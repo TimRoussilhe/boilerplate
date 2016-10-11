@@ -1,0 +1,173 @@
+#app-index {
+
+	.content-left{
+
+		position: relative;
+		z-index: 2;
+		padding-bottom: 3%;
+
+		.intro-content-wrapper{
+			height: 100%;
+			position: relative;
+		}
+
+		.index-headlines{
+			position: relative;
+			z-index: 1;
+
+			.sub-headline{
+				margin-bottom: 29px;
+			}
+		}
+
+		.index-stats{
+
+			position: absolute;
+			z-index: 1;
+			bottom: 0;
+			left: 0;
+
+			.stats-container{
+
+				width: auto;
+				display: inline-block;
+				margin-bottom: 10px;
+				float: left;
+
+				&.tax-credits{
+
+					width: 200px;
+
+					h4{
+						left: -2px;
+					}
+
+				}
+
+				p{
+					color: base-light-font-color;
+					font-family: LouisRegular;
+					font-size: 1.3rem;
+					line-height: 1.4rem;
+					letter-spacing: -0.015em;
+				}
+				h4{
+					color: base-light-font-color;
+					font-family: LouisRegular;
+					font-size: 5.2rem;
+					line-height: 6rem;
+					letter-spacing: -0.04em;
+					position: relative;
+					top: 0px;
+					left: -4px;
+				}
+
+			}
+
+			.separator{
+				display: inline-block;
+				width: 3px;
+				height: 86px;
+				background-color: base-light-font-color;
+				margin-right: 20px;
+				margin-left: 20px;
+				float: left;
+			}
+
+			.disclaimer{
+				color: base-light-font-color;
+				font-family: Roboto;
+				font-weight: 300;
+				font-size: 1.2rem;
+				line-height: 2.0rem;
+				letter-spacing: -0.0175em;
+				margin-left: -2px;
+				clear: left;
+			}
+
+		}
+
+		.background{
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			height: 100%;
+			width: 100%;
+			background-image url('../images/cinemagraph.jpg');
+			background-size cover;
+			background-position: 0 50%;
+		}
+
+	}
+
+	.index-tiles{
+		position: relative;
+		z-index: 2;
+
+		.tile{
+
+			height: 33.33%;
+
+		}
+
+	}
+
+	.background-container{
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		height: 100%;
+		width: 100%;
+		z-index: 1;
+		overflow: hidden;
+
+		.overlay{
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			z-index: 3;
+			background: rgba(0,0,0,0.2);
+			background: -moz-linear-gradient(top, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.2) 100%);
+			background: -webkit-linear-gradient(top, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.2) 100%);
+			background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.2) 100%);
+			// filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#66000000', endColorstr='#66000000',GradientType=0);
+		}
+
+		.poster{
+
+			z-index: 2;
+			/* Setting width & height to auto prevents the browser from stretching or squishing the video */
+			width: auto;
+			height: 100%;
+
+			/* Center the video */
+			position: absolute;
+			top: 50%;
+			left: 50%;
+
+			display: none;
+
+		}
+
+		video{
+
+			opacity: 1;
+			z-index: 1;
+			/* Make video to at least 100% wide and tall */
+			// min-width: 100%;
+			// min-height: 100%;
+
+			/* Setting width & height to auto prevents the browser from stretching or squishing the video */
+			width: auto;
+			height: 100%;
+
+			/* Center the video */
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			// transform: translate(-7%,0px);
+		}
+
+	}
+
+}

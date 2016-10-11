@@ -1,0 +1,83 @@
+zindex(elem){
+	z-index z-index-array[elem]
+}
+
+aspect-ratio(width, height){
+
+	position: relative;
+
+	&:before{
+		display: block;
+		content: "";
+		width: 100%;
+		padding-top: floor((height / width) * 100%,3);
+	}
+	> img{
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		width : 100%;
+		height : auto;
+	}	
+	> video{
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		width : 100%;
+		height : auto;
+	}
+}
+
+fontSize($context-width, $base-font-size, $min-width, $max-width) {
+	
+	$min-size = round($min-width * ($base-font-size / $context-width)) / 10;
+	$max-size = round($max-width * ($base-font-size / $context-width)) / 10;
+
+	@media screen and (max-width: ($min-width)px) {
+   @media screen and (max-width: ($min-width)px) {
+     font-size: $min-size;
+   }
+  }
+
+ @media screen and (min-width: ($min-width)px) {
+   @media screen and (max-width: ($max-width)px) {
+     font-size: (($base-font-size / $context-width) * 100)vw;
+   }
+  }
+
+ @media screen and (min-width: ($max-width)px) {
+   @media screen and (min-width: ($max-width)px) {
+     font-size: $max-size;
+   }
+  }
+ 
+}
+
+lineHeight($context-width, $base-line-height, $min-width, $max-width) {
+	
+	$min-size = round($min-width * ($base-line-height / $context-width)) / 10;
+	$max-size = round($max-width * ($base-line-height / $context-width)) / 10;
+	
+	@media screen and (max-width: ($min-width)px) {
+   @media screen and (max-width: ($min-width)px) {
+     line-height: $min-size;
+   }
+  }
+
+ @media screen and (min-width: ($min-width)px) {
+   @media screen and (max-width: ($max-width)px) {
+     line-height : (($base-line-height / $context-width) * 100)vw;
+   }
+  }
+
+ @media screen and (min-width: ($max-width)px) {
+   @media screen and (min-width: ($max-width)px) {
+     line-height : $max-size;
+   }
+  }
+	
+}

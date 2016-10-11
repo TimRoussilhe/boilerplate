@@ -1,0 +1,18 @@
+{
+		"extends": "google",
+		"rules": {
+			"global-require": 0,
+			"curly": [2, "multi-line"],
+			"no-mixed-spaces-and-tabs": [2, "smart-tabs"],
+			"key-spacing": 0,
+			"indent": [2, "tab"],
+			"strict": [2, "global"],
+			"quotes": [2, "single"],
+			"quote-props": [2, "as-needed"],
+			"max-len": [2, 150],
+			"no-use-before-define": [0],
+			"no-negated-condition": [0],
+			"no-lonely-if": [0],
+			"no-debugger": [0]
+		}
+}

@@ -1,0 +1,62 @@
+// Header Styles
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { font-weight: inherit; }
+
+h1 { font-size: h1-fontsize; line-height: h1-lineheight; }
+h2 { font-size: h2-fontsize; line-height: h2-lineheight; }
+h3 { font-size: h3-fontsize; line-height: h3-lineheight; }
+h4 { font-size: h4-fontsize; line-height: h4-lineheight; }
+h5 { font-size: h5-fontsize; line-height: h5-lineheight ; }
+h6 { font-size: h6-fontsize; line-height: h6-lineheight ; }
+a  { font-size: fontsize-base; line-height: p-lineheight;}
+p  { font-size: p-fontsize; line-height: 100%; }
+
+blockquote, pre, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, b{
+	font-size: fontsize-base;
+}
+
+p {
+
+	// font-size: p-fontsize;
+	// line-height: p-lineheight;
+
+	fontSize( 32rem , p-fontsize , 320 , max-font-width);
+	lineHeight( 32rem , p-lineheight , 320 , max-font-width);
+
+	strong {
+		font-family: LouisRegular;
+		fontSize( 32rem , p-fontsize , 320 , max-font-width);
+		lineHeight( 32rem , p-lineheight , 320 , max-font-width);
+	}
+
+	em {
+		font-style: italic;
+		font-family: LouisRegular;
+		fontSize( 32rem , p-fontsize , 320 , max-font-width);
+		lineHeight( 32rem , p-lineheight , 320 , max-font-width);
+	}
+}
+
+.headline{
+	font-family: LouisRegular;
+	fontSize( 32rem , h1-fontsize , 320 , max-font-width);
+	lineHeight( 32rem , h1-lineheight , 320 , max-font-width);
+	letter-spacing: -0.035em;
+	margin-bottom: 7%;
+}
+
+.sub-headline{
+	font-family: Roboto;
+	font-weight: 300;
+	fontSize( 32rem , h2-fontsize , 320 , max-font-width);
+	lineHeight( 32rem , h2-lineheight , 320 , max-font-width);
+	letter-spacing: -0.02em;
+	margin-bottom: 9%;
+	br{
+		display: none;
+	}
+}
+
+.third-line {
+	fontSize( 32rem ,1.6, 320 ,max-font-width);
+	lineHeight( 32rem , p-lineheight , 320 , max-font-width);
+}

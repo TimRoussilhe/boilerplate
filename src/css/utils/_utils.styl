@@ -1,0 +1,83 @@
+.underline{
+
+	text-decoration : underline;
+
+}
+
+// Text overflow
+// Requires inline-block or block for proper styling
+
+.text-overflow {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+// Hide text
+
+.hide-text {
+	overflow: hidden;
+	text-indent: 100%;
+	white-space: nowrap;
+}
+
+
+/* Vertical Align */
+
+.vertical-align-wrapper{
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+}
+
+/* Justify-content */
+
+.start {
+	justify-content: flex-start;
+}
+
+.center {
+	justify-content: center;
+}
+
+.end {
+	justify-content: flex-end;
+}
+
+.around {
+	justify-content: space-around;
+}
+
+.between {
+	justify-content: space-between;
+}
+
+/* Align-items */
+
+.top {
+	align-items: flex-start;
+}
+
+.middle {
+	align-items: center;
+}
+
+.bottom {
+	align-items: flex-end;
+}
+
+.column{
+	flex-direction: column
+}
+
+/* Order */
+
+.first {
+	order: -1;
+}
+
+.last {
+	order: 1;
+}

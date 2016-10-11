@@ -1,0 +1,101 @@
+/*==========  Global styles  ==========*/
+
+/* Styles used throughout the whole website */
+
+html {
+	background-image : none;
+	background-color: white;
+}
+
+.content-container {
+
+	margin-right: auto;
+	margin-left: auto;
+	padding-right: gutters;
+	padding-left: gutters;
+	overflow: hidden;
+
+}
+#content{
+	height: auto;
+}
+
+.container{
+	display: block;
+}
+
+.page-wrapper{
+	height: auto;
+	position: relative;
+
+	.content-left{
+
+		min-height: 100vh;
+		padding: 14.7887vh gutters 0px gutters;
+
+		.wrapper-anim {
+			padding: 0;
+			position: relative;
+		}
+
+	}
+
+}
+
+// make sure grid are now vertical
+// fix most of IOS8 issues.
+.container{
+	flex-direction: column;
+}
+
+.wrapper-anim {
+	padding: 0;
+	position: relative;
+}
+
+.main-header{
+	position: fixed;
+	top: 11px;
+	left: 9px;
+	// z-index: 9;
+}
+
+
+.show-mobile{
+	display : block;
+}
+
+.hide-mobile{
+	display : none;
+	visibility: hidden;
+}
+
+.hide {
+	visibility: hidden;
+}
+
+/* All the iOs Hacks... */
+
+// iPhone 6 portrait
+@media only screen and (min-device-width:375px) and (max-device-width:667px) and (width:375px) and (height:559px) and (orientation:portrait) and (color:8) and (device-aspect-ratio:375/667) and (aspect-ratio:375/559) {
+	// not on al lthe pages
+	#app-real-talk .content-left,
+	#overlay-container .content-left,
+	#app-charging-locator .content-right,
+	#app-index .content-left {
+		height: 559px;
+		min-height: 559px;
+	}
+}
+
+// iPhone 6+ portrait
+@media only screen and (min-device-width : 414px) and (max-device-width : 736px) and (device-width : 414px) and (device-height : 736px) and (orientation : portrait)  {
+	// not on al lthe pages
+	#app-real-talk .content-left,
+	#overlay-container .content-left,
+	#app-charging-locator .content-right,
+	#app-index .content-left {
+		height: 628px;
+		min-height: 628px;
+	}
+}

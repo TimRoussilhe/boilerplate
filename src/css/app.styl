@@ -1,0 +1,35 @@
+/*==========  Google fonts  ==========*/
+
+/*==========  Browser reset  ==========*/
+@import "_reset";
+global-reset()
+
+small-breakpoints = 960;
+
+/*==========  Sprites  ==========*/
+
+// @import "./public/assets/css/spriteGlobal.css"
+// @import "./public/assets/css/iconfont.css"
+
+/*==========  Globals Variables  ==========*/
+
+@import "variables/_fonts";
+@import "variables/_colors";
+
+/*==========  Utils  ==========*/
+
+@import "utils/_utils";
+// Using reflex flexbox grid
+@import "utils/grid";
+
+/*==========  Mixins  ==========*/
+@import "mixins/_mixins";
+
+/*==========  Media queries  ==========*/
+@import "media/default";
+
+
+/* Devices, Tablets/Mobile */
+@media only screen and (max-width : small-breakpoints * 1px)  {
+	@import "media/_960px";
+}

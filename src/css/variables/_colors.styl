@@ -1,0 +1,25 @@
+
+/* ==========================================================================
+	Color Variables
+========================================================================== */
+	
+	text-white          = #ffffff;
+
+	dynamic-colors = {
+
+		base-light-font-color 	: #ffffff,
+		black 					: #000,
+		text-black 				: #141414,
+		base-dark-font-color  	: #202127,
+	}
+
+/* ==========================================================================
+	 Color Functions
+	 ========================================================================== */
+
+for key, value in dynamic-colors
+		define(key, value)
+		.{backgroundlassName}-{key}
+			background-color: value
+		.{key}
+			color: value
