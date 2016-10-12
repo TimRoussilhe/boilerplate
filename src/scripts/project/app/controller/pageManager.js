@@ -136,22 +136,22 @@ var _onPageRendered = function() {
 
 var _onPageReady = function () {
 
-		this.stopListening( this.currentPage, EVENT.INIT);
+	this.stopListening( this.currentPage, EVENT.INIT);
 
-		if (this.oldPage) {
+	if (this.oldPage) {
 
-				this.trigger(EVENT.HIDE_PAGE)
-				this.listenToOnce( this.oldPage, EVENT.HIDDEN , _onPageHidden.bind(this));
-				this.oldPage.hide();
+		this.trigger(EVENT.HIDE_PAGE)
+		this.listenToOnce( this.oldPage, EVENT.HIDDEN , _onPageHidden.bind(this));
+		this.oldPage.hide();
 
-		} else {
+	} else {
 
-				//first page
-				//direct Show
-				this.trigger(EVENT.SHOW_PAGE)
-				this.listenToOnce( this.currentPage, EVENT.SHOWN , _onPageShown.bind(this));
-				this.currentPage.show(true);
-		}
+		//first page
+		//direct Show
+		this.trigger(EVENT.SHOW_PAGE)
+		this.listenToOnce(this.currentPage, EVENT.SHOWN , _onPageShown.bind(this));
+		this.currentPage.show(true);
+	}
 
 }
 

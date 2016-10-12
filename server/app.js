@@ -7,12 +7,6 @@ var parser = require('ua-parser-js');
 // var connect = require('connect-livereload');
 var MobileDetect = require('mobile-detect');
 var helpers = require('../shared/helpers/helpers');
-
-
-// WE LOAD JSON MANUALLY FOR THE EXAMPLE
-// Can use dynamic routing system or external API
-// var jsonHome = require(path.join(__dirname, '../shared/jsons/index.json'));
-// var jsonAbout = require(path.join(__dirname, '../shared/jsons/about.json'));
 var routes = require(path.join(__dirname, '../shared/jsons/routes.json'));
 
 var app = express();
@@ -79,7 +73,7 @@ app.listen(3000, function() {
 
 });
 
-function getRouteByUrl(url){
+function getRouteByUrl(url) {
 	for (var id in routes) {
 		if (routes[id].url === url || routes[id].url === '/' + url || routes[id].url === '/' + url + '/') {
 			return routes[id];

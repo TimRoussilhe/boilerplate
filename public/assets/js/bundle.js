@@ -13394,8 +13394,8 @@
 	var EVENT 						= __webpack_require__(10);
 	var PageManager              	= __webpack_require__(13);
 	var CV                       	= __webpack_require__(11);
-	var NavigationView           	= __webpack_require__(43);
-	var FastClick					= __webpack_require__(44);
+	var NavigationView           	= __webpack_require__(44);
+	var FastClick					= __webpack_require__(45);
 	/*
 	 * MainView: Handles the main view logic - window/document event
 	 * @extend {abstract/view/DOM/DOMview}
@@ -13722,22 +13722,22 @@
 	
 	var _onPageReady = function () {
 	
-			this.stopListening( this.currentPage, EVENT.INIT);
+		this.stopListening( this.currentPage, EVENT.INIT);
 	
-			if (this.oldPage) {
+		if (this.oldPage) {
 	
-					this.trigger(EVENT.HIDE_PAGE)
-					this.listenToOnce( this.oldPage, EVENT.HIDDEN , _onPageHidden.bind(this));
-					this.oldPage.hide();
+			this.trigger(EVENT.HIDE_PAGE)
+			this.listenToOnce( this.oldPage, EVENT.HIDDEN , _onPageHidden.bind(this));
+			this.oldPage.hide();
 	
-			} else {
+		} else {
 	
-					//first page
-					//direct Show
-					this.trigger(EVENT.SHOW_PAGE)
-					this.listenToOnce( this.currentPage, EVENT.SHOWN , _onPageShown.bind(this));
-					this.currentPage.show(true);
-			}
+			//first page
+			//direct Show
+			this.trigger(EVENT.SHOW_PAGE)
+			this.listenToOnce(this.currentPage, EVENT.SHOWN , _onPageShown.bind(this));
+			this.currentPage.show(true);
+		}
 	
 	}
 	
@@ -15580,8 +15580,8 @@
 	/* WEBPACK VAR INJECTION */(function(_) {/* global  _   */
 	
 	var PageView  			= __webpack_require__(17);
-	var template 			= __webpack_require__(45);
-	var AboutDatas 		= __webpack_require__(42)
+	var template 			= __webpack_require__(42);
+	var AboutDatas 		= __webpack_require__(43)
 	
 	//TODO clean datas flow here
 	var AboutView = function(options, datas) {
@@ -15614,6 +15614,22 @@
 
 /***/ },
 /* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Handlebars = __webpack_require__(20);
+	function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
+	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+	    var stack1, alias1=container.escapeExpression;
+	
+	  return "<section class=\"page-wrapper\" id=\"about\">\n\n	<h1>"
+	    + alias1(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1), depth0))
+	    + "</h1>\n	<h2>"
+	    + alias1(__default(__webpack_require__(39)).call(depth0 != null ? depth0 : {},((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1),{"name":"yell","hash":{},"data":data}))
+	    + "</h2>\n\n</section>\n";
+	},"useData":true});
+
+/***/ },
+/* 43 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -15627,7 +15643,7 @@
 	};
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(_, $) {/* global $ _ */
@@ -15687,7 +15703,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;;(function () {
@@ -16532,22 +16548,6 @@
 		}
 	}());
 
-
-/***/ },
-/* 45 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Handlebars = __webpack_require__(20);
-	function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-	    var stack1, alias1=container.escapeExpression;
-	
-	  return "<section class=\"page-wrapper\" id=\"about\">\n\n	<h1>"
-	    + alias1(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1), depth0))
-	    + "</h1>\n	<h2>"
-	    + alias1(__default(__webpack_require__(39)).call(depth0 != null ? depth0 : {},((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1),{"name":"yell","hash":{},"data":data}))
-	    + "</h2>\n\n</section>\n";
-	},"useData":true});
 
 /***/ }
 /******/ ]);
