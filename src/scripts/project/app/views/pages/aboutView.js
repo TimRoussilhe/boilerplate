@@ -1,7 +1,7 @@
 /* global  _   */
 
 var PageView  			= require('abstract/pageView');
-var template 			= require('templates/index.hbs');
+var template 			= require('templates/about.hbs');
 var AboutDatas 		= require('jsons/about.json')
 
 //TODO clean datas flow here

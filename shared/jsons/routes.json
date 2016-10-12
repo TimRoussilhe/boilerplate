@@ -8,6 +8,7 @@
 	"about": {
 		"id": "about",
 		"url": "/about",
-		"label": "About"
+		"label": "About",
+		"jsonUrl": "../shared/jsons/about.json"
 	}
 }

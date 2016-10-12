@@ -6,6 +6,8 @@ var path = require('path');
 var parser = require('ua-parser-js');
 // var connect = require('connect-livereload');
 var MobileDetect = require('mobile-detect');
+var helpers = require('../shared/helpers/helpers');
+
 
 // WE LOAD JSON MANUALLY FOR THE EXAMPLE
 // Can use dynamic routing system or external API
@@ -24,6 +26,7 @@ app.set('views', path.join(__dirname, '../shared/templates'));
 
 app.engine('.hbs', exphbs({
 	defaultLayout: 'main',
+	helpers: helpers,
 	layoutsDir: path.join(__dirname, '/layouts'),
 	partialsDir: path.join(__dirname, '/partials'),
 	extname: '.hbs'
@@ -83,7 +86,7 @@ function getRouteByUrl(url){
 		}
 	}
 	return null;
-};
+}
 
 function detectWebP(req) {
 

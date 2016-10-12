@@ -131,7 +131,11 @@ module.exports = {
 			{test: /zepto\.js$/, loader: 'exports?Zepto; delete window.$; delete window.Zepto;'},
 			{test: /detectizr\.js$/, loader: 'imports?this=>window!exports?window.Detectizr;'},
 			{test: /modernizr.custom\.js$/, loader: 'imports?this=>window!exports?window.Modernizr;'},
-			{test: /\.hbs$/, loader: 'handlebars-loader'}
+			{test: /\.hbs$/, loader: 'handlebars-loader', query: {
+				helperDirs: [
+					__dirname + "/shared/helpers",
+				]
+			}}
 			//{test: /\.js$/, loader: 'eslint-loader', exclude: [/node_modules/, /vendors/]}
 		]
 	},
