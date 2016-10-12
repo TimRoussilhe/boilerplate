@@ -121,10 +121,14 @@ PageManager.prototype.onError = function() {
 
 var _onPageRendered = function() {
 
-	//Back-end rendered here
+	// FE render here
 	if (this.oldPage !== null) {
+
+		// will append page into the DOM
 		this.trigger(EVENT.PAGE_RENDERED);
+
 	}
+
 	var title = this.currentPage.model.attributes.metas.title;
 	document.title = title ? title : 'Framework | Default Title here';
 
@@ -132,6 +136,7 @@ var _onPageRendered = function() {
 	this.currentPage.init();
 
 	document.body.setAttribute('data-page', CV.currentPage);
+
 };
 
 var _onPageReady = function () {
@@ -169,7 +174,7 @@ var _onPageHidden = function () {
 		//we appended the new page on the DOM
 		setTimeout( (function(){
 
-				this.trigger(EVENT.SHOW_PAGE)
+				this.trigger(EVENT.SHOW_PAGE);
 				this.currentPage.show(false);
 
 		}).bind(this), 0 )

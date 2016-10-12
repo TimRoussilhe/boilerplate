@@ -13707,10 +13707,14 @@
 	
 	var _onPageRendered = function() {
 	
-		//Back-end rendered here
+		// FE render here
 		if (this.oldPage !== null) {
+	
+			// will append page into the DOM
 			this.trigger(EVENT.PAGE_RENDERED);
+	
 		}
+	
 		var title = this.currentPage.model.attributes.metas.title;
 		document.title = title ? title : 'Framework | Default Title here';
 	
@@ -13718,6 +13722,7 @@
 		this.currentPage.init();
 	
 		document.body.setAttribute('data-page', CV.currentPage);
+	
 	};
 	
 	var _onPageReady = function () {
@@ -13755,7 +13760,7 @@
 			//we appended the new page on the DOM
 			setTimeout( (function(){
 	
-					this.trigger(EVENT.SHOW_PAGE)
+					this.trigger(EVENT.SHOW_PAGE);
 					this.currentPage.show(false);
 	
 			}).bind(this), 0 )
@@ -13929,7 +13934,7 @@
 	};
 	
 	PageView.prototype.onRendered = function() {
-	
+		this.$el.addClass('next-page');
 		BaseView.prototype.onRendered.call(this);
 	};
 	
@@ -13980,6 +13985,7 @@
 	 */
 	
 	PageView.prototype.show = function(direct) {
+		this.$el.removeClass('next-page');
 		console.log('PageView show');
 		// call now to have a transition based on the viewport size (desktop/mobile)
 		this.initTLShow();

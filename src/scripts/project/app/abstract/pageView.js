@@ -44,7 +44,7 @@ PageView.prototype.initializeRender = function() {
 };
 
 PageView.prototype.onRendered = function() {
-
+	this.$el.addClass('next-page');
 	BaseView.prototype.onRendered.call(this);
 };
 
@@ -95,6 +95,7 @@ PageView.prototype.initTLBaseHide = function() {
  */
 
 PageView.prototype.show = function(direct) {
+	this.$el.removeClass('next-page');
 	console.log('PageView show');
 	// call now to have a transition based on the viewport size (desktop/mobile)
 	this.initTLShow();
