@@ -1,23 +1,10 @@
-/* global  _ Backbone $ location  */
-
-// Example of dynamic require 
-
-// var requireAll = function(requireContext) {
-// 	var r = {};
-// 	var a = requireContext.keys().map(requireContext);
-// 	for (var i in requireContext.keys()) {
-// 		if (requireContext.keys()[i]) {
-// 			var id = requireContext.keys()[i].replace('./', '').replace('.svg', '');
-// 			r[id] = a[i];
-// 		}
-// 	}
-// 	return r;
-// };
+/* global  _ Backbone location  */
 
 var EVENT = require('events/events');
 var CV = require('config/currentValues');
 
 var BaseView = function(options, data) {
+
 	/*
 	* Params object from router
 	* @type {Objet}
@@ -98,6 +85,7 @@ var BaseView = function(options, data) {
 	this.events['click a'] = 'onLinkClicked'; // global link
 
 	Backbone.View.call(this, options, data);
+
 };
 
 _.extend(BaseView, Backbone.View);
@@ -111,8 +99,6 @@ BaseView.prototype.initialize = function(options, data) {
 	if (this.options.dataID !== undefined) this.dataID = this.options.dataID;
 	if (this.options.template !== undefined) this.template = this.options.template;
 	if (this.options.className !== undefined) this.className = this.options.className;
-
-	// console.log(this.className);
 
 	// Render now if you don't have to fetch anything
 	if (this.model === null) {
@@ -144,7 +130,7 @@ BaseView.prototype.render = function() {
 BaseView.prototype.renderTemplate = function() {
 
 	if (this.template === null) return;
-	var html = (this.model !== null) ? this.template({datas: this.model.attributes, svgFiles: SvgFiles}) : this.template({svgFiles : SvgFiles});
+	var html = (this.model !== null) ? this.template({datas: this.model.attributes}) : this.template();
 	this.setElement(html);
 
 };

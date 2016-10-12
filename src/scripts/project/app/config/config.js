@@ -1,5 +1,5 @@
 /* global window  */
-var Routes = require('jsons/routes.json');
+// var Routes = require('jsons/routes.json');
 
 var Config = function() {
 	/**
@@ -7,47 +7,6 @@ var Config = function() {
 	 * @type {String}
 	 */
 	this.appName = 'Framework';
-
-	/*
-	 * this pulls from routes so there is only one place to change things.
-	 * unfortunately there is no easy way to dynamically import/require
-	 * with webpack so we need to do some hard coding/repetition.
-	 */
-
-	this.paths = [
-		{
-			name: 'index',
-			url: Routes.index.url.replace('/', '')
-		},
-		{
-			name: 'bolt-everyday',
-			url: Routes['bolt-everyday'].url.replace('/', '')
-		},
-		{
-			name: 'charging-101',
-			url: Routes['charging-101'].url.replace('/', '')
-		},
-		{
-			name: 'charging-locator',
-			url: Routes['charging-locator'].url.replace('/', '')
-		},
-		{
-			name: 'real-talk',
-			url: Routes['real-talk'].url.replace('/', '')
-		},
-		{
-			name: 'savings-calculator',
-			url: Routes['savings-calculator'].url.replace('/', '')
-		},
-		{
-			name: 'legacy',
-			url: Routes.legacy.url.replace('/', '')
-		},
-		{
-			name: 'error',
-			url: Routes.error.url.replace('/', '')
-		}
-	];
 
 	/**
 	 * Does the browser has audio available ?

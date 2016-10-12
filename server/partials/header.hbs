@@ -8,10 +8,10 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Framework boilerplate</title>
+		<title>{{datas.metas.title}}</title>
 
 		<!-- Meta -->
-		<meta property="description" content="Description" />
+		<meta property="description" content="{{datas.metas.description}}" />
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<meta name="robots" content="index, follow">
@@ -60,10 +60,10 @@
 	</head>
 
 		<body>
-			<nav>
+			<nav id="main-nav">
 				<ul>
-					<li><a href="/" title="">Index</a></li>
-					<li><a href="/about" title="">About</a></li>
+					{{#each routes}}
+						<li><a data-page="{{this.id}}" href="{{this.url}}"" title="">{{this.label}}</a></li>
+					{{/each}}
 				</ul>
-			</nav>	
-		
+			</nav>

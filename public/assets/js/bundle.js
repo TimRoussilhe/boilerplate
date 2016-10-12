@@ -13111,10 +13111,10 @@
 
 /***/ },
 /* 9 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	/* global window  */
-	var Routes = __webpack_require__(10);
+	// var Routes = require('jsons/routes.json');
 	
 	var Config = function() {
 		/**
@@ -13122,47 +13122,6 @@
 		 * @type {String}
 		 */
 		this.appName = 'Framework';
-	
-		/*
-		 * this pulls from routes so there is only one place to change things.
-		 * unfortunately there is no easy way to dynamically import/require
-		 * with webpack so we need to do some hard coding/repetition.
-		 */
-	
-		this.paths = [
-			{
-				name: 'index',
-				url: Routes.index.url.replace('/', '')
-			},
-			{
-				name: 'bolt-everyday',
-				url: Routes['bolt-everyday'].url.replace('/', '')
-			},
-			{
-				name: 'charging-101',
-				url: Routes['charging-101'].url.replace('/', '')
-			},
-			{
-				name: 'charging-locator',
-				url: Routes['charging-locator'].url.replace('/', '')
-			},
-			{
-				name: 'real-talk',
-				url: Routes['real-talk'].url.replace('/', '')
-			},
-			{
-				name: 'savings-calculator',
-				url: Routes['savings-calculator'].url.replace('/', '')
-			},
-			{
-				name: 'legacy',
-				url: Routes.legacy.url.replace('/', '')
-			},
-			{
-				name: 'error',
-				url: Routes.error.url.replace('/', '')
-			}
-		];
 	
 		/**
 		 * Does the browser has audio available ?
@@ -13242,305 +13201,13 @@
 		"index": {
 			"id": "index",
 			"url": "/",
-			"relativeBasePath": "",
 			"label": "Home",
-			"color": "#ffd86c",
-			"generationHTML": {
-				"src": "./shared/templates/layouts/index.handlebars",
-				"datas": "index/datas.json",
-				"tracking": {
-					"channel": "index",
-					"eVar4": "en",
-					"eVar17": "chevyevlife",
-					"eVar18": "chevrolet",
-					"eVar31": "usa",
-					"eVar32": "northamerica",
-					"hier1": "index",
-					"pageName": "ch:no:us:en:chevyevlife:index",
-					"prop14": "index",
-					"prop17": "chevyevlife",
-					"prop18": "chevrolet",
-					"prop23": "en"
-				}
-			}
+			"jsonUrl": "../shared/jsons/index.json"
 		},
-		"bolt-everyday": {
-			"id": "bolt-everyday",
-			"url": "/bolt-ev-everyday",
-			"relativeBasePath": "../",
-			"label": "Bolt EV Every Day",
-			"color": "#d3d3d3",
-			"generationHTML": {
-				"src": "./shared/templates/layouts/bolt-everyday.handlebars",
-				"datas": "bolt-everyday/datas.json",
-				"tracking": {
-					"channel": "index",
-					"eVar4": "en",
-					"eVar17": "chevyevlife",
-					"eVar18": "chevrolet",
-					"eVar31": "usa",
-					"eVar32": "northamerica",
-					"hier1": "index,bolteveveryday",
-					"pageName": "ch:no:us:en:chevyevlife:bolteveveryday",
-					"prop11": "bolteveveryday",
-					"prop14": "index:bolteveveryday",
-					"prop17": "chevyevlife",
-					"prop18": "chevrolet",
-					"prop23": "en"
-				}
-			}
-		},
-		"real-talk": {
-			"id": "real-talk",
-			"url": "/bolt-ev-questions-and-answers",
-			"relativeBasePath": "../",
-			"label": "Real Talk Q&amp;A",
-			"color": "#ff9b8c",
-			"generationHTML": {
-				"src": "./shared/templates/layouts/real-talk.handlebars",
-				"datas": "real-talk/datas.json",
-				"tracking": {
-					"channel": "index",
-					"eVar4": "en",
-					"eVar17": "chevyevlife",
-					"eVar18": "chevrolet",
-					"eVar31": "usa",
-					"eVar32": "northamerica",
-					"hier1": "index,boltevqa",
-					"pageName": "ch:no:us:en:chevyevlife:boltevqa",
-					"prop11": "boltevqa",
-					"prop14": "index:boltevqa",
-					"prop17": "chevyevlife",
-					"prop18": "chevrolet",
-					"prop23": "en"
-				}
-			},
-			"overlays": {
-				"when-can-i-buy-a-bolt-ev": {
-					"view": "realTalkTextView",
-					"datas": "real-talk-question-01"
-				},
-				"what-factors-impact-it": {
-					"view": "realTalkTextView",
-					"datas": "real-talk-question-03"
-				},
-				"how-do-i-know-how-much-energy-im-using": {
-					"view": "realTalkTextView",
-					"datas": "real-talk-question-02"
-				},
-				"will-i-get-a-tax-credit-for-buying-this-car": {
-					"view": "realTalkTextView",
-					"datas": "real-talk-question-04"
-				},
-				"do-i-need-any-special-equipment-to-charge-at-home": {
-					"view": "realTalkTextView",
-					"datas": "real-talk-question-05"
-				},
-				"does-it-come-with-a-warranty": {
-					"view": "realTalkTextView",
-					"datas": "real-talk-question-06"
-				},
-				"where-do-i-sign-up-to-get-more-information": {
-					"view": "realTalkTextView",
-					"datas": "real-talk-question-07"
-				},
-				"what-colors-and-configurations-will-be-available": {
-					"view": "realTalkTextView",
-					"datas": "real-talk-question-08"
-				},
-				"how-much-will-it-cost-me-to-charge-an-ev": {
-					"view": "realTalkTextView",
-					"datas": "real-talk-question-09"
-				},
-				"what-scheduled-maintenance-is-needed-and-where-can-i-go-for-service": {
-					"view": "realTalkTextView",
-					"datas": "real-talk-question-10"
-				},
-				"how-long-does-it-take-to-charge": {
-					"view": "realTalkVideoView",
-					"datas": "real-talk-video01"
-				},
-				"how-long-does-the-battery-last": {
-					"view": "realTalkVideoView",
-					"datas": "real-talk-video02"
-				},
-				"where-can-i-charge-the-Bolt-ev-when-i-m-not-at-home": {
-					"view": "realTalkVideoView",
-					"datas": "real-talk-video03"
-				},
-				"do-i-need-to-put-gas-in-it": {
-					"view": "realTalkVideoView",
-					"datas": "real-talk-video04"
-				},
-				"can-i-top-off-my-charge-at-anytime": {
-					"view": "realTalkVideoView",
-					"datas": "real-talk-video05"
-				},
-				"is-a-bolt-ev-for-me": {
-					"view": "realTalkVideoView",
-					"datas": "real-talk-video06"
-				},
-				"how-is-an-all-electric-vehicle-different-than-any-other-car": {
-					"view": "realTalkVideoView",
-					"datas": "real-talk-video07"
-				},
-				"what-are-the-different-charging-options": {
-					"view": "realTalkVideoView",
-					"datas": "real-talk-video08"
-				},
-				"how-far-can-i-go-on-a-single-charge": {
-					"view": "realTalkVideoView",
-					"datas": "real-talk-video09"
-				},
-				"are-there-ways-i-can-maximize-my-range": {
-					"view": "realTalkVideoView",
-					"datas": "real-talk-video10"
-				}
-			}
-		},
-		"savings-calculator": {
-			"id": "savings-calculator",
-			"url": "/bolt-ev-savings-calculator",
-			"relativeBasePath": "../",
-			"label": "Savings Calculator",
-			"color": "#97dab5",
-			"generationHTML": {
-				"src": "./shared/templates/layouts/savings-calculator.handlebars",
-				"datas": "savings-calculator/datas.json",
-				"tracking": {
-					"channel": "index",
-					"eVar4": "en",
-					"eVar17": "chevyevlife",
-					"eVar18": "chevrolet",
-					"eVar31": "usa",
-					"eVar32": "northamerica",
-					"hier1": "index,boltevsavings",
-					"pageName": "ch:no:us:en:chevyevlife:boltevsavings",
-					"prop11": "boltevsavings",
-					"prop14": "index:boltevsavings",
-					"prop17": "chevyevlife",
-					"prop18": "chevrolet",
-					"prop23": "en"
-				}
-			}
-		},
-		"charging-101": {
-			"id": "charging-101",
-			"url": "/bolt-ev-charging-guide",
-			"relativeBasePath": "../",
-			"color": "#62d0e4",
-			"label": "Charging 101",
-			"generationHTML": {
-				"src": "./shared/templates/layouts/charging-101.handlebars",
-				"datas": "charging-101/datas.json",
-				"tracking": {
-					"channel": "index",
-					"eVar4": "en",
-					"eVar17": "chevyevlife",
-					"eVar18": "chevrolet",
-					"eVar31": "usa",
-					"eVar32": "northamerica",
-					"hier1": "index,boltevchargeguide",
-					"pageName": "ch:no:us:en:chevyevlife:boltevchargeguide",
-					"prop11": "boltevchargeguide",
-					"prop14": "index:boltevchargeguide",
-					"prop17": "chevyevlife",
-					"prop18": "chevrolet",
-					"prop23": "en"
-				}
-			},
-			"overlays": {
-				"basic": {
-					"view": "charging101View",
-					"datas": "charging-101-basic"
-				},
-				"fast": {
-					"view": "charging101View",
-					"datas": "charging-101-fast"
-				},
-				"superFast": {
-					"view": "charging101View",
-					"datas": "charging-101-super-fast"
-				}
-			}
-		},
-		"charging-locator": {
-			"id": "charging-locator",
-			"url": "/bolt-ev-charging-locator",
-			"relativeBasePath": "../",
-			"label": "Charging Locator",
-			"color": "#f07ee7",
-			"generationHTML": {
-				"src": "./shared/templates/layouts/charging-locator.handlebars",
-				"datas": "charging-locator/datas.json",
-				"tracking": {
-					"channel": "index",
-					"eVar4": "en",
-					"eVar17": "chevyevlife",
-					"eVar18": "chevrolet",
-					"eVar31": "usa",
-					"eVar32": "northamerica",
-					"hier1": "index,chargelocate",
-					"pageName": "ch:no:us:en:chevyevlife:chargelocate",
-					"prop11": "chargelocate",
-					"prop14": "index:chargelocate",
-					"prop17": "chevyevlife",
-					"prop18": "chevrolet",
-					"prop23": "en"
-				}
-			}
-		},
-		"error": {
-			"hide": true,
-			"id": "error",
-			"label": "404",
-			"url": "/404",
-			"relativeBasePath": "../",
-			"generationHTML": {
-				"src": "./shared/templates/layouts/error.handlebars",
-				"datas": "error/datas.json",
-				"tracking": {
-					"channel": "index",
-					"eVar4": "en",
-					"eVar17": "chevyevlife",
-					"eVar18": "chevrolet",
-					"eVar31": "usa",
-					"eVar32": "northamerica",
-					"hier1": "index,404",
-					"pageName": "ch:no:us:en:chevyevlife:404",
-					"prop11": "404",
-					"prop14": "index:404",
-					"prop17": "chevyevlife",
-					"prop18": "chevrolet",
-					"prop23": "en"
-				}
-			}
-		},
-		"legacy": {
-			"hide": true,
-			"id": "legacy",
-			"label": "legacy",
-			"url": "/legacy",
-			"relativeBasePath": "../",
-			"generationHTML": {
-				"src": "./shared/templates/layouts/legacy.handlebars",
-				"datas": "legacy/datas.json",
-				"tracking": {
-					"channel": "index",
-					"eVar4": "en",
-					"eVar17": "chevyevlife",
-					"eVar18": "chevrolet",
-					"eVar31": "usa",
-					"eVar32": "northamerica",
-					"hier1": "index,legacy",
-					"pageName": "ch:no:us:en:chevyevlife:legacy",
-					"prop11": "legacy",
-					"prop14": "index:legacy",
-					"prop17": "chevyevlife",
-					"prop18": "chevrolet",
-					"prop23": "en"
-				}
-			}
+		"about": {
+			"id": "about",
+			"url": "/about",
+			"label": "About"
 		}
 	};
 
@@ -13592,7 +13259,7 @@
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($, Backbone) {/* global Backbone location */
+	/* WEBPACK VAR INJECTION */(function($, Backbone) {/* global Backbone location $ */
 	//var Detectizr = require('Detectizr');
 	
 	var CurrentValues = function() {
@@ -13678,14 +13345,14 @@
 		 * Is mobile?
 		 * @type {Boolean}
 		 */
-		 //this.isMobile = (Detectizr.device.type === 'mobile');
+		 // this.isMobile = (Detectizr.device.type === 'mobile');
 		 this.isMobile = $('body').hasClass('mobile');
 	
 		/**
 		 * Is tablet?
 		 * @type {Boolean}
 		 */
-		 //this.isTablet = (Detectizr.device.type === 'tablet' && Detectizr.browser.name !== 'ie');
+		 // this.isTablet = (Detectizr.device.type === 'tablet' && Detectizr.browser.name !== 'ie');
 		 this.isTablet = $('body').hasClass('tablet');
 	
 		 /**
@@ -13706,7 +13373,6 @@
 		 */
 		this.mainDatas = null;
 	
-	
 		/**
 		 * main assets
 		 * @type {Object}
@@ -13720,13 +13386,17 @@
 	};
 	
 	CurrentValues.prototype.navigate = function(href) {
+		
 		var root = location.protocol + '//' + location.host;
 	
 		// Ensure the root is part of the anchor href, meaning it's relative.
 		if (href && href.slice(0, root.length) === root) {
+	
 			href = href.replace(root, '');
 			if (this.isAnimating === false) Backbone.history.navigate(href, true);
+	
 		}
+	
 	};
 	
 	module.exports = new CurrentValues();
@@ -13743,7 +13413,6 @@
 	var PageManager              	= __webpack_require__(14);
 	var CV                       	= __webpack_require__(12);
 	var NavigationView           	= __webpack_require__(41);
-	var Analytics                	= __webpack_require__(16);
 	var FastClick					= __webpack_require__(42);
 	/*
 	 * MainView: Handles the main view logic - window/document event
@@ -13786,7 +13455,6 @@
 		 */
 		this.a$.body = null;
 	
-	
 		this.pageManager = null;
 	
 		this.handlers = {};
@@ -13828,7 +13496,7 @@
 		this.listenTo(this.pageManager, EVENT.PAGE_SHOWN,		_onPageShown.bind(this));
 		this.listenTo(this.pageManager, EVENT.HIDE_PAGE,		_onHidePage.bind(this));
 	
-		this.navigationView = new NavigationView({el: this.$el.find('#nav-wrapper')[0]});
+		this.navigationView = new NavigationView({el: this.$el.find('#main-nav')[0]});
 		this.navigationView.init();
 	
 		this.handlers.onUpdate = _onUpdate.bind(this);
@@ -13837,13 +13505,13 @@
 	
 	
 	var _onShowPage = function() {
-		
+	
 		_onResize.call(this);
-		
+	
 	};
 	
 	var _onHidePage = function() {
-		
+	
 	};
 	
 	var _appendPage = function() {
@@ -13851,7 +13519,7 @@
 	};
 	
 	var _onPageShown = function() {
-		
+	
 		this.$el.addClass('shown');
 	};
 	
@@ -13880,6 +13548,7 @@
 	
 	MainView.prototype.navigateTo = function(page, params, hash) {
 		this.pageManager.navigateTo(page, params, hash);
+		this.navigationView.setNavLayout(page);
 	};
 	
 	var _onScroll = function() {
@@ -13939,8 +13608,8 @@
 	var CV = __webpack_require__(12);
 	var Config = __webpack_require__(9);
 	var ROUTES = __webpack_require__(15);
-	var Analytics = __webpack_require__(16);
 	var IndexView = __webpack_require__(17);
+	var AboutView = __webpack_require__(43);
 	
 	var PageManager = function() {
 		/*
@@ -13976,14 +13645,20 @@
 	 * @param {Object} page of the page to navigate to.
 	 */
 	PageManager.prototype.navigateTo = function(page, params, hash) {
+	
 		var el = null;
+	
 		if (this.oldPage === null && this.currentPage === null) {
+	
 			el = document.getElementsByClassName('page-wrapper')[0];
 	
 			if (el && el.id === 'app-error') {
+	
 				page = '404';
 				params = null;
+	
 			}
+	
 		}
 	
 		var newPage = this.getCurrentPage(page, params);
@@ -13995,11 +13670,10 @@
 		// console.log('this.currentPage', this.currentPage);
 	
 		if (this.currentPage) {
+	
 			this.oldPage = this.currentPage;
 			CV.oldPage = this.currentPage.idView;
 	
-			// tracking new page
-			var route = ROUTES.getRouteByID(newPage.id);
 		}
 	
 		CV.currentPage = newPage.id;
@@ -14021,26 +13695,20 @@
 	PageManager.prototype.getCurrentPage = function(page, params) {
 		if (page === null || page === undefined) page = '/';
 	
-		console.log(page);
-	
 		var route = ROUTES.getRouteByUrl(page);
 		var view = null;
 	
-		// dynamic case switch if views are stored in config.js
-		// for (var p = 0; p < Config.paths.length; p++) {
-		// 	if (Config.paths[p].name === route.id) {
-		// 		// view = Config.paths[p].view;
-		// 		break;
-		// 	}
-		// }
 		if (!route) {
 			view = IndexView;
 			return {id: 'index', View: view};
 		}
-		console.log(route.id);
+	
 		switch (route.id) {
 		case 'index':
 			view = IndexView;
+			break;
+		case 'about':
+			view = AboutView;
 			break;
 		default:
 			view = IndexView;
@@ -14057,7 +13725,7 @@
 	
 	var _onPageRendered = function() {
 	
-		//Back-end rendered here 
+		//Back-end rendered here
 		if (this.oldPage !== null) {
 			this.trigger(EVENT.PAGE_RENDERED);
 		}
@@ -14072,52 +13740,52 @@
 	
 	var _onPageReady = function () {
 	
-	    this.stopListening( this.currentPage, EVENT.INIT);
+			this.stopListening( this.currentPage, EVENT.INIT);
 	
-	    if (this.oldPage) {
-	        
-	        this.trigger(EVENT.HIDE_PAGE)
-	        this.listenToOnce( this.oldPage, EVENT.HIDDEN , _onPageHidden.bind(this));
-	        this.oldPage.hide();
+			if (this.oldPage) {
 	
-	    } else {
-	        
-	        //first page
-	        //direct Show
-	        this.trigger(EVENT.SHOW_PAGE)
-	        this.listenToOnce( this.currentPage, EVENT.SHOWN , _onPageShown.bind(this));
-	        this.currentPage.show(true);
-	    }
-	    
+					this.trigger(EVENT.HIDE_PAGE)
+					this.listenToOnce( this.oldPage, EVENT.HIDDEN , _onPageHidden.bind(this));
+					this.oldPage.hide();
+	
+			} else {
+	
+					//first page
+					//direct Show
+					this.trigger(EVENT.SHOW_PAGE)
+					this.listenToOnce( this.currentPage, EVENT.SHOWN , _onPageShown.bind(this));
+					this.currentPage.show(true);
+			}
+	
 	}
 	
 	var _onPageHidden = function () {
 	
-	    //console.log('pageManager _onPageHidden')
-	    this.listenToOnce(this.currentPage, EVENT.SHOWN , _onPageShown.bind(this));
+			//console.log('pageManager _onPageHidden')
+			this.listenToOnce(this.currentPage, EVENT.SHOWN , _onPageShown.bind(this));
 	
-	    // dispose now!
-	    if (this.oldPage){
-	        _removeOldPage.call(this);
-	    } 
+			// dispose now!
+			if (this.oldPage){
+					_removeOldPage.call(this);
+			}
 	
-	    //here we hide old page so it's not direct
-	    //we appended the new page on the DOM
-	    setTimeout( (function(){
-	        
-	        this.trigger(EVENT.SHOW_PAGE)
-	        this.currentPage.show(false);
+			//here we hide old page so it's not direct
+			//we appended the new page on the DOM
+			setTimeout( (function(){
 	
-	    }).bind(this), 0 )
-	    
+					this.trigger(EVENT.SHOW_PAGE)
+					this.currentPage.show(false);
+	
+			}).bind(this), 0 )
+	
 	}
 	
-	var _onPageShown = function () {
+	var _onPageShown = function() {
 	
-	    CV.isAnimating = false;
-	    CV.firstTime = false;
+			CV.isAnimating = false;
+			CV.firstTime = false;
 	
-	    this.trigger(EVENT.PAGE_SHOWN);
+			this.trigger(EVENT.PAGE_SHOWN);
 	
 	}
 	
@@ -14172,122 +13840,7 @@
 
 
 /***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* global window */
-	
-	/**
-	 * Init analytics by loading the Google scripts.
-	 * @constructor
-	 */
-	'use strict';
-	
-	var Config     = __webpack_require__(9);
-	
-	/**
-	 * Init analytics by loading the Google scripts.
-	 * @constructor
-	 */
-	var Analytics = function(){
-	
-	  this.loaded = false;
-	  this.startedLoading = false;
-	
-	  if( window.ga){
-	    // if this is required elsewhere.. don't load the script more than once.
-	    // console.log(' google analytics already initialized.');
-	
-	    // already created the GA just return this for tracking event use.
-	    return this;
-	  }
-	
-	  if (this.startedLoading) return this;
-	
-	  this.startedLoading = true;
-	
-	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-	
-	
-	};
-	
-	Analytics.prototype.init = function() {
-	
-	  // Create here
-	  if (Config.gaID != null)
-	    ga('create', Config.gaID, 'auto');
-	
-	}
-	
-	// the google method to retrieving a pageview. but won't work with ajax updates.
-	// so we force it in pagemanager and read this method.
-	Analytics.prototype.getCurrentUrl = function() {
-	  var location = window.location.protocol +
-	    '//' + window.location.hostname +
-	    window.location.pathname +
-	    window.location.search;
-	  return location;
-	}
-	
-	
-	
-	Analytics.prototype.page = function(objPage) {
-	
-	  if (window.ga == undefined) return;
-	
-	  // console.log("\n-------- ga track page------");
-	  // console.log(" page page. ");
-	  // console.log("--------------\n");
-	
-	  if( typeof objPage !== 'undefined' ){
-	    var page = objPage.page || "";
-	    var title = objPage.title || "";
-	
-	    ga('send', 'pageview', {
-	      page: page,
-	      title: title
-	    });
-	
-	  }else{
-	    // do not pass an empty object if undefined.
-	    ga('send', 'pageview');
-	  }
-	
-	}
-	
-	
-	
-	Analytics.prototype.event = function(event) {
-	
-	  if (window.ga == undefined) return;
-	
-	  if (event.category == undefined) {
-	    console.log('GA:: You have to provide a category', event);
-	    return;
-	  }
-	
-	  if (event.action == undefined) {
-	    console.log('GA:: You have to provide an action', event);
-	    return;
-	  }
-	
-	  var category = event.category;
-	  var action = event.action;
-	  var label = event.label || null;
-	  // value can only be numerical
-	  var value = event.value || null;
-	
-	  ga('send', 'event', category, action, label, value);
-	  
-	}
-	
-	
-	module.exports = new Analytics();
-
-/***/ },
+/* 16 */,
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -14296,7 +13849,7 @@
 	var PageView  			= __webpack_require__(18);
 	var template 			= __webpack_require__(20);
 	var CV 					= __webpack_require__(12);
-	var HomepageDatas 		= __webpack_require__(43)	
+	var HomepageDatas 		= __webpack_require__(40)	
 	
 	var IndexView = function(options, datas) {
 		this.template = template;
@@ -14342,12 +13895,6 @@
 		* @type {Backbone Model}
 		*/
 		this.model = (this.model !== undefined) ? this.model : new Backbone.Model({asynchronous: false});
-	
-		/**
-		* Associative object containing get params
-		* @type {Object}
-		*/
-		this.params = {};
 	
 		/**
 		* Current Id View
@@ -14407,15 +13954,15 @@
 	};
 	
 	PageView.prototype.initTLShow = function() {
-		
+	
 		this.initTLBaseShow();
-		
+	
 	};
 	
 	PageView.prototype.initTLHide = function() {
-		
+	
 		this.initTLBaseHide();
-		
+	
 	};
 	
 	PageView.prototype.initTLBaseShow = function() {
@@ -14495,26 +14042,13 @@
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Backbone, _) {/* global  _ Backbone $ location  */
-	
-	// Example of dynamic require 
-	
-	// var requireAll = function(requireContext) {
-	// 	var r = {};
-	// 	var a = requireContext.keys().map(requireContext);
-	// 	for (var i in requireContext.keys()) {
-	// 		if (requireContext.keys()[i]) {
-	// 			var id = requireContext.keys()[i].replace('./', '').replace('.svg', '');
-	// 			r[id] = a[i];
-	// 		}
-	// 	}
-	// 	return r;
-	// };
+	/* WEBPACK VAR INJECTION */(function(Backbone, _) {/* global  _ Backbone location  */
 	
 	var EVENT = __webpack_require__(11);
 	var CV = __webpack_require__(12);
 	
 	var BaseView = function(options, data) {
+	
 		/*
 		* Params object from router
 		* @type {Objet}
@@ -14595,6 +14129,7 @@
 		this.events['click a'] = 'onLinkClicked'; // global link
 	
 		Backbone.View.call(this, options, data);
+	
 	};
 	
 	_.extend(BaseView, Backbone.View);
@@ -14608,8 +14143,6 @@
 		if (this.options.dataID !== undefined) this.dataID = this.options.dataID;
 		if (this.options.template !== undefined) this.template = this.options.template;
 		if (this.options.className !== undefined) this.className = this.options.className;
-	
-		// console.log(this.className);
 	
 		// Render now if you don't have to fetch anything
 		if (this.model === null) {
@@ -14641,7 +14174,7 @@
 	BaseView.prototype.renderTemplate = function() {
 	
 		if (this.template === null) return;
-		var html = (this.model !== null) ? this.template({datas: this.model.attributes, svgFiles: SvgFiles}) : this.template({svgFiles : SvgFiles});
+		var html = (this.model !== null) ? this.template({datas: this.model.attributes}) : this.template();
 		this.setElement(html);
 	
 	};
@@ -16016,11 +15549,24 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 40 */,
+/* 40 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"metas": {
+			"title": "Index",
+			"description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmodproident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+		},
+		"content": {
+			"title": "Hello World Index"
+		}
+	};
+
+/***/ },
 /* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_, $) {/* global Power2 TweenMax $ Backbone _ TimelineMax Cubic */
+	/* WEBPACK VAR INJECTION */(function(_, $) {/* global $ _ */
 	
 	var CV      		= __webpack_require__(12);
 	var ROUTES 			= __webpack_require__(15);
@@ -16041,8 +15587,8 @@
 	 * Here we should create reference of DOM elements we want to manipulate
 	 */
 	NavigationView.prototype.initDOM = function() {
-		this.a$.nav 				= this.$el.find('.nav-container');
-		this.a$.navItems			= this.a$.nav.find('nav li a');
+		this.a$.nav 				= this.$el.find('ul');
+		this.a$.navItems		= this.a$.nav.find('li a');
 	
 		BaseView.prototype.initDOM.call(this);
 	};
@@ -16052,32 +15598,14 @@
 	};
 	
 	NavigationView.prototype.onLinkClicked = function(e) {
-		this.href = $(e.currentTarget).attr('href');
-		var pageID = $(e.currentTarget).data('page');
-		if (
-			(this.href.substr(0, 4) === 'http' && this.href.indexOf(root) === -1) ||
-			(this.href.substr(0, 5) === 'https' && this.href.indexOf(root) === -1) ||
-			e.currentTarget.getAttribute('target') === '_blank' ||
-			(this.href.substr(0, 6) === 'mailto' && this.href.indexOf(root) === -1)) {
-			// do nothing
-		} else {
-			e.preventDefault();
-	
-			if (CV.currentPage === this.href || this.href === '/' && CV.currentPage === 'index') {
-				this.href = null;
-				return false;
-			}
-			// this.hide(link);
-			this.setNavLayout(pageID, true);
-		}
+		BaseView.prototype.onLinkClicked.call(this, e);
 	};
 	
-	NavigationView.prototype.setNavLayout = function(pageID, hideAfter_) {
-	
+	NavigationView.prototype.setNavLayout = function(pageURL) {
+		console.log('setNavLayout', pageURL);
 		this.resetCurrentNavItem();
 	
-		var currentPage = pageID ? ROUTES.getRouteByID(pageID) : ROUTES.getRouteByID(CV.currentPage);
-	
+		var currentPage = pageURL ? ROUTES.getRouteByUrl(pageURL) : ROUTES.getRouteByID(CV.currentPage);
 		var $currentNavItem = this.a$.nav.find('*[data-page="' + currentPage.id + '"]');
 		// if no nav item SKIP. this would happen when rendering legacy and 404.
 		if ($currentNavItem.length === 0) return;
@@ -16943,15 +16471,54 @@
 
 /***/ },
 /* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(_) {/* global  _   */
+	
+	var PageView  			= __webpack_require__(18);
+	var template 			= __webpack_require__(20);
+	var AboutDatas 		= __webpack_require__(44)
+	
+	//TODO clean datas flow here
+	var AboutView = function(options, datas) {
+		this.template = template;
+	
+		var datasParam = AboutDatas;
+	
+		PageView.call(this, options, datasParam);
+	};
+	
+	_.extend(AboutView, PageView);
+	_.extend(AboutView.prototype, PageView.prototype);
+	
+	AboutView.prototype.initDOM = function() {
+	
+		PageView.prototype.initDOM.call(this);
+	};
+	
+	AboutView.prototype.setupDOM = function() {
+	
+	};
+	
+	AboutView.prototype.onResize = function() {
+	
+	};
+	
+	module.exports = AboutView;
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ },
+/* 44 */
 /***/ function(module, exports) {
 
 	module.exports = {
 		"metas": {
-			"title": "Index",
+			"title": "About",
 			"description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmodproident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 		},
 		"content": {
-			"title": "Hello World Index"
+			"title": "Hello World About"
 		}
 	};
 

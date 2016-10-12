@@ -2,10 +2,10 @@ var path = require('path');
 var webpack = require('webpack');
 var appEntryPoint = './src/scripts/project/main.js';
 var includePath = path.join(__dirname, 'src/scripts');
-var templatePath = path.join(__dirname, 'public/templates');
-var nodeModulesPath = path.join(__dirname, 'node_modules');
-var outputPath = __dirname + '/public/assets/js/';
-var vendorPath = path.join(__dirname, '/vendors');
+// var templatePath = path.join(__dirname, 'public/templates');
+// var nodeModulesPath = path.join(__dirname, 'node_modules');
+var outputPath = path.join(__dirname, '/public/assets/js/');
+// var vendorPath = path.join(__dirname, '/vendors');
 var devTool = 'source-map';
 
 var PROD = JSON.parse(process.env.ENV_PROD || 0);
@@ -16,13 +16,14 @@ var env = {
 };
 
 var plugins = [
-		// Avoid publishing files when compilation failed
-		new webpack.NoErrorsPlugin()
+	// Avoid publishing files when compilation failed
+	new webpack.NoErrorsPlugin()
 ];
 
 var filename = 'bundle.js';
 
 if (PROD) {
+
 	plugins.push(
 			// new webpack.optimize.DedupePlugin(),
 			// new webpack.optimize.OccurenceOrderPlugin(),
@@ -39,32 +40,32 @@ if (PROD) {
 			})
 		);
 
-		outputPath = __dirname + '/public/assets/js/';
+	outputPath = path.join(__dirname, '/public/assets/js/');
 
-		filename = 'bundle.min.js';
+	filename = 'bundle.min.js';
 
-		devTool = null;//'hidden-source-map';
+	devTool = null;
+	// 'hidden-source-map';
 
-		// devTool = 'inline-source-map';
+	// devTool = 'inline-source-map';
+	console.log('\n ---- WEBPACK ----\n \n running in production \n');
 
-		console.log('\n ---- WEBPACK ----\n \n running in production \n');
+} else {
 
-}else{
-
-		console.log('\n ---- WEBPACK ---- \n \n running in development \n');
+	console.log('\n ---- WEBPACK ---- \n \n running in development \n');
 
 }
 
-console.log(' running webpack in ' + __dirname );
-console.log(' filename: ' + filename );
-console.log(' devTool: ' + devTool );
-console.log(' include path ' + includePath );
+console.log(path.join(' running webpack in ', __dirname));
+console.log(' filename: ' + filename);
+console.log(' devTool: ' + devTool);
+console.log(' include path ' + includePath);
 console.log(' outputPath path ' + outputPath + '\n');
 
 var entryPoints = appEntryPoint;
 
-plugins.push( new webpack.DefinePlugin({
-		ENV : JSON.stringify(env)
+plugins.push(new webpack.DefinePlugin({
+	ENV : JSON.stringify(env)
 }));
 
 // This plugin makes a module available as variable in every module.
@@ -136,8 +137,8 @@ module.exports = {
 	},
 
 	stats: {
-			// Nice colored output
-			colors: true
+		// Nice colored output
+		colors: true
 	},
 
 	// Create Sourcemaps for the bundle

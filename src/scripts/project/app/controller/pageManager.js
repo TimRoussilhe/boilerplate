@@ -4,8 +4,8 @@ var EVENT = require('events/events');
 var CV = require('config/currentValues');
 var Config = require('config/config');
 var ROUTES = require('router/routes');
-var Analytics = require('tools/analytics');
 var IndexView = require('views/pages/indexView');
+var AboutView = require('views/pages/aboutView');
 
 var PageManager = function() {
 	/*
@@ -41,14 +41,20 @@ PageManager.prototype.init = function() {
  * @param {Object} page of the page to navigate to.
  */
 PageManager.prototype.navigateTo = function(page, params, hash) {
+
 	var el = null;
+
 	if (this.oldPage === null && this.currentPage === null) {
+
 		el = document.getElementsByClassName('page-wrapper')[0];
 
 		if (el && el.id === 'app-error') {
+
 			page = '404';
 			params = null;
+
 		}
+
 	}
 
 	var newPage = this.getCurrentPage(page, params);
@@ -60,11 +66,10 @@ PageManager.prototype.navigateTo = function(page, params, hash) {
 	// console.log('this.currentPage', this.currentPage);
 
 	if (this.currentPage) {
+
 		this.oldPage = this.currentPage;
 		CV.oldPage = this.currentPage.idView;
 
-		// tracking new page
-		var route = ROUTES.getRouteByID(newPage.id);
 	}
 
 	CV.currentPage = newPage.id;
@@ -86,26 +91,20 @@ PageManager.prototype.renderCurrentPage = function() {
 PageManager.prototype.getCurrentPage = function(page, params) {
 	if (page === null || page === undefined) page = '/';
 
-	console.log(page);
-
 	var route = ROUTES.getRouteByUrl(page);
 	var view = null;
 
-	// dynamic case switch if views are stored in config.js
-	// for (var p = 0; p < Config.paths.length; p++) {
-	// 	if (Config.paths[p].name === route.id) {
-	// 		// view = Config.paths[p].view;
-	// 		break;
-	// 	}
-	// }
 	if (!route) {
 		view = IndexView;
 		return {id: 'index', View: view};
 	}
-	console.log(route.id);
+
 	switch (route.id) {
 	case 'index':
 		view = IndexView;
+		break;
+	case 'about':
+		view = AboutView;
 		break;
 	default:
 		view = IndexView;
@@ -122,7 +121,7 @@ PageManager.prototype.onError = function() {
 
 var _onPageRendered = function() {
 
-	//Back-end rendered here 
+	//Back-end rendered here
 	if (this.oldPage !== null) {
 		this.trigger(EVENT.PAGE_RENDERED);
 	}
@@ -137,52 +136,52 @@ var _onPageRendered = function() {
 
 var _onPageReady = function () {
 
-    this.stopListening( this.currentPage, EVENT.INIT);
+		this.stopListening( this.currentPage, EVENT.INIT);
 
-    if (this.oldPage) {
-        
-        this.trigger(EVENT.HIDE_PAGE)
-        this.listenToOnce( this.oldPage, EVENT.HIDDEN , _onPageHidden.bind(this));
-        this.oldPage.hide();
+		if (this.oldPage) {
 
-    } else {
-        
-        //first page
-        //direct Show
-        this.trigger(EVENT.SHOW_PAGE)
-        this.listenToOnce( this.currentPage, EVENT.SHOWN , _onPageShown.bind(this));
-        this.currentPage.show(true);
-    }
-    
+				this.trigger(EVENT.HIDE_PAGE)
+				this.listenToOnce( this.oldPage, EVENT.HIDDEN , _onPageHidden.bind(this));
+				this.oldPage.hide();
+
+		} else {
+
+				//first page
+				//direct Show
+				this.trigger(EVENT.SHOW_PAGE)
+				this.listenToOnce( this.currentPage, EVENT.SHOWN , _onPageShown.bind(this));
+				this.currentPage.show(true);
+		}
+
 }
 
 var _onPageHidden = function () {
 
-    //console.log('pageManager _onPageHidden')
-    this.listenToOnce(this.currentPage, EVENT.SHOWN , _onPageShown.bind(this));
+		//console.log('pageManager _onPageHidden')
+		this.listenToOnce(this.currentPage, EVENT.SHOWN , _onPageShown.bind(this));
 
-    // dispose now!
-    if (this.oldPage){
-        _removeOldPage.call(this);
-    } 
+		// dispose now!
+		if (this.oldPage){
+				_removeOldPage.call(this);
+		}
 
-    //here we hide old page so it's not direct
-    //we appended the new page on the DOM
-    setTimeout( (function(){
-        
-        this.trigger(EVENT.SHOW_PAGE)
-        this.currentPage.show(false);
+		//here we hide old page so it's not direct
+		//we appended the new page on the DOM
+		setTimeout( (function(){
 
-    }).bind(this), 0 )
-    
+				this.trigger(EVENT.SHOW_PAGE)
+				this.currentPage.show(false);
+
+		}).bind(this), 0 )
+
 }
 
-var _onPageShown = function () {
+var _onPageShown = function() {
 
-    CV.isAnimating = false;
-    CV.firstTime = false;
+		CV.isAnimating = false;
+		CV.firstTime = false;
 
-    this.trigger(EVENT.PAGE_SHOWN);
+		this.trigger(EVENT.PAGE_SHOWN);
 
 }
 

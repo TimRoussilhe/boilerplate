@@ -12,12 +12,6 @@ var PageView = function(options, data) {
 	this.model = (this.model !== undefined) ? this.model : new Backbone.Model({asynchronous: false});
 
 	/**
-	* Associative object containing get params
-	* @type {Object}
-	*/
-	this.params = {};
-
-	/**
 	* Current Id View
 	* @type {string}
 	*/
@@ -75,15 +69,15 @@ PageView.prototype.setupDOM = function() {
 };
 
 PageView.prototype.initTLShow = function() {
-	
+
 	this.initTLBaseShow();
-	
+
 };
 
 PageView.prototype.initTLHide = function() {
-	
+
 	this.initTLBaseHide();
-	
+
 };
 
 PageView.prototype.initTLBaseShow = function() {

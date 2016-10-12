@@ -1,4 +1,4 @@
-/* global Backbone location */
+/* global Backbone location $ */
 //var Detectizr = require('Detectizr');
 
 var CurrentValues = function() {
@@ -84,14 +84,14 @@ var CurrentValues = function() {
 	 * Is mobile?
 	 * @type {Boolean}
 	 */
-	 //this.isMobile = (Detectizr.device.type === 'mobile');
+	 // this.isMobile = (Detectizr.device.type === 'mobile');
 	 this.isMobile = $('body').hasClass('mobile');
 
 	/**
 	 * Is tablet?
 	 * @type {Boolean}
 	 */
-	 //this.isTablet = (Detectizr.device.type === 'tablet' && Detectizr.browser.name !== 'ie');
+	 // this.isTablet = (Detectizr.device.type === 'tablet' && Detectizr.browser.name !== 'ie');
 	 this.isTablet = $('body').hasClass('tablet');
 
 	 /**
@@ -112,7 +112,6 @@ var CurrentValues = function() {
 	 */
 	this.mainDatas = null;
 
-
 	/**
 	 * main assets
 	 * @type {Object}
@@ -126,13 +125,17 @@ CurrentValues.prototype.init = function() {
 };
 
 CurrentValues.prototype.navigate = function(href) {
+	
 	var root = location.protocol + '//' + location.host;
 
 	// Ensure the root is part of the anchor href, meaning it's relative.
 	if (href && href.slice(0, root.length) === root) {
+
 		href = href.replace(root, '');
 		if (this.isAnimating === false) Backbone.history.navigate(href, true);
+
 	}
+
 };
 
 module.exports = new CurrentValues();

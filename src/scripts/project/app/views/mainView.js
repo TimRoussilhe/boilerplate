@@ -4,7 +4,6 @@ var EVENT 						= require('events/events');
 var PageManager              	= require('controller/pageManager');
 var CV                       	= require('config/currentValues');
 var NavigationView           	= require('views/ui/navigationView');
-var Analytics                	= require('tools/analytics');
 var FastClick					= require('FastClick');
 /*
  * MainView: Handles the main view logic - window/document event
@@ -47,7 +46,6 @@ var MainView = function(options, datas) {
 	 */
 	this.a$.body = null;
 
-
 	this.pageManager = null;
 
 	this.handlers = {};
@@ -89,7 +87,7 @@ MainView.prototype.init = function() {
 	this.listenTo(this.pageManager, EVENT.PAGE_SHOWN,		_onPageShown.bind(this));
 	this.listenTo(this.pageManager, EVENT.HIDE_PAGE,		_onHidePage.bind(this));
 
-	this.navigationView = new NavigationView({el: this.$el.find('#nav-wrapper')[0]});
+	this.navigationView = new NavigationView({el: this.$el.find('#main-nav')[0]});
 	this.navigationView.init();
 
 	this.handlers.onUpdate = _onUpdate.bind(this);
@@ -98,13 +96,13 @@ MainView.prototype.init = function() {
 
 
 var _onShowPage = function() {
-	
+
 	_onResize.call(this);
-	
+
 };
 
 var _onHidePage = function() {
-	
+
 };
 
 var _appendPage = function() {
@@ -112,7 +110,7 @@ var _appendPage = function() {
 };
 
 var _onPageShown = function() {
-	
+
 	this.$el.addClass('shown');
 };
 
@@ -141,6 +139,7 @@ MainView.prototype.bindMainEvents = function() {
 
 MainView.prototype.navigateTo = function(page, params, hash) {
 	this.pageManager.navigateTo(page, params, hash);
+	this.navigationView.setNavLayout(page);
 };
 
 var _onScroll = function() {

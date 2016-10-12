@@ -1,4 +1,4 @@
-/* global Power2 TweenMax $ Backbone _ TimelineMax Cubic */
+/* global $ _ */
 
 var CV      		= require('config/currentValues');
 var ROUTES 			= require('router/routes');
@@ -19,8 +19,8 @@ _.extend(NavigationView.prototype, BaseView.prototype);
  * Here we should create reference of DOM elements we want to manipulate
  */
 NavigationView.prototype.initDOM = function() {
-	this.a$.nav 				= this.$el.find('.nav-container');
-	this.a$.navItems			= this.a$.nav.find('nav li a');
+	this.a$.nav 				= this.$el.find('ul');
+	this.a$.navItems		= this.a$.nav.find('li a');
 
 	BaseView.prototype.initDOM.call(this);
 };
@@ -30,32 +30,14 @@ NavigationView.prototype.setupDOM = function() {
 };
 
 NavigationView.prototype.onLinkClicked = function(e) {
-	this.href = $(e.currentTarget).attr('href');
-	var pageID = $(e.currentTarget).data('page');
-	if (
-		(this.href.substr(0, 4) === 'http' && this.href.indexOf(root) === -1) ||
-		(this.href.substr(0, 5) === 'https' && this.href.indexOf(root) === -1) ||
-		e.currentTarget.getAttribute('target') === '_blank' ||
-		(this.href.substr(0, 6) === 'mailto' && this.href.indexOf(root) === -1)) {
-		// do nothing
-	} else {
-		e.preventDefault();
-
-		if (CV.currentPage === this.href || this.href === '/' && CV.currentPage === 'index') {
-			this.href = null;
-			return false;
-		}
-		// this.hide(link);
-		this.setNavLayout(pageID, true);
-	}
+	BaseView.prototype.onLinkClicked.call(this, e);
 };
 
-NavigationView.prototype.setNavLayout = function(pageID, hideAfter_) {
-
+NavigationView.prototype.setNavLayout = function(pageURL) {
+	console.log('setNavLayout', pageURL);
 	this.resetCurrentNavItem();
 
-	var currentPage = pageID ? ROUTES.getRouteByID(pageID) : ROUTES.getRouteByID(CV.currentPage);
-
+	var currentPage = pageURL ? ROUTES.getRouteByUrl(pageURL) : ROUTES.getRouteByID(CV.currentPage);
 	var $currentNavItem = this.a$.nav.find('*[data-page="' + currentPage.id + '"]');
 	// if no nav item SKIP. this would happen when rendering legacy and 404.
 	if ($currentNavItem.length === 0) return;
