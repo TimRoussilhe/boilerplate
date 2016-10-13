@@ -1,76 +1,77 @@
 {
-  "name": "Boilerplate",
-  "description": "Boilerplate framework",
-  "version": "0.0.1",
-  "private": true,
-  "author": "Tim Roussilhe",
-  "contributors": [
-    "Tim Roussilhe"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Stinkdigital/chevy-volt"
-  },
-  "bugs": {
-    "url": "https://github.com/Stinkdigital/chevy-volt/issues"
-  },
-  "app": {},
-  "engines": {
-    "node": "latest",
-    "npm": "latest"
-  },
-  "dependencies": {
-    "compression": "^1.6.2",
-    "express": "^4.14.0",
-    "express-handlebars": "^3.0.0",
-    "helmet": "^2.3.0",
-    "mobile-detect": "^1.3.3",
-    "ua-parser-js": "^0.7.10"
-  },
-  "devDependencies": {
-    "autoprefixer": "^6.5.0",
-    "autoprefixer-stylus": "^0.11.0",
-    "backbone": "^1.3.3",
-    "connect-livereload": "^0.6.0",
-    "customizr": "^1.0.0-alpha",
-    "eslint": "^3.7.1",
-    "eslint-config-google": "^0.6.0",
-    "exports-loader": "^0.6.3",
-    "fastclick": "^1.0.6",
-    "gsap": "^1.19.0",
-    "gulp": "^3.9.1",
-    "gulp-csso": "^2.0.0",
-    "gulp-iconfont": "^8.0.1",
-    "gulp-iconfont-css": "^2.1.0",
-    "gulp-imagemin": "^3.0.3",
-    "gulp.spritesmith": "^6.2.1",
-    "handlebars": "^4.0.5",
-    "handlebars-loader": "^1.4.0",
-    "imports-loader": "^0.6.5",
-    "json-loader": "^0.5.4",
-    "merge-stream": "^1.0.0",
-    "npm-zepto": "^1.1.7",
-    "parallelshell": "^2.0.0",
-    "run-sequence": "^1.2.2",
-    "stylus": "^0.54.5",
-    "underscore": "^1.8.3",
-    "vinyl-buffer": "^1.0.0",
-    "webpack": "^1.13.2"
-  },
-  "scripts": {
-    "build:stylus": "$(npm bin)/stylus -u autoprefixer-stylus -m -w ./src/css/app.styl -o ./public/assets/css/app.css --include-css",
-    "build:js": "ENV_PROD=0 webpack",
-    "build:iconfont": "gulp iconfontSequence",
-    "build:modernizr": "$(npm bin)/customizr -c ./customizr.config.json",
-    "build:png2Sprite": "gulp png2Sprite",
-    "dist:stylus": "$(npm bin)/stylus -u autoprefixer-stylus ./src/css/app.styl -o ./public/assets/css/app.min.css --include-css -c",
-    "dist:autoprefixer": "postcss --use autoprefixer -c autoprefixer-options.json ./public/assets/css/app.min.css -d ./public/assets/css/min-prefixed",
-    "dist:js": "ENV_PROD=1 webpack",
-    "lint:deploy": "npm run lint:css",
-    "lint:css": "stylelint ./public/assets/css/*.css",
-    "lint:js": "eslint ./src/scripts/project",
-    "watch:js": "ENV_PROD=0 webpack --progress --colors --watch --cache",
-    "dev": "npm run build:modernizr && parallelshell 'npm run watch:js' 'npm run build:stylus'",
-    "deploy": "npm run build:png2Sprite && npm run build:modernizr && npm run dist:stylus && npm run lint:js && npm run dist:js"
-  }
+	"name": "Boilerplate",
+	"description": "Boilerplate framework",
+	"version": "0.0.1",
+	"private": true,
+	"author": "Tim Roussilhe",
+	"contributors": [
+		"Tim Roussilhe"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Stinkdigital/chevy-volt"
+	},
+	"bugs": {
+		"url": "https://github.com/Stinkdigital/chevy-volt/issues"
+	},
+	"app": {},
+	"engines": {
+		"node": "latest",
+		"npm": "latest"
+	},
+	"dependencies": {
+		"compression": "^1.6.2",
+		"express": "^4.14.0",
+		"express-handlebars": "^3.0.0",
+		"helmet": "^2.3.0",
+		"mobile-detect": "^1.3.3",
+		"ua-parser-js": "^0.7.10"
+	},
+	"devDependencies": {
+		"autoprefixer": "^6.5.0",
+		"autoprefixer-stylus": "^0.11.0",
+		"backbone": "^1.3.3",
+		"concurrently": "^3.1.0",
+		"connect-livereload": "^0.6.0",
+		"customizr": "^1.0.0-alpha",
+		"eslint": "^3.7.1",
+		"eslint-config-google": "^0.6.0",
+		"exports-loader": "^0.6.3",
+		"fastclick": "^1.0.6",
+		"gsap": "^1.19.0",
+		"gulp": "^3.9.1",
+		"gulp-csso": "^2.0.0",
+		"gulp-iconfont": "^8.0.1",
+		"gulp-iconfont-css": "^2.1.0",
+		"gulp-imagemin": "^3.0.3",
+		"gulp.spritesmith": "^6.2.1",
+		"handlebars": "^4.0.5",
+		"handlebars-loader": "^1.4.0",
+		"imports-loader": "^0.6.5",
+		"json-loader": "^0.5.4",
+		"merge-stream": "^1.0.0",
+		"nodemon": "^1.11.0",
+		"npm-zepto": "^1.1.7",
+		"run-sequence": "^1.2.2",
+		"stylus": "^0.54.5",
+		"underscore": "^1.8.3",
+		"vinyl-buffer": "^1.0.0",
+		"webpack": "^1.13.2"
+	},
+	"scripts": {
+		"build:stylus": "$(npm bin)/stylus -u autoprefixer-stylus -m -w ./src/css/app.styl -o ./public/assets/css/app.css --include-css",
+		"build:js": "ENV_PROD=0 webpack",
+		"build:iconfont": "gulp iconfontSequence",
+		"build:modernizr": "$(npm bin)/customizr -c ./customizr.config.json",
+		"build:png2Sprite": "gulp png2Sprite",
+		"dist:stylus": "$(npm bin)/stylus -u autoprefixer-stylus ./src/css/app.styl -o ./public/assets/css/app.min.css --include-css -c",
+		"dist:autoprefixer": "postcss --use autoprefixer -c autoprefixer-options.json ./public/assets/css/app.min.css -d ./public/assets/css/min-prefixed",
+		"dist:js": "ENV_PROD=1 webpack",
+		"lint:css": "stylelint ./public/assets/css/*.css",
+		"lint:js": "eslint ./src/scripts/project",
+		"watch:js": "ENV_PROD=0 webpack --progress --colors --watch --cache",
+		"server": "nodemon ./server/app.js -V --watch shared --watch server",
+		"start": "npm run build:modernizr && concurrently -p \"[{name}]\" -n \"NODE,WEBPACK,STYLUS\" -c \"bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"npm run server\" \"npm run watch:js\" \"npm run build:stylus\"",
+		"deploy": "npm run build:png2Sprite && npm run build:modernizr && npm run dist:stylus && npm run dist:js && npm run lint:js && npm run lint:css"
+	}
 }

@@ -54,7 +54,6 @@ app.use(express.static(pathPublic));
 // });
 
 app.get('/*', function(req, res) {
-
 	var currentRoute = getRouteByUrl(req.url);
 	var json = require(path.join(__dirname, currentRoute.jsonUrl));
 

@@ -14378,7 +14378,7 @@
 	    + alias1(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1), depth0))
 	    + "</h1>\n	<h2>"
 	    + alias1(__default(__webpack_require__(39)).call(depth0 != null ? depth0 : {},((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1),{"name":"yell","hash":{},"data":data}))
-	    + "</h2>\n\n</section>\n";
+	    + "</h2>\n</section>\n";
 	},"useData":true});
 
 /***/ },
