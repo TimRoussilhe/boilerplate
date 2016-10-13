@@ -1,23 +1,24 @@
 /* global Backbone $ document */
 
+// require('underscore');
+// require('Modernizr');
+// require('gsap');
+
+import 'gsap';
+import 'Modernizr';
+import 'underscore';
+
 Backbone.$ = $;
-var App = require('./app/app');
+import App from './app/app';
 
-/**
- * Main module - App entry point
- * @module Main
- */
+class Main {
+	onReady() {
+		const app = new App();
+		app.init();
+	}
+}
 
-var Main = function() {};
-
-/**
- * Callback fired once the document is ready
- * @public
- */
-Main.prototype.onReady = function() {
-	var app = new App();
-	app.init();
-};
-
-var main = module.exports = new Main();
-$(document).ready(main.onReady.bind(main));
+const main = module.exports = new Main();
+$(() => {
+	main.onReady(main);
+});

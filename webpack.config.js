@@ -110,8 +110,8 @@ module.exports = {
 	resolve: {
 		alias: {
 			// jquery:   	includePath + '/vendors/zepto',
-			jquery:   'npm-zepto',
-			$:   'npm-zepto',
+			jquery: 'npm-zepto',
+			$: 'npm-zepto',
 			zepto:     'jquery',
 			// Detectizr: includePath + '/vendors/detectizr',
 			Modernizr: includePath + '/vendors/modernizr.custom'
@@ -127,6 +127,14 @@ module.exports = {
 
 	module: {
 		loaders: [
+			{
+				test: /\.js$/,
+				exclude: /(node_modules|bower_components)/,
+				loader: 'babel', // 'babel-loader' is also a valid name to reference
+				query: {
+					presets: ['es2015']
+				}
+			},
 			{test: /\.json$/, loader: 'json-loader'},
 			{test: /zepto\.js$/, loader: 'exports?Zepto; delete window.$; delete window.Zepto;'},
 			{test: /detectizr\.js$/, loader: 'imports?this=>window!exports?window.Detectizr;'},

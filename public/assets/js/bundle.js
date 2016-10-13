@@ -44,30 +44,50 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($, Backbone) {/* global Backbone $ document */
+	/* WEBPACK VAR INJECTION */(function($, Backbone) {'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* global Backbone $ document */
+	
+	// require('underscore');
+	// require('Modernizr');
+	// require('gsap');
+	
+	__webpack_require__(7);
+	
+	__webpack_require__(5);
+	
+	__webpack_require__(3);
+	
+	var _app = __webpack_require__(4);
+	
+	var _app2 = _interopRequireDefault(_app);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	Backbone.$ = $;
-	var App = __webpack_require__(4);
 	
-	/**
-	 * Main module - App entry point
-	 * @module Main
-	 */
+	var Main = function () {
+		function Main() {
+			_classCallCheck(this, Main);
+		}
 	
-	var Main = function() {};
+		_createClass(Main, [{
+			key: 'onReady',
+			value: function onReady() {
+				var app = new _app2.default();
+				app.init();
+			}
+		}]);
 	
-	/**
-	 * Callback fired once the document is ready
-	 * @public
-	 */
-	Main.prototype.onReady = function() {
-		var app = new App();
-		app.init();
-	};
+		return Main;
+	}();
 	
 	var main = module.exports = new Main();
-	$(document).ready(main.onReady.bind(main));
-	
+	$(function () {
+		main.onReady(main);
+	});
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(2)))
 
 /***/ },
@@ -5153,55 +5173,283 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_, Backbone) {/* global Backbone _*/
+	/* WEBPACK VAR INJECTION */(function(_, Backbone) {'use strict';
 	
-	__webpack_require__(3);
-	__webpack_require__(5);
-	__webpack_require__(6);
+	var _router = __webpack_require__(9);
 	
-	var Router  = __webpack_require__(8);
-	var Config  = __webpack_require__(9);
+	var _router2 = _interopRequireDefault(_router);
+	
+	var _config = __webpack_require__(10);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/**
 	 * app: Init the app
 	 * @constructor
 	 */
-	var App = function() {
-		_.extend(this, Backbone.Events);
+	/* global Backbone _*/
+	
+	var App = function App() {
+	  _.extend(this, Backbone.Events);
 	};
 	
 	/**
 	 * Handles the init
 	 */
-	App.prototype.init = function() {
-		console.log('**** Begin App ****');
+	App.prototype.init = function () {
+	  console.log('**** Begin App ****');
 	
-		Config.init();
-		Router.init();
+	  _config2.default.init();
+	  _router2.default.init();
 	};
 	
 	module.exports = App;
-	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(2)))
 
 /***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_) {/*** IMPORTS FROM imports-loader ***/
-	(function() {
+	/* WEBPACK VAR INJECTION */(function(_, module) {"use strict";
 	
-	/*! modernizr 3.3.1 (Custom Build) | MIT *
-	 * http://modernizr.com/download/?-svg-addtest-fnbind-printshiv-setclasses-testprop !*/
-	!function(e,t,n){function r(e,t){return typeof e===t}function o(){var e,t,n,o,i,a,s;for(var l in h)if(h.hasOwnProperty(l)){if(e=[],t=h[l],t.name&&(e.push(t.name.toLowerCase()),t.options&&t.options.aliases&&t.options.aliases.length))for(n=0;n<t.options.aliases.length;n++)e.push(t.options.aliases[n].toLowerCase());for(o=r(t.fn,"function")?t.fn():t.fn,i=0;i<e.length;i++)a=e[i],s=a.split("."),1===s.length?Modernizr[s[0]]=o:(!Modernizr[s[0]]||Modernizr[s[0]]instanceof Boolean||(Modernizr[s[0]]=new Boolean(Modernizr[s[0]])),Modernizr[s[0]][s[1]]=o),y.push((o?"":"no-")+s.join("-"))}}function i(e){var t=E.className,n=Modernizr._config.classPrefix||"";if(S&&(t=t.baseVal),Modernizr._config.enableJSClass){var r=new RegExp("(^|\\s)"+n+"no-js(\\s|$)");t=t.replace(r,"$1"+n+"js$2")}Modernizr._config.enableClasses&&(t+=" "+n+e.join(" "+n),S?E.className.baseVal=t:E.className=t)}function a(e,t){if("object"==typeof e)for(var n in e)g(e,n)&&a(n,e[n]);else{e=e.toLowerCase();var r=e.split("."),o=Modernizr[r[0]];if(2==r.length&&(o=o[r[1]]),"undefined"!=typeof o)return Modernizr;t="function"==typeof t?t():t,1==r.length?Modernizr[r[0]]=t:(!Modernizr[r[0]]||Modernizr[r[0]]instanceof Boolean||(Modernizr[r[0]]=new Boolean(Modernizr[r[0]])),Modernizr[r[0]][r[1]]=t),i([(t&&0!=t?"":"no-")+r.join("-")]),Modernizr._trigger(e,t)}return Modernizr}function s(e,t){return!!~(""+e).indexOf(t)}function l(){return"function"!=typeof t.createElement?t.createElement(arguments[0]):S?t.createElementNS.call(t,"http://www.w3.org/2000/svg",arguments[0]):t.createElement.apply(t,arguments)}function c(){var e=t.body;return e||(e=l(S?"svg":"body"),e.fake=!0),e}function u(e,n,r,o){var i,a,s,u,f="modernizr",d=l("div"),p=c();if(parseInt(r,10))for(;r--;)s=l("div"),s.id=o?o[r]:f+(r+1),d.appendChild(s);return i=l("style"),i.type="text/css",i.id="s"+f,(p.fake?p:d).appendChild(i),p.appendChild(d),i.styleSheet?i.styleSheet.cssText=e:i.appendChild(t.createTextNode(e)),d.id=f,p.fake&&(p.style.background="",p.style.overflow="hidden",u=E.style.overflow,E.style.overflow="hidden",E.appendChild(p)),a=n(d,e),p.fake?(p.parentNode.removeChild(p),E.style.overflow=u,E.offsetHeight):d.parentNode.removeChild(d),!!a}function f(e){return e.replace(/([A-Z])/g,function(e,t){return"-"+t.toLowerCase()}).replace(/^ms-/,"-ms-")}function d(t,r){var o=t.length;if("CSS"in e&&"supports"in e.CSS){for(;o--;)if(e.CSS.supports(f(t[o]),r))return!0;return!1}if("CSSSupportsRule"in e){for(var i=[];o--;)i.push("("+f(t[o])+":"+r+")");return i=i.join(" or "),u("@supports ("+i+") { #modernizr { position: absolute; } }",function(e){return"absolute"==getComputedStyle(e,null).position})}return n}function p(e){return e.replace(/([a-z])-([a-z])/g,function(e,t,n){return t+n.toUpperCase()}).replace(/^-/,"")}function m(e,t,o,i){function a(){u&&(delete C.style,delete C.modElem)}if(i=r(i,"undefined")?!1:i,!r(o,"undefined")){var c=d(e,o);if(!r(c,"undefined"))return c}for(var u,f,m,h,v,g=["modernizr","tspan"];!C.style;)u=!0,C.modElem=l(g.shift()),C.style=C.modElem.style;for(m=e.length,f=0;m>f;f++)if(h=e[f],v=C.style[h],s(h,"-")&&(h=p(h)),C.style[h]!==n){if(i||r(o,"undefined"))return a(),"pfx"==t?h:!0;try{C.style[h]=o}catch(y){}if(C.style[h]!=v)return a(),"pfx"==t?h:!0}return a(),!1}var h=[],v={_version:"3.3.1",_config:{classPrefix:"",enableClasses:!0,enableJSClass:!0,usePrefixes:!0},_q:[],on:function(e,t){var n=this;setTimeout(function(){t(n[e])},0)},addTest:function(e,t,n){h.push({name:e,fn:t,options:n})},addAsyncTest:function(e){h.push({name:null,fn:e})}},Modernizr=function(){};Modernizr.prototype=v,Modernizr=new Modernizr;var g,y=[],E=t.documentElement,S="svg"===E.nodeName.toLowerCase();!function(){var e={}.hasOwnProperty;g=r(e,"undefined")||r(e.call,"undefined")?function(e,t){return t in e&&r(e.constructor.prototype[t],"undefined")}:function(t,n){return e.call(t,n)}}(),v._l={},v.on=function(e,t){this._l[e]||(this._l[e]=[]),this._l[e].push(t),Modernizr.hasOwnProperty(e)&&setTimeout(function(){Modernizr._trigger(e,Modernizr[e])},0)},v._trigger=function(e,t){if(this._l[e]){var n=this._l[e];setTimeout(function(){var e,r;for(e=0;e<n.length;e++)(r=n[e])(t)},0),delete this._l[e]}},Modernizr._q.push(function(){v.addTest=a});S||!function(e,t){function n(e,t){var n=e.createElement("p"),r=e.getElementsByTagName("head")[0]||e.documentElement;return n.innerHTML="x<style>"+t+"</style>",r.insertBefore(n.lastChild,r.firstChild)}function r(){var e=_.elements;return"string"==typeof e?e.split(" "):e}function o(e,t){var n=_.elements;"string"!=typeof n&&(n=n.join(" ")),"string"!=typeof e&&(e=e.join(" ")),_.elements=n+" "+e,c(t)}function i(e){var t=b[e[w]];return t||(t={},C++,e[w]=C,b[C]=t),t}function a(e,n,r){if(n||(n=t),v)return n.createElement(e);r||(r=i(n));var o;return o=r.cache[e]?r.cache[e].cloneNode():S.test(e)?(r.cache[e]=r.createElem(e)).cloneNode():r.createElem(e),!o.canHaveChildren||E.test(e)||o.tagUrn?o:r.frag.appendChild(o)}function s(e,n){if(e||(e=t),v)return e.createDocumentFragment();n=n||i(e);for(var o=n.frag.cloneNode(),a=0,s=r(),l=s.length;l>a;a++)o.createElement(s[a]);return o}function l(e,t){t.cache||(t.cache={},t.createElem=e.createElement,t.createFrag=e.createDocumentFragment,t.frag=t.createFrag()),e.createElement=function(n){return _.shivMethods?a(n,e,t):t.createElem(n)},e.createDocumentFragment=Function("h,f","return function(){var n=f.cloneNode(),c=n.createElement;h.shivMethods&&("+r().join().replace(/[\w\-:]+/g,function(e){return t.createElem(e),t.frag.createElement(e),'c("'+e+'")'})+");return n}")(_,t.frag)}function c(e){e||(e=t);var r=i(e);return!_.shivCSS||h||r.hasCSS||(r.hasCSS=!!n(e,"article,aside,dialog,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}mark{background:#FF0;color:#000}template{display:none}")),v||l(e,r),e}function u(e){for(var t,n=e.getElementsByTagName("*"),o=n.length,i=RegExp("^(?:"+r().join("|")+")$","i"),a=[];o--;)t=n[o],i.test(t.nodeName)&&a.push(t.applyElement(f(t)));return a}function f(e){for(var t,n=e.attributes,r=n.length,o=e.ownerDocument.createElement(T+":"+e.nodeName);r--;)t=n[r],t.specified&&o.setAttribute(t.nodeName,t.nodeValue);return o.style.cssText=e.style.cssText,o}function d(e){for(var t,n=e.split("{"),o=n.length,i=RegExp("(^|[\\s,>+~])("+r().join("|")+")(?=[[\\s,>+~#.:]|$)","gi"),a="$1"+T+"\\:$2";o--;)t=n[o]=n[o].split("}"),t[t.length-1]=t[t.length-1].replace(i,a),n[o]=t.join("}");return n.join("{")}function p(e){for(var t=e.length;t--;)e[t].removeNode()}function m(e){function t(){clearTimeout(a._removeSheetTimer),r&&r.removeNode(!0),r=null}var r,o,a=i(e),s=e.namespaces,l=e.parentWindow;return!x||e.printShived?e:("undefined"==typeof s[T]&&s.add(T),l.attachEvent("onbeforeprint",function(){t();for(var i,a,s,l=e.styleSheets,c=[],f=l.length,p=Array(f);f--;)p[f]=l[f];for(;s=p.pop();)if(!s.disabled&&N.test(s.media)){try{i=s.imports,a=i.length}catch(m){a=0}for(f=0;a>f;f++)p.push(i[f]);try{c.push(s.cssText)}catch(m){}}c=d(c.reverse().join("")),o=u(e),r=n(e,c)}),l.attachEvent("onafterprint",function(){p(o),clearTimeout(a._removeSheetTimer),a._removeSheetTimer=setTimeout(t,500)}),e.printShived=!0,e)}var h,v,g="3.7.3",y=e.html5||{},E=/^<|^(?:button|map|select|textarea|object|iframe|option|optgroup)$/i,S=/^(?:a|b|code|div|fieldset|h1|h2|h3|h4|h5|h6|i|label|li|ol|p|q|span|strong|style|table|tbody|td|th|tr|ul)$/i,w="_html5shiv",C=0,b={};!function(){try{var e=t.createElement("a");e.innerHTML="<xyz></xyz>",h="hidden"in e,v=1==e.childNodes.length||function(){t.createElement("a");var e=t.createDocumentFragment();return"undefined"==typeof e.cloneNode||"undefined"==typeof e.createDocumentFragment||"undefined"==typeof e.createElement}()}catch(n){h=!0,v=!0}}();var _={elements:y.elements||"abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output picture progress section summary template time video",version:g,shivCSS:y.shivCSS!==!1,supportsUnknownElements:v,shivMethods:y.shivMethods!==!1,type:"default",shivDocument:c,createElement:a,createDocumentFragment:s,addElements:o};e.html5=_,c(t);var N=/^$|\b(?:all|print)\b/,T="html5shiv",x=!v&&function(){var n=t.documentElement;return!("undefined"==typeof t.namespaces||"undefined"==typeof t.parentWindow||"undefined"==typeof n.applyElement||"undefined"==typeof n.removeNode||"undefined"==typeof e.attachEvent)}();_.type+=" print",_.shivPrint=m,m(t),"object"==typeof module&&module.exports&&(module.exports=_)}("undefined"!=typeof e?e:this,t);var w={elem:l("modernizr")};Modernizr._q.push(function(){delete w.elem});var C={style:w.elem.style};Modernizr._q.unshift(function(){delete C.style});v.testProp=function(e,t,r){return m([e],n,t,r)};Modernizr.addTest("svg",!!t.createElementNS&&!!t.createElementNS("http://www.w3.org/2000/svg","svg").createSVGRect),o(),i(y),delete v.addTest,delete v.addAsyncTest;for(var b=0;b<Modernizr._q.length;b++)Modernizr._q[b]();e.Modernizr=Modernizr}(window,document);
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	/*** EXPORTS FROM exports-loader ***/
-	module.exports = window.Modernizr;;
-	}.call(window));
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+	/*** IMPORTS FROM imports-loader ***/
+	(function () {
+	
+	  /*! modernizr 3.3.1 (Custom Build) | MIT *
+	   * http://modernizr.com/download/?-svg-addtest-fnbind-printshiv-setclasses-testprop !*/
+	  !function (e, t, n) {
+	    function r(e, t) {
+	      return (typeof e === "undefined" ? "undefined" : _typeof(e)) === t;
+	    }function o() {
+	      var e, t, n, o, i, a, s;for (var l in h) {
+	        if (h.hasOwnProperty(l)) {
+	          if (e = [], t = h[l], t.name && (e.push(t.name.toLowerCase()), t.options && t.options.aliases && t.options.aliases.length)) for (n = 0; n < t.options.aliases.length; n++) {
+	            e.push(t.options.aliases[n].toLowerCase());
+	          }for (o = r(t.fn, "function") ? t.fn() : t.fn, i = 0; i < e.length; i++) {
+	            a = e[i], s = a.split("."), 1 === s.length ? Modernizr[s[0]] = o : (!Modernizr[s[0]] || Modernizr[s[0]] instanceof Boolean || (Modernizr[s[0]] = new Boolean(Modernizr[s[0]])), Modernizr[s[0]][s[1]] = o), y.push((o ? "" : "no-") + s.join("-"));
+	          }
+	        }
+	      }
+	    }function i(e) {
+	      var t = E.className,
+	          n = Modernizr._config.classPrefix || "";if (S && (t = t.baseVal), Modernizr._config.enableJSClass) {
+	        var r = new RegExp("(^|\\s)" + n + "no-js(\\s|$)");t = t.replace(r, "$1" + n + "js$2");
+	      }Modernizr._config.enableClasses && (t += " " + n + e.join(" " + n), S ? E.className.baseVal = t : E.className = t);
+	    }function a(e, t) {
+	      if ("object" == (typeof e === "undefined" ? "undefined" : _typeof(e))) for (var n in e) {
+	        g(e, n) && a(n, e[n]);
+	      } else {
+	        e = e.toLowerCase();var r = e.split("."),
+	            o = Modernizr[r[0]];if (2 == r.length && (o = o[r[1]]), "undefined" != typeof o) return Modernizr;t = "function" == typeof t ? t() : t, 1 == r.length ? Modernizr[r[0]] = t : (!Modernizr[r[0]] || Modernizr[r[0]] instanceof Boolean || (Modernizr[r[0]] = new Boolean(Modernizr[r[0]])), Modernizr[r[0]][r[1]] = t), i([(t && 0 != t ? "" : "no-") + r.join("-")]), Modernizr._trigger(e, t);
+	      }return Modernizr;
+	    }function s(e, t) {
+	      return !!~("" + e).indexOf(t);
+	    }function l() {
+	      return "function" != typeof t.createElement ? t.createElement(arguments[0]) : S ? t.createElementNS.call(t, "http://www.w3.org/2000/svg", arguments[0]) : t.createElement.apply(t, arguments);
+	    }function c() {
+	      var e = t.body;return e || (e = l(S ? "svg" : "body"), e.fake = !0), e;
+	    }function u(e, n, r, o) {
+	      var i,
+	          a,
+	          s,
+	          u,
+	          f = "modernizr",
+	          d = l("div"),
+	          p = c();if (parseInt(r, 10)) for (; r--;) {
+	        s = l("div"), s.id = o ? o[r] : f + (r + 1), d.appendChild(s);
+	      }return i = l("style"), i.type = "text/css", i.id = "s" + f, (p.fake ? p : d).appendChild(i), p.appendChild(d), i.styleSheet ? i.styleSheet.cssText = e : i.appendChild(t.createTextNode(e)), d.id = f, p.fake && (p.style.background = "", p.style.overflow = "hidden", u = E.style.overflow, E.style.overflow = "hidden", E.appendChild(p)), a = n(d, e), p.fake ? (p.parentNode.removeChild(p), E.style.overflow = u, E.offsetHeight) : d.parentNode.removeChild(d), !!a;
+	    }function f(e) {
+	      return e.replace(/([A-Z])/g, function (e, t) {
+	        return "-" + t.toLowerCase();
+	      }).replace(/^ms-/, "-ms-");
+	    }function d(t, r) {
+	      var o = t.length;if ("CSS" in e && "supports" in e.CSS) {
+	        for (; o--;) {
+	          if (e.CSS.supports(f(t[o]), r)) return !0;
+	        }return !1;
+	      }if ("CSSSupportsRule" in e) {
+	        for (var i = []; o--;) {
+	          i.push("(" + f(t[o]) + ":" + r + ")");
+	        }return i = i.join(" or "), u("@supports (" + i + ") { #modernizr { position: absolute; } }", function (e) {
+	          return "absolute" == getComputedStyle(e, null).position;
+	        });
+	      }return n;
+	    }function p(e) {
+	      return e.replace(/([a-z])-([a-z])/g, function (e, t, n) {
+	        return t + n.toUpperCase();
+	      }).replace(/^-/, "");
+	    }function m(e, t, o, i) {
+	      function a() {
+	        u && (delete C.style, delete C.modElem);
+	      }if (i = r(i, "undefined") ? !1 : i, !r(o, "undefined")) {
+	        var c = d(e, o);if (!r(c, "undefined")) return c;
+	      }for (var u, f, m, h, v, g = ["modernizr", "tspan"]; !C.style;) {
+	        u = !0, C.modElem = l(g.shift()), C.style = C.modElem.style;
+	      }for (m = e.length, f = 0; m > f; f++) {
+	        if (h = e[f], v = C.style[h], s(h, "-") && (h = p(h)), C.style[h] !== n) {
+	          if (i || r(o, "undefined")) return a(), "pfx" == t ? h : !0;try {
+	            C.style[h] = o;
+	          } catch (y) {}if (C.style[h] != v) return a(), "pfx" == t ? h : !0;
+	        }
+	      }return a(), !1;
+	    }var h = [],
+	        v = { _version: "3.3.1", _config: { classPrefix: "", enableClasses: !0, enableJSClass: !0, usePrefixes: !0 }, _q: [], on: function on(e, t) {
+	        var n = this;setTimeout(function () {
+	          t(n[e]);
+	        }, 0);
+	      }, addTest: function addTest(e, t, n) {
+	        h.push({ name: e, fn: t, options: n });
+	      }, addAsyncTest: function addAsyncTest(e) {
+	        h.push({ name: null, fn: e });
+	      } },
+	        Modernizr = function Modernizr() {};Modernizr.prototype = v, Modernizr = new Modernizr();var g,
+	        y = [],
+	        E = t.documentElement,
+	        S = "svg" === E.nodeName.toLowerCase();!function () {
+	      var e = {}.hasOwnProperty;g = r(e, "undefined") || r(e.call, "undefined") ? function (e, t) {
+	        return t in e && r(e.constructor.prototype[t], "undefined");
+	      } : function (t, n) {
+	        return e.call(t, n);
+	      };
+	    }(), v._l = {}, v.on = function (e, t) {
+	      this._l[e] || (this._l[e] = []), this._l[e].push(t), Modernizr.hasOwnProperty(e) && setTimeout(function () {
+	        Modernizr._trigger(e, Modernizr[e]);
+	      }, 0);
+	    }, v._trigger = function (e, t) {
+	      if (this._l[e]) {
+	        var n = this._l[e];setTimeout(function () {
+	          var e, r;for (e = 0; e < n.length; e++) {
+	            (r = n[e])(t);
+	          }
+	        }, 0), delete this._l[e];
+	      }
+	    }, Modernizr._q.push(function () {
+	      v.addTest = a;
+	    });S || !function (e, t) {
+	      function n(e, t) {
+	        var n = e.createElement("p"),
+	            r = e.getElementsByTagName("head")[0] || e.documentElement;return n.innerHTML = "x<style>" + t + "</style>", r.insertBefore(n.lastChild, r.firstChild);
+	      }function r() {
+	        var e = _.elements;return "string" == typeof e ? e.split(" ") : e;
+	      }function o(e, t) {
+	        var n = _.elements;"string" != typeof n && (n = n.join(" ")), "string" != typeof e && (e = e.join(" ")), _.elements = n + " " + e, c(t);
+	      }function i(e) {
+	        var t = b[e[w]];return t || (t = {}, C++, e[w] = C, b[C] = t), t;
+	      }function a(e, n, r) {
+	        if (n || (n = t), v) return n.createElement(e);r || (r = i(n));var o;return o = r.cache[e] ? r.cache[e].cloneNode() : S.test(e) ? (r.cache[e] = r.createElem(e)).cloneNode() : r.createElem(e), !o.canHaveChildren || E.test(e) || o.tagUrn ? o : r.frag.appendChild(o);
+	      }function s(e, n) {
+	        if (e || (e = t), v) return e.createDocumentFragment();n = n || i(e);for (var o = n.frag.cloneNode(), a = 0, s = r(), l = s.length; l > a; a++) {
+	          o.createElement(s[a]);
+	        }return o;
+	      }function l(e, t) {
+	        t.cache || (t.cache = {}, t.createElem = e.createElement, t.createFrag = e.createDocumentFragment, t.frag = t.createFrag()), e.createElement = function (n) {
+	          return _.shivMethods ? a(n, e, t) : t.createElem(n);
+	        }, e.createDocumentFragment = Function("h,f", "return function(){var n=f.cloneNode(),c=n.createElement;h.shivMethods&&(" + r().join().replace(/[\w\-:]+/g, function (e) {
+	          return t.createElem(e), t.frag.createElement(e), 'c("' + e + '")';
+	        }) + ");return n}")(_, t.frag);
+	      }function c(e) {
+	        e || (e = t);var r = i(e);return !_.shivCSS || h || r.hasCSS || (r.hasCSS = !!n(e, "article,aside,dialog,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}mark{background:#FF0;color:#000}template{display:none}")), v || l(e, r), e;
+	      }function u(e) {
+	        for (var t, n = e.getElementsByTagName("*"), o = n.length, i = RegExp("^(?:" + r().join("|") + ")$", "i"), a = []; o--;) {
+	          t = n[o], i.test(t.nodeName) && a.push(t.applyElement(f(t)));
+	        }return a;
+	      }function f(e) {
+	        for (var t, n = e.attributes, r = n.length, o = e.ownerDocument.createElement(T + ":" + e.nodeName); r--;) {
+	          t = n[r], t.specified && o.setAttribute(t.nodeName, t.nodeValue);
+	        }return o.style.cssText = e.style.cssText, o;
+	      }function d(e) {
+	        for (var t, n = e.split("{"), o = n.length, i = RegExp("(^|[\\s,>+~])(" + r().join("|") + ")(?=[[\\s,>+~#.:]|$)", "gi"), a = "$1" + T + "\\:$2"; o--;) {
+	          t = n[o] = n[o].split("}"), t[t.length - 1] = t[t.length - 1].replace(i, a), n[o] = t.join("}");
+	        }return n.join("{");
+	      }function p(e) {
+	        for (var t = e.length; t--;) {
+	          e[t].removeNode();
+	        }
+	      }function m(e) {
+	        function t() {
+	          clearTimeout(a._removeSheetTimer), r && r.removeNode(!0), r = null;
+	        }var r,
+	            o,
+	            a = i(e),
+	            s = e.namespaces,
+	            l = e.parentWindow;return !x || e.printShived ? e : ("undefined" == typeof s[T] && s.add(T), l.attachEvent("onbeforeprint", function () {
+	          t();for (var i, a, s, l = e.styleSheets, c = [], f = l.length, p = Array(f); f--;) {
+	            p[f] = l[f];
+	          }for (; s = p.pop();) {
+	            if (!s.disabled && N.test(s.media)) {
+	              try {
+	                i = s.imports, a = i.length;
+	              } catch (m) {
+	                a = 0;
+	              }for (f = 0; a > f; f++) {
+	                p.push(i[f]);
+	              }try {
+	                c.push(s.cssText);
+	              } catch (m) {}
+	            }
+	          }c = d(c.reverse().join("")), o = u(e), r = n(e, c);
+	        }), l.attachEvent("onafterprint", function () {
+	          p(o), clearTimeout(a._removeSheetTimer), a._removeSheetTimer = setTimeout(t, 500);
+	        }), e.printShived = !0, e);
+	      }var h,
+	          v,
+	          g = "3.7.3",
+	          y = e.html5 || {},
+	          E = /^<|^(?:button|map|select|textarea|object|iframe|option|optgroup)$/i,
+	          S = /^(?:a|b|code|div|fieldset|h1|h2|h3|h4|h5|h6|i|label|li|ol|p|q|span|strong|style|table|tbody|td|th|tr|ul)$/i,
+	          w = "_html5shiv",
+	          C = 0,
+	          b = {};!function () {
+	        try {
+	          var e = t.createElement("a");e.innerHTML = "<xyz></xyz>", h = "hidden" in e, v = 1 == e.childNodes.length || function () {
+	            t.createElement("a");var e = t.createDocumentFragment();return "undefined" == typeof e.cloneNode || "undefined" == typeof e.createDocumentFragment || "undefined" == typeof e.createElement;
+	          }();
+	        } catch (n) {
+	          h = !0, v = !0;
+	        }
+	      }();var _ = { elements: y.elements || "abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output picture progress section summary template time video", version: g, shivCSS: y.shivCSS !== !1, supportsUnknownElements: v, shivMethods: y.shivMethods !== !1, type: "default", shivDocument: c, createElement: a, createDocumentFragment: s, addElements: o };e.html5 = _, c(t);var N = /^$|\b(?:all|print)\b/,
+	          T = "html5shiv",
+	          x = !v && function () {
+	        var n = t.documentElement;return !("undefined" == typeof t.namespaces || "undefined" == typeof t.parentWindow || "undefined" == typeof n.applyElement || "undefined" == typeof n.removeNode || "undefined" == typeof e.attachEvent);
+	      }();_.type += " print", _.shivPrint = m, m(t), "object" == ( false ? "undefined" : _typeof(module)) && module.exports && (module.exports = _);
+	    }("undefined" != typeof e ? e : this, t);var w = { elem: l("modernizr") };Modernizr._q.push(function () {
+	      delete w.elem;
+	    });var C = { style: w.elem.style };Modernizr._q.unshift(function () {
+	      delete C.style;
+	    });v.testProp = function (e, t, r) {
+	      return m([e], n, t, r);
+	    };Modernizr.addTest("svg", !!t.createElementNS && !!t.createElementNS("http://www.w3.org/2000/svg", "svg").createSVGRect), o(), i(y), delete v.addTest, delete v.addAsyncTest;for (var b = 0; b < Modernizr._q.length; b++) {
+	      Modernizr._q[b]();
+	    }e.Modernizr = Modernizr;
+	  }(window, document);
+	
+	  /*** EXPORTS FROM exports-loader ***/
+	  module.exports = window.Modernizr;;
+	}).call(window);
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(6)(module)))
 
 /***/ },
 /* 6 */
+/***/ function(module, exports) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -11193,7 +11441,7 @@
 							if (global) {
 								_globals[n] = _exports[n] = cl; //provides a way to avoid global namespace pollution. By default, the main classes like TweenLite, Power1, Strong, etc. are added to window unless a GreenSockGlobals is defined. So if you want to have things added to a custom object instead, just do something like window.GreenSockGlobals = {} before loading any GreenSock files. You can even set up an alias like window.GreenSockGlobals = windows.gs = {} so that you can access everything like gs.TweenLite. Also remember that ALL classes are added to the window.com.greensock object (in their respective packages, like com.greensock.easing.Power1, com.greensock.TweenLite, etc.)
 								hasModule = (typeof(module) !== "undefined" && module.exports);
-								if (!hasModule && "function" === "function" && __webpack_require__(7)){ //AMD
+								if (!hasModule && "function" === "function" && __webpack_require__(8)){ //AMD
 									!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() { return cl; }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 								} else if (hasModule){ //node
 									if (ns === moduleName) {
@@ -13007,7 +13255,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -13015,24 +13263,26 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Backbone, _) {/* global  _ Backbone window  */
-	var Config = __webpack_require__(9);
-	var EVENT = __webpack_require__(10);
-	var CV = __webpack_require__(11);
-	var MainView = __webpack_require__(12);
+	/* WEBPACK VAR INJECTION */(function(Backbone, _) {'use strict';
 	
-	var Router = function() {
+	/* global  _ Backbone window  */
+	var Config = __webpack_require__(10);
+	var EVENT = __webpack_require__(11);
+	var CV = __webpack_require__(12);
+	var MainView = __webpack_require__(13);
+	
+	var Router = function Router() {
 		this.routes = {
-			':page/?:subpage'						: 'default',
-			':page/?:subpage/'						: 'default',
-			':page'									: 'default',
-			':page/'								: 'default',
-			'(/)'									: 'default',
+			':page/?:subpage': 'default',
+			':page/?:subpage/': 'default',
+			':page': 'default',
+			':page/': 'default',
+			'(/)': 'default',
 			//	http://stackoverflow.com/questions/11236338/is-there-a-way-to-catch-all-non-matched-routes-with-backbone
-			'*notFound'								: 'notFound'
+			'*notFound': 'notFound'
 		};
 	
 		this.baseURL = '/';
@@ -13047,328 +13297,323 @@
 	_.extend(Router, Backbone.Router);
 	_.extend(Router.prototype, Backbone.Router.prototype);
 	
-	Router.prototype.init = function() {
+	Router.prototype.init = function () {
 		this.listenToOnce(this.mainView, EVENT.INIT, _onMainViewInit.bind(this));
 		this.mainView.init();
 	};
 	
-	
-	var _onMainViewInit = function() {
+	var _onMainViewInit = function _onMainViewInit() {
 		Backbone.history.start({
 			pushState: true,
 			root: this.baseURL
 		});
 	};
 	
-	Router.prototype.default = function(page_, subpage_) {
-		var page = (page_ !== undefined) ? page_ : 'error';
-		var subpage = (subpage_ !== undefined) ? subpage_ : 'null';
-		var query = (Backbone.history.location.search) ? _parseQueryString(Backbone.history.location.search) : null;
+	Router.prototype.default = function (page_, subpage_) {
+		var page = page_ !== undefined ? page_ : 'error';
+		var subpage = subpage_ !== undefined ? subpage_ : 'null';
+		var query = Backbone.history.location.search ? _parseQueryString(Backbone.history.location.search) : null;
 		this.mainView.navigateTo(page, subpage, query);
 	
 		this.history.push(page);
 	};
 	
-	Router.prototype.currentPage = function() {
+	Router.prototype.currentPage = function () {
 		return _.last(this.history);
 	};
 	
-	Router.prototype.back = function() {
+	Router.prototype.back = function () {
 		console.log('Router.prototype.back');
-		Backbone.history.navigate(this.previousPage(), {trigger: false});
+		Backbone.history.navigate(this.previousPage(), { trigger: false });
 	};
 	
-	Router.prototype.previousPage = function() {
+	Router.prototype.previousPage = function () {
 		if (this.history.length <= 1) return null;
 		return this.history[this.history.length - 2];
 	};
 	
-	var _parseQueryString = function(queryString) {
+	var _parseQueryString = function _parseQueryString(queryString) {
 		var params = {};
 		if (queryString) {
-			_.each(
-				_.map(decodeURI(queryString).split(/&/g), function(el, i) {
-					var aux = el.split('=');
-					var o = {};
-					if (aux.length >= 1) {
-						var val;
-						if (aux.length === 2) val = aux[1];
-						o[aux[0]] = val;
-					}
-					return o;
-				}),
-				function(o) {
-					_.extend(params, o);
+			_.each(_.map(decodeURI(queryString).split(/&/g), function (el, i) {
+				var aux = el.split('=');
+				var o = {};
+				if (aux.length >= 1) {
+					var val;
+					if (aux.length === 2) val = aux[1];
+					o[aux[0]] = val;
 				}
-		);
+				return o;
+			}), function (o) {
+				_.extend(params, o);
+			});
 		}
 		return params;
 	};
 	
 	module.exports = new Router();
-	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(3)))
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	/* global window  */
-	// var Routes = require('jsons/routes.json');
-	
-	var Config = function() {
-		/**
-		 * name of the app
-		 * @type {String}
-		 */
-		this.appName = 'Framework';
-	
-		/**
-		 * Does the browser has audio available ?
-		 * @type {boolean}
-		 */
-		this.hasAudio = false;
-	
-		/**
-		 * Does the browser is an IE browser ?
-		 * @type {boolean}
-		 */
-		this.isIE = false;
-	
-		/**
-		 * Google Analytic ID
-		 * @type {String}
-		 * The id is tied to
-		 */
-		this.gaID = null;
-	
-		/**
-		 * Does the browser is an OLD IE browser ?
-		 * @type {boolean}
-		 */
-		this.isOldIE = false;
-	
-		/**
-		 * Does the browser has webgl ?
-		 * @type {boolean}
-		 */
-		this.hasWEBGL = true;
-	
-		/**
-		 * Base URL of the website
-		 * @type {string}
-		 */
-		this.baseUrl = window.location.origin || window.location.protocol + '//' + window.location.host;
-	
-		/**
-		 * Root used by Backbone.history
-		 * @type {string}
-		 */
-		this.root = '';
-	
-		/**
-		 * Is an High resolution screen ?
-		 * @type {boolean}
-		 */
-		this.isHighRes = false;
-	
-		/**
-		 * Object containing device informations (based on Detectizr)
-		 * @type {Object}
-		 */
-		this.device = null;
-	
-		/**
-		 * Save performance for browser in need
-		 * @type {boolean}
-		 */
-		this.savePerformance = false;
-	
-	};
-	
-	Config.prototype.init = function() {
-		//Detectizr.detect();
-	};
-	
-	module.exports = new Config();
-
 
 /***/ },
 /* 10 */
 /***/ function(module, exports) {
 
+	'use strict';
+	
+	/* global window  */
+	// var Routes = require('jsons/routes.json');
+	
+	var Config = function Config() {
+		/**
+	  * name of the app
+	  * @type {String}
+	  */
+		this.appName = 'Framework';
+	
+		/**
+	  * Does the browser has audio available ?
+	  * @type {boolean}
+	  */
+		this.hasAudio = false;
+	
+		/**
+	  * Does the browser is an IE browser ?
+	  * @type {boolean}
+	  */
+		this.isIE = false;
+	
+		/**
+	  * Google Analytic ID
+	  * @type {String}
+	  * The id is tied to
+	  */
+		this.gaID = null;
+	
+		/**
+	  * Does the browser is an OLD IE browser ?
+	  * @type {boolean}
+	  */
+		this.isOldIE = false;
+	
+		/**
+	  * Does the browser has webgl ?
+	  * @type {boolean}
+	  */
+		this.hasWEBGL = true;
+	
+		/**
+	  * Base URL of the website
+	  * @type {string}
+	  */
+		this.baseUrl = window.location.origin || window.location.protocol + '//' + window.location.host;
+	
+		/**
+	  * Root used by Backbone.history
+	  * @type {string}
+	  */
+		this.root = '';
+	
+		/**
+	  * Is an High resolution screen ?
+	  * @type {boolean}
+	  */
+		this.isHighRes = false;
+	
+		/**
+	  * Object containing device informations (based on Detectizr)
+	  * @type {Object}
+	  */
+		this.device = null;
+	
+		/**
+	  * Save performance for browser in need
+	  * @type {boolean}
+	  */
+		this.savePerformance = false;
+	};
+	
+	Config.prototype.init = function () {
+		//Detectizr.detect();
+	};
+	
+	module.exports = new Config();
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
 	var Events = {
-		INIT:          'init',
-		SHOWN:         'shown',
-		PAGE_SHOWN:    'page_shown',
-		SHOW_PAGE:     'show_page',
-		HIDDEN:        'hidden',
-		HIDE_PAGE:     'hide_page',
-		PAGE_HIDDEN:   'page_hidden',
-		PRE_HIDDEN:    'prehidden',
-		POST_HIDDEN:   'posthidden',
-		COMPLETE:      'complete',
-		DISPOSE:       'dispose',
-		NAVIGATE:      'navigate',
-		NEW_PAGE: 		'new_page',
+		INIT: 'init',
+		SHOWN: 'shown',
+		PAGE_SHOWN: 'page_shown',
+		SHOW_PAGE: 'show_page',
+		HIDDEN: 'hidden',
+		HIDE_PAGE: 'hide_page',
+		PAGE_HIDDEN: 'page_hidden',
+		PRE_HIDDEN: 'prehidden',
+		POST_HIDDEN: 'posthidden',
+		COMPLETE: 'complete',
+		DISPOSE: 'dispose',
+		NAVIGATE: 'navigate',
+		NEW_PAGE: 'new_page',
 		PAGE_RENDERED: 'rendered',
-		UI_RENDERED:   'rendered',
+		UI_RENDERED: 'rendered',
 	
 		// DOM
 		ON_ORIENTATION_CHANGE: 'on_orientation_change',
-		ON_RESIZE:             'on_resize',
-		ON_MOUSE_OUT:          'on_mouse_out',
-		ON_MOUSE_MOVE:         'on_mouse_move',
-		ON_MOUSE_DOWN:         'on_mouse_down',
-		ON_MOUSE_LEAVE:        'on_mouse_leave',
-		ON_MOUSE_ENTER:        'on_mouse_enter',
-		ON_MOUSE_UP:           'on_mouse_up',
-		ON_TOUCH_START:        'on_touch_start',
-		ON_TOUCH_MOVE:         'on_touch_move',
-		ON_TOUCH_END:          'on_touch_end',
-		ON_RAF:                'on_raf',
-		ON_FONT_SIZE:          'on_font_size',
-		ON_SCROLL:             'on_scroll',
-		ON_KEYDOWN:            'on_keydown',
-		ON_CLICK:              'on_click',
+		ON_RESIZE: 'on_resize',
+		ON_MOUSE_OUT: 'on_mouse_out',
+		ON_MOUSE_MOVE: 'on_mouse_move',
+		ON_MOUSE_DOWN: 'on_mouse_down',
+		ON_MOUSE_LEAVE: 'on_mouse_leave',
+		ON_MOUSE_ENTER: 'on_mouse_enter',
+		ON_MOUSE_UP: 'on_mouse_up',
+		ON_TOUCH_START: 'on_touch_start',
+		ON_TOUCH_MOVE: 'on_touch_move',
+		ON_TOUCH_END: 'on_touch_end',
+		ON_RAF: 'on_raf',
+		ON_FONT_SIZE: 'on_font_size',
+		ON_SCROLL: 'on_scroll',
+		ON_KEYDOWN: 'on_keydown',
+		ON_CLICK: 'on_click'
 	
 	};
 	
 	module.exports = Events;
 
-
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($, Backbone) {/* global Backbone location $ */
+	/* WEBPACK VAR INJECTION */(function($, Backbone) {'use strict';
+	
+	/* global Backbone location $ */
 	//var Detectizr = require('Detectizr');
 	
-	var CurrentValues = function() {
+	var CurrentValues = function CurrentValues() {
 		/**
-		 * Viewport object
-		 * @type {Object}
-		 */
-		 this.viewport = {width: 0, height: 0, wrapperWidth: 0};
+	  * Viewport object
+	  * @type {Object}
+	  */
+		this.viewport = { width: 0, height: 0, wrapperWidth: 0 };
 	
 		/**
-		 * Mouse object
-		 * @type {Object}
-		 */
-		 this.mouse = {x: 0, y: 0};
+	  * Mouse object
+	  * @type {Object}
+	  */
+		this.mouse = { x: 0, y: 0 };
 	
 		/**
-		 * Touch object
-		 * @type {Object}
-		 */
-		 this.touch = {x: 0, y: 0, startX: 0, startY: 0, deltaX: 0, deltaY: 0};
+	  * Touch object
+	  * @type {Object}
+	  */
+		this.touch = { x: 0, y: 0, startX: 0, startY: 0, deltaX: 0, deltaY: 0 };
 	
 		/**
-		 * Is mouse out of window?
-		 * @type {boolean}
-		 */
-		 this.outWindow = false;
+	  * Is mouse out of window?
+	  * @type {boolean}
+	  */
+		this.outWindow = false;
 	
 		/**
-		 * scroll Y value
-		 * @type {number}
-		 */
-		 this.scrollY = 0;
+	  * scroll Y value
+	  * @type {number}
+	  */
+		this.scrollY = 0;
 	
 		/**
-		 * scroll Y direction
-		 * @type {number}
-		 */
+	  * scroll Y direction
+	  * @type {number}
+	  */
 		this.scrollYDirection = 'down';
 	
 		/**
-		 * current page
-		 * @type {string}
-		 */
+	  * current page
+	  * @type {string}
+	  */
 		this.currentPage = null;
 	
 		/**
-		 * old page
-		 * @type {string}
-		 */
+	  * old page
+	  * @type {string}
+	  */
 		this.oldPage = null;
 	
 		/**
-		 * delta Y value
-		 * @type {number}
-		 */
+	  * delta Y value
+	  * @type {number}
+	  */
 		this.deltaY = 0;
 	
 		/**
-		 * Is is first time?
-		 * @type {boolean}
-		 */
+	  * Is is first time?
+	  * @type {boolean}
+	  */
 		this.firstTime = true;
 	
 		/**
-		 * Block mouse wheel?
-		 * @type {boolean}
-		 */
+	  * Block mouse wheel?
+	  * @type {boolean}
+	  */
 		this.mouseWheelBlock = false;
 	
 		/**
-		 * Is mobile size?
-		 * @type {Boolean}
-		 */
-		 this.isMobileSize = false;
-	
-		 /**
-		* Is overlay open?
-		* @type {Boolean}
-		*/
-		 this.overlayOpen = false;
-	
-		 /**
-		 * Is mobile?
-		 * @type {Boolean}
-		 */
-		 // this.isMobile = (Detectizr.device.type === 'mobile');
-		 this.isMobile = $('body').hasClass('mobile');
+	  * Is mobile size?
+	  * @type {Boolean}
+	  */
+		this.isMobileSize = false;
 	
 		/**
-		 * Is tablet?
-		 * @type {Boolean}
-		 */
-		 // this.isTablet = (Detectizr.device.type === 'tablet' && Detectizr.browser.name !== 'ie');
-		 this.isTablet = $('body').hasClass('tablet');
-	
-		 /**
-			* Is isTouch?
-			* @type {Boolean}
-			*/
-		 this.isTouch = this.isMobile || this.isTablet;
+	 * Is overlay open?
+	 * @type {Boolean}
+	 */
+		this.overlayOpen = false;
 	
 		/**
-		 * Breakpoint
-		 * @type {Boolean}
-		 */
-		 this.breakpoint = null;
+	 * Is mobile?
+	 * @type {Boolean}
+	 */
+		// this.isMobile = (Detectizr.device.type === 'mobile');
+		this.isMobile = $('body').hasClass('mobile');
 	
 		/**
-		 * main datas
-		 * @type {Object}
-		 */
+	  * Is tablet?
+	  * @type {Boolean}
+	  */
+		// this.isTablet = (Detectizr.device.type === 'tablet' && Detectizr.browser.name !== 'ie');
+		this.isTablet = $('body').hasClass('tablet');
+	
+		/**
+	 * Is isTouch?
+	 * @type {Boolean}
+	 */
+		this.isTouch = this.isMobile || this.isTablet;
+	
+		/**
+	  * Breakpoint
+	  * @type {Boolean}
+	  */
+		this.breakpoint = null;
+	
+		/**
+	  * main datas
+	  * @type {Object}
+	  */
 		this.mainDatas = null;
 	
 		/**
-		 * main assets
-		 * @type {Object}
-		 */
+	  * main assets
+	  * @type {Object}
+	  */
 		this.isAnimating = null;
-	
 	};
 	
-	CurrentValues.prototype.init = function() {
+	CurrentValues.prototype.init = function () {};
 	
-	};
+	CurrentValues.prototype.navigate = function (href) {
 	
-	CurrentValues.prototype.navigate = function(href) {
-		
 		var root = location.protocol + '//' + location.host;
 	
 		// Ensure the root is part of the anchor href, meaning it's relative.
@@ -13376,65 +13621,64 @@
 	
 			href = href.replace(root, '');
 			if (this.isAnimating === false) Backbone.history.navigate(href, true);
-	
 		}
-	
 	};
 	
 	module.exports = new CurrentValues();
-	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(2)))
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($, Backbone, _) {/* global document $ Backbone _ window*/
+	/* WEBPACK VAR INJECTION */(function($, Backbone, _) {'use strict';
 	
-	var EVENT 						= __webpack_require__(10);
-	var PageManager              	= __webpack_require__(13);
-	var CV                       	= __webpack_require__(11);
-	var NavigationView           	= __webpack_require__(47);
-	var FastClick					= __webpack_require__(48);
+	/* global document $ Backbone _ window*/
+	
+	var EVENT = __webpack_require__(11);
+	var PageManager = __webpack_require__(14);
+	var CV = __webpack_require__(12);
+	var NavigationView = __webpack_require__(48);
+	var FastClick = __webpack_require__(49);
 	/*
 	 * MainView: Handles the main view logic - window/document event
 	 * @extend {abstract/view/DOM/DOMview}
 	 * @constructor
 	 */
 	
-	var MainView = function(options, datas) {
-		this.el    	= document.body;
-		this.$el   	= $(this.el);
+	var MainView = function MainView(options, datas) {
+		this.el = document.body;
+		this.$el = $(this.el);
 	
 		this.idView = 'mainpage';
 	
 		/**
-		 * Meta viewport element
-		 * @type {element}
-		 * @private
-		 */
+	  * Meta viewport element
+	  * @type {element}
+	  * @private
+	  */
 		this.metaViewport = null;
 	
 		this.a$ = {};
 		/**
-		 * Main container
-		 * @type {jQuery element}
-		 * @private
-		 */
+	  * Main container
+	  * @type {jQuery element}
+	  * @private
+	  */
 		this.a$.container = null;
 	
 		/**
-		 * html element
-		 * @type {jQuery element}
-		 * @private
-		 */
+	  * html element
+	  * @type {jQuery element}
+	  * @private
+	  */
 		this.a$.html = null;
 	
 		/**
-		 * body element
-		 * @type {jQuery element}
-		 * @private
-		 */
+	  * body element
+	  * @type {jQuery element}
+	  * @private
+	  */
 		this.a$.body = null;
 	
 		this.pageManager = null;
@@ -13449,18 +13693,18 @@
 	/*
 	 * @override
 	 */
-	MainView.prototype.initialize = function() {
+	MainView.prototype.initialize = function () {
 	
 		this.bindMainEvents();
 	};
 	
-	MainView.prototype.init = function() {
+	MainView.prototype.init = function () {
 	
 		if (CV.isMobile) {
 			$('body').addClass('isMobile');
 			$('body').addClass('isTouch');
 			var needsClick = FastClick.prototype.needsClick;
-			FastClick.prototype.needsClick = function(target) {
+			FastClick.prototype.needsClick = function (target) {
 				if ((target.className || '').indexOf('pac-item') > -1) {
 					return true;
 				} else if ((target.parentNode.className || '').indexOf('pac-item') > -1) {
@@ -13473,34 +13717,30 @@
 		}
 	
 		this.pageManager = new PageManager();
-		this.listenTo(this.pageManager, EVENT.PAGE_RENDERED,	_appendPage.bind(this));
-		this.listenTo(this.pageManager, EVENT.SHOW_PAGE, 		_onShowPage.bind(this));
-		this.listenTo(this.pageManager, EVENT.PAGE_SHOWN,		_onPageShown.bind(this));
-		this.listenTo(this.pageManager, EVENT.HIDE_PAGE,		_onHidePage.bind(this));
+		this.listenTo(this.pageManager, EVENT.PAGE_RENDERED, _appendPage.bind(this));
+		this.listenTo(this.pageManager, EVENT.SHOW_PAGE, _onShowPage.bind(this));
+		this.listenTo(this.pageManager, EVENT.PAGE_SHOWN, _onPageShown.bind(this));
+		this.listenTo(this.pageManager, EVENT.HIDE_PAGE, _onHidePage.bind(this));
 	
-		this.navigationView = new NavigationView({el: this.$el.find('#main-nav')[0]});
+		this.navigationView = new NavigationView({ el: this.$el.find('#main-nav')[0] });
 		this.navigationView.init();
 	
 		this.handlers.onUpdate = _onUpdate.bind(this);
 		this.trigger(EVENT.INIT);
 	};
 	
-	
-	var _onShowPage = function() {
+	var _onShowPage = function _onShowPage() {
 	
 		_onResize.call(this);
-	
 	};
 	
-	var _onHidePage = function() {
+	var _onHidePage = function _onHidePage() {};
 	
-	};
-	
-	var _appendPage = function() {
+	var _appendPage = function _appendPage() {
 		this.$.container.append(this.pageManager.currentPage.el);
 	};
 	
-	var _onPageShown = function() {
+	var _onPageShown = function _onPageShown() {
 	
 		this.$el.addClass('shown');
 	};
@@ -13508,7 +13748,7 @@
 	/*
 	 * Bind all the main window/document event here.
 	 */
-	MainView.prototype.bindMainEvents = function() {
+	MainView.prototype.bindMainEvents = function () {
 		this.$.html = $('html');
 		this.$.container = $('#content');
 		this.$.body = $('body');
@@ -13527,17 +13767,16 @@
 		// this.$.body[0].addEventListener("touchend",    $.proxy(_onTouchEnd, this), false);
 	};
 	
-	
-	MainView.prototype.navigateTo = function(page, params, hash) {
+	MainView.prototype.navigateTo = function (page, params, hash) {
 		this.pageManager.navigateTo(page, params, hash);
 		this.navigationView.setNavLayout(page);
 	};
 	
-	var _onScroll = function() {
+	var _onScroll = function _onScroll() {
 		this.ticketScroll = true;
 	};
 	
-	var _onUpdate = function() {
+	var _onUpdate = function _onUpdate() {
 		if (this.ticketScroll) {
 			this.ticketScroll = false;
 	
@@ -13559,11 +13798,11 @@
 		window.requestAnimationFrame(this.handlers.onUpdate);
 	};
 	
-	var _onResize = function() {
+	var _onResize = function _onResize() {
 	
 		CV.viewport.width = CV.viewport.wrapperWidth = $(window).width();
 		CV.viewport.height = $(window).height();
-		CV.breakpoint = (CV.viewport.width <= 960) ? 'sml' : 'default';
+		CV.breakpoint = CV.viewport.width <= 960 ? 'sml' : 'default';
 	
 		if (this.pageManager && this.pageManager.currentPage) this.pageManager.currentPage.onResize();
 	
@@ -13572,45 +13811,46 @@
 		}
 	};
 	
-	var _onKeyDown = function(e) {
+	var _onKeyDown = function _onKeyDown(e) {
 		if (this.pageManager && this.pageManager.currentPage) this.pageManager.currentPage.onKeyDown(e);
 	};
 	
 	module.exports = new MainView();
-	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(2), __webpack_require__(3)))
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_, Backbone) {/* global  _ Backbone document window */
+	/* WEBPACK VAR INJECTION */(function(_, Backbone) {'use strict';
 	
-	var EVENT = __webpack_require__(10);
-	var CV = __webpack_require__(11);
-	var Config = __webpack_require__(9);
-	var ROUTES = __webpack_require__(14);
-	var IndexView = __webpack_require__(16);
-	var AboutView = __webpack_require__(41);
-	var ErrorView = __webpack_require__(44);
+	/* global  _ Backbone document window */
 	
-	var PageManager = function() {
+	var EVENT = __webpack_require__(11);
+	var CV = __webpack_require__(12);
+	var Config = __webpack_require__(10);
+	var ROUTES = __webpack_require__(15);
+	var IndexView = __webpack_require__(17);
+	var AboutView = __webpack_require__(42);
+	var ErrorView = __webpack_require__(45);
+	
+	var PageManager = function PageManager() {
 		/*
-		* Instance of Page
-		* @type {abstract/controller}
-		*/
+	 * Instance of Page
+	 * @type {abstract/controller}
+	 */
 		this.currentPage = null;
 	
 		/*
-		* Instance of Page
-		* @type {abstract/controller}
-		*/
+	 * Instance of Page
+	 * @type {abstract/controller}
+	 */
 		this.oldPage = null;
 	
 		/*
-		* object as an associative array
-		* @type {Object}
-		*/
+	 * object as an associative array
+	 * @type {Object}
+	 */
 		this.pages = {};
 		window.CONFIG = Config;
 		_.extend(this, Backbone.Events);
@@ -13619,22 +13859,19 @@
 	/*
 	 * Handles the initialization
 	 */
-	PageManager.prototype.init = function() {
-	
-	};
+	PageManager.prototype.init = function () {};
 	
 	/*
 	 * Entry point to change pages
 	 * @param {Object} page of the page to navigate to.
 	 */
-	PageManager.prototype.navigateTo = function(page, params, hash) {
+	PageManager.prototype.navigateTo = function (page, params, hash) {
 	
 		var el = null;
 	
 		if (this.oldPage === null && this.currentPage === null) {
 	
 			el = document.getElementsByClassName('page-wrapper')[0];
-	
 		}
 	
 		var newPage = this.getCurrentPage(page, params);
@@ -13645,26 +13882,25 @@
 	
 			this.oldPage = this.currentPage;
 			CV.oldPage = this.currentPage.idView;
-	
 		}
 	
 		CV.currentPage = newPage.id;
 	
 		this.currentPage = new newPage.View({
-			slug:    params,
-			el:      this.currentPage ? null : el,
-			idView:  newPage.id
+			slug: params,
+			el: this.currentPage ? null : el,
+			idView: newPage.id
 		}, {});
 	
 		this.renderCurrentPage();
 	};
 	
-	PageManager.prototype.renderCurrentPage = function() {
+	PageManager.prototype.renderCurrentPage = function () {
 		this.listenToOnce(this.currentPage, EVENT.PAGE_RENDERED, _onPageRendered.bind(this));
 		this.currentPage.initializeRender();
 	};
 	
-	PageManager.prototype.getCurrentPage = function(page, params) {
+	PageManager.prototype.getCurrentPage = function (page, params) {
 		if (page === null || page === undefined) page = '/';
 	
 		var route = ROUTES.getRouteByUrl(page);
@@ -13672,37 +13908,36 @@
 	
 		if (!route) {
 			view = ErrorView;
-			return {id: '404', View: view};
+			return { id: '404', View: view };
 		}
 	
 		switch (route.id) {
-		case 'index':
-			view = IndexView;
-			break;
-		case 'about':
-			view = AboutView;
-			break;
-		default:
-			view = IndexView;
-			break;
+			case 'index':
+				view = IndexView;
+				break;
+			case 'about':
+				view = AboutView;
+				break;
+			default:
+				view = IndexView;
+				break;
 		}
 	
-		return {id: route.id, View: view};
+		return { id: route.id, View: view };
 	};
 	
-	PageManager.prototype.onError = function() {
-		Backbone.history.navigate('404', {trigger: false});
+	PageManager.prototype.onError = function () {
+		Backbone.history.navigate('404', { trigger: false });
 		this.navigateTo('404');
 	};
 	
-	var _onPageRendered = function() {
+	var _onPageRendered = function _onPageRendered() {
 	
 		// FE render here
 		if (this.oldPage !== null) {
 	
 			// will append page into the DOM
 			this.trigger(EVENT.PAGE_RENDERED);
-	
 		}
 	
 		var title = this.currentPage.model.attributes.metas.title;
@@ -13712,61 +13947,55 @@
 		this.currentPage.init();
 	
 		document.body.setAttribute('data-page', CV.currentPage);
-	
 	};
 	
-	var _onPageReady = function () {
+	var _onPageReady = function _onPageReady() {
 	
-		this.stopListening( this.currentPage, EVENT.INIT);
+		this.stopListening(this.currentPage, EVENT.INIT);
 	
 		if (this.oldPage) {
 	
-			this.trigger(EVENT.HIDE_PAGE)
-			this.listenToOnce( this.oldPage, EVENT.HIDDEN , _onPageHidden.bind(this));
+			this.trigger(EVENT.HIDE_PAGE);
+			this.listenToOnce(this.oldPage, EVENT.HIDDEN, _onPageHidden.bind(this));
 			this.oldPage.hide();
-	
 		} else {
 	
 			//first page
 			//direct Show
-			this.trigger(EVENT.SHOW_PAGE)
-			this.listenToOnce(this.currentPage, EVENT.SHOWN , _onPageShown.bind(this));
+			this.trigger(EVENT.SHOW_PAGE);
+			this.listenToOnce(this.currentPage, EVENT.SHOWN, _onPageShown.bind(this));
 			this.currentPage.show(true);
 		}
+	};
 	
-	}
+	var _onPageHidden = function _onPageHidden() {
 	
-	var _onPageHidden = function () {
+		//console.log('pageManager _onPageHidden')
+		this.listenToOnce(this.currentPage, EVENT.SHOWN, _onPageShown.bind(this));
 	
-			//console.log('pageManager _onPageHidden')
-			this.listenToOnce(this.currentPage, EVENT.SHOWN , _onPageShown.bind(this));
+		// dispose now!
+		if (this.oldPage) {
+			_removeOldPage.call(this);
+		}
 	
-			// dispose now!
-			if (this.oldPage){
-					_removeOldPage.call(this);
-			}
+		//here we hide old page so it's not direct
+		//we appended the new page on the DOM
+		setTimeout(function () {
 	
-			//here we hide old page so it's not direct
-			//we appended the new page on the DOM
-			setTimeout( (function(){
+			this.trigger(EVENT.SHOW_PAGE);
+			this.currentPage.show(false);
+		}.bind(this), 0);
+	};
 	
-					this.trigger(EVENT.SHOW_PAGE);
-					this.currentPage.show(false);
+	var _onPageShown = function _onPageShown() {
 	
-			}).bind(this), 0 )
+		CV.isAnimating = false;
+		CV.firstTime = false;
 	
-	}
+		this.trigger(EVENT.PAGE_SHOWN);
+	};
 	
-	var _onPageShown = function() {
-	
-			CV.isAnimating = false;
-			CV.firstTime = false;
-	
-			this.trigger(EVENT.PAGE_SHOWN);
-	
-	}
-	
-	var _removeOldPage = function() {
+	var _removeOldPage = function _removeOldPage() {
 		if (this.oldPage) {
 			this.stopListening(this.oldPage, EVENT.HIDDEN);
 			this.stopListening(this.oldPage, EVENT.SHOWN);
@@ -13783,20 +14012,21 @@
 	};
 	
 	module.exports = PageManager;
-	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(2)))
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var routes = __webpack_require__(15);
+	'use strict';
 	
-	var Routes = function() {
+	var routes = __webpack_require__(16);
+	
+	var Routes = function Routes() {
 		this.routes = routes;
 	};
 	
-	Routes.prototype.getRouteByUrl = function(url) {
+	Routes.prototype.getRouteByUrl = function (url) {
 		console.log(url);
 		for (var id in this.routes) {
 			if (this.routes[id].url === url || this.routes[id].url === '/' + url || this.routes[id].url === '/' + url + '/') {
@@ -13806,7 +14036,7 @@
 		return null;
 	};
 	
-	Routes.prototype.getRouteByID = function(id_) {
+	Routes.prototype.getRouteByID = function (id_) {
 		for (var id in this.routes) {
 			if (id === id_) return this.routes[id];
 		}
@@ -13815,9 +14045,8 @@
 	
 	module.exports = new Routes();
 
-
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -13839,17 +14068,19 @@
 	};
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_) {/* global  _ TweenMax Cubic TimelineMax  */
+	/* WEBPACK VAR INJECTION */(function(_) {'use strict';
 	
-	var PageView  			= __webpack_require__(17);
-	var template 			= __webpack_require__(19);
-	var CV 					= __webpack_require__(11);
-	var HomepageDatas 		= __webpack_require__(40)	
+	/* global  _ TweenMax Cubic TimelineMax  */
 	
-	var IndexView = function(options, datas) {
+	var PageView = __webpack_require__(18);
+	var template = __webpack_require__(20);
+	var CV = __webpack_require__(12);
+	var HomepageDatas = __webpack_require__(41);
+	
+	var IndexView = function IndexView(options, datas) {
 		this.template = template;
 	
 		var datasParam = HomepageDatas;
@@ -13860,45 +14091,42 @@
 	_.extend(IndexView, PageView);
 	_.extend(IndexView.prototype, PageView.prototype);
 	
-	IndexView.prototype.initDOM = function() {
-		
+	IndexView.prototype.initDOM = function () {
+	
 		PageView.prototype.initDOM.call(this);
 	};
 	
-	IndexView.prototype.setupDOM = function() {
-		
-	};
+	IndexView.prototype.setupDOM = function () {};
 	
-	IndexView.prototype.onResize = function() {
-	
-	};
+	IndexView.prototype.onResize = function () {};
 	
 	module.exports = IndexView;
-	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Backbone, _) {/* global  _ Backbone TweenLite TimelineMax Cubic window*/
+	/* WEBPACK VAR INJECTION */(function(Backbone, _) {'use strict';
 	
-	var EVENT = __webpack_require__(10);
-	var CV = __webpack_require__(11);
-	var BaseView = __webpack_require__(18);
+	/* global  _ Backbone TweenLite TimelineMax Cubic window*/
 	
-	var PageView = function(options, data) {
+	var EVENT = __webpack_require__(11);
+	var CV = __webpack_require__(12);
+	var BaseView = __webpack_require__(19);
+	
+	var PageView = function PageView(options, data) {
 		/**
-		* Model
-		* @type {Backbone Model}
-		*/
-		this.model = (this.model !== undefined) ? this.model : new Backbone.Model({asynchronous: false});
+	 * Model
+	 * @type {Backbone Model}
+	 */
+		this.model = this.model !== undefined ? this.model : new Backbone.Model({ asynchronous: false });
 	
 		/**
-		* Current Id View
-		* @type {string}
-		*/
-		this.idView = (options.idView !== undefined) ? options.idView : this.idView;
+	 * Current Id View
+	 * @type {string}
+	 */
+		this.idView = options.idView !== undefined ? options.idView : this.idView;
 	
 		BaseView.call(this, options, data);
 	};
@@ -13906,15 +14134,15 @@
 	_.extend(PageView, BaseView);
 	_.extend(PageView.prototype, BaseView.prototype);
 	
-	PageView.prototype.initialize = function(options, dataP) {
+	PageView.prototype.initialize = function (options, dataP) {
 		// Checking if data passed as attributes and merging them with model attributes
-		var data = (dataP !== undefined) ? dataP : null; // put in a page property to match the templating data style
+		var data = dataP !== undefined ? dataP : null; // put in a page property to match the templating data style
 		if (data !== null) this.model.set(data);
 	
 		BaseView.prototype.initialize.call(this, options, data);
 	};
 	
-	PageView.prototype.initializeRender = function() {
+	PageView.prototype.initializeRender = function () {
 		// Asyncronous rendering checking
 		// We check if we are on the server ( and data are here ) or if we need to fecth model before render
 		if (this.model.get('asyncronous') === true) {
@@ -13926,7 +14154,7 @@
 		}
 	};
 	
-	PageView.prototype.onRendered = function() {
+	PageView.prototype.onRendered = function () {
 		this.$el.addClass('next-page');
 		BaseView.prototype.onRendered.call(this);
 	};
@@ -13936,48 +14164,46 @@
 	 * Here we should create reference of DOM elements we want to manipulate
 	 */
 	
-	PageView.prototype.initDOM = function() {
+	PageView.prototype.initDOM = function () {
 	
 		BaseView.prototype.initDOM.call(this);
 	};
 	
-	PageView.prototype.onDOMInit = function() {
+	PageView.prototype.onDOMInit = function () {
 	
 		this.onResize();
 		BaseView.prototype.onDOMInit.call(this);
 	};
 	
-	PageView.prototype.setupDOM = function() {
-		TweenLite.set(this.$el, {autoAlpha: 0});
+	PageView.prototype.setupDOM = function () {
+		TweenLite.set(this.$el, { autoAlpha: 0 });
 	};
 	
-	PageView.prototype.initTLShow = function() {
+	PageView.prototype.initTLShow = function () {
 	
 		this.initTLBaseShow();
-	
 	};
 	
-	PageView.prototype.initTLHide = function() {
+	PageView.prototype.initTLHide = function () {
 	
 		this.initTLBaseHide();
-	
 	};
 	
-	PageView.prototype.initTLBaseShow = function() {
-		this.TL.show = new TimelineMax({paused: true, onComplete: this.onShown.bind(this)});
-		this.TL.show.to(this.$el, 0.3, {autoAlpha: 1, ease: Cubic.easeInOut}, 0);
+	PageView.prototype.initTLBaseShow = function () {
+		this.TL.show = new TimelineMax({ paused: true, onComplete: this.onShown.bind(this) });
+		this.TL.show.to(this.$el, 0.3, { autoAlpha: 1, ease: Cubic.easeInOut }, 0);
 	};
 	
-	PageView.prototype.initTLBaseHide = function() {
-		this.TL.hide = new TimelineMax({paused: true, onComplete: this.onHidden.bind(this)});
-		this.TL.hide.to(this.$el, 0.3, {autoAlpha: 0, ease: Cubic.easeInOut}, 0);
+	PageView.prototype.initTLBaseHide = function () {
+		this.TL.hide = new TimelineMax({ paused: true, onComplete: this.onHidden.bind(this) });
+		this.TL.hide.to(this.$el, 0.3, { autoAlpha: 0, ease: Cubic.easeInOut }, 0);
 	};
 	
 	/**
 	 * Bind events
 	 */
 	
-	PageView.prototype.show = function(direct) {
+	PageView.prototype.show = function (direct) {
 		this.$el.removeClass('next-page');
 		console.log('PageView show');
 		// call now to have a transition based on the viewport size (desktop/mobile)
@@ -13986,23 +14212,23 @@
 		// scrolltop
 		window.scrollTo(0, 0);
 	
-		setTimeout((function() {
+		setTimeout(function () {
 			this.TL.show.play(0);
-		}).bind(this), 0);
+		}.bind(this), 0);
 	};
 	
-	PageView.prototype.onShown = function() {
+	PageView.prototype.onShown = function () {
 		BaseView.prototype.onShown.call(this);
 		this.onResize();
 	};
 	
-	PageView.prototype.onHidden = function() {
+	PageView.prototype.onHidden = function () {
 		// display: none
 		this.$el.addClass('undisplay');
 		BaseView.prototype.onHidden.call(this);
 	};
 	
-	PageView.prototype.hide = function(direct) {
+	PageView.prototype.hide = function (direct) {
 		// No need to replay the timeline, just trigger the hidden event
 		if (!this.isShown) {
 			this.trigger(EVENT.HIDDEN);
@@ -14012,21 +14238,16 @@
 		// call now to have a transition based on the viewport size (desktop/mobile)
 		this.initTLHide();
 	
-		setTimeout((function() {
+		setTimeout(function () {
 			this.TL.hide.play(0);
-		}).bind(this));
+		}.bind(this));
 	};
 	
-	PageView.prototype.onResize = function() {
+	PageView.prototype.onResize = function () {};
 	
-	};
+	PageView.prototype.onKeyDown = function (e) {};
 	
-	
-	PageView.prototype.onKeyDown = function(e) {
-	
-	};
-	
-	PageView.prototype.dispose = function() {
+	PageView.prototype.dispose = function () {
 		if (this.model !== null) this.model.stopListening();
 		this.model = null;
 	
@@ -14034,108 +14255,108 @@
 	};
 	
 	module.exports = PageView;
-	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(3)))
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Backbone, _) {/* global  _ Backbone location  */
+	/* WEBPACK VAR INJECTION */(function(Backbone, _) {'use strict';
 	
-	var EVENT = __webpack_require__(10);
-	var CV = __webpack_require__(11);
+	/* global  _ Backbone location  */
 	
-	var BaseView = function(options, data) {
+	var EVENT = __webpack_require__(11);
+	var CV = __webpack_require__(12);
+	
+	var BaseView = function BaseView(options, data) {
 	
 		/*
-		* Params object from router
-		* @type {Objet}
-		*/
-		this.params = (this.params) ? this.params : {};
+	 * Params object from router
+	 * @type {Objet}
+	 */
+		this.params = this.params ? this.params : {};
 	
 		/**
-		* Option object
-		* @type {Objet}
-		*/
-		this.options = (options) ? options : {};
+	 * Option object
+	 * @type {Objet}
+	 */
+		this.options = options ? options : {};
 	
 		/**
-		* Model
-		* @type {Backbone Model}
-		*/
-		this.model = (this.model) ? this.model : null;
+	 * Model
+	 * @type {Backbone Model}
+	 */
+		this.model = this.model ? this.model : null;
 	
 		/**
-		* Assets object template
-		* @type {Objet}
-		*/
+	 * Assets object template
+	 * @type {Objet}
+	 */
 		this.assets = {};
 	
 		/**
-		* Handlers object
-		* @type {Objet}
-		*/
-		this.handlers = (this.handlers) ? this.handlers : {};
+	 * Handlers object
+	 * @type {Objet}
+	 */
+		this.handlers = this.handlers ? this.handlers : {};
 	
 		/**
-		* template
-		* @type {Twig Template}
-		*/
-		this.template = (this.template) ? this.template : null;
+	 * template
+	 * @type {Twig Template}
+	 */
+		this.template = this.template ? this.template : null;
 	
 		/**
-		* Object as associative array of all the <Timeline> objects
-		* @type {Object}
-		*/
+	 * Object as associative array of all the <Timeline> objects
+	 * @type {Object}
+	 */
 		this.TL = {};
 	
 		/**
-		* Object as associative array of all the <$> objects
-		* @type {Object}
-		*/
-		this.a$ = (this.a$) ? this.a$ : {};
+	 * Object as associative array of all the <$> objects
+	 * @type {Object}
+	 */
+		this.a$ = this.a$ ? this.a$ : {};
 	
 		/**
-		* Can update the current view on request animation frame?
-		* @type {boolean}
-		*/
-		this.canUpdate = (this.canUpdate) ? this.canUpdate : false;
+	 * Can update the current view on request animation frame?
+	 * @type {boolean}
+	 */
+		this.canUpdate = this.canUpdate ? this.canUpdate : false;
 	
 		/**
-		* classname
-		* @type {String}
-		*/
-		this.className = (this.className) ? this.className : null;
+	 * classname
+	 * @type {String}
+	 */
+		this.className = this.className ? this.className : null;
 	
 		/**
-		* is init ?
-		* @type {Boolean}
-		*/
+	 * is init ?
+	 * @type {Boolean}
+	 */
 		this.isInit = false;
 	
 		/**
-		* is shown ?
-		* @type {Boolean}
-		*/
+	 * is shown ?
+	 * @type {Boolean}
+	 */
 		this.isShown = false;
 	
 		/**
-		* Handlers object
-		* @type {Objet}
-		*/
+	 * Handlers object
+	 * @type {Objet}
+	 */
 		this.events = this.events ? this.events : {};
 		this.events['click a'] = 'onLinkClicked'; // global link
 	
 		Backbone.View.call(this, options, data);
-	
 	};
 	
 	_.extend(BaseView, Backbone.View);
 	_.extend(BaseView.prototype, Backbone.View.prototype);
 	
-	BaseView.prototype.initialize = function(options, data) {
-		this.options = (typeof options !== 'undefined') ? options : {};
+	BaseView.prototype.initialize = function (options, data) {
+		this.options = typeof options !== 'undefined' ? options : {};
 	
 		if (this.options.id !== undefined) this.id = this.options.id;
 	
@@ -14157,7 +14378,7 @@
 	 * If this.id is provided, it tries to get the element from the DOM
 	 * If not, it generates the element based on the tempalte provided, and append it to the container
 	 */
-	BaseView.prototype.render = function() {
+	BaseView.prototype.render = function () {
 		// console.log('this.options.el', this.options.el);
 		if (this.options.el) {
 			this.setElement(this.options.el);
@@ -14170,15 +14391,14 @@
 		setTimeout(this.onRendered.bind(this), 0);
 	};
 	
-	BaseView.prototype.renderTemplate = function() {
+	BaseView.prototype.renderTemplate = function () {
 	
 		if (this.template === null) return;
-		var html = (this.model !== null) ? this.template({datas: this.model.attributes}) : this.template();
+		var html = this.model !== null ? this.template({ datas: this.model.attributes }) : this.template();
 		this.setElement(html);
-	
 	};
 	
-	BaseView.prototype.onRendered = function() {
+	BaseView.prototype.onRendered = function () {
 		if (this.className !== null) {
 			this.$el.addClass(this.className);
 		}
@@ -14188,7 +14408,7 @@
 	/**
 	 * @override
 	 */
-	BaseView.prototype.init = function(params, assets) {
+	BaseView.prototype.init = function (params, assets) {
 		// if (this.isInit) return;
 	
 		this.params = params || {};
@@ -14202,18 +14422,18 @@
 	 * Here we should create reference of DOM elements we want to manipulate
 	 */
 	
-	BaseView.prototype.initDOM = function() {
+	BaseView.prototype.initDOM = function () {
 		setTimeout(this.onDOMInit.bind(this), 0);
 	};
 	
-	BaseView.prototype.setupDOM = function() {};
+	BaseView.prototype.setupDOM = function () {};
 	
-	BaseView.prototype.initTL = function() {};
+	BaseView.prototype.initTL = function () {};
 	
 	/**
 	 * After the DOM is fully init
 	 */
-	BaseView.prototype.onDOMInit = function() {
+	BaseView.prototype.onDOMInit = function () {
 	
 		this.setupDOM();
 		this.initTL();
@@ -14222,7 +14442,7 @@
 		this.onInit();
 	};
 	
-	BaseView.prototype.onInit = function() {
+	BaseView.prototype.onInit = function () {
 		this.isInit = true;
 		this.trigger(EVENT.INIT);
 	};
@@ -14230,20 +14450,16 @@
 	/**
 	 * Bind events
 	 */
-	BaseView.prototype.bindEvents = function() {};
+	BaseView.prototype.bindEvents = function () {};
 	
-	BaseView.prototype.onLinkClicked = function(e) {
+	BaseView.prototype.onLinkClicked = function (e) {
 		var root = location.protocol + '//' + location.host;
 		var href = e.currentTarget.href;
 	
 		// external link
-		if (
-			(href.substr(0, 4) === 'http' && href.indexOf(root) === -1) ||
-			(href.substr(0, 5) === 'https' && href.indexOf(root) === -1) ||
-			e.currentTarget.getAttribute('target') === '_blank' ||
-			(href.substr(0, 6) === 'mailto' && href.indexOf(root) === -1)) {
+		if (href.substr(0, 4) === 'http' && href.indexOf(root) === -1 || href.substr(0, 5) === 'https' && href.indexOf(root) === -1 || e.currentTarget.getAttribute('target') === '_blank' || href.substr(0, 6) === 'mailto' && href.indexOf(root) === -1) {
 			// do nothing
-		} else if ((e.metaKey === undefined && e.ctrlKey === undefined) || (!e.metaKey && !e.ctrlKey)) {
+		} else if (e.metaKey === undefined && e.ctrlKey === undefined || !e.metaKey && !e.ctrlKey) {
 			e.preventDefault();
 			CV.navigate(e.currentTarget.href);
 		} // allow command-click and control-click to open new tab
@@ -14252,53 +14468,49 @@
 	/**
 	 * Unbind events
 	 */
-	BaseView.prototype.unbindEvents = function() {};
+	BaseView.prototype.unbindEvents = function () {};
 	
-	BaseView.prototype.show = function() {
+	BaseView.prototype.show = function () {
 		this.onShown();
 	};
 	
-	BaseView.prototype.onShown = function() {
+	BaseView.prototype.onShown = function () {
 		this.canUpdate = true;
 		this.isShown = true;
 	
 		this.trigger(EVENT.SHOWN);
 	};
 	
-	BaseView.prototype.hide = function() {
+	BaseView.prototype.hide = function () {
 		this.onHidden();
 	};
 	
-	BaseView.prototype.onHidden = function() {
-		this.isShown 	 = false;
+	BaseView.prototype.onHidden = function () {
+		this.isShown = false;
 		this.canUpdate = false;
 	
 		this.trigger(EVENT.HIDDEN);
 	};
 	
-	BaseView.prototype.onResize = function() {
-	
-	};
+	BaseView.prototype.onResize = function () {};
 	
 	/**
 	 * Called on request animation frame
 	 */
-	BaseView.prototype.update = function() {
+	BaseView.prototype.update = function () {
 		if (this.canUpdate) this.onUpdate();
 	};
 	
 	/**
 	 * Called on request animation frame
 	 */
-	BaseView.prototype.onUpdate = function() {
-	
-	};
+	BaseView.prototype.onUpdate = function () {};
 	
 	/**
 	 * Kill a timeline
 	 * @param {string} name of the timeline stocked in this.TL.
 	 */
-	BaseView.prototype.killTL = function(name) {
+	BaseView.prototype.killTL = function (name) {
 		if (this.TL[name] === undefined || this.TL[name] === null) return;
 	
 		var tl = this.TL[name];
@@ -14314,7 +14526,7 @@
 	/**
 	 * Kill all the timelines
 	 */
-	BaseView.prototype.destroyTL = function() {
+	BaseView.prototype.destroyTL = function () {
 		for (var name in this.TL) {
 			if (this.TL.hasOwnProperty(name)) {
 				this.killTL(name);
@@ -14327,7 +14539,7 @@
 	/**
 	 * @override
 	 */
-	BaseView.prototype.dispose = function() {
+	BaseView.prototype.dispose = function () {
 		this.undelegateEvents();
 		this.stopListening();
 	
@@ -14355,14 +14567,13 @@
 	};
 	
 	module.exports = BaseView;
-	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(3)))
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Handlebars = __webpack_require__(20);
+	var Handlebars = __webpack_require__(21);
 	function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
 	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
 	    var stack1, alias1=container.escapeExpression;
@@ -14370,21 +14581,21 @@
 	  return "<section class=\"page-wrapper\" id=\"homepage\">\n\n	<div class=\"grid\">\n		<div class=\"grid__col-12\">\n			<h1>"
 	    + alias1(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1), depth0))
 	    + "</h1>\n			<h2>"
-	    + alias1(__default(__webpack_require__(39)).call(depth0 != null ? depth0 : {},((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1),{"name":"yell","hash":{},"data":data}))
+	    + alias1(__default(__webpack_require__(40)).call(depth0 != null ? depth0 : {},((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1),{"name":"yell","hash":{},"data":data}))
 	    + "</h2>\n		</div>\n		<div class=\"grid__col-xs-6 grid__col-12\">\n				<p>\n					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et sagittis dui. Maecenas rhoncus justo aliquam urna finibus tincidunt et ut mauris.\n				</p>\n		</div>\n		<div class=\"grid__col-xs-6 grid__col-12\">\n			<p>\n				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et sagittis dui. Maecenas rhoncus justo aliquam urna finibus tincidunt et ut mauris.\n			</p>\n		</div>\n</div>\n</section>\n";
 	},"useData":true});
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Create a simple path alias to allow browserify to resolve
 	// the runtime on a supported path.
-	module.exports = __webpack_require__(21)['default'];
+	module.exports = __webpack_require__(22)['default'];
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14398,30 +14609,30 @@
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 	
-	var _handlebarsBase = __webpack_require__(22);
+	var _handlebarsBase = __webpack_require__(23);
 	
 	var base = _interopRequireWildcard(_handlebarsBase);
 	
 	// Each of these augment the Handlebars object. No need to setup here.
 	// (This is done to easily share code between commonjs and browse envs)
 	
-	var _handlebarsSafeString = __webpack_require__(36);
+	var _handlebarsSafeString = __webpack_require__(37);
 	
 	var _handlebarsSafeString2 = _interopRequireDefault(_handlebarsSafeString);
 	
-	var _handlebarsException = __webpack_require__(24);
+	var _handlebarsException = __webpack_require__(25);
 	
 	var _handlebarsException2 = _interopRequireDefault(_handlebarsException);
 	
-	var _handlebarsUtils = __webpack_require__(23);
+	var _handlebarsUtils = __webpack_require__(24);
 	
 	var Utils = _interopRequireWildcard(_handlebarsUtils);
 	
-	var _handlebarsRuntime = __webpack_require__(37);
+	var _handlebarsRuntime = __webpack_require__(38);
 	
 	var runtime = _interopRequireWildcard(_handlebarsRuntime);
 	
-	var _handlebarsNoConflict = __webpack_require__(38);
+	var _handlebarsNoConflict = __webpack_require__(39);
 	
 	var _handlebarsNoConflict2 = _interopRequireDefault(_handlebarsNoConflict);
 	
@@ -14456,7 +14667,7 @@
 
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14467,17 +14678,17 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(23);
+	var _utils = __webpack_require__(24);
 	
-	var _exception = __webpack_require__(24);
+	var _exception = __webpack_require__(25);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
-	var _helpers = __webpack_require__(25);
+	var _helpers = __webpack_require__(26);
 	
-	var _decorators = __webpack_require__(33);
+	var _decorators = __webpack_require__(34);
 	
-	var _logger = __webpack_require__(35);
+	var _logger = __webpack_require__(36);
 	
 	var _logger2 = _interopRequireDefault(_logger);
 	
@@ -14566,7 +14777,7 @@
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -14696,7 +14907,7 @@
 
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -14742,7 +14953,7 @@
 
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14753,31 +14964,31 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _helpersBlockHelperMissing = __webpack_require__(26);
+	var _helpersBlockHelperMissing = __webpack_require__(27);
 	
 	var _helpersBlockHelperMissing2 = _interopRequireDefault(_helpersBlockHelperMissing);
 	
-	var _helpersEach = __webpack_require__(27);
+	var _helpersEach = __webpack_require__(28);
 	
 	var _helpersEach2 = _interopRequireDefault(_helpersEach);
 	
-	var _helpersHelperMissing = __webpack_require__(28);
+	var _helpersHelperMissing = __webpack_require__(29);
 	
 	var _helpersHelperMissing2 = _interopRequireDefault(_helpersHelperMissing);
 	
-	var _helpersIf = __webpack_require__(29);
+	var _helpersIf = __webpack_require__(30);
 	
 	var _helpersIf2 = _interopRequireDefault(_helpersIf);
 	
-	var _helpersLog = __webpack_require__(30);
+	var _helpersLog = __webpack_require__(31);
 	
 	var _helpersLog2 = _interopRequireDefault(_helpersLog);
 	
-	var _helpersLookup = __webpack_require__(31);
+	var _helpersLookup = __webpack_require__(32);
 	
 	var _helpersLookup2 = _interopRequireDefault(_helpersLookup);
 	
-	var _helpersWith = __webpack_require__(32);
+	var _helpersWith = __webpack_require__(33);
 	
 	var _helpersWith2 = _interopRequireDefault(_helpersWith);
 	
@@ -14794,14 +15005,14 @@
 
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(23);
+	var _utils = __webpack_require__(24);
 	
 	exports['default'] = function (instance) {
 	  instance.registerHelper('blockHelperMissing', function (context, options) {
@@ -14839,7 +15050,7 @@
 
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14849,9 +15060,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(23);
+	var _utils = __webpack_require__(24);
 	
-	var _exception = __webpack_require__(24);
+	var _exception = __webpack_require__(25);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
@@ -14939,7 +15150,7 @@
 
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14949,7 +15160,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _exception = __webpack_require__(24);
+	var _exception = __webpack_require__(25);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
@@ -14970,14 +15181,14 @@
 
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(23);
+	var _utils = __webpack_require__(24);
 	
 	exports['default'] = function (instance) {
 	  instance.registerHelper('if', function (conditional, options) {
@@ -15005,7 +15216,7 @@
 
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -15037,7 +15248,7 @@
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -15055,14 +15266,14 @@
 
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(23);
+	var _utils = __webpack_require__(24);
 	
 	exports['default'] = function (instance) {
 	  instance.registerHelper('with', function (context, options) {
@@ -15094,7 +15305,7 @@
 
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15105,7 +15316,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _decoratorsInline = __webpack_require__(34);
+	var _decoratorsInline = __webpack_require__(35);
 	
 	var _decoratorsInline2 = _interopRequireDefault(_decoratorsInline);
 	
@@ -15116,14 +15327,14 @@
 
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(23);
+	var _utils = __webpack_require__(24);
 	
 	exports['default'] = function (instance) {
 	  instance.registerDecorator('inline', function (fn, props, container, options) {
@@ -15151,14 +15362,14 @@
 
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(23);
+	var _utils = __webpack_require__(24);
 	
 	var logger = {
 	  methodMap: ['debug', 'info', 'warn', 'error'],
@@ -15204,7 +15415,7 @@
 
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports) {
 
 	// Build out our basic SafeString type
@@ -15225,7 +15436,7 @@
 
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15245,15 +15456,15 @@
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 	
-	var _utils = __webpack_require__(23);
+	var _utils = __webpack_require__(24);
 	
 	var Utils = _interopRequireWildcard(_utils);
 	
-	var _exception = __webpack_require__(24);
+	var _exception = __webpack_require__(25);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
-	var _base = __webpack_require__(22);
+	var _base = __webpack_require__(23);
 	
 	function checkRevision(compilerInfo) {
 	  var compilerRevision = compilerInfo && compilerInfo[0] || 1,
@@ -15523,7 +15734,7 @@
 
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/* global window */
@@ -15550,16 +15761,17 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports) {
 
-	module.exports = function(msg) {
+	"use strict";
+	
+	module.exports = function (msg) {
 		return msg.toUpperCase();
 	};
 
-
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -15573,17 +15785,19 @@
 	};
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_) {/* global  _   */
+	/* WEBPACK VAR INJECTION */(function(_) {'use strict';
 	
-	var PageView  			= __webpack_require__(17);
-	var template 			= __webpack_require__(42);
-	var AboutDatas 		= __webpack_require__(43)
+	/* global  _   */
+	
+	var PageView = __webpack_require__(18);
+	var template = __webpack_require__(43);
+	var AboutDatas = __webpack_require__(44);
 	
 	//TODO clean datas flow here
-	var AboutView = function(options, datas) {
+	var AboutView = function AboutView(options, datas) {
 		this.template = template;
 	
 		var datasParam = AboutDatas;
@@ -15594,28 +15808,23 @@
 	_.extend(AboutView, PageView);
 	_.extend(AboutView.prototype, PageView.prototype);
 	
-	AboutView.prototype.initDOM = function() {
+	AboutView.prototype.initDOM = function () {
 	
 		PageView.prototype.initDOM.call(this);
 	};
 	
-	AboutView.prototype.setupDOM = function() {
+	AboutView.prototype.setupDOM = function () {};
 	
-	};
-	
-	AboutView.prototype.onResize = function() {
-	
-	};
+	AboutView.prototype.onResize = function () {};
 	
 	module.exports = AboutView;
-	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Handlebars = __webpack_require__(20);
+	var Handlebars = __webpack_require__(21);
 	function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
 	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
 	    var stack1, alias1=container.escapeExpression;
@@ -15623,12 +15832,12 @@
 	  return "<section class=\"page-wrapper\" id=\"about\">\n\n	<h1>"
 	    + alias1(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1), depth0))
 	    + "</h1>\n	<h2>"
-	    + alias1(__default(__webpack_require__(39)).call(depth0 != null ? depth0 : {},((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1),{"name":"yell","hash":{},"data":data}))
+	    + alias1(__default(__webpack_require__(40)).call(depth0 != null ? depth0 : {},((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1),{"name":"yell","hash":{},"data":data}))
 	    + "</h2>\n	<a href=\"/broken-link\">Broken Link</a>\n</section>\n";
 	},"useData":true});
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -15642,51 +15851,46 @@
 	};
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_) {/* global  _   */
+	/* WEBPACK VAR INJECTION */(function(_) {'use strict';
 	
-	var PageView  		= __webpack_require__(17);
-	var template 			= __webpack_require__(45);
-	var ErrorDatas 		= __webpack_require__(46);
+	/* global  _   */
 	
-	var ErrorView = function(options, datas) {
+	var PageView = __webpack_require__(18);
+	var template = __webpack_require__(46);
+	var ErrorDatas = __webpack_require__(47);
+	
+	var ErrorView = function ErrorView(options, datas) {
 	
 		this.template = template;
 	
 		var datasParam = ErrorDatas;
 	
 		PageView.call(this, options, datasParam);
-	
 	};
 	
 	_.extend(ErrorView, PageView);
 	_.extend(ErrorView.prototype, PageView.prototype);
 	
-	ErrorView.prototype.initDOM = function() {
+	ErrorView.prototype.initDOM = function () {
 	
 		PageView.prototype.initDOM.call(this);
-	
 	};
 	
-	ErrorView.prototype.setupDOM = function() {
+	ErrorView.prototype.setupDOM = function () {};
 	
-	};
-	
-	ErrorView.prototype.onResize = function() {
-	
-	};
+	ErrorView.prototype.onResize = function () {};
 	
 	module.exports = ErrorView;
-	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Handlebars = __webpack_require__(20);
+	var Handlebars = __webpack_require__(21);
 	function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
 	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
 	    var stack1;
@@ -15697,7 +15901,7 @@
 	},"useData":true});
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -15711,16 +15915,18 @@
 	};
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_, $) {/* global $ _ */
+	/* WEBPACK VAR INJECTION */(function(_, $) {'use strict';
 	
-	var CV      		= __webpack_require__(11);
-	var ROUTES 			= __webpack_require__(14);
-	var BaseView  	= __webpack_require__(18);
+	/* global $ _ */
 	
-	var NavigationView = function(options, datas) {
+	var CV = __webpack_require__(12);
+	var ROUTES = __webpack_require__(15);
+	var BaseView = __webpack_require__(19);
+	
+	var NavigationView = function NavigationView(options, datas) {
 	
 		this.href = null;
 	
@@ -15734,22 +15940,22 @@
 	 * Handles the initialization of DOM element
 	 * Here we should create reference of DOM elements we want to manipulate
 	 */
-	NavigationView.prototype.initDOM = function() {
-		this.a$.nav 				= this.$el.find('ul');
-		this.a$.navItems		= this.a$.nav.find('li a');
+	NavigationView.prototype.initDOM = function () {
+		this.a$.nav = this.$el.find('ul');
+		this.a$.navItems = this.a$.nav.find('li a');
 	
 		BaseView.prototype.initDOM.call(this);
 	};
 	
-	NavigationView.prototype.setupDOM = function() {
+	NavigationView.prototype.setupDOM = function () {
 		this.setNavLayout();
 	};
 	
-	NavigationView.prototype.onLinkClicked = function(e) {
+	NavigationView.prototype.onLinkClicked = function (e) {
 		BaseView.prototype.onLinkClicked.call(this, e);
 	};
 	
-	NavigationView.prototype.setNavLayout = function(pageURL) {
+	NavigationView.prototype.setNavLayout = function (pageURL) {
 		this.resetCurrentNavItem();
 	
 		var currentPage = pageURL ? ROUTES.getRouteByUrl(pageURL) : ROUTES.getRouteByID(CV.currentPage);
@@ -15761,18 +15967,17 @@
 		$currentNavItem.addClass('active');
 	};
 	
-	NavigationView.prototype.resetCurrentNavItem = function() {
+	NavigationView.prototype.resetCurrentNavItem = function () {
 		for (var i = 0; i < this.a$.navItems.length; i++) {
 			$(this.a$.navItems[i]).removeClass('active');
 		}
 	};
 	
 	module.exports = NavigationView;
-	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;;(function () {

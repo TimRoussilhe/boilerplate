@@ -125,7 +125,7 @@ CurrentValues.prototype.init = function() {
 };
 
 CurrentValues.prototype.navigate = function(href) {
-	
+
 	var root = location.protocol + '//' + location.host;
 
 	// Ensure the root is part of the anchor href, meaning it's relative.

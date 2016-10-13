@@ -1,11 +1,7 @@
 /* global Backbone _*/
 
-require('underscore');
-require('Modernizr');
-require('gsap');
-
-var Router  = require('router/router');
-var Config  = require('config/config');
+import Router from 'router/router';
+import Config from 'config/config';
 
 /**
  * app: Init the app
