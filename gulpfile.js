@@ -8,6 +8,8 @@ var csso = require('gulp-csso');
 var merge = require('merge-stream');
 var buffer = require('vinyl-buffer');
 var fontName = 'iconfont';
+var nodemon = require('gulp-nodemon');
+var browserSync = require('browser-sync').create();
 
 //iconfont
 gulp.task('iconfont', function() {
@@ -60,4 +62,27 @@ gulp.task('png2Sprite', function(callback) {
 
 gulp.task('iconfontSequence', function(callback) {
 	runSequence('iconfont', 'optiIconFontCSS');
+});
+
+gulp.task('browser-sync', ['nodemon'], function() {
+	browserSync.init(null, {
+		proxy: 'http://localhost:3000',
+		files: ['public/**/*.*'],
+		browser: 'google chrome',
+		port: 7000
+	});
+});
+
+gulp.task('nodemon', function(cb) {
+	var started = false;
+	return nodemon({
+		script: './server/app.js',
+		watch: ['./shared','./server']
+	}).on('start', function () {
+		// to avoid nodemon being started multiple times
+		if (!started) {
+			cb();
+			started = true;
+		}
+	});
 });
