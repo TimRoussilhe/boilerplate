@@ -37,7 +37,7 @@ gulp.task('optiIconFontCSS', function() {
 // Retina PNG Sprite
 gulp.task('spriteGlobal', function() {
 	var spriteData = gulp.src('public/assets/pngs-global/*.png').pipe(spritesmith({
-		imgName:         'spriteGlobal.png',
+		imgName:         'spriteGl obal.png',
 		cssName:         'spriteGlobal.css',
 		retinaSrcFilter: ['public/assets/pngs-global/*@2x.png'],
 		retinaImgName:   'spriteGlobal@2x.png'

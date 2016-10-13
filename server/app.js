@@ -8,13 +8,11 @@ var parser = require('ua-parser-js');
 var MobileDetect = require('mobile-detect');
 var helpers = require('../shared/helpers/helpers');
 var routes = require(path.join(__dirname, '../shared/jsons/routes.json'));
+var menuDatas = require(path.join(__dirname, '../shared/jsons/menu.json'));
 
 var app = express();
 app.use(compression());
 app.use(helmet());
-// app.use(connect({
-//     port: 3000
-//   }));
 
 app.set('views', path.join(__dirname, '../shared/templates'));
 
@@ -31,36 +29,17 @@ app.set('view engine', '.hbs');
 var pathPublic = path.join(__dirname, '../public');
 app.use(express.static(pathPublic));
 
-// app.get('/', function(req, res) {
-//
-// 	res.render('index', {
-// 		datas: jsonHome,
-// 		routes: routes,
-// 		webpAvailable : detectWebP(req),
-// 		isMobile: detectMobile(req)
-// 	});
-//
-// });
-//
-// app.get('/about', function(req, res) {
-//
-// 	res.render('about', {
-// 		datas: jsonAbout,
-// 		routes: routes,
-// 		webpAvailable : detectWebP(req),
-// 		isMobile: detectMobile(req)
-// 	});
-//
-// });
-
 app.get('/*', function(req, res) {
+
 	var currentRoute = getRouteByUrl(req.url);
+	if (currentRoute === null) currentRoute = getRouteByID('404');
+
 	var json = require(path.join(__dirname, currentRoute.jsonUrl));
 
 	// the ID needs to be the template name
 	res.render(currentRoute.id, {
 		datas: json,
-		routes: routes,
+		menu: menuDatas,
 		webpAvailable : detectWebP(req),
 		isMobile: detectMobile(req)
 	});
@@ -80,6 +59,13 @@ function getRouteByUrl(url) {
 	}
 	return null;
 }
+
+function getRouteByID(id_) {
+	for (var id in routes) {
+		if (id === id_) return routes[id];
+	}
+	return null;
+};
 
 function detectWebP(req) {
 

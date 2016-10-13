@@ -6,6 +6,7 @@ var Config = require('config/config');
 var ROUTES = require('router/routes');
 var IndexView = require('views/pages/indexView');
 var AboutView = require('views/pages/aboutView');
+var ErrorView = require('views/pages/404View');
 
 var PageManager = function() {
 	/*
@@ -48,22 +49,11 @@ PageManager.prototype.navigateTo = function(page, params, hash) {
 
 		el = document.getElementsByClassName('page-wrapper')[0];
 
-		if (el && el.id === 'app-error') {
-
-			page = '404';
-			params = null;
-
-		}
-
 	}
 
 	var newPage = this.getCurrentPage(page, params);
 
 	CV.isAnimating = true;
-
-	// console.log('PageManager.prototype.navigateTo', page,params,filters);
-	// console.log('this.oldPage', this.oldPage);
-	// console.log('this.currentPage', this.currentPage);
 
 	if (this.currentPage) {
 
@@ -95,8 +85,8 @@ PageManager.prototype.getCurrentPage = function(page, params) {
 	var view = null;
 
 	if (!route) {
-		view = IndexView;
-		return {id: 'index', View: view};
+		view = ErrorView;
+		return {id: '404', View: view};
 	}
 
 	switch (route.id) {

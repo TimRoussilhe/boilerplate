@@ -13592,6 +13592,7 @@
 	var ROUTES = __webpack_require__(14);
 	var IndexView = __webpack_require__(16);
 	var AboutView = __webpack_require__(41);
+	var ErrorView = __webpack_require__(46);
 	
 	var PageManager = function() {
 		/*
@@ -13634,22 +13635,11 @@
 	
 			el = document.getElementsByClassName('page-wrapper')[0];
 	
-			if (el && el.id === 'app-error') {
-	
-				page = '404';
-				params = null;
-	
-			}
-	
 		}
 	
 		var newPage = this.getCurrentPage(page, params);
 	
 		CV.isAnimating = true;
-	
-		// console.log('PageManager.prototype.navigateTo', page,params,filters);
-		// console.log('this.oldPage', this.oldPage);
-		// console.log('this.currentPage', this.currentPage);
 	
 		if (this.currentPage) {
 	
@@ -13681,8 +13671,8 @@
 		var view = null;
 	
 		if (!route) {
-			view = IndexView;
-			return {id: 'index', View: view};
+			view = ErrorView;
+			return {id: '404', View: view};
 		}
 	
 		switch (route.id) {
@@ -13831,16 +13821,19 @@
 /***/ function(module, exports) {
 
 	module.exports = {
+		"404": {
+			"id": "404",
+			"url": "/404",
+			"jsonUrl": "../shared/jsons/404.json"
+		},
 		"index": {
 			"id": "index",
 			"url": "/",
-			"label": "Home",
 			"jsonUrl": "../shared/jsons/index.json"
 		},
 		"about": {
 			"id": "about",
 			"url": "/about",
-			"label": "About",
 			"jsonUrl": "../shared/jsons/about.json"
 		}
 	};
@@ -15631,7 +15624,7 @@
 	    + alias1(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1), depth0))
 	    + "</h1>\n	<h2>"
 	    + alias1(__default(__webpack_require__(39)).call(depth0 != null ? depth0 : {},((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1),{"name":"yell","hash":{},"data":data}))
-	    + "</h2>\n\n</section>\n";
+	    + "</h2>\n	<a href=\"/broken-link\">Broken Link</a>\n</section>\n";
 	},"useData":true});
 
 /***/ },
@@ -15692,6 +15685,8 @@
 		this.resetCurrentNavItem();
 	
 		var currentPage = pageURL ? ROUTES.getRouteByUrl(pageURL) : ROUTES.getRouteByID(CV.currentPage);
+		if (currentPage === null) return;
+	
 		var $currentNavItem = this.a$.nav.find('*[data-page="' + currentPage.id + '"]');
 		// if no nav item SKIP. this would happen when rendering legacy and 404.
 		if ($currentNavItem.length === 0) return;
@@ -16554,6 +16549,75 @@
 		}
 	}());
 
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(_) {/* global  _   */
+	
+	var PageView  		= __webpack_require__(17);
+	var template 			= __webpack_require__(47);
+	var ErrorDatas 		= __webpack_require__(48);
+	
+	var ErrorView = function(options, datas) {
+	
+		this.template = template;
+	
+		var datasParam = ErrorDatas;
+	
+		PageView.call(this, options, datasParam);
+	
+	};
+	
+	_.extend(ErrorView, PageView);
+	_.extend(ErrorView.prototype, PageView.prototype);
+	
+	ErrorView.prototype.initDOM = function() {
+	
+		PageView.prototype.initDOM.call(this);
+	
+	};
+	
+	ErrorView.prototype.setupDOM = function() {
+	
+	};
+	
+	ErrorView.prototype.onResize = function() {
+	
+	};
+	
+	module.exports = ErrorView;
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ },
+/* 47 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Handlebars = __webpack_require__(20);
+	function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
+	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+	    var stack1;
+	
+	  return "<section class=\"page-wrapper\" id=\"404\">\n	<h1>"
+	    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1), depth0))
+	    + "</h1>\n</section>\n";
+	},"useData":true});
+
+/***/ },
+/* 48 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"metas": {
+			"title": "404",
+			"description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmodproident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+		},
+		"content": {
+			"title": "Sorry this page doesn't exist"
+		}
+	};
 
 /***/ }
 /******/ ]);

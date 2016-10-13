@@ -38,6 +38,8 @@ NavigationView.prototype.setNavLayout = function(pageURL) {
 	this.resetCurrentNavItem();
 
 	var currentPage = pageURL ? ROUTES.getRouteByUrl(pageURL) : ROUTES.getRouteByID(CV.currentPage);
+	if (currentPage === null) return;
+
 	var $currentNavItem = this.a$.nav.find('*[data-page="' + currentPage.id + '"]');
 	// if no nav item SKIP. this would happen when rendering legacy and 404.
 	if ($currentNavItem.length === 0) return;
