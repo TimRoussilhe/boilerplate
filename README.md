@@ -70,6 +70,8 @@ MVC kinda
 
 ## CSS Framework
 Stylus
+Using Reflex Flex grid ( ported from SASS to Stylus manually )
+[Documentation here](http://leejordan.github.io/reflex/docs/)
 
 
 # potential compatibility errors

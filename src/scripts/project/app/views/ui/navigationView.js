@@ -34,7 +34,6 @@ NavigationView.prototype.onLinkClicked = function(e) {
 };
 
 NavigationView.prototype.setNavLayout = function(pageURL) {
-	console.log('setNavLayout', pageURL);
 	this.resetCurrentNavItem();
 
 	var currentPage = pageURL ? ROUTES.getRouteByUrl(pageURL) : ROUTES.getRouteByID(CV.currentPage);
