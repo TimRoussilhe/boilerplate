@@ -1,188 +1,182 @@
 /* global document $ Backbone _ window*/
 
-var EVENT 						= require('events/events');
-var PageManager              	= require('controller/pageManager');
-var CV                       	= require('config/currentValues');
-var NavigationView           	= require('views/ui/navigationView');
-var FastClick					= require('FastClick');
+import FastClick from 'FastClick';
+import CV from 'config/currentValues';
+import PageManager from 'controller/pageManager';
+import EVENTS from 'events/events';
+import NavigationView from 'views/ui/navigationView';
+
 /*
  * MainView: Handles the main view logic - window/document event
  * @extend {abstract/view/DOM/DOMview}
  * @constructor
  */
 
-var MainView = function(options, datas) {
-	this.el    	= document.body;
-	this.$el   	= $(this.el);
+class MainView extends Backbone.View {
 
-	this.idView = 'mainpage';
+	constructor(options = {}) {
 
-	/**
-	 * Meta viewport element
-	 * @type {element}
-	 * @private
+		_.defaults(options, {
+			 // These options are assigned to the instance by Backbone
+			 el: document.body,
+			 $el: $(document.body),
+			 className: 'test',
+			 idView: 'mainpage'
+		 });
+
+		 super(options);
+		 this.options = options;
+	}
+
+	/*
+	 * @override
 	 */
-	this.metaViewport = null;
+	initialize(options) {
 
-	this.a$ = {};
-	/**
-	 * Main container
-	 * @type {jQuery element}
-	 * @private
-	 */
-	this.a$.container = null;
+		this.el    	= document.body;
+		this.$el   	= $(this.el);
 
-	/**
-	 * html element
-	 * @type {jQuery element}
-	 * @private
-	 */
-	this.a$.html = null;
+		this.idView = 'mainpage';
 
-	/**
-	 * body element
-	 * @type {jQuery element}
-	 * @private
-	 */
-	this.a$.body = null;
-
-	this.pageManager = null;
-
-	this.handlers = {};
-	Backbone.View.call(this, options, datas);
-};
-
-_.extend(MainView, Backbone.View);
-_.extend(MainView.prototype, Backbone.View.prototype);
-
-/*
- * @override
- */
-MainView.prototype.initialize = function() {
-
-	this.bindMainEvents();
-};
-
-MainView.prototype.init = function() {
-
-	if (CV.isMobile) {
-		$('body').addClass('isMobile');
-		$('body').addClass('isTouch');
-		var needsClick = FastClick.prototype.needsClick;
-		FastClick.prototype.needsClick = function(target) {
-			if ((target.className || '').indexOf('pac-item') > -1) {
-				return true;
-			} else if ((target.parentNode.className || '').indexOf('pac-item') > -1) {
-				return true;
-			}
-			return needsClick.apply(this, arguments);
+		this.a$ = {
+			container : null,
+			html : null,
+			body : null
 		};
 
-		FastClick.attach(this.el);
+		this.pageManager = null;
+
+		this.handlers = {};
+		this.bindMainEvents();
+
 	}
 
-	this.pageManager = new PageManager();
-	this.listenTo(this.pageManager, EVENT.PAGE_RENDERED,	_appendPage.bind(this));
-	this.listenTo(this.pageManager, EVENT.SHOW_PAGE, 		_onShowPage.bind(this));
-	this.listenTo(this.pageManager, EVENT.PAGE_SHOWN,		_onPageShown.bind(this));
-	this.listenTo(this.pageManager, EVENT.HIDE_PAGE,		_onHidePage.bind(this));
+	init() {
 
-	this.navigationView = new NavigationView({el: this.$el.find('#main-nav')[0]});
-	this.navigationView.init();
+		if (CV.isMobile) {
+			$('body').addClass('isMobile');
+			$('body').addClass('isTouch');
+			let needsClick = FastClick.prototype.needsClick;
+			FastClick.prototype.needsClick = function(target) {
+				if ((target.className || '').indexOf('pac-item') > -1) {
+					return true;
+				} else if ((target.parentNode.className || '').indexOf('pac-item') > -1) {
+					return true;
+				}
+				return needsClick.apply(this, arguments);
+			};
 
-	this.handlers.onUpdate = _onUpdate.bind(this);
-	this.trigger(EVENT.INIT);
-};
-
-
-var _onShowPage = function() {
-
-	_onResize.call(this);
-
-};
-
-var _onHidePage = function() {
-
-};
-
-var _appendPage = function() {
-	this.$.container.append(this.pageManager.currentPage.el);
-};
-
-var _onPageShown = function() {
-
-	this.$el.addClass('shown');
-};
-
-/*
- * Bind all the main window/document event here.
- */
-MainView.prototype.bindMainEvents = function() {
-	this.$.html = $('html');
-	this.$.container = $('#content');
-	this.$.body = $('body');
-
-	window.addEventListener('resize', _.throttle(_onResize.bind(this), 300), false);
-	window.addEventListener('scroll', _onScroll.bind(this), false);
-	document.addEventListener('keydown', $.proxy(_onKeyDown, this), false);
-
-	// document.addEventListener("mouseout",  $.proxy(_onMouseOut, this), false);
-	// this.$.body[0].addEventListener("mousemove",  $.proxy(_onMouseMove, this), false);
-	// this.$.body[0].addEventListener("mousedown",  $.proxy(_onMouseDown, this), false);
-	// this.$.body[0].addEventListener("mouseup",  $.proxy(_onMouseUp, this), false);
-
-	// this.$.body[0].addEventListener("touchstart",  $.proxy(_onTouchStart, this), false);
-	// this.$.body[0].addEventListener("touchmove",   $.proxy(_onTouchMove, this), false);
-	// this.$.body[0].addEventListener("touchend",    $.proxy(_onTouchEnd, this), false);
-};
-
-
-MainView.prototype.navigateTo = function(page, params, hash) {
-	this.pageManager.navigateTo(page, params, hash);
-	this.navigationView.setNavLayout(page);
-};
-
-var _onScroll = function() {
-	this.ticketScroll = true;
-};
-
-var _onUpdate = function() {
-	if (this.ticketScroll) {
-		this.ticketScroll = false;
-
-		var scrollY = window.scrollY || window.pageYOffset;
-
-		if (scrollY < CV.scrollY) {
-			CV.scrollYDirection = 'up';
-		} else {
-			CV.scrollYDirection = 'down';
+			FastClick.attach(this.el);
 		}
 
-		CV.scrollY = scrollY;
+		this.pageManager = new PageManager();
+
+		this.listenTo(this.pageManager, EVENTS.PAGE_RENDERED,() => this._appendPage());
+		this.listenTo(this.pageManager, EVENTS.SHOW_PAGE, () => this._onShowPage());
+		this.listenTo(this.pageManager, EVENTS.PAGE_SHOWN, () => this._onPageShown());
+		this.listenTo(this.pageManager, EVENTS.HIDE_PAGE, () => this._onHidePage());
+
+		this.navigationView = new NavigationView({el: this.$el.find('#main-nav')[0]});
+		this.navigationView.init();
+
+		this.handlers.onUpdate = () => this._onUpdate();
+		this.trigger(EVENTS.INIT);
+
 	}
 
-	if (this.pageManager && this.pageManager.currentPage && this.pageManager.currentPage.canUpdate) this.pageManager.currentPage.onUpdate();
+	_onShowPage() {
 
-	this.navigationView.onUpdate();
+		this._onResize();
 
-	window.requestAnimationFrame(this.handlers.onUpdate);
-};
-
-var _onResize = function() {
-
-	CV.viewport.width = CV.viewport.wrapperWidth = $(window).width();
-	CV.viewport.height = $(window).height();
-	CV.breakpoint = (CV.viewport.width <= 960) ? 'sml' : 'default';
-
-	if (this.pageManager && this.pageManager.currentPage) this.pageManager.currentPage.onResize();
-
-	if (this.navigationView) {
-		this.navigationView.onResize();
 	}
-};
 
-var _onKeyDown = function(e) {
-	if (this.pageManager && this.pageManager.currentPage) this.pageManager.currentPage.onKeyDown(e);
-};
+	_onHidePage() {
 
-module.exports = new MainView();
+	}
+
+	_appendPage() {
+		console.log('_appendPage',this);
+		this.a$.container.append(this.pageManager.currentPage.el);
+	}
+
+	_onPageShown() {
+
+		this.$el.addClass('shown');
+
+	}
+
+	/*
+	 * Bind all the main window/document event here.
+	 */
+	bindMainEvents() {
+
+		this.a$.html = $('html');
+		this.a$.container = $('#content');
+		this.a$.body = $('body');
+
+		window.addEventListener('resize', _.throttle( () => this._onResize(), 300), false);
+		window.addEventListener('scroll', () => this._onScroll , false);
+		document.addEventListener('keydown',() => this._onKeyDown(), false);
+
+		// document.addEventListener("mouseout",	$.proxy(_onMouseOut, this), false);
+		// this.$.body[0].addEventListener("mousemove",	$.proxy(_onMouseMove, this), false);
+		// this.$.body[0].addEventListener("mousedown",	$.proxy(_onMouseDown, this), false);
+		// this.$.body[0].addEventListener("mouseup",	$.proxy(_onMouseUp, this), false);
+
+		// this.$.body[0].addEventListener("touchstart",	$.proxy(_onTouchStart, this), false);
+		// this.$.body[0].addEventListener("touchmove",	 $.proxy(_onTouchMove, this), false);
+		// this.$.body[0].addEventListener("touchend",		$.proxy(_onTouchEnd, this), false);
+	}
+
+	navigateTo(page, params, hash) {
+		this.pageManager.navigateTo(page, params, hash);
+		this.navigationView.setNavLayout(page);
+	}
+
+	_onScroll() {
+		this.ticketScroll = true;
+	}
+
+	_onUpdate() {
+
+		if (this.ticketScroll) {
+			this.ticketScroll = false;
+
+			let scrollY = window.scrollY || window.pageYOffset;
+
+			if (scrollY < CV.scrollY) {
+				CV.scrollYDirection = 'up';
+			} else {
+				CV.scrollYDirection = 'down';
+			}
+
+			CV.scrollY = scrollY;
+		}
+
+		if (this.pageManager && this.pageManager.currentPage && this.pageManager.currentPage.canUpdate) this.pageManager.currentPage.onUpdate();
+
+		this.navigationView.onUpdate();
+
+		window.requestAnimationFrame(this.handlers.onUpdate);
+
+	}
+
+	_onResize() {
+
+		CV.viewport.height = $(window).height();
+		CV.breakpoint = (CV.viewport.width <= 960) ? 'sml' : 'default';
+
+		if (this.pageManager && this.pageManager.currentPage) this.pageManager.currentPage.onResize();
+
+		if (this.navigationView) {
+			this.navigationView.onResize();
+		}
+	}
+
+	_onKeyDown(e) {
+		if (this.pageManager && this.pageManager.currentPage) this.pageManager.currentPage.onKeyDown(e);
+	}
+
+}
+
+export default new MainView();

@@ -1,32 +1,44 @@
 /* global  _   */
 
-var PageView  			= require('abstract/pageView');
-var template 			= require('templates/about.hbs');
-var AboutDatas 		= require('jsons/about.json')
+import PageView from 'abstract/pageView';
+import template from 'templates/about.hbs';
+import AboutDatas from 'jsons/about.json';
 
-//TODO clean datas flow here
-var AboutView = function(options, datas) {
-	this.template = template;
+class AboutView extends PageView {
 
-	var datasParam = AboutDatas;
+	constructor(options = {}, datas) {
+		console.log('AboutView constructor');
 
-	PageView.call(this, options, datasParam);
-};
+		_.defaults(options, {
+			template: template,
+			// These options are assigned to the instance by Backbone
+			events: {
+			 'click a': 'onLinkClicked'
+			}
+		});
 
-_.extend(AboutView, PageView);
-_.extend(AboutView.prototype, PageView.prototype);
+		super(options, AboutDatas);
+	}
 
-AboutView.prototype.initDOM = function() {
+	initialize(options, data) {
+		console.log('AboutView initialize', this);
+		super.initialize(options, data);
+	}
 
-	PageView.prototype.initDOM.call(this);
-};
+	initDOM() {
 
-AboutView.prototype.setupDOM = function() {
+		super.initDOM();
+		// PageView.prototype.initDOM.call(this);
+	}
 
-};
+	setupDOM() {
 
-AboutView.prototype.onResize = function() {
+	}
 
-};
+	onResize() {
 
-module.exports = AboutView;
+	}
+
+}
+
+export default AboutView;

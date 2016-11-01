@@ -1,9 +1,5 @@
 /* global Backbone $ document */
 
-// require('underscore');
-// require('Modernizr');
-// require('gsap');
-
 import 'gsap';
 import 'Modernizr';
 import 'underscore';
@@ -19,6 +15,7 @@ class Main {
 }
 
 const main = module.exports = new Main();
+
 $(() => {
 	main.onReady(main);
 });

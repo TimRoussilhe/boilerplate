@@ -1,88 +1,90 @@
-/* global  _ Backbone window  */
-var Config = require('config/config');
-var EVENT = require('events/events');
-var CV = require('config/currentValues');
-var MainView = require('views/mainView');
+/* global  _ Backbone  */
 
-var Router = function() {
-	this.routes = {
-		':page/?:subpage'						: 'default',
-		':page/?:subpage/'						: 'default',
-		':page'									: 'default',
-		':page/'								: 'default',
-		'(/)'									: 'default',
-		//	http://stackoverflow.com/questions/11236338/is-there-a-way-to-catch-all-non-matched-routes-with-backbone
-		'*notFound'								: 'notFound'
+import EVENTS from 'events/events';
+import MainView from 'views/mainView';
+
+class Router extends Backbone.Router {
+
+	constructor(routes = {}) {
+
+		_.defaults(routes, {
+			':page/?:subpage'						: 'default',
+			 ':page/?:subpage/'						: 'default',
+			 ':page'									: 'default',
+			 ':page/'								: 'default',
+			 '(/)'									: 'default',
+			 //	http://stackoverflow.com/questions/11236338/is-there-a-way-to-catch-all-non-matched-routes-with-backbone
+			 '*notFound'								: 'notFound'
+		});
+
+		super({routes: routes});
+
+		// this.options = options;
+		this.baseURL = '/';
+		this.history = [];
+		this.mainView = MainView;
+
+	}
+
+	init() {
+		this.listenToOnce(this.mainView, EVENTS.INIT, this._onMainViewInit.bind(this));
+		this.mainView.init();
 	};
 
-	this.baseURL = '/';
 
-	this.history = [];
+	_onMainViewInit() {
+		Backbone.history.start({
+			pushState: true,
+			root: this.baseURL
+		});
+	};
 
-	this.mainView = MainView;
+	default(page_, subpage_) {
 
-	Backbone.Router.call(this);
-};
+		const page = (page_ !== undefined) ? page_ : 'error';
+		const subpage = (subpage_ !== undefined) ? subpage_ : 'null';
+		const query = (Backbone.history.location.search) ? this._parseQueryString(Backbone.history.location.search) : null;
+		this.mainView.navigateTo(page, subpage, query);
 
-_.extend(Router, Backbone.Router);
-_.extend(Router.prototype, Backbone.Router.prototype);
+		this.history.push(page);
+	};
 
-Router.prototype.init = function() {
-	this.listenToOnce(this.mainView, EVENT.INIT, _onMainViewInit.bind(this));
-	this.mainView.init();
-};
+	currentPage() {
+		return _.last(this.history);
+	};
 
+	back() {
+		console.log('back');
+		Backbone.history.navigate(this.previousPage(), {trigger: false});
+	};
 
-var _onMainViewInit = function() {
-	Backbone.history.start({
-		pushState: true,
-		root: this.baseURL
-	});
-};
+	previousPage() {
+		if (this.history.length <= 1) return null;
+		return this.history[this.history.length - 2];
+	};
 
-Router.prototype.default = function(page_, subpage_) {
-	var page = (page_ !== undefined) ? page_ : 'error';
-	var subpage = (subpage_ !== undefined) ? subpage_ : 'null';
-	var query = (Backbone.history.location.search) ? _parseQueryString(Backbone.history.location.search) : null;
-	this.mainView.navigateTo(page, subpage, query);
-
-	this.history.push(page);
-};
-
-Router.prototype.currentPage = function() {
-	return _.last(this.history);
-};
-
-Router.prototype.back = function() {
-	console.log('Router.prototype.back');
-	Backbone.history.navigate(this.previousPage(), {trigger: false});
-};
-
-Router.prototype.previousPage = function() {
-	if (this.history.length <= 1) return null;
-	return this.history[this.history.length - 2];
-};
-
-var _parseQueryString = function(queryString) {
-	var params = {};
-	if (queryString) {
-		_.each(
-			_.map(decodeURI(queryString).split(/&/g), function(el, i) {
-				var aux = el.split('=');
-				var o = {};
-				if (aux.length >= 1) {
-					var val;
-					if (aux.length === 2) val = aux[1];
-					o[aux[0]] = val;
+	_parseQueryString(queryString) {
+		let params = {};
+		if (queryString) {
+			_.each(
+				_.map(decodeURI(queryString).split(/&/g), function(el, i) {
+					let aux = el.split('=');
+					let o = {};
+					if (aux.length >= 1) {
+						let val;
+						if (aux.length === 2) val = aux[1];
+						o[aux[0]] = val;
+					}
+					return o;
+				}),
+				function(o) {
+					_.extend(params, o);
 				}
-				return o;
-			}),
-			function(o) {
-				_.extend(params, o);
-			}
-	);
+		);
+		}
+		return params;
 	}
-	return params;
-};
 
-module.exports = new Router();
+}
+
+export default new Router();

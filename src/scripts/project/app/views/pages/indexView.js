@@ -1,32 +1,44 @@
-/* global  _ TweenMax Cubic TimelineMax  */
+/* global _  */
 
-var PageView  			= require('abstract/pageView');
-var template 			= require('templates/index.hbs');
-var CV 					= require('config/currentValues');
-var HomepageDatas 		= require('jsons/index.json')
+import PageView from 'abstract/pageView';
+import template from 'templates/index.hbs';
+import HomepageDatas from 'jsons/index.json';
 
-var IndexView = function(options, datas) {
-	this.template = template;
+class IndexView extends PageView {
 
-	var datasParam = HomepageDatas;
+	constructor(options = {}, datas) {
+		console.log('IndexView constructor');
 
-	PageView.call(this, options, datasParam);
-};
+		_.defaults(options, {
+			template: template,
+			// These options are assigned to the instance by Backbone
+			events: {
+			 'click a': 'onLinkClicked'
+			}
+		});
 
-_.extend(IndexView, PageView);
-_.extend(IndexView.prototype, PageView.prototype);
+		super(options, HomepageDatas);
+	}
 
-IndexView.prototype.initDOM = function() {
+	initialize(options, data) {
+		console.log('IndexView initialize', this);
+		super.initialize(options, data);
+	}
 
-	PageView.prototype.initDOM.call(this);
-};
+	initDOM() {
 
-IndexView.prototype.setupDOM = function() {
+		super.initDOM();
+		// PageView.prototype.initDOM.call(this);
+	}
 
-};
+	setupDOM() {
 
-IndexView.prototype.onResize = function() {
+	}
 
-};
+	onResize() {
 
-module.exports = IndexView;
+	}
+
+}
+
+export default IndexView;

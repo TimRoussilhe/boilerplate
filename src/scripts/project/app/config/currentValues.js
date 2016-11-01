@@ -1,141 +1,142 @@
-/* global Backbone location $ */
-//var Detectizr = require('Detectizr');
 
-var CurrentValues = function() {
-	/**
-	 * Viewport object
-	 * @type {Object}
-	 */
-	 this.viewport = {width: 0, height: 0, wrapperWidth: 0};
+/* global Backbone location window $ _ */
+// var Detectizr = require('Detectizr');
 
-	/**
-	 * Mouse object
-	 * @type {Object}
-	 */
-	 this.mouse = {x: 0, y: 0};
+class CurrentValues {
 
-	/**
-	 * Touch object
-	 * @type {Object}
-	 */
-	 this.touch = {x: 0, y: 0, startX: 0, startY: 0, deltaX: 0, deltaY: 0};
+	constructor() {
+		this.init();
+		_.extend(this, Backbone.Events);
+	}
 
-	/**
-	 * Is mouse out of window?
-	 * @type {boolean}
-	 */
-	 this.outWindow = false;
+	init() {
+		/**
+		 * Viewport object
+		 * @type {Object}
+		 */
+		 this.viewport = {width: $(window).width(), height: $(window).height()};
 
-	/**
-	 * scroll Y value
-	 * @type {number}
-	 */
-	 this.scrollY = 0;
+		/**
+		 * Mouse object
+		 * @type {Object}
+		 */
+		 this.mouse = {x: 0, y: 0};
 
-	/**
-	 * scroll Y direction
-	 * @type {number}
-	 */
-	this.scrollYDirection = 'down';
+		/**
+		 * Touch object
+		 * @type {Object}
+		 */
+		 this.touch = {x: 0, y: 0, startX: 0, startY: 0, deltaX: 0, deltaY: 0};
 
-	/**
-	 * current page
-	 * @type {string}
-	 */
-	this.currentPage = null;
+		/**
+		 * Is mouse out of window?
+		 * @type {boolean}
+		 */
+		 this.outWindow = false;
 
-	/**
-	 * old page
-	 * @type {string}
-	 */
-	this.oldPage = null;
+		/**
+		 * scroll Y value
+		 * @type {number}
+		 */
+		 this.scrollY = 0;
 
-	/**
-	 * delta Y value
-	 * @type {number}
-	 */
-	this.deltaY = 0;
+		/**
+		 * scroll Y direction
+		 * @type {number}
+		 */
+		this.scrollYDirection = 'down';
 
-	/**
-	 * Is is first time?
-	 * @type {boolean}
-	 */
-	this.firstTime = true;
+		/**
+		 * current page
+		 * @type {string}
+		 */
+		this.currentPage = null;
 
-	/**
-	 * Block mouse wheel?
-	 * @type {boolean}
-	 */
-	this.mouseWheelBlock = false;
+		/**
+		 * old page
+		 * @type {string}
+		 */
+		this.oldPage = null;
 
-	/**
-	 * Is mobile size?
-	 * @type {Boolean}
-	 */
-	 this.isMobileSize = false;
+		/**
+		 * delta Y value
+		 * @type {number}
+		 */
+		this.deltaY = 0;
 
-	 /**
-	* Is overlay open?
-	* @type {Boolean}
-	*/
-	 this.overlayOpen = false;
+		/**
+		 * Is is first time?
+		 * @type {boolean}
+		 */
+		this.firstTime = true;
 
-	 /**
-	 * Is mobile?
-	 * @type {Boolean}
-	 */
-	 // this.isMobile = (Detectizr.device.type === 'mobile');
-	 this.isMobile = $('body').hasClass('mobile');
+		/**
+		 * Block mouse wheel?
+		 * @type {boolean}
+		 */
+		this.mouseWheelBlock = false;
 
-	/**
-	 * Is tablet?
-	 * @type {Boolean}
-	 */
-	 // this.isTablet = (Detectizr.device.type === 'tablet' && Detectizr.browser.name !== 'ie');
-	 this.isTablet = $('body').hasClass('tablet');
+		/**
+		 * Is mobile size?
+		 * @type {Boolean}
+		 */
+		 this.isMobileSize = false;
 
-	 /**
-		* Is isTouch?
-		* @type {Boolean}
-		*/
-	 this.isTouch = this.isMobile || this.isTablet;
+		 /**
+		 * Is mobile?
+		 * @type {Boolean}
+		 */
+		 // this.isMobile = (Detectizr.device.type === 'mobile');
+		 this.isMobile = $('body').hasClass('mobile');
 
-	/**
-	 * Breakpoint
-	 * @type {Boolean}
-	 */
-	 this.breakpoint = null;
+		/**
+		 * Is tablet?
+		 * @type {Boolean}
+		 */
+		 // this.isTablet = (Detectizr.device.type === 'tablet' && Detectizr.browser.name !== 'ie');
+		 this.isTablet = $('body').hasClass('tablet');
 
-	/**
-	 * main datas
-	 * @type {Object}
-	 */
-	this.mainDatas = null;
+		 /**
+			* Is isTouch?
+			* @type {Boolean}
+			*/
+		 this.isTouch = this.isMobile || this.isTablet;
 
-	/**
-	 * main assets
-	 * @type {Object}
-	 */
-	this.isAnimating = null;
+		/**
+		 * Breakpoint
+		 * @type {Boolean}
+		 */
+		 this.breakpoint = null;
 
-};
+		/**
+		 * main datas
+		 * @type {Object}
+		 */
+		this.mainDatas = null;
 
-CurrentValues.prototype.init = function() {
-
-};
-
-CurrentValues.prototype.navigate = function(href) {
-
-	var root = location.protocol + '//' + location.host;
-
-	// Ensure the root is part of the anchor href, meaning it's relative.
-	if (href && href.slice(0, root.length) === root) {
-
-		href = href.replace(root, '');
-		if (this.isAnimating === false) Backbone.history.navigate(href, true);
+		/**
+		 * main assets
+		 * @type {Object}
+		 */
+		this.isAnimating = null;
 
 	}
 
-};
+	navigate(href) {
 
-module.exports = new CurrentValues();
+		var root = location.protocol + '//' + location.host;
+
+		// Ensure the root is part of the anchor href, meaning it's relative.
+		if (href && href.slice(0, root.length) === root) {
+
+			href = href.replace(root, '');
+			if (this.isAnimating === false) Backbone.history.navigate(href, true);
+
+		}
+
+	}
+
+}
+
+let single = new CurrentValues();
+export default single;

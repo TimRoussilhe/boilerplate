@@ -1,34 +1,40 @@
 /* global  _   */
 
-var PageView  		= require('abstract/pageView');
-var template 			= require('templates/404.hbs');
-var ErrorDatas 		= require('jsons/404.json');
+import PageView from 'abstract/pageView';
+import template from 'templates/index.hbs';
+import ErrorDatas from 'jsons/404.json';
 
-var ErrorView = function(options, datas) {
+class ErrorView extends PageView {
 
-	this.template = template;
+	constructor(options = {}, datas) {
 
-	var datasParam = ErrorDatas;
+		_.defaults(options, {
+			template: template,
+			// These options are assigned to the instance by Backbone
+			events: {
+			 'click a': 'onLinkClicked'
+			}
+		});
 
-	PageView.call(this, options, datasParam);
+		const datasParam = ErrorDatas;
 
-};
+		super(options, datasParam);
+	}
 
-_.extend(ErrorView, PageView);
-_.extend(ErrorView.prototype, PageView.prototype);
+	initDOM() {
 
-ErrorView.prototype.initDOM = function() {
+		super.initDOM();
+		// PageView.prototype.initDOM.call(this);
+	}
 
-	PageView.prototype.initDOM.call(this);
+	setupDOM() {
 
-};
+	}
 
-ErrorView.prototype.setupDOM = function() {
+	onResize() {
 
-};
+	}
 
-ErrorView.prototype.onResize = function() {
-
-};
+}
 
 module.exports = ErrorView;

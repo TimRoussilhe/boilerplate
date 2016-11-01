@@ -31,8 +31,8 @@ var Events = {
 	ON_FONT_SIZE:          'on_font_size',
 	ON_SCROLL:             'on_scroll',
 	ON_KEYDOWN:            'on_keydown',
-	ON_CLICK:              'on_click',
+	ON_CLICK:              'on_click'
 
 };
 
-module.exports = Events;
+export default Events;

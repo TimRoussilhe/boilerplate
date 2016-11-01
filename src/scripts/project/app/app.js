@@ -7,18 +7,19 @@ import Config from 'config/config';
  * app: Init the app
  * @constructor
  */
-var App = function() {
-	_.extend(this, Backbone.Events);
-};
+class App {
 
-/**
- * Handles the init
- */
-App.prototype.init = function() {
-	console.log('**** Begin App ****');
+	constructor(){
+		_.extend(this, Backbone.Events);
+	}
 
-	Config.init();
-	Router.init();
-};
+	init() {
+		console.log('**** Begin App ****');
 
-module.exports = App;
+		Config.init();
+		Router.init();
+	}
+
+}
+
+export default App;
