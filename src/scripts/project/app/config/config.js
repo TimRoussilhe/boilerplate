@@ -3,7 +3,7 @@
 
 class Config {
 
-	constructor(){
+	constructor() {
 		/**
 		 * name of the app
 		 * @type {String}
@@ -30,10 +30,10 @@ class Config {
 		this.root = '';
 	}
 
-	init(){
+	init() {
 		// Detectizr.detect();
 	}
-};
+}
 
 
 let single = new Config();

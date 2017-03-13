@@ -1,8 +1,9 @@
-/* global $ _ */
+/* global $ */
 
-import CV from 'config/currentValues';
-import ROUTES from 'router/routes';
+// import CV from 'config/currentValues';
+import ROUTES from 'routes/routes';
 import BaseView from 'abstract/baseView';
+import GlobalStore from 'state/globalStore';
 
 class NavigationView extends BaseView {
 
@@ -15,8 +16,6 @@ class NavigationView extends BaseView {
 
 	initDOM() {
 
-		console.log('initDOM');
-		console.log(this);
 		this.a$.nav = this.$el.find('ul');
 		this.a$.navItems = this.a$.nav.find('li a');
 		super.initDOM();
@@ -28,14 +27,13 @@ class NavigationView extends BaseView {
 	}
 
 	onLinkClicked(e) {
-		console.log('onLinkClicked');
 		super.onLinkClicked(e);
 	}
 
 	setNavLayout(pageURL) {
 		this.resetCurrentNavItem();
 
-		const currentPage = pageURL ? ROUTES.getRouteByUrl(pageURL) : ROUTES.getRouteByID(CV.currentPage);
+		const currentPage = pageURL ? ROUTES.getRouteByUrl(pageURL) : ROUTES.getRouteByID(GlobalStore.get('currentPage'));
 		if (currentPage === null) return;
 
 		let $currentNavItem = this.a$.nav.find('*[data-page="' + currentPage.id + '"]');

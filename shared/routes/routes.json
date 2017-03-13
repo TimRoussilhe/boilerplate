@@ -2,16 +2,16 @@
 	"index": {
 		"id": "index",
 		"url": "/",
-		"jsonUrl": "../shared/jsons/index.json"
+		"jsonUrl": "../public/assets/jsons/index.json"
 	},
 	"about": {
 		"id": "about",
 		"url": "/about",
-		"jsonUrl": "../shared/jsons/about.json"
+		"jsonUrl": "../public/assets/jsons/about.json"
 	},
 	"404": {
 		"id": "404",
 		"url": "/404",
-		"jsonUrl": "../shared/jsons/404.json"
+		"jsonUrl": "../public/assets/jsons/404.json"
 	}
 }

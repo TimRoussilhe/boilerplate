@@ -2,10 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var appEntryPoint = './src/scripts/project/main.js';
 var includePath = path.join(__dirname, 'src/scripts');
-// var templatePath = path.join(__dirname, 'public/templates');
-// var nodeModulesPath = path.join(__dirname, 'node_modules');
 var outputPath = path.join(__dirname, '/public/assets/js/');
-// var vendorPath = path.join(__dirname, '/vendors');
 var devTool = 'source-map';
 
 var PROD = JSON.parse(process.env.ENV_PROD || 0);
@@ -112,9 +109,7 @@ module.exports = {
 			// jquery:   	includePath + '/vendors/zepto',
 			jquery: 'npm-zepto',
 			$: 'npm-zepto',
-			zepto:     'jquery',
-			// Detectizr: includePath + '/vendors/detectizr',
-			Modernizr: includePath + '/vendors/modernizr.custom'
+			zepto:     'jquery'
 		},
 		modulesDirectories: [
 			'src/scripts/project/app/',
@@ -137,14 +132,11 @@ module.exports = {
 			},
 			{test: /\.json$/, loader: 'json-loader'},
 			{test: /zepto\.js$/, loader: 'exports?Zepto; delete window.$; delete window.Zepto;'},
-			{test: /detectizr\.js$/, loader: 'imports?this=>window!exports?window.Detectizr;'},
-			{test: /modernizr.custom\.js$/, loader: 'imports?this=>window!exports?window.Modernizr;'},
 			{test: /\.hbs$/, loader: 'handlebars-loader', query: {
 				helperDirs: [
 					__dirname + "/shared/helpers",
 				]
 			}}
-			//{test: /\.js$/, loader: 'eslint-loader', exclude: [/node_modules/, /vendors/]}
 		]
 	},
 

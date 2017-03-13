@@ -1,30 +1,25 @@
 /* global  _   */
 
 import PageView from 'abstract/pageView';
-import template from 'templates/index.hbs';
-import ErrorDatas from 'jsons/404.json';
+import template from 'templates/404.hbs';
+import ErrorData from 'jsons/404.json';
 
 class ErrorView extends PageView {
 
-	constructor(options = {}, datas) {
+	constructor(options = {}, data) {
 
 		_.defaults(options, {
-			template: template,
-			// These options are assigned to the instance by Backbone
-			events: {
-			 'click a': 'onLinkClicked'
-			}
+			template: template
 		});
 
-		const datasParam = ErrorDatas;
+		const dataParam = ErrorData;
 
-		super(options, datasParam);
+		super(options, dataParam);
 	}
 
 	initDOM() {
 
 		super.initDOM();
-		// PageView.prototype.initDOM.call(this);
 	}
 
 	setupDOM() {

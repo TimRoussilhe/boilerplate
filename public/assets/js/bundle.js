@@ -46,15 +46,13 @@
 
 	/* WEBPACK VAR INJECTION */(function($, Backbone) {'use strict';
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* global Backbone $ document */
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* global Backbone $ */
 	
 	__webpack_require__(4);
 	
-	__webpack_require__(6);
-	
 	__webpack_require__(3);
 	
-	var _app = __webpack_require__(8);
+	var _app = __webpack_require__(6);
 	
 	var _app2 = _interopRequireDefault(_app);
 	
@@ -5171,13 +5169,13 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
-	 * VERSION: 1.19.0
-	 * DATE: 2016-07-14
+	 * VERSION: 1.19.1
+	 * DATE: 2017-01-17
 	 * UPDATES AND DOCS AT: http://greensock.com
 	 * 
 	 * Includes all of the following: TweenLite, TweenMax, TimelineLite, TimelineMax, EasePack, CSSPlugin, RoundPropsPlugin, BezierPlugin, AttrPlugin, DirectionalRotationPlugin
 	 *
-	 * @license Copyright (c) 2008-2016, GreenSock. All rights reserved.
+	 * @license Copyright (c) 2008-2017, GreenSock. All rights reserved.
 	 * This work is subject to the terms at http://greensock.com/standard-license or for
 	 * Club GreenSock members, the software agreement that was issued with your membership.
 	 * 
@@ -5222,7 +5220,7 @@
 				p = TweenMax.prototype = TweenLite.to({}, 0.1, {}),
 				_blankArray = [];
 	
-			TweenMax.version = "1.19.0";
+			TweenMax.version = "1.19.1";
 			p.constructor = TweenMax;
 			p.kill()._gc = false;
 			TweenMax.killTweensOf = TweenMax.killDelayedCallsTo = TweenLite.killTweensOf;
@@ -5303,7 +5301,7 @@
 					duration = this._duration,
 					prevRawPrevTime = this._rawPrevTime,
 					isComplete, callback, pt, cycleDuration, r, type, pow, rawPrevTime;
-				if (time >= totalDur - 0.0000001) { //to work around occasional floating point math artifacts.
+				if (time >= totalDur - 0.0000001 && time >= 0) { //to work around occasional floating point math artifacts.
 					this._totalTime = totalDur;
 					this._cycle = this._repeat;
 					if (this._yoyo && (this._cycle & 1) !== 0) {
@@ -5845,7 +5843,7 @@
 						p, val;
 					for (p in alt) {
 						val = alt[p];
-						vars[p] = (typeof(val) === "function") ? val.call(targets[i], i) : val[i % val.length];
+						vars[p] = (typeof(val) === "function") ? val(i, targets[i]) : val[i % val.length];
 					}
 					delete vars.cycle;
 				},
@@ -5859,7 +5857,7 @@
 				},
 				p = TimelineLite.prototype = new SimpleTimeline();
 	
-			TimelineLite.version = "1.19.0";
+			TimelineLite.version = "1.19.1";
 			p.constructor = TimelineLite;
 			p.kill()._gc = p._forcingPlayhead = p._hasPause = false;
 	
@@ -6064,8 +6062,8 @@
 				var last = this._last;
 				if (!last) {
 					this._time = this._totalTime = this._duration = this._totalDuration = 0;
-				} else if (this._time > last._startTime + last._totalDuration / last._timeScale) {
-					this._time = this.duration();
+				} else if (this._time > this.duration()) {
+					this._time = this._duration;
 					this._totalTime = this._totalDuration;
 				}
 				return this;
@@ -6164,7 +6162,7 @@
 					prevTimeScale = this._timeScale,
 					prevPaused = this._paused,
 					tween, isComplete, next, callback, internalForce, pauseTween, curTime;
-				if (time >= totalDur - 0.0000001) { //to work around occasional floating point math artifacts.
+				if (time >= totalDur - 0.0000001 && time >= 0) { //to work around occasional floating point math artifacts.
 					this._totalTime = this._time = totalDur;
 					if (!this._reversed) if (!this._hasPausedChild()) {
 						isComplete = true;
@@ -6545,8 +6543,8 @@
 				return (tl === Animation._rootFramesTimeline);
 			};
 	
-			p.rawTime = function() {
-				return this._paused ? this._totalTime : (this._timeline.rawTime() - this._startTime) * this._timeScale;
+			p.rawTime = function(wrapRepeats) {
+				return (wrapRepeats && (this._paused || (this._repeat && this.time() > 0 && this.totalProgress() < 1))) ? this._totalTime % (this._duration + this._repeatDelay) : this._paused ? this._totalTime : (this._timeline.rawTime(wrapRepeats) - this._startTime) * this._timeScale;
 			};
 	
 			return TimelineLite;
@@ -6590,7 +6588,7 @@
 	
 			p.constructor = TimelineMax;
 			p.kill()._gc = false;
-			TimelineMax.version = "1.19.0";
+			TimelineMax.version = "1.19.1";
 	
 			p.invalidate = function() {
 				this._yoyo = (this.vars.yoyo === true);
@@ -6643,7 +6641,7 @@
 						t.duration( Math.abs( t.vars.time - t.target.time()) / t.target._timeScale );
 					}
 					if (vars.onStart) { //in case the user had an onStart in the vars - we don't want to overwrite it.
-						t._callback("onStart");
+						vars.onStart.apply(vars.onStartScope || vars.callbackScope || t, vars.onStartParams || []); //don't use t._callback("onStart") or it'll point to the copy.onStart and we'll get a recursion error.
 					}
 				};
 				return t;
@@ -6672,7 +6670,7 @@
 					prevPaused = this._paused,
 					prevCycle = this._cycle,
 					tween, isComplete, next, callback, internalForce, cycleDuration, pauseTween, curTime;
-				if (time >= totalDur - 0.0000001) { //to work around occasional floating point math artifacts.
+				if (time >= totalDur - 0.0000001 && time >= 0) { //to work around occasional floating point math artifacts.
 					if (!this._locked) {
 						this._totalTime = totalDur;
 						this._cycle = this._repeat;
@@ -6759,9 +6757,9 @@
 						}
 					}
 	
-					if (this._hasPause && !this._forcingPlayhead && !suppressEvents) {
+					if (this._hasPause && !this._forcingPlayhead && !suppressEvents && time < dur) {
 						time = this._time;
-						if (time >= prevTime) {
+						if (time >= prevTime || (this._repeat && prevCycle !== this._cycle)) {
 							tween = this._first;
 							while (tween && tween._startTime <= time && !pauseTween) {
 								if (!tween._duration) if (tween.data === "isPause" && !tween.ratio && !(tween._startTime === 0 && this._rawPrevTime === 0)) {
@@ -6817,6 +6815,8 @@
 					this.render(prevTime, suppressEvents, (dur === 0));
 					if (!suppressEvents) if (!this._gc) {
 						if (this.vars.onRepeat) {
+							this._cycle = recCycle; //in case the onRepeat alters the playhead or invalidates(), we shouldn't stay locked or use the previous cycle.
+							this._locked = false;
 							this._callback("onRepeat");
 						}
 					}
@@ -6824,6 +6824,8 @@
 						return;
 					}
 					if (wrap) {
+						this._cycle = prevCycle; //if there's an onRepeat, we reverted this above, so make sure it's set properly again. We also unlocked in that scenario, so reset that too.
+						this._locked = true;
 						prevTime = (backwards) ? dur + 0.0001 : -0.0001;
 						this.render(prevTime, true, false);
 					}
@@ -6986,6 +6988,11 @@
 					return a.time - b.time;
 				});
 				return a;
+			};
+	
+			p.invalidate = function() {
+				this._locked = false; //unlock and set cycle in case invalidate() is called from inside an onRepeat
+				return TimelineLite.prototype.invalidate.call(this);
 			};
 	
 	
@@ -7708,7 +7715,7 @@
 				p = CSSPlugin.prototype = new TweenPlugin("css");
 	
 			p.constructor = CSSPlugin;
-			CSSPlugin.version = "1.19.0";
+			CSSPlugin.version = "1.19.1";
 			CSSPlugin.API = 2;
 			CSSPlugin.defaultTransformPerspective = 0;
 			CSSPlugin.defaultSkewType = "compensated";
@@ -7738,14 +7745,15 @@
 				_DEG2RAD = Math.PI / 180,
 				_RAD2DEG = 180 / Math.PI,
 				_forcePT = {},
-				_doc = document,
-				_createElement = function(type) {
-					return _doc.createElementNS ? _doc.createElementNS("http://www.w3.org/1999/xhtml", type) : _doc.createElement(type);
+				_dummyElement = {style:{}},
+				_doc = _gsScope.document || {createElement: function() {return _dummyElement;}},
+				_createElement = function(type, ns) {
+					return _doc.createElementNS ? _doc.createElementNS(ns || "http://www.w3.org/1999/xhtml", type) : _doc.createElement(type);
 				},
 				_tempDiv = _createElement("div"),
 				_tempImg = _createElement("img"),
 				_internals = CSSPlugin._internals = {_specialProps:_specialProps}, //provides a hook to a few internal methods that we need to access from inside other plugins
-				_agent = navigator.userAgent,
+				_agent = (_gsScope.navigator || {}).userAgent || "",
 				_autoRound,
 				_reqSafariFix, //we won't apply the Safari transform fix until we actually come across a tween that affects a transform property (to maintain best performance).
 	
@@ -7756,8 +7764,8 @@
 				_supportsOpacity = (function() { //we set _isSafari, _ieVers, _isFirefox, and _supportsOpacity all in one function here to reduce file size slightly, especially in the minified version.
 					var i = _agent.indexOf("Android"),
 						a = _createElement("a");
-					_isSafari = (_agent.indexOf("Safari") !== -1 && _agent.indexOf("Chrome") === -1 && (i === -1 || Number(_agent.substr(i+8, 1)) > 3));
-					_isSafariLT6 = (_isSafari && (Number(_agent.substr(_agent.indexOf("Version/")+8, 1)) < 6));
+					_isSafari = (_agent.indexOf("Safari") !== -1 && _agent.indexOf("Chrome") === -1 && (i === -1 || parseFloat(_agent.substr(i+8, 2)) > 3));
+					_isSafariLT6 = (_isSafari && (parseFloat(_agent.substr(_agent.indexOf("Version/")+8, 2)) < 6));
 					_isFirefox = (_agent.indexOf("Firefox") !== -1);
 					if ((/MSIE ([0-9]{1,}[\.0-9]{0,})/).exec(_agent) || (/Trident\/.*rv:([0-9]{1,}[\.0-9]{0,})/).exec(_agent)) {
 						_ieVers = parseFloat( RegExp.$1 );
@@ -7772,7 +7780,7 @@
 					return (_opacityExp.test( ((typeof(v) === "string") ? v : (v.currentStyle ? v.currentStyle.filter : v.style.filter) || "") ) ? ( parseFloat( RegExp.$1 ) / 100 ) : 1);
 				},
 				_log = function(s) {//for logging messages, but in a way that won't throw errors in old versions of IE.
-					if (window.console) {
+					if (_gsScope.console) {
 						console.log(s);
 					}
 				},
@@ -7976,7 +7984,7 @@
 				_getDimension = function(t, p, cs) {
 					if ((t.nodeName + "").toLowerCase() === "svg") { //Chrome no longer supports offsetWidth/offsetHeight on SVG elements.
 						return (cs || _getComputedStyle(t))[p] || 0;
-					} else if (t.getBBox && _isSVG(t)) {
+					} else if (t.getCTM && _isSVG(t)) {
 						return t.getBBox()[p] || 0;
 					}
 					var v = parseFloat((p === "width") ? t.offsetWidth : t.offsetHeight),
@@ -8856,7 +8864,7 @@
 	
 	
 			//transform-related methods and properties
-			CSSPlugin.useSVGTransformAttr = _isSafari || _isFirefox; //Safari and Firefox both have some rendering bugs when applying CSS transforms to SVG elements, so default to using the "transform" attribute instead (users can override this).
+			CSSPlugin.useSVGTransformAttr = true; //Safari and Firefox both have some rendering bugs when applying CSS transforms to SVG elements, so default to using the "transform" attribute instead (users can override this).
 			var _transformProps = ("scaleX,scaleY,scaleZ,x,y,z,skewX,skewY,rotation,rotationX,rotationY,perspective,xPercent,yPercent").split(","),
 				_transformProp = _checkPropPrefix("transform"), //the Javascript (camelCase) transform property, like msTransform, WebkitTransform, MozTransform, or OTransform.
 				_transformPropCSS = _prefixCSS + "transform",
@@ -8866,7 +8874,7 @@
 					this.perspective = parseFloat(CSSPlugin.defaultTransformPerspective) || 0;
 					this.force3D = (CSSPlugin.defaultForce3D === false || !_supports3D) ? false : CSSPlugin.defaultForce3D || "auto";
 				},
-				_SVGElement = window.SVGElement,
+				_SVGElement = _gsScope.SVGElement,
 				_useSVGTransformAttr,
 				//Some browsers (like Firefox and IE) don't honor transform-origin properly in SVG elements, so we need to manually adjust the matrix accordingly. We feature detect here rather than always doing the conversion for certain browsers because they may fix the problem at some point in the future.
 	
@@ -8880,10 +8888,10 @@
 					container.appendChild(element);
 					return element;
 				},
-				_docElement = _doc.documentElement,
+				_docElement = _doc.documentElement || {},
 				_forceSVGTransformAttr = (function() {
 					//IE and Android stock don't support CSS transforms on SVG elements, so we must write them to the "transform" attribute. We populate this variable in the _parseTransform() method, and only if/when we come across an SVG element
-					var force = _ieVers || (/Android/i.test(_agent) && !window.chrome),
+					var force = _ieVers || (/Android/i.test(_agent) && !_gsScope.chrome),
 						svg, rect, width;
 					if (_doc.createElementNS && !force) { //IE8 and earlier doesn't support SVG anyway
 						svg = _createSVG("svg", _docElement);
@@ -8906,6 +8914,9 @@
 					}
 					if (!absolute || (v = absolute.split(" ")).length < 2) {
 						b = e.getBBox();
+						if (b.x === 0 && b.y === 0 && b.width + b.height === 0) { //some browsers (like Firefox) misreport the bounds if the element has zero width and height (it just assumes it's at x:0, y:0), thus we need to manually grab the position in that case.
+							b = {x: parseFloat(e.hasAttribute("x") ? e.getAttribute("x") : e.hasAttribute("cx") ? e.getAttribute("cx") : 0) || 0, y: parseFloat(e.hasAttribute("y") ? e.getAttribute("y") : e.hasAttribute("cy") ? e.getAttribute("cy") : 0) || 0, width:0, height:0};
+						}
 						local = _parsePosition(local).split(" ");
 						v = [(local[0].indexOf("%") !== -1 ? parseFloat(local[0]) / 100 * b.width : parseFloat(local[0])) + b.x,
 							 (local[1].indexOf("%") !== -1 ? parseFloat(local[1]) / 100 * b.height : parseFloat(local[1])) + b.y];
@@ -8920,10 +8931,12 @@
 						tx = m[4];
 						ty = m[5];
 						determinant = (a * d - b * c);
-						x = xOrigin * (d / determinant) + yOrigin * (-c / determinant) + ((c * ty - d * tx) / determinant);
-						y = xOrigin * (-b / determinant) + yOrigin * (a / determinant) - ((a * ty - b * tx) / determinant);
-						xOrigin = decoratee.xOrigin = v[0] = x;
-						yOrigin = decoratee.yOrigin = v[1] = y;
+						if (determinant) { //if it's zero (like if scaleX and scaleY are zero), skip it to avoid errors with dividing by zero.
+							x = xOrigin * (d / determinant) + yOrigin * (-c / determinant) + ((c * ty - d * tx) / determinant);
+							y = xOrigin * (-b / determinant) + yOrigin * (a / determinant) - ((a * ty - b * tx) / determinant);
+							xOrigin = decoratee.xOrigin = v[0] = x;
+							yOrigin = decoratee.yOrigin = v[1] = y;
+						}
 					}
 					if (tm) { //avoid jump when transformOrigin is changed - adjust the x/y values accordingly
 						if (skipRecord) {
@@ -8947,13 +8960,42 @@
 						e.setAttribute("data-svg-origin", v.join(" "));
 					}
 				},
-				_canGetBBox = function(e) {
+				_getBBoxHack = function(swapIfPossible) { //works around issues in some browsers (like Firefox) that don't correctly report getBBox() on SVG elements inside a <defs> element and/or <mask>. We try creating an SVG, adding it to the documentElement and toss the element in there so that it's definitely part of the rendering tree, then grab the bbox and if it works, we actually swap out the original getBBox() method for our own that does these extra steps whenever getBBox is needed. This helps ensure that performance is optimal (only do all these extra steps when absolutely necessary...most elements don't need it).
+					var svg = _createElement("svg", this.ownerSVGElement.getAttribute("xmlns") || "http://www.w3.org/2000/svg"),
+						oldParent = this.parentNode,
+						oldSibling = this.nextSibling,
+						oldCSS = this.style.cssText,
+						bbox;
+					_docElement.appendChild(svg);
+					svg.appendChild(this);
+					this.style.display = "block";
+					if (swapIfPossible) {
+						try {
+							bbox = this.getBBox();
+							this._originalGetBBox = this.getBBox;
+							this.getBBox = _getBBoxHack;
+						} catch (e) { }
+					} else if (this._originalGetBBox) {
+						bbox = this._originalGetBBox();
+					}
+					if (oldSibling) {
+						oldParent.insertBefore(this, oldSibling);
+					} else {
+						oldParent.appendChild(this);
+					}
+					_docElement.removeChild(svg);
+					this.style.cssText = oldCSS;
+					return bbox;
+				},
+				_getBBox = function(e) {
 					try {
 						return e.getBBox(); //Firefox throws errors if you try calling getBBox() on an SVG element that's not rendered (like in a <symbol> or <defs>). https://bugzilla.mozilla.org/show_bug.cgi?id=612118
-					} catch (e) {}
+					} catch (error) {
+						return _getBBoxHack.call(e, true);
+					}
 				},
 				_isSVG = function(e) { //reports if the element is an SVG on which getBBox() actually works
-					return !!(_SVGElement && e.getBBox && e.getCTM && _canGetBBox(e) && (!e.parentNode || (e.parentNode.getBBox && e.parentNode.getCTM)));
+					return !!(_SVGElement && e.getCTM && _getBBox(e) && (!e.parentNode || e.ownerSVGElement));
 				},
 				_identity2DMatrix = [1,0,0,1,0,0],
 				_getMatrix = function(e, force2D) {
@@ -8989,7 +9031,7 @@
 							_docElement.removeChild(e);
 						}
 					}
-					if (tm.svg || (e.getBBox && _isSVG(e))) {
+					if (tm.svg || (e.getCTM && _isSVG(e))) {
 						if (isDefault && (style[_transformProp] + "").indexOf("matrix") !== -1) { //some browsers (like Chrome 40) don't correctly report transforms that are applied inline on an SVG element (they don't get included in the computed style), so we double-check here and accept matrix values
 							s = style[_transformProp];
 							isDefault = 0;
@@ -9038,7 +9080,7 @@
 						defaultTransformPerspective = parseFloat(CSSPlugin.defaultTransformPerspective) || 0,
 						m, i, scaleX, scaleY, rotation, skewX;
 	
-					tm.svg = !!(t.getBBox && _isSVG(t));
+					tm.svg = !!(t.getCTM && _isSVG(t));
 					if (tm.svg) {
 						_parseSVGOrigin(t, _getStyle(t, _transformOriginProp, cs, false, "50% 50%") + "", tm, t.getAttribute("data-svg-origin"));
 						_useSVGTransformAttr = CSSPlugin.useSVGTransformAttr || _forceSVGTransformAttr;
@@ -9304,27 +9346,34 @@
 						isSVG = t.svg,
 						perspective = t.perspective,
 						force3D = t.force3D,
-						a11, a12, a13, a21, a22, a23, a31, a32, a33, a41, a42, a43,
-						zOrigin, min, cos, sin, t1, t2, transform, comma, zero, skew, rnd;
+						skewY = t.skewY,
+						skewX = t.skewX,
+						t1,	a11, a12, a13, a21, a22, a23, a31, a32, a33, a41, a42, a43,
+						zOrigin, min, cos, sin, t2, transform, comma, zero, skew, rnd;
+					if (skewY) { //for performance reasons, we combine all skewing into the skewX and rotation values. Remember, a skewY of 10 degrees looks the same as a rotation of 10 degrees plus a skewX of 10 degrees.
+						skewX += skewY;
+						angle += skewY;
+					}
+	
 					//check to see if we should render as 2D (and SVGs must use 2D when _useSVGTransformAttr is true)
 					if (((((v === 1 || v === 0) && force3D === "auto" && (this.tween._totalTime === this.tween._totalDuration || !this.tween._totalTime)) || !force3D) && !z && !perspective && !rotationY && !rotationX && sz === 1) || (_useSVGTransformAttr && isSVG) || !_supports3D) { //on the final render (which could be 0 for a from tween), if there are no 3D aspects, render in 2D to free up memory and improve performance especially on mobile devices. Check the tween's totalTime/totalDuration too in order to make sure it doesn't happen between repeats if it's a repeating tween.
 	
 						//2D
-						if (angle || t.skewX || isSVG) {
+						if (angle || skewX || isSVG) {
 							angle *= _DEG2RAD;
-							skew = t.skewX * _DEG2RAD;
+							skew = skewX * _DEG2RAD;
 							rnd = 100000;
 							a11 = Math.cos(angle) * sx;
 							a21 = Math.sin(angle) * sx;
 							a12 = Math.sin(angle - skew) * -sy;
 							a22 = Math.cos(angle - skew) * sy;
 							if (skew && t.skewType === "simple") { //by default, we compensate skewing on the other axis to make it look more natural, but you can set the skewType to "simple" to use the uncompensated skewing that CSS does
-								t1 = Math.tan(skew - t.skewY * _DEG2RAD);
+								t1 = Math.tan(skew - skewY * _DEG2RAD);
 								t1 = Math.sqrt(1 + t1 * t1);
 								a12 *= t1;
 								a22 *= t1;
-								if (t.skewY) {
-									t1 = Math.tan(t.skewY * _DEG2RAD);
+								if (skewY) {
+									t1 = Math.tan(skewY * _DEG2RAD);
 									t1 = Math.sqrt(1 + t1 * t1);
 									a11 *= t1;
 									a21 *= t1;
@@ -9371,21 +9420,21 @@
 							perspective = 0;
 						}
 					}
-					if (angle || t.skewX) {
+					if (angle || skewX) {
 						angle *= _DEG2RAD;
 						cos = a11 = Math.cos(angle);
 						sin = a21 = Math.sin(angle);
-						if (t.skewX) {
-							angle -= t.skewX * _DEG2RAD;
+						if (skewX) {
+							angle -= skewX * _DEG2RAD;
 							cos = Math.cos(angle);
 							sin = Math.sin(angle);
 							if (t.skewType === "simple") { //by default, we compensate skewing on the other axis to make it look more natural, but you can set the skewType to "simple" to use the uncompensated skewing that CSS does
-								t1 = Math.tan((t.skewX - t.skewY) * _DEG2RAD);
+								t1 = Math.tan((skewX - skewY) * _DEG2RAD);
 								t1 = Math.sqrt(1 + t1 * t1);
 								cos *= t1;
 								sin *= t1;
 								if (t.skewY) {
-									t1 = Math.tan(t.skewY * _DEG2RAD);
+									t1 = Math.tan(skewY * _DEG2RAD);
 									t1 = Math.sqrt(1 + t1 * t1);
 									a11 *= t1;
 									a21 *= t1;
@@ -9519,10 +9568,14 @@
 			_registerComplexSpecialProp("transform,scale,scaleX,scaleY,scaleZ,x,y,z,rotation,rotationX,rotationY,rotationZ,skewX,skewY,shortRotation,shortRotationX,shortRotationY,shortRotationZ,transformOrigin,svgOrigin,transformPerspective,directionalRotation,parseTransform,force3D,skewType,xPercent,yPercent,smoothOrigin", {parser:function(t, e, parsingProp, cssp, pt, plugin, vars) {
 				if (cssp._lastParsedTransform === vars) { return pt; } //only need to parse the transform once, and only if the browser supports it.
 				cssp._lastParsedTransform = vars;
-				var swapFunc;
+				var scaleFunc = (vars.scale && typeof(vars.scale) === "function") ? vars.scale : 0, //if there's a function-based "scale" value, swap in the resulting numeric value temporarily. Otherwise, if it's called for both scaleX and scaleY independently, they may not match (like if the function uses Math.random()).
+					swapFunc;
 				if (typeof(vars[parsingProp]) === "function") { //whatever property triggers the initial parsing might be a function-based value in which case it already got called in parse(), thus we don't want to call it again in here. The most efficient way to avoid this is to temporarily swap the value directly into the vars object, and then after we do all our parsing in this function, we'll swap it back again.
 					swapFunc = vars[parsingProp];
 					vars[parsingProp] = e;
+				}
+				if (scaleFunc) {
+					vars.scale = scaleFunc(_index, t);
 				}
 				var originalGSTransform = t._gsTransform,
 					style = t.style,
@@ -9600,18 +9653,13 @@
 						m2.yPercent = _parseVal(v.y, m1.yPercent);
 					}
 	
-					m2.rotation = _parseAngle(("rotation" in v) ? v.rotation : ("shortRotation" in v) ? v.shortRotation + "_short" : ("rotationZ" in v) ? v.rotationZ : m1.rotation - m1.skewY, m1.rotation - m1.skewY, "rotation", endRotations); //see notes below about skewY for why we subtract it from rotation here
+					m2.rotation = _parseAngle(("rotation" in v) ? v.rotation : ("shortRotation" in v) ? v.shortRotation + "_short" : ("rotationZ" in v) ? v.rotationZ : m1.rotation, m1.rotation, "rotation", endRotations);
 					if (_supports3D) {
 						m2.rotationX = _parseAngle(("rotationX" in v) ? v.rotationX : ("shortRotationX" in v) ? v.shortRotationX + "_short" : m1.rotationX || 0, m1.rotationX, "rotationX", endRotations);
 						m2.rotationY = _parseAngle(("rotationY" in v) ? v.rotationY : ("shortRotationY" in v) ? v.shortRotationY + "_short" : m1.rotationY || 0, m1.rotationY, "rotationY", endRotations);
 					}
-					m2.skewX = _parseAngle(v.skewX, m1.skewX - m1.skewY); //see notes below about skewY and why we subtract it from skewX here
-	
-					//note: for performance reasons, we combine all skewing into the skewX and rotation values, ignoring skewY but we must still record it so that we can discern how much of the overall skew is attributed to skewX vs. skewY. Otherwise, if the skewY would always act relative (tween skewY to 10deg, for example, multiple times and if we always combine things into skewX, we can't remember that skewY was 10 from last time). Remember, a skewY of 10 degrees looks the same as a rotation of 10 degrees plus a skewX of -10 degrees.
-					if ((m2.skewY = _parseAngle(v.skewY, m1.skewY))) {
-						m2.skewX += m2.skewY;
-						m2.rotation += m2.skewY;
-					}
+					m2.skewX = _parseAngle(v.skewX, m1.skewX);
+					m2.skewY = _parseAngle(v.skewY, m1.skewY);
 				}
 				if (_supports3D && v.force3D != null) {
 					m1.force3D = v.force3D;
@@ -9651,7 +9699,7 @@
 						pt = _addNonTweeningNumericPT(m1, "xOffset", (originalGSTransform ? x : m1.xOffset), m1.xOffset, pt, transformOriginString);
 						pt = _addNonTweeningNumericPT(m1, "yOffset", (originalGSTransform ? y : m1.yOffset), m1.yOffset, pt, transformOriginString);
 					}
-					orig = _useSVGTransformAttr ? null : "0px 0px"; //certain browsers (like firefox) completely botch transform-origin, so we must remove it to prevent it from contaminating transforms. We manage it ourselves with xOrigin and yOrigin
+					orig = "0px 0px"; //certain browsers (like firefox) completely botch transform-origin, so we must remove it to prevent it from contaminating transforms. We manage it ourselves with xOrigin and yOrigin
 				}
 				if (orig || (_supports3D && has3D && m1.zOrigin)) { //if anything 3D is happening and there's a transformOrigin with a z component that's non-zero, we must ensure that the transformOrigin's z-component is set to 0 so that we can manually do those calculations to get around Safari bugs. Even if the user didn't specifically define a "transformOrigin" in this particular tween (maybe they did it via css directly).
 					if (_transformProp) {
@@ -9683,6 +9731,9 @@
 				}
 				if (swapFunc) {
 					vars[parsingProp] = swapFunc;
+				}
+				if (scaleFunc) {
+					vars.scale = scaleFunc;
 				}
 				return pt;
 			}, prefix:true});
@@ -11067,6 +11118,7 @@
 	
 			"use strict";
 			var _exports = {},
+				_doc = window.document,
 				_globals = window.GreenSockGlobals = window.GreenSockGlobals || window;
 			if (_globals.TweenLite) {
 				return; //in case the core set of classes is already loaded, don't instantiate twice.
@@ -11443,7 +11495,7 @@
 	
 				//a bug in iOS 6 Safari occasionally prevents the requestAnimationFrame from working initially, so we use a 1.5-second timeout that automatically falls back to setTimeout() if it senses this condition.
 				setTimeout(function() {
-					if (_useRAF === "auto" && _self.frame < 5 && document.visibilityState !== "hidden") {
+					if (_useRAF === "auto" && _self.frame < 5 && _doc.visibilityState !== "hidden") {
 						_self.useRAF(false);
 					}
 				}, 1500);
@@ -11555,7 +11607,7 @@
 				var tl = this._timeline, //the 2 root timelines won't have a _timeline; they're always active.
 					startTime = this._startTime,
 					rawTime;
-				return (!tl || (!this._gc && !this._paused && tl.isActive() && (rawTime = tl.rawTime()) >= startTime && rawTime < startTime + this.totalDuration() / this._timeScale));
+				return (!tl || (!this._gc && !this._paused && tl.isActive() && (rawTime = tl.rawTime(true)) >= startTime && rawTime < startTime + this.totalDuration() / this._timeScale));
 			};
 	
 			p._enabled = function (enabled, ignoreTimeline) {
@@ -11999,7 +12051,7 @@
 			p._firstPT = p._targets = p._overwrittenProps = p._startAt = null;
 			p._notifyPluginsOfEnabled = p._lazy = false;
 	
-			TweenLite.version = "1.19.0";
+			TweenLite.version = "1.19.1";
 			TweenLite.defaultEase = p._ease = new Ease(null, null, 1, 1);
 			TweenLite.defaultOverwrite = "auto";
 			TweenLite.ticker = _ticker;
@@ -12014,7 +12066,7 @@
 					TweenLite.selector = selector;
 					return selector(e);
 				}
-				return (typeof(document) === "undefined") ? e : (document.querySelectorAll ? document.querySelectorAll(e) : document.getElementById((e.charAt(0) === "#") ? e.substr(1) : e));
+				return (typeof(_doc) === "undefined") ? e : (_doc.querySelectorAll ? _doc.querySelectorAll(e) : _doc.getElementById((e.charAt(0) === "#") ? e.substr(1) : e));
 			};
 	
 			var _lazyTweens = [],
@@ -12026,10 +12078,10 @@
 						min = 0.000001,
 						val;
 					while (pt) {
-						val = !pt.blob ? pt.c * v + pt.s : v ? this.join("") : this.start;
+						val = !pt.blob ? pt.c * v + pt.s : (v === 1) ? this.end : v ? this.join("") : this.start;
 						if (pt.m) {
 							val = pt.m(val, this._target || pt.t);
-						} else if (val < min) if (val > -min) { //prevents issues with converting very small numbers to strings in the browser
+						} else if (val < min) if (val > -min && !pt.blob) { //prevents issues with converting very small numbers to strings in the browser
 							val = 0;
 						}
 						if (!pt.f) {
@@ -12044,12 +12096,15 @@
 				},
 				//compares two strings (start/end), finds the numbers that are different and spits back an array representing the whole value but with the changing values isolated as elements. For example, "rgb(0,0,0)" and "rgb(100,50,0)" would become ["rgb(", 0, ",", 50, ",0)"]. Notice it merges the parts that are identical (performance optimization). The array also has a linked list of PropTweens attached starting with _firstPT that contain the tweening data (t, p, s, c, f, etc.). It also stores the starting value as a "start" property so that we can revert to it if/when necessary, like when a tween rewinds fully. If the quantity of numbers differs between the start and end, it will always prioritize the end value(s). The pt parameter is optional - it's for a PropTween that will be appended to the end of the linked list and is typically for actually setting the value after all of the elements have been updated (with array.join("")).
 				_blobDif = function(start, end, filter, pt) {
-					var a = [start, end],
+					var a = [],
 						charIndex = 0,
 						s = "",
 						color = 0,
 						startNums, endNums, num, i, l, nonNumbers, currentNum;
 					a.start = start;
+					a.end = end;
+					start = a[0] = start + ""; //ensure values are strings
+					end = a[1] = end + "";
 					if (filter) {
 						filter(a); //pass an array with the starting and ending values and let the filter do whatever it needs to the values.
 						start = a[0];
@@ -12100,24 +12155,24 @@
 					if (typeof(end) === "function") {
 						end = end(index || 0, target);
 					}
-					var s = (start === "get") ? target[prop] : start,
-						type = typeof(target[prop]),
+					var type = typeof(target[prop]),
+						getterName = (type !== "function") ? "" : ((prop.indexOf("set") || typeof(target["get" + prop.substr(3)]) !== "function") ? prop : "get" + prop.substr(3)),
+						s = (start !== "get") ? start : !getterName ? target[prop] : funcParam ? target[getterName](funcParam) : target[getterName](),
 						isRelative = (typeof(end) === "string" && end.charAt(1) === "="),
 						pt = {t:target, p:prop, s:s, f:(type === "function"), pg:0, n:overwriteProp || prop, m:(!mod ? 0 : (typeof(mod) === "function") ? mod : Math.round), pr:0, c:isRelative ? parseInt(end.charAt(0) + "1", 10) * parseFloat(end.substr(2)) : (parseFloat(end) - s) || 0},
-						blob, getterName;
-					if (type !== "number") {
-						if (type === "function" && start === "get") {
-							getterName = ((prop.indexOf("set") || typeof(target["get" + prop.substr(3)]) !== "function") ? prop : "get" + prop.substr(3));
-							pt.s = s = funcParam ? target[getterName](funcParam) : target[getterName]();
-						}
-						if (typeof(s) === "string" && (funcParam || isNaN(s))) {
+						blob;
+	
+					if (typeof(s) !== "number" || (typeof(end) !== "number" && !isRelative)) {
+						if (funcParam || isNaN(s) || (!isRelative && isNaN(end)) || typeof(s) === "boolean" || typeof(end) === "boolean") {
 							//a blob (string that has multiple numbers in it)
 							pt.fp = funcParam;
-							blob = _blobDif(s, end, stringFilter || TweenLite.defaultStringFilter, pt);
-							pt = {t:blob, p:"setRatio", s:0, c:1, f:2, pg:0, n:overwriteProp || prop, pr:0, m:0}; //"2" indicates it's a Blob property tween. Needed for RoundPropsPlugin for example.
-						} else if (!isRelative) {
+							blob = _blobDif(s, (isRelative ? pt.s + pt.c : end), stringFilter || TweenLite.defaultStringFilter, pt);
+							pt = {t: blob, p: "setRatio", s: 0, c: 1, f: 2, pg: 0, n: overwriteProp || prop, pr: 0, m: 0}; //"2" indicates it's a Blob property tween. Needed for RoundPropsPlugin for example.
+						} else {
 							pt.s = parseFloat(s);
-							pt.c = (parseFloat(end) - pt.s) || 0;
+							if (!isRelative) {
+								pt.c = (parseFloat(end) - pt.s) || 0;
+							}
 						}
 					}
 					if (pt.c) { //only add it to the linked list if there's a change.
@@ -12463,7 +12518,7 @@
 					duration = this._duration,
 					prevRawPrevTime = this._rawPrevTime,
 					isComplete, callback, pt, rawPrevTime;
-				if (time >= duration - 0.0000001) { //to work around occasional floating point math artifacts.
+				if (time >= duration - 0.0000001 && time >= 0) { //to work around occasional floating point math artifacts.
 					this._totalTime = this._time = duration;
 					this.ratio = this._ease._calcEnd ? this._ease.getRatio(1) : 1;
 					if (!this._reversed ) {
@@ -12984,246 +13039,6 @@
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_, module) {"use strict";
-	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-	
-	/*** IMPORTS FROM imports-loader ***/
-	(function () {
-	
-	  /*! modernizr 3.3.1 (Custom Build) | MIT *
-	   * http://modernizr.com/download/?-svg-addtest-fnbind-printshiv-setclasses-testprop !*/
-	  !function (e, t, n) {
-	    function r(e, t) {
-	      return (typeof e === "undefined" ? "undefined" : _typeof(e)) === t;
-	    }function o() {
-	      var e, t, n, o, i, a, s;for (var l in h) {
-	        if (h.hasOwnProperty(l)) {
-	          if (e = [], t = h[l], t.name && (e.push(t.name.toLowerCase()), t.options && t.options.aliases && t.options.aliases.length)) for (n = 0; n < t.options.aliases.length; n++) {
-	            e.push(t.options.aliases[n].toLowerCase());
-	          }for (o = r(t.fn, "function") ? t.fn() : t.fn, i = 0; i < e.length; i++) {
-	            a = e[i], s = a.split("."), 1 === s.length ? Modernizr[s[0]] = o : (!Modernizr[s[0]] || Modernizr[s[0]] instanceof Boolean || (Modernizr[s[0]] = new Boolean(Modernizr[s[0]])), Modernizr[s[0]][s[1]] = o), y.push((o ? "" : "no-") + s.join("-"));
-	          }
-	        }
-	      }
-	    }function i(e) {
-	      var t = E.className,
-	          n = Modernizr._config.classPrefix || "";if (S && (t = t.baseVal), Modernizr._config.enableJSClass) {
-	        var r = new RegExp("(^|\\s)" + n + "no-js(\\s|$)");t = t.replace(r, "$1" + n + "js$2");
-	      }Modernizr._config.enableClasses && (t += " " + n + e.join(" " + n), S ? E.className.baseVal = t : E.className = t);
-	    }function a(e, t) {
-	      if ("object" == (typeof e === "undefined" ? "undefined" : _typeof(e))) for (var n in e) {
-	        g(e, n) && a(n, e[n]);
-	      } else {
-	        e = e.toLowerCase();var r = e.split("."),
-	            o = Modernizr[r[0]];if (2 == r.length && (o = o[r[1]]), "undefined" != typeof o) return Modernizr;t = "function" == typeof t ? t() : t, 1 == r.length ? Modernizr[r[0]] = t : (!Modernizr[r[0]] || Modernizr[r[0]] instanceof Boolean || (Modernizr[r[0]] = new Boolean(Modernizr[r[0]])), Modernizr[r[0]][r[1]] = t), i([(t && 0 != t ? "" : "no-") + r.join("-")]), Modernizr._trigger(e, t);
-	      }return Modernizr;
-	    }function s(e, t) {
-	      return !!~("" + e).indexOf(t);
-	    }function l() {
-	      return "function" != typeof t.createElement ? t.createElement(arguments[0]) : S ? t.createElementNS.call(t, "http://www.w3.org/2000/svg", arguments[0]) : t.createElement.apply(t, arguments);
-	    }function c() {
-	      var e = t.body;return e || (e = l(S ? "svg" : "body"), e.fake = !0), e;
-	    }function u(e, n, r, o) {
-	      var i,
-	          a,
-	          s,
-	          u,
-	          f = "modernizr",
-	          d = l("div"),
-	          p = c();if (parseInt(r, 10)) for (; r--;) {
-	        s = l("div"), s.id = o ? o[r] : f + (r + 1), d.appendChild(s);
-	      }return i = l("style"), i.type = "text/css", i.id = "s" + f, (p.fake ? p : d).appendChild(i), p.appendChild(d), i.styleSheet ? i.styleSheet.cssText = e : i.appendChild(t.createTextNode(e)), d.id = f, p.fake && (p.style.background = "", p.style.overflow = "hidden", u = E.style.overflow, E.style.overflow = "hidden", E.appendChild(p)), a = n(d, e), p.fake ? (p.parentNode.removeChild(p), E.style.overflow = u, E.offsetHeight) : d.parentNode.removeChild(d), !!a;
-	    }function f(e) {
-	      return e.replace(/([A-Z])/g, function (e, t) {
-	        return "-" + t.toLowerCase();
-	      }).replace(/^ms-/, "-ms-");
-	    }function d(t, r) {
-	      var o = t.length;if ("CSS" in e && "supports" in e.CSS) {
-	        for (; o--;) {
-	          if (e.CSS.supports(f(t[o]), r)) return !0;
-	        }return !1;
-	      }if ("CSSSupportsRule" in e) {
-	        for (var i = []; o--;) {
-	          i.push("(" + f(t[o]) + ":" + r + ")");
-	        }return i = i.join(" or "), u("@supports (" + i + ") { #modernizr { position: absolute; } }", function (e) {
-	          return "absolute" == getComputedStyle(e, null).position;
-	        });
-	      }return n;
-	    }function p(e) {
-	      return e.replace(/([a-z])-([a-z])/g, function (e, t, n) {
-	        return t + n.toUpperCase();
-	      }).replace(/^-/, "");
-	    }function m(e, t, o, i) {
-	      function a() {
-	        u && (delete C.style, delete C.modElem);
-	      }if (i = r(i, "undefined") ? !1 : i, !r(o, "undefined")) {
-	        var c = d(e, o);if (!r(c, "undefined")) return c;
-	      }for (var u, f, m, h, v, g = ["modernizr", "tspan"]; !C.style;) {
-	        u = !0, C.modElem = l(g.shift()), C.style = C.modElem.style;
-	      }for (m = e.length, f = 0; m > f; f++) {
-	        if (h = e[f], v = C.style[h], s(h, "-") && (h = p(h)), C.style[h] !== n) {
-	          if (i || r(o, "undefined")) return a(), "pfx" == t ? h : !0;try {
-	            C.style[h] = o;
-	          } catch (y) {}if (C.style[h] != v) return a(), "pfx" == t ? h : !0;
-	        }
-	      }return a(), !1;
-	    }var h = [],
-	        v = { _version: "3.3.1", _config: { classPrefix: "", enableClasses: !0, enableJSClass: !0, usePrefixes: !0 }, _q: [], on: function on(e, t) {
-	        var n = this;setTimeout(function () {
-	          t(n[e]);
-	        }, 0);
-	      }, addTest: function addTest(e, t, n) {
-	        h.push({ name: e, fn: t, options: n });
-	      }, addAsyncTest: function addAsyncTest(e) {
-	        h.push({ name: null, fn: e });
-	      } },
-	        Modernizr = function Modernizr() {};Modernizr.prototype = v, Modernizr = new Modernizr();var g,
-	        y = [],
-	        E = t.documentElement,
-	        S = "svg" === E.nodeName.toLowerCase();!function () {
-	      var e = {}.hasOwnProperty;g = r(e, "undefined") || r(e.call, "undefined") ? function (e, t) {
-	        return t in e && r(e.constructor.prototype[t], "undefined");
-	      } : function (t, n) {
-	        return e.call(t, n);
-	      };
-	    }(), v._l = {}, v.on = function (e, t) {
-	      this._l[e] || (this._l[e] = []), this._l[e].push(t), Modernizr.hasOwnProperty(e) && setTimeout(function () {
-	        Modernizr._trigger(e, Modernizr[e]);
-	      }, 0);
-	    }, v._trigger = function (e, t) {
-	      if (this._l[e]) {
-	        var n = this._l[e];setTimeout(function () {
-	          var e, r;for (e = 0; e < n.length; e++) {
-	            (r = n[e])(t);
-	          }
-	        }, 0), delete this._l[e];
-	      }
-	    }, Modernizr._q.push(function () {
-	      v.addTest = a;
-	    });S || !function (e, t) {
-	      function n(e, t) {
-	        var n = e.createElement("p"),
-	            r = e.getElementsByTagName("head")[0] || e.documentElement;return n.innerHTML = "x<style>" + t + "</style>", r.insertBefore(n.lastChild, r.firstChild);
-	      }function r() {
-	        var e = _.elements;return "string" == typeof e ? e.split(" ") : e;
-	      }function o(e, t) {
-	        var n = _.elements;"string" != typeof n && (n = n.join(" ")), "string" != typeof e && (e = e.join(" ")), _.elements = n + " " + e, c(t);
-	      }function i(e) {
-	        var t = b[e[w]];return t || (t = {}, C++, e[w] = C, b[C] = t), t;
-	      }function a(e, n, r) {
-	        if (n || (n = t), v) return n.createElement(e);r || (r = i(n));var o;return o = r.cache[e] ? r.cache[e].cloneNode() : S.test(e) ? (r.cache[e] = r.createElem(e)).cloneNode() : r.createElem(e), !o.canHaveChildren || E.test(e) || o.tagUrn ? o : r.frag.appendChild(o);
-	      }function s(e, n) {
-	        if (e || (e = t), v) return e.createDocumentFragment();n = n || i(e);for (var o = n.frag.cloneNode(), a = 0, s = r(), l = s.length; l > a; a++) {
-	          o.createElement(s[a]);
-	        }return o;
-	      }function l(e, t) {
-	        t.cache || (t.cache = {}, t.createElem = e.createElement, t.createFrag = e.createDocumentFragment, t.frag = t.createFrag()), e.createElement = function (n) {
-	          return _.shivMethods ? a(n, e, t) : t.createElem(n);
-	        }, e.createDocumentFragment = Function("h,f", "return function(){var n=f.cloneNode(),c=n.createElement;h.shivMethods&&(" + r().join().replace(/[\w\-:]+/g, function (e) {
-	          return t.createElem(e), t.frag.createElement(e), 'c("' + e + '")';
-	        }) + ");return n}")(_, t.frag);
-	      }function c(e) {
-	        e || (e = t);var r = i(e);return !_.shivCSS || h || r.hasCSS || (r.hasCSS = !!n(e, "article,aside,dialog,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}mark{background:#FF0;color:#000}template{display:none}")), v || l(e, r), e;
-	      }function u(e) {
-	        for (var t, n = e.getElementsByTagName("*"), o = n.length, i = RegExp("^(?:" + r().join("|") + ")$", "i"), a = []; o--;) {
-	          t = n[o], i.test(t.nodeName) && a.push(t.applyElement(f(t)));
-	        }return a;
-	      }function f(e) {
-	        for (var t, n = e.attributes, r = n.length, o = e.ownerDocument.createElement(T + ":" + e.nodeName); r--;) {
-	          t = n[r], t.specified && o.setAttribute(t.nodeName, t.nodeValue);
-	        }return o.style.cssText = e.style.cssText, o;
-	      }function d(e) {
-	        for (var t, n = e.split("{"), o = n.length, i = RegExp("(^|[\\s,>+~])(" + r().join("|") + ")(?=[[\\s,>+~#.:]|$)", "gi"), a = "$1" + T + "\\:$2"; o--;) {
-	          t = n[o] = n[o].split("}"), t[t.length - 1] = t[t.length - 1].replace(i, a), n[o] = t.join("}");
-	        }return n.join("{");
-	      }function p(e) {
-	        for (var t = e.length; t--;) {
-	          e[t].removeNode();
-	        }
-	      }function m(e) {
-	        function t() {
-	          clearTimeout(a._removeSheetTimer), r && r.removeNode(!0), r = null;
-	        }var r,
-	            o,
-	            a = i(e),
-	            s = e.namespaces,
-	            l = e.parentWindow;return !x || e.printShived ? e : ("undefined" == typeof s[T] && s.add(T), l.attachEvent("onbeforeprint", function () {
-	          t();for (var i, a, s, l = e.styleSheets, c = [], f = l.length, p = Array(f); f--;) {
-	            p[f] = l[f];
-	          }for (; s = p.pop();) {
-	            if (!s.disabled && N.test(s.media)) {
-	              try {
-	                i = s.imports, a = i.length;
-	              } catch (m) {
-	                a = 0;
-	              }for (f = 0; a > f; f++) {
-	                p.push(i[f]);
-	              }try {
-	                c.push(s.cssText);
-	              } catch (m) {}
-	            }
-	          }c = d(c.reverse().join("")), o = u(e), r = n(e, c);
-	        }), l.attachEvent("onafterprint", function () {
-	          p(o), clearTimeout(a._removeSheetTimer), a._removeSheetTimer = setTimeout(t, 500);
-	        }), e.printShived = !0, e);
-	      }var h,
-	          v,
-	          g = "3.7.3",
-	          y = e.html5 || {},
-	          E = /^<|^(?:button|map|select|textarea|object|iframe|option|optgroup)$/i,
-	          S = /^(?:a|b|code|div|fieldset|h1|h2|h3|h4|h5|h6|i|label|li|ol|p|q|span|strong|style|table|tbody|td|th|tr|ul)$/i,
-	          w = "_html5shiv",
-	          C = 0,
-	          b = {};!function () {
-	        try {
-	          var e = t.createElement("a");e.innerHTML = "<xyz></xyz>", h = "hidden" in e, v = 1 == e.childNodes.length || function () {
-	            t.createElement("a");var e = t.createDocumentFragment();return "undefined" == typeof e.cloneNode || "undefined" == typeof e.createDocumentFragment || "undefined" == typeof e.createElement;
-	          }();
-	        } catch (n) {
-	          h = !0, v = !0;
-	        }
-	      }();var _ = { elements: y.elements || "abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output picture progress section summary template time video", version: g, shivCSS: y.shivCSS !== !1, supportsUnknownElements: v, shivMethods: y.shivMethods !== !1, type: "default", shivDocument: c, createElement: a, createDocumentFragment: s, addElements: o };e.html5 = _, c(t);var N = /^$|\b(?:all|print)\b/,
-	          T = "html5shiv",
-	          x = !v && function () {
-	        var n = t.documentElement;return !("undefined" == typeof t.namespaces || "undefined" == typeof t.parentWindow || "undefined" == typeof n.applyElement || "undefined" == typeof n.removeNode || "undefined" == typeof e.attachEvent);
-	      }();_.type += " print", _.shivPrint = m, m(t), "object" == ( false ? "undefined" : _typeof(module)) && module.exports && (module.exports = _);
-	    }("undefined" != typeof e ? e : this, t);var w = { elem: l("modernizr") };Modernizr._q.push(function () {
-	      delete w.elem;
-	    });var C = { style: w.elem.style };Modernizr._q.unshift(function () {
-	      delete C.style;
-	    });v.testProp = function (e, t, r) {
-	      return m([e], n, t, r);
-	    };Modernizr.addTest("svg", !!t.createElementNS && !!t.createElementNS("http://www.w3.org/2000/svg", "svg").createSVGRect), o(), i(y), delete v.addTest, delete v.addAsyncTest;for (var b = 0; b < Modernizr._q.length; b++) {
-	      Modernizr._q[b]();
-	    }e.Modernizr = Modernizr;
-	  }(window, document);
-	
-	  /*** EXPORTS FROM exports-loader ***/
-	  module.exports = window.Modernizr;;
-	}).call(window);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(7)(module)))
-
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
-
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/* WEBPACK VAR INJECTION */(function(_, Backbone) {'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -13232,11 +13047,11 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* global Backbone _*/
 	
-	var _router = __webpack_require__(9);
+	var _router = __webpack_require__(7);
 	
 	var _router2 = _interopRequireDefault(_router);
 	
-	var _config = __webpack_require__(15);
+	var _config = __webpack_require__(14);
 	
 	var _config2 = _interopRequireDefault(_config);
 	
@@ -13272,7 +13087,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(2)))
 
 /***/ },
-/* 9 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Backbone, _) {'use strict';
@@ -13283,13 +13098,17 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _events = __webpack_require__(10);
+	var _events = __webpack_require__(8);
 	
 	var _events2 = _interopRequireDefault(_events);
 	
-	var _mainView = __webpack_require__(11);
+	var _mainView = __webpack_require__(9);
 	
 	var _mainView2 = _interopRequireDefault(_mainView);
+	
+	var _globalStore = __webpack_require__(11);
+	
+	var _globalStore2 = _interopRequireDefault(_globalStore);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -13297,7 +13116,7 @@
 	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global  _ Backbone  */
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global  _ Backbone location */
 	
 	var Router = function (_Backbone$Router) {
 		_inherits(Router, _Backbone$Router);
@@ -13389,6 +13208,20 @@
 				}
 				return params;
 			}
+		}, {
+			key: 'navigate',
+			value: function navigate(href) {
+	
+				console.log('ROUTER NAVIGATE', href);
+				var root = location.protocol + '//' + location.host;
+	
+				// Ensure the root is part of the anchor href, meaning it's relative.
+				if (href && href.slice(0, root.length) === root) {
+	
+					href = href.replace(root, '');
+					if (_globalStore2.default.get('isAnimating') === false) Backbone.history.navigate(href, true);
+				}
+			}
 		}]);
 	
 		return Router;
@@ -13398,7 +13231,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(3)))
 
 /***/ },
-/* 10 */
+/* 8 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13446,7 +13279,7 @@
 	exports.default = Events;
 
 /***/ },
-/* 11 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Backbone, _, $) {'use strict';
@@ -13457,23 +13290,23 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _FastClick = __webpack_require__(12);
+	var _FastClick = __webpack_require__(10);
 	
 	var _FastClick2 = _interopRequireDefault(_FastClick);
 	
-	var _currentValues = __webpack_require__(13);
+	var _globalStore = __webpack_require__(11);
 	
-	var _currentValues2 = _interopRequireDefault(_currentValues);
+	var _globalStore2 = _interopRequireDefault(_globalStore);
 	
-	var _pageManager = __webpack_require__(14);
+	var _pageManager = __webpack_require__(13);
 	
 	var _pageManager2 = _interopRequireDefault(_pageManager);
 	
-	var _events = __webpack_require__(10);
+	var _events = __webpack_require__(8);
 	
 	var _events2 = _interopRequireDefault(_events);
 	
-	var _navigationView = __webpack_require__(48);
+	var _navigationView = __webpack_require__(49);
 	
 	var _navigationView2 = _interopRequireDefault(_navigationView);
 	
@@ -13484,6 +13317,9 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global document $ Backbone _ window*/
+	
+	// import CV from 'config/currentValues';
+	
 	
 	/*
 	 * MainView: Handles the main view logic - window/document event
@@ -13543,22 +13379,19 @@
 			value: function init() {
 				var _this2 = this;
 	
-				if (_currentValues2.default.isMobile) {
-					(function () {
-						$('body').addClass('isMobile');
-						$('body').addClass('isTouch');
-						var needsClick = _FastClick2.default.prototype.needsClick;
-						_FastClick2.default.prototype.needsClick = function (target) {
-							if ((target.className || '').indexOf('pac-item') > -1) {
-								return true;
-							} else if ((target.parentNode.className || '').indexOf('pac-item') > -1) {
-								return true;
-							}
-							return needsClick.apply(this, arguments);
-						};
-	
-						_FastClick2.default.attach(_this2.el);
-					})();
+				if (_globalStore2.default.get('isMobile')) {
+					$('body').addClass('isMobile');
+					$('body').addClass('isTouch');
+					var needsClick = _FastClick2.default.prototype.needsClick;
+					_FastClick2.default.prototype.needsClick = function (target) {
+						if ((target.className || '').indexOf('pac-item') > -1) {
+							return true;
+						} else if ((target.parentNode.className || '').indexOf('pac-item') > -1) {
+							return true;
+						}
+						return needsClick.apply(this, arguments);
+					};
+					_FastClick2.default.attach(this.el);
 				}
 	
 				this.pageManager = new _pageManager2.default();
@@ -13625,18 +13458,16 @@
 				window.addEventListener('scroll', function () {
 					return _this3._onScroll;
 				}, false);
-				document.addEventListener('keydown', function () {
-					return _this3._onKeyDown();
-				}, false);
 	
-				// document.addEventListener("mouseout",	$.proxy(_onMouseOut, this), false);
-				// this.$.body[0].addEventListener("mousemove",	$.proxy(_onMouseMove, this), false);
-				// this.$.body[0].addEventListener("mousedown",	$.proxy(_onMouseDown, this), false);
-				// this.$.body[0].addEventListener("mouseup",	$.proxy(_onMouseUp, this), false);
+				// document.addEventListener('keydown',() => this._onKeyDown(e), false);
+				// document.addEventListener("mouseout",	() => this._onMouseOut(e), false);
+				// this.$.body[0].addEventListener("mousemove",	() => this._onMouseMove(e), false);
+				// this.$.body[0].addEventListener("mousedown",	() => this._onMouseDown(e), false);
+				// this.$.body[0].addEventListener("mouseup",	() => this._onMouseUp(e), false);
 	
-				// this.$.body[0].addEventListener("touchstart",	$.proxy(_onTouchStart, this), false);
-				// this.$.body[0].addEventListener("touchmove",	 $.proxy(_onTouchMove, this), false);
-				// this.$.body[0].addEventListener("touchend",		$.proxy(_onTouchEnd, this), false);
+				// this.$.body[0].addEventListener("touchstart",	() => this._onTouchStart(e), false);
+				// this.$.body[0].addEventListener("touchmove",	 () => this._onTouchMove(e), false);
+				// this.$.body[0].addEventListener("touchend",		() => this._onTouchEnd(e), false);
 			}
 		}, {
 			key: 'navigateTo',
@@ -13658,16 +13489,20 @@
 	
 					var scrollY = window.scrollY || window.pageYOffset;
 	
-					if (scrollY < _currentValues2.default.scrollY) {
-						_currentValues2.default.scrollYDirection = 'up';
+					if (scrollY < _globalStore2.default.get('scrollY')) {
+						_globalStore2.default.set('scrollYDirection', 'up');
 					} else {
-						_currentValues2.default.scrollYDirection = 'down';
+						_globalStore2.default.set('scrollYDirection', 'down');
 					}
-	
-					_currentValues2.default.scrollY = scrollY;
+					_globalStore2.default.set('scrollY', scrollY);
 				}
 	
-				if (this.pageManager && this.pageManager.currentPage && this.pageManager.currentPage.canUpdate) this.pageManager.currentPage.onUpdate();
+				// if (this.pageManager && this.pageManager.currentPage && this.pageManager.currentPage.canUpdate) this.pageManager.currentPage.onUpdate();
+	
+				// update run through the RAF call stack:
+				for (var c = 0; c < _globalStore2.default.get('rafCallStack').length; c++) {
+					_globalStore2.default.get('rafCallStack')[c]();
+				}
 	
 				this.navigationView.onUpdate();
 	
@@ -13677,19 +13512,40 @@
 			key: '_onResize',
 			value: function _onResize() {
 	
-				_currentValues2.default.viewport.height = $(window).height();
-				_currentValues2.default.breakpoint = _currentValues2.default.viewport.width <= 960 ? 'sml' : 'default';
+				// windoz resize
+				var width = this.getWidth();
+				var height = this.getHeight();
 	
-				if (this.pageManager && this.pageManager.currentPage) this.pageManager.currentPage.onResize();
+				_globalStore2.default.set('viewport', {
+					width: width,
+					height: height
+				});
 	
-				if (this.navigationView) {
-					this.navigationView.onResize();
-				}
+				// CV.viewport.height = $(window).height();
+				// CV.breakpoint = (CV.viewport.width <= 960) ? 'sml' : 'default';
+	
+				// if (this.pageManager && this.pageManager.currentPage) this.pageManager.currentPage.onResize();
+	
+				// if (this.navigationView) {
+				// this.navigationView.onResize();
+				// }
+			}
+		}, {
+			key: 'getHeight',
+			value: function getHeight() {
+				return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+			}
+		}, {
+			key: 'getWidth',
+			value: function getWidth() {
+				return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 			}
 		}, {
 			key: '_onKeyDown',
-			value: function _onKeyDown(e) {
-				if (this.pageManager && this.pageManager.currentPage) this.pageManager.currentPage.onKeyDown(e);
+			value: function _onKeyDown(evt) {
+	
+				_globalStore2.default.set('onKeyDown', evt.keyCode || evt.which);
+				// if (this.pageManager && this.pageManager.currentPage) this.pageManager.currentPage.onKeyDown(e);
 			}
 		}]);
 	
@@ -13700,7 +13556,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(3), __webpack_require__(1)))
 
 /***/ },
-/* 12 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;;(function () {
@@ -14547,167 +14403,1030 @@
 
 
 /***/ },
-/* 13 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(_, Backbone, $) {'use strict';
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // Global store in addition of the STATE, Animation / mouse state when State is in charge of Application State.
+	/* global  window  */
+	
+	var _is_js = __webpack_require__(12);
+	
+	var _is_js2 = _interopRequireDefault(_is_js);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	/* global Backbone location window $ _ */
-	// var Detectizr = require('Detectizr');
+	var GlobalStore = function () {
+		function GlobalStore() {
+			_classCallCheck(this, GlobalStore);
 	
-	var CurrentValues = function () {
-		function CurrentValues() {
-			_classCallCheck(this, CurrentValues);
+			this._type = 'CommonModel';
+			this._eventTypes = [];
+			this._callbackFunctions = [];
+			this._dataObj = {
+				createdAt: new Date(),
+				rafCallStack: [],
+				scroll: {
+					targetY: 0,
+					currentY: 0
+				},
 	
-			this.init();
-			_.extend(this, Backbone.Events);
+				viewport: {
+					width: window.innerWidth,
+					height: window.innerHeight
+				},
+				//keydown : evt.keyCode || evt.which
+				onKeyDown: null,
+				// is there any animation happening
+				isAnimating: false,
+	
+				// Pages
+				oldPage: null,
+				currentPage: null,
+				firstTime: true
+	
+			};
+	
+			// Objects that are not going ot be modified neither need callback
+			this.isMobile = _is_js2.default.mobile();
+			this.isTablet = _is_js2.default.tablet();
 		}
 	
-		_createClass(CurrentValues, [{
-			key: 'init',
-			value: function init() {
-				/**
-	    * Viewport object
-	    * @type {Object}
-	    */
-				this.viewport = { width: $(window).width(), height: $(window).height() };
+		_createClass(GlobalStore, [{
+			key: 'on',
+			value: function on(eventType, callback) {
+				if (this._eventTypes.findIndex(function (x) {
+					return x === eventType;
+				}) === -1) {
+					this._eventTypes.push(eventType);
+				}
 	
-				/**
-	    * Mouse object
-	    * @type {Object}
-	    */
-				this.mouse = { x: 0, y: 0 };
-	
-				/**
-	    * Touch object
-	    * @type {Object}
-	    */
-				this.touch = { x: 0, y: 0, startX: 0, startY: 0, deltaX: 0, deltaY: 0 };
-	
-				/**
-	    * Is mouse out of window?
-	    * @type {boolean}
-	    */
-				this.outWindow = false;
-	
-				/**
-	    * scroll Y value
-	    * @type {number}
-	    */
-				this.scrollY = 0;
-	
-				/**
-	    * scroll Y direction
-	    * @type {number}
-	    */
-				this.scrollYDirection = 'down';
-	
-				/**
-	    * current page
-	    * @type {string}
-	    */
-				this.currentPage = null;
-	
-				/**
-	    * old page
-	    * @type {string}
-	    */
-				this.oldPage = null;
-	
-				/**
-	    * delta Y value
-	    * @type {number}
-	    */
-				this.deltaY = 0;
-	
-				/**
-	    * Is is first time?
-	    * @type {boolean}
-	    */
-				this.firstTime = true;
-	
-				/**
-	    * Block mouse wheel?
-	    * @type {boolean}
-	    */
-				this.mouseWheelBlock = false;
-	
-				/**
-	    * Is mobile size?
-	    * @type {Boolean}
-	    */
-				this.isMobileSize = false;
-	
-				/**
-	   * Is mobile?
-	   * @type {Boolean}
-	   */
-				// this.isMobile = (Detectizr.device.type === 'mobile');
-				this.isMobile = $('body').hasClass('mobile');
-	
-				/**
-	    * Is tablet?
-	    * @type {Boolean}
-	    */
-				// this.isTablet = (Detectizr.device.type === 'tablet' && Detectizr.browser.name !== 'ie');
-				this.isTablet = $('body').hasClass('tablet');
-	
-				/**
-	   * Is isTouch?
-	   * @type {Boolean}
-	   */
-				this.isTouch = this.isMobile || this.isTablet;
-	
-				/**
-	    * Breakpoint
-	    * @type {Boolean}
-	    */
-				this.breakpoint = null;
-	
-				/**
-	    * main datas
-	    * @type {Object}
-	    */
-				this.mainDatas = null;
-	
-				/**
-	    * main assets
-	    * @type {Object}
-	    */
-				this.isAnimating = null;
+				if (this._callbackFunctions[eventType]) {
+					this._callbackFunctions[eventType].push(callback);
+				} else {
+					this._callbackFunctions[eventType] = [];
+					this._callbackFunctions[eventType].push(callback);
+				}
 			}
 		}, {
-			key: 'navigate',
-			value: function navigate(href) {
+			key: 'set',
+			value: function set(attr, val, silent) {
+				var _this = this;
 	
-				var root = location.protocol + '//' + location.host;
-	
-				// Ensure the root is part of the anchor href, meaning it's relative.
-				if (href && href.slice(0, root.length) === root) {
-	
-					href = href.replace(root, '');
-					if (this.isAnimating === false) Backbone.history.navigate(href, true);
+				if (silent) {
+					this._dataObj[attr] = val;
+				} else {
+					if (this._dataObj[attr] !== val) {
+						var previous = this._dataObj[attr];
+						this._dataObj[attr] = val;
+						this._eventTypes.forEach(function (eventType, index) {
+							_this._callbackFunctions[eventType].forEach(function (callback, index) {
+								if (eventType.indexOf("change:") > -1) {
+									if (eventType === "change:" + attr) {
+										callback.call(_this, val, previous);
+									}
+								} else {
+									callback.call(_this, val, previous);
+								}
+							});
+						});
+					}
 				}
+			}
+		}, {
+			key: 'get',
+			value: function get(attr) {
+				return this._dataObj[attr];
 			}
 		}]);
 	
-		return CurrentValues;
+		return GlobalStore;
 	}();
 	
-	var single = new CurrentValues();
-	exports.default = single;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(2), __webpack_require__(1)))
+	exports.default = new GlobalStore();
 
 /***/ },
-/* 14 */
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
+	 * is.js 0.8.0
+	 * Author: Aras Atasaygin
+	 */
+	
+	// AMD with global, Node, or global
+	;(function(root, factory) {    // eslint-disable-line no-extra-semi
+	    if (true) {
+	        // AMD. Register as an anonymous module.
+	        !(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
+	            // Also create a global in case some scripts
+	            // that are loaded still are looking for
+	            // a global even when an AMD loader is in use.
+	            return (root.is = factory());
+	        }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    } else if (typeof exports === 'object') {
+	        // Node. Does not work with strict CommonJS, but
+	        // only CommonJS-like enviroments that support module.exports,
+	        // like Node.
+	        module.exports = factory();
+	    } else {
+	        // Browser globals (root is self)
+	        root.is = factory();
+	    }
+	}(this, function() {
+	
+	    // Baseline
+	    /* -------------------------------------------------------------------------- */
+	
+	    // define 'is' object and current version
+	    var is = {};
+	    is.VERSION = '0.8.0';
+	
+	    // define interfaces
+	    is.not = {};
+	    is.all = {};
+	    is.any = {};
+	
+	    // cache some methods to call later on
+	    var toString = Object.prototype.toString;
+	    var slice = Array.prototype.slice;
+	    var hasOwnProperty = Object.prototype.hasOwnProperty;
+	
+	    // helper function which reverses the sense of predicate result
+	    function not(func) {
+	        return function() {
+	            return !func.apply(null, slice.call(arguments));
+	        };
+	    }
+	
+	    // helper function which call predicate function per parameter and return true if all pass
+	    function all(func) {
+	        return function() {
+	            var params = getParams(arguments);
+	            var length = params.length;
+	            for (var i = 0; i < length; i++) {
+	                if (!func.call(null, params[i])) {
+	                    return false;
+	                }
+	            }
+	            return true;
+	        };
+	    }
+	
+	    // helper function which call predicate function per parameter and return true if any pass
+	    function any(func) {
+	        return function() {
+	            var params = getParams(arguments);
+	            var length = params.length;
+	            for (var i = 0; i < length; i++) {
+	                if (func.call(null, params[i])) {
+	                    return true;
+	                }
+	            }
+	            return false;
+	        };
+	    }
+	
+	    // build a 'comparator' object for various comparison checks
+	    var comparator = {
+	        '<': function(a, b) { return a < b; },
+	        '<=': function(a, b) { return a <= b; },
+	        '>': function(a, b) { return a > b; },
+	        '>=': function(a, b) { return a >= b; }
+	    }
+	
+	    // helper function which compares a version to a range
+	    function compareVersion(version, range) {
+	        var string = (range + '');
+	        var n = +(string.match(/\d+/) || NaN);
+	        var op = string.match(/^[<>]=?|/)[0];
+	        return comparator[op] ? comparator[op](version, n) : (version == n || n !== n);
+	    }
+	
+	    // helper function which extracts params from arguments
+	    function getParams(args) {
+	        var params = slice.call(args);
+	        var length = params.length;
+	        if (length === 1 && is.array(params[0])) {    // support array
+	            params = params[0];
+	        }
+	        return params;
+	    }
+	
+	    // Type checks
+	    /* -------------------------------------------------------------------------- */
+	
+	    // is a given value Arguments?
+	    is.arguments = function(value) {    // fallback check is for IE
+	        return toString.call(value) === '[object Arguments]' ||
+	            (value != null && typeof value === 'object' && 'callee' in value);
+	    };
+	
+	    // is a given value Array?
+	    is.array = Array.isArray || function(value) {    // check native isArray first
+	        return toString.call(value) === '[object Array]';
+	    };
+	
+	    // is a given value Boolean?
+	    is.boolean = function(value) {
+	        return value === true || value === false || toString.call(value) === '[object Boolean]';
+	    };
+	
+	    // is a given value Char?
+	    is.char = function(value) {
+	        return is.string(value) && value.length === 1;
+	    };
+	
+	    // is a given value Date Object?
+	    is.date = function(value) {
+	        return toString.call(value) === '[object Date]';
+	    };
+	
+	    // is a given object a DOM node?
+	    is.domNode = function(object) {
+	        return is.object(object) && object.nodeType > 0;
+	    };
+	
+	    // is a given value Error object?
+	    is.error = function(value) {
+	        return toString.call(value) === '[object Error]';
+	    };
+	
+	    // is a given value function?
+	    is['function'] = function(value) {    // fallback check is for IE
+	        return toString.call(value) === '[object Function]' || typeof value === 'function';
+	    };
+	
+	    // is given value a pure JSON object?
+	    is.json = function(value) {
+	        return toString.call(value) === '[object Object]';
+	    };
+	
+	    // is a given value NaN?
+	    is.nan = function(value) {    // NaN is number :) Also it is the only value which does not equal itself
+	        return value !== value;
+	    };
+	
+	    // is a given value null?
+	    is['null'] = function(value) {
+	        return value === null;
+	    };
+	
+	    // is a given value number?
+	    is.number = function(value) {
+	        return is.not.nan(value) && toString.call(value) === '[object Number]';
+	    };
+	
+	    // is a given value object?
+	    is.object = function(value) {
+	        return Object(value) === value;
+	    };
+	
+	    // is a given value RegExp?
+	    is.regexp = function(value) {
+	        return toString.call(value) === '[object RegExp]';
+	    };
+	
+	    // are given values same type?
+	    // prevent NaN, Number same type check
+	    is.sameType = function(value, other) {
+	        var tag = toString.call(value);
+	        if (tag !== toString.call(other)) {
+	            return false;
+	        }
+	        if (tag === '[object Number]') {
+	            return !is.any.nan(value, other) || is.all.nan(value, other);
+	        }
+	        return true;
+	    };
+	    // sameType method does not support 'all' and 'any' interfaces
+	    is.sameType.api = ['not'];
+	
+	    // is a given value String?
+	    is.string = function(value) {
+	        return toString.call(value) === '[object String]';
+	    };
+	
+	    // is a given value undefined?
+	    is.undefined = function(value) {
+	        return value === void 0;
+	    };
+	
+	    // is a given value window?
+	    // setInterval method is only available for window object
+	    is.windowObject = function(value) {
+	        return value != null && typeof value === 'object' && 'setInterval' in value;
+	    };
+	
+	    // Presence checks
+	    /* -------------------------------------------------------------------------- */
+	
+	    //is a given value empty? Objects, arrays, strings
+	    is.empty = function(value) {
+	        if (is.object(value)) {
+	            var length = Object.getOwnPropertyNames(value).length;
+	            if (length === 0 || (length === 1 && is.array(value)) ||
+	                    (length === 2 && is.arguments(value))) {
+	                return true;
+	            }
+	            return false;
+	        }
+	        return value === '';
+	    };
+	
+	    // is a given value existy?
+	    is.existy = function(value) {
+	        return value != null;
+	    };
+	
+	    // is a given value falsy?
+	    is.falsy = function(value) {
+	        return !value;
+	    };
+	
+	    // is a given value truthy?
+	    is.truthy = not(is.falsy);
+	
+	    // Arithmetic checks
+	    /* -------------------------------------------------------------------------- */
+	
+	    // is a given number above minimum parameter?
+	    is.above = function(n, min) {
+	        return is.all.number(n, min) && n > min;
+	    };
+	    // above method does not support 'all' and 'any' interfaces
+	    is.above.api = ['not'];
+	
+	    // is a given number decimal?
+	    is.decimal = function(n) {
+	        return is.number(n) && n % 1 !== 0;
+	    };
+	
+	    // are given values equal? supports numbers, strings, regexes, booleans
+	    // TODO: Add object and array support
+	    is.equal = function(value, other) {
+	        // check 0 and -0 equity with Infinity and -Infinity
+	        if (is.all.number(value, other)) {
+	            return value === other && 1 / value === 1 / other;
+	        }
+	        // check regexes as strings too
+	        if (is.all.string(value, other) || is.all.regexp(value, other)) {
+	            return '' + value === '' + other;
+	        }
+	        if (is.all.boolean(value, other)) {
+	            return value === other;
+	        }
+	        return false;
+	    };
+	    // equal method does not support 'all' and 'any' interfaces
+	    is.equal.api = ['not'];
+	
+	    // is a given number even?
+	    is.even = function(n) {
+	        return is.number(n) && n % 2 === 0;
+	    };
+	
+	    // is a given number finite?
+	    is.finite = isFinite || function(n) {
+	        return is.not.infinite(n) && is.not.nan(n);
+	    };
+	
+	    // is a given number infinite?
+	    is.infinite = function(n) {
+	        return n === Infinity || n === -Infinity;
+	    };
+	
+	    // is a given number integer?
+	    is.integer = function(n) {
+	        return is.number(n) && n % 1 === 0;
+	    };
+	
+	    // is a given number negative?
+	    is.negative = function(n) {
+	        return is.number(n) && n < 0;
+	    };
+	
+	    // is a given number odd?
+	    is.odd = function(n) {
+	        return is.number(n) && n % 2 === 1;
+	    };
+	
+	    // is a given number positive?
+	    is.positive = function(n) {
+	        return is.number(n) && n > 0;
+	    };
+	
+	    // is a given number above maximum parameter?
+	    is.under = function(n, max) {
+	        return is.all.number(n, max) && n < max;
+	    };
+	    // least method does not support 'all' and 'any' interfaces
+	    is.under.api = ['not'];
+	
+	    // is a given number within minimum and maximum parameters?
+	    is.within = function(n, min, max) {
+	        return is.all.number(n, min, max) && n > min && n < max;
+	    };
+	    // within method does not support 'all' and 'any' interfaces
+	    is.within.api = ['not'];
+	
+	    // Regexp checks
+	    /* -------------------------------------------------------------------------- */
+	    // Steven Levithan, Jan Goyvaerts: Regular Expressions Cookbook
+	    // Scott Gonzalez: Email address validation
+	
+	    // dateString match m/d/yy and mm/dd/yyyy, allowing any combination of one or two digits for the day and month, and two or four digits for the year
+	    // eppPhone match extensible provisioning protocol format
+	    // nanpPhone match north american number plan format
+	    // time match hours, minutes, and seconds, 24-hour clock
+	    var regexes = {
+	        affirmative: /^(?:1|t(?:rue)?|y(?:es)?|ok(?:ay)?)$/,
+	        alphaNumeric: /^[A-Za-z0-9]+$/,
+	        caPostalCode: /^(?!.*[DFIOQU])[A-VXY][0-9][A-Z]\s?[0-9][A-Z][0-9]$/,
+	        creditCard: /^(?:(4[0-9]{12}(?:[0-9]{3})?)|(5[1-5][0-9]{14})|(6(?:011|5[0-9]{2})[0-9]{12})|(3[47][0-9]{13})|(3(?:0[0-5]|[68][0-9])[0-9]{11})|((?:2131|1800|35[0-9]{3})[0-9]{11}))$/,
+	        dateString: /^(1[0-2]|0?[1-9])([\/-])(3[01]|[12][0-9]|0?[1-9])(?:\2)(?:[0-9]{2})?[0-9]{2}$/,
+	        email: /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i, // eslint-disable-line no-control-regex
+	        eppPhone: /^\+[0-9]{1,3}\.[0-9]{4,14}(?:x.+)?$/,
+	        hexadecimal: /^(?:0x)?[0-9a-fA-F]+$/,
+	        hexColor: /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/,
+	        ipv4: /^(?:(?:\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.){3}(?:\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])$/,
+	        ipv6: /^((?=.*::)(?!.*::.+::)(::)?([\dA-F]{1,4}:(:|\b)|){5}|([\dA-F]{1,4}:){6})((([\dA-F]{1,4}((?!\3)::|:\b|$))|(?!\2\3)){2}|(((2[0-4]|1\d|[1-9])?\d|25[0-5])\.?\b){4})$/i,
+	        nanpPhone: /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
+	        socialSecurityNumber: /^(?!000|666)[0-8][0-9]{2}-?(?!00)[0-9]{2}-?(?!0000)[0-9]{4}$/,
+	        timeString: /^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$/,
+	        ukPostCode: /^[A-Z]{1,2}[0-9RCHNQ][0-9A-Z]?\s?[0-9][ABD-HJLNP-UW-Z]{2}$|^[A-Z]{2}-?[0-9]{4}$/,
+	        url: /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/i,
+	        usZipCode: /^[0-9]{5}(?:-[0-9]{4})?$/
+	    };
+	
+	    function regexpCheck(regexp, regexes) {
+	        is[regexp] = function(value) {
+	            return regexes[regexp].test(value);
+	        };
+	    }
+	
+	    // create regexp checks methods from 'regexes' object
+	    for (var regexp in regexes) {
+	        if (regexes.hasOwnProperty(regexp)) {
+	            regexpCheck(regexp, regexes);
+	        }
+	    }
+	
+	    // simplify IP checks by calling the regex helpers for IPv4 and IPv6
+	    is.ip = function(value) {
+	        return is.ipv4(value) || is.ipv6(value);
+	    };
+	
+	    // String checks
+	    /* -------------------------------------------------------------------------- */
+	
+	    // is a given string or sentence capitalized?
+	    is.capitalized = function(string) {
+	        if (is.not.string(string)) {
+	            return false;
+	        }
+	        var words = string.split(' ');
+	        for (var i = 0; i < words.length; i++) {
+	            var word = words[i];
+	            if (word.length) {
+	                var chr = word.charAt(0);
+	                if (chr !== chr.toUpperCase()) {
+	                    return false;
+	                }
+	            }
+	        }
+	        return true;
+	    };
+	
+	    // is string end with a given target parameter?
+	    is.endWith = function(string, target) {
+	        if (is.not.string(string)) {
+	            return false;
+	        }
+	        target += '';
+	        var position = string.length - target.length;
+	        return position >= 0 && string.indexOf(target, position) === position;
+	    };
+	    // endWith method does not support 'all' and 'any' interfaces
+	    is.endWith.api = ['not'];
+	
+	    // is a given string include parameter target?
+	    is.include = function(string, target) {
+	        return string.indexOf(target) > -1;
+	    };
+	    // include method does not support 'all' and 'any' interfaces
+	    is.include.api = ['not'];
+	
+	    // is a given string all lowercase?
+	    is.lowerCase = function(string) {
+	        return is.string(string) && string === string.toLowerCase();
+	    };
+	
+	    // is a given string palindrome?
+	    is.palindrome = function(string) {
+	        if (is.not.string(string)) {
+	            return false;
+	        }
+	        string = string.replace(/[^a-zA-Z0-9]+/g, '').toLowerCase();
+	        var length = string.length - 1;
+	        for (var i = 0, half = Math.floor(length / 2); i <= half; i++) {
+	            if (string.charAt(i) !== string.charAt(length - i)) {
+	                return false;
+	            }
+	        }
+	        return true;
+	    };
+	
+	    // is a given value space?
+	    // horizantal tab: 9, line feed: 10, vertical tab: 11, form feed: 12, carriage return: 13, space: 32
+	    is.space = function(value) {
+	        if (is.not.char(value)) {
+	            return false;
+	        }
+	        var charCode = value.charCodeAt(0);
+	        return (charCode > 8 && charCode < 14) || charCode === 32;
+	    };
+	
+	    // is string start with a given target parameter?
+	    is.startWith = function(string, target) {
+	        return is.string(string) && string.indexOf(target) === 0;
+	    };
+	    // startWith method does not support 'all' and 'any' interfaces
+	    is.startWith.api = ['not'];
+	
+	    // is a given string all uppercase?
+	    is.upperCase = function(string) {
+	        return is.string(string) && string === string.toUpperCase();
+	    };
+	
+	    // Time checks
+	    /* -------------------------------------------------------------------------- */
+	
+	    var days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+	    var months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+	
+	    // is a given dates day equal given day parameter?
+	    is.day = function(date, day) {
+	        return is.date(date) && day.toLowerCase() === days[date.getDay()];
+	    };
+	    // day method does not support 'all' and 'any' interfaces
+	    is.day.api = ['not'];
+	
+	    // is a given date in daylight saving time?
+	    is.dayLightSavingTime = function(date) {
+	        var january = new Date(date.getFullYear(), 0, 1);
+	        var july = new Date(date.getFullYear(), 6, 1);
+	        var stdTimezoneOffset = Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
+	        return date.getTimezoneOffset() < stdTimezoneOffset;
+	    };
+	
+	    // is a given date future?
+	    is.future = function(date) {
+	        var now = new Date();
+	        return is.date(date) && date.getTime() > now.getTime();
+	    };
+	
+	    // is date within given range?
+	    is.inDateRange = function(date, start, end) {
+	        if (is.not.date(date) || is.not.date(start) || is.not.date(end)) {
+	            return false;
+	        }
+	        var stamp = date.getTime();
+	        return stamp > start.getTime() && stamp < end.getTime();
+	    };
+	    // inDateRange method does not support 'all' and 'any' interfaces
+	    is.inDateRange.api = ['not'];
+	
+	    // is a given date in last month range?
+	    is.inLastMonth = function(date) {
+	        return is.inDateRange(date, new Date(new Date().setMonth(new Date().getMonth() - 1)), new Date());
+	    };
+	
+	    // is a given date in last week range?
+	    is.inLastWeek = function(date) {
+	        return is.inDateRange(date, new Date(new Date().setDate(new Date().getDate() - 7)), new Date());
+	    };
+	
+	    // is a given date in last year range?
+	    is.inLastYear = function(date) {
+	        return is.inDateRange(date, new Date(new Date().setFullYear(new Date().getFullYear() - 1)), new Date());
+	    };
+	
+	    // is a given date in next month range?
+	    is.inNextMonth = function(date) {
+	        return is.inDateRange(date, new Date(), new Date(new Date().setMonth(new Date().getMonth() + 1)));
+	    };
+	
+	    // is a given date in next week range?
+	    is.inNextWeek = function(date) {
+	        return is.inDateRange(date, new Date(), new Date(new Date().setDate(new Date().getDate() + 7)));
+	    };
+	
+	    // is a given date in next year range?
+	    is.inNextYear = function(date) {
+	        return is.inDateRange(date, new Date(), new Date(new Date().setFullYear(new Date().getFullYear() + 1)));
+	    };
+	
+	    // is the given year a leap year?
+	    is.leapYear = function(year) {
+	        return is.number(year) && ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0);
+	    };
+	
+	    // is a given dates month equal given month parameter?
+	    is.month = function(date, month) {
+	        return is.date(date) && month.toLowerCase() === months[date.getMonth()];
+	    };
+	    // month method does not support 'all' and 'any' interfaces
+	    is.month.api = ['not'];
+	
+	    // is a given date past?
+	    is.past = function(date) {
+	        var now = new Date();
+	        return is.date(date) && date.getTime() < now.getTime();
+	    };
+	
+	    // is a given date in the parameter quarter?
+	    is.quarterOfYear = function(date, quarter) {
+	        return is.date(date) && is.number(quarter) && quarter === Math.floor((date.getMonth() + 3) / 3);
+	    };
+	    // quarterOfYear method does not support 'all' and 'any' interfaces
+	    is.quarterOfYear.api = ['not'];
+	
+	    // is a given date indicate today?
+	    is.today = function(date) {
+	        var now = new Date();
+	        var todayString = now.toDateString();
+	        return is.date(date) && date.toDateString() === todayString;
+	    };
+	
+	    // is a given date indicate tomorrow?
+	    is.tomorrow = function(date) {
+	        var now = new Date();
+	        var tomorrowString = new Date(now.setDate(now.getDate() + 1)).toDateString();
+	        return is.date(date) && date.toDateString() === tomorrowString;
+	    };
+	
+	    // is a given date weekend?
+	    // 6: Saturday, 0: Sunday
+	    is.weekend = function(date) {
+	        return is.date(date) && (date.getDay() === 6 || date.getDay() === 0);
+	    };
+	
+	    // is a given date weekday?
+	    is.weekday = not(is.weekend);
+	
+	    // is a given dates year equal given year parameter?
+	    is.year = function(date, year) {
+	        return is.date(date) && is.number(year) && year === date.getFullYear();
+	    };
+	    // year method does not support 'all' and 'any' interfaces
+	    is.year.api = ['not'];
+	
+	    // is a given date indicate yesterday?
+	    is.yesterday = function(date) {
+	        var now = new Date();
+	        var yesterdayString = new Date(now.setDate(now.getDate() - 1)).toDateString();
+	        return is.date(date) && date.toDateString() === yesterdayString;
+	    };
+	
+	    // Environment checks
+	    /* -------------------------------------------------------------------------- */
+	
+	    var freeGlobal = is.windowObject(typeof global == 'object' && global) && global;
+	    var freeSelf = is.windowObject(typeof self == 'object' && self) && self;
+	    var thisGlobal = is.windowObject(typeof this == 'object' && this) && this;
+	    var root = freeGlobal || freeSelf || thisGlobal || Function('return this')();
+	
+	    var document = freeSelf && freeSelf.document;
+	    var previousIs = root.is;
+	
+	    // store navigator properties to use later
+	    var navigator = freeSelf && freeSelf.navigator;
+	    var appVersion = (navigator && navigator.appVersion || '').toLowerCase();
+	    var userAgent = (navigator && navigator.userAgent || '').toLowerCase();
+	    var vendor = (navigator && navigator.vendor || '').toLowerCase();
+	
+	    // is current device android?
+	    is.android = function() {
+	        return /android/.test(userAgent);
+	    };
+	    // android method does not support 'all' and 'any' interfaces
+	    is.android.api = ['not'];
+	
+	    // is current device android phone?
+	    is.androidPhone = function() {
+	        return /android/.test(userAgent) && /mobile/.test(userAgent);
+	    };
+	    // androidPhone method does not support 'all' and 'any' interfaces
+	    is.androidPhone.api = ['not'];
+	
+	    // is current device android tablet?
+	    is.androidTablet = function() {
+	        return /android/.test(userAgent) && !/mobile/.test(userAgent);
+	    };
+	    // androidTablet method does not support 'all' and 'any' interfaces
+	    is.androidTablet.api = ['not'];
+	
+	    // is current device blackberry?
+	    is.blackberry = function() {
+	        return /blackberry/.test(userAgent) || /bb10/.test(userAgent);
+	    };
+	    // blackberry method does not support 'all' and 'any' interfaces
+	    is.blackberry.api = ['not'];
+	
+	    // is current browser chrome?
+	    // parameter is optional
+	    is.chrome = function(range) {
+	        var match = /google inc/.test(vendor) ? userAgent.match(/(?:chrome|crios)\/(\d+)/) : null;
+	        return match !== null && compareVersion(match[1], range);
+	    };
+	    // chrome method does not support 'all' and 'any' interfaces
+	    is.chrome.api = ['not'];
+	
+	    // is current device desktop?
+	    is.desktop = function() {
+	        return is.not.mobile() && is.not.tablet();
+	    };
+	    // desktop method does not support 'all' and 'any' interfaces
+	    is.desktop.api = ['not'];
+	
+	    // is current browser edge?
+	    // parameter is optional
+	    is.edge = function(range) {
+	        var match = userAgent.match(/edge\/(\d+)/);
+	        return match !== null && compareVersion(match[1], range);
+	    };
+	    // edge method does not support 'all' and 'any' interfaces
+	    is.edge.api = ['not'];
+	
+	    // is current browser firefox?
+	    // parameter is optional
+	    is.firefox = function(range) {
+	        var match = userAgent.match(/(?:firefox|fxios)\/(\d+)/);
+	        return match !== null && compareVersion(match[1], range);
+	    };
+	    // firefox method does not support 'all' and 'any' interfaces
+	    is.firefox.api = ['not'];
+	
+	    // is current browser internet explorer?
+	    // parameter is optional
+	    is.ie = function(range) {
+	        var match = userAgent.match(/(?:msie |trident.+?; rv:)(\d+)/);
+	        return match !== null && compareVersion(match[1], range);
+	    };
+	    // ie method does not support 'all' and 'any' interfaces
+	    is.ie.api = ['not'];
+	
+	    // is current device ios?
+	    is.ios = function() {
+	        return is.iphone() || is.ipad() || is.ipod();
+	    };
+	    // ios method does not support 'all' and 'any' interfaces
+	    is.ios.api = ['not'];
+	
+	    // is current device ipad?
+	    // parameter is optional
+	    is.ipad = function(range) {
+	        var match = userAgent.match(/ipad.+?os (\d+)/);
+	        return match !== null && compareVersion(match[1], range);
+	    };
+	    // ipad method does not support 'all' and 'any' interfaces
+	    is.ipad.api = ['not'];
+	
+	    // is current device iphone?
+	    // parameter is optional
+	    is.iphone = function(range) {
+	        // original iPhone doesn't have the os portion of the UA
+	        var match = userAgent.match(/iphone(?:.+?os (\d+))?/);
+	        return match !== null && compareVersion(match[1] || 1, range);
+	    };
+	    // iphone method does not support 'all' and 'any' interfaces
+	    is.iphone.api = ['not'];
+	
+	    // is current device ipod?
+	    // parameter is optional
+	    is.ipod = function(range) {
+	        var match = userAgent.match(/ipod.+?os (\d+)/);
+	        return match !== null && compareVersion(match[1], range);
+	    };
+	    // ipod method does not support 'all' and 'any' interfaces
+	    is.ipod.api = ['not'];
+	
+	    // is current operating system linux?
+	    is.linux = function() {
+	        return /linux/.test(appVersion);
+	    };
+	    // linux method does not support 'all' and 'any' interfaces
+	    is.linux.api = ['not'];
+	
+	    // is current operating system mac?
+	    is.mac = function() {
+	        return /mac/.test(appVersion);
+	    };
+	    // mac method does not support 'all' and 'any' interfaces
+	    is.mac.api = ['not'];
+	
+	    // is current device mobile?
+	    is.mobile = function() {
+	        return is.iphone() || is.ipod() || is.androidPhone() || is.blackberry() || is.windowsPhone();
+	    };
+	    // mobile method does not support 'all' and 'any' interfaces
+	    is.mobile.api = ['not'];
+	
+	    // is current state offline?
+	    is.offline = not(is.online);
+	    // offline method does not support 'all' and 'any' interfaces
+	    is.offline.api = ['not'];
+	
+	    // is current state online?
+	    is.online = function() {
+	        return !navigator || navigator.onLine === true;
+	    };
+	    // online method does not support 'all' and 'any' interfaces
+	    is.online.api = ['not'];
+	
+	    // is current browser opera?
+	    // parameter is optional
+	    is.opera = function(range) {
+	        var match = userAgent.match(/(?:^opera.+?version|opr)\/(\d+)/);
+	        return match !== null && compareVersion(match[1], range);
+	    };
+	    // opera method does not support 'all' and 'any' interfaces
+	    is.opera.api = ['not'];
+	
+	    // is current browser phantomjs?
+	    // parameter is optional
+	    is.phantom = function(range) {
+	        var match = userAgent.match(/phantomjs\/(\d+)/);
+	        return match !== null && compareVersion(match[1], range);
+	    };
+	    // phantom method does not support 'all' and 'any' interfaces
+	    is.phantom.api = ['not'];
+	
+	    // is current browser safari?
+	    // parameter is optional
+	    is.safari = function(range) {
+	        var match = userAgent.match(/version\/(\d+).+?safari/);
+	        return match !== null && compareVersion(match[1], range);
+	    };
+	    // safari method does not support 'all' and 'any' interfaces
+	    is.safari.api = ['not'];
+	
+	    // is current device tablet?
+	    is.tablet = function() {
+	        return is.ipad() || is.androidTablet() || is.windowsTablet();
+	    };
+	    // tablet method does not support 'all' and 'any' interfaces
+	    is.tablet.api = ['not'];
+	
+	    // is current device supports touch?
+	    is.touchDevice = function() {
+	        return !!document && ('ontouchstart' in freeSelf ||
+	            ('DocumentTouch' in freeSelf && document instanceof DocumentTouch));
+	    };
+	    // touchDevice method does not support 'all' and 'any' interfaces
+	    is.touchDevice.api = ['not'];
+	
+	    // is current operating system windows?
+	    is.windows = function() {
+	        return /win/.test(appVersion);
+	    };
+	    // windows method does not support 'all' and 'any' interfaces
+	    is.windows.api = ['not'];
+	
+	    // is current device windows phone?
+	    is.windowsPhone = function() {
+	        return is.windows() && /phone/.test(userAgent);
+	    };
+	    // windowsPhone method does not support 'all' and 'any' interfaces
+	    is.windowsPhone.api = ['not'];
+	
+	    // is current device windows tablet?
+	    is.windowsTablet = function() {
+	        return is.windows() && is.not.windowsPhone() && /touch/.test(userAgent);
+	    };
+	    // windowsTablet method does not support 'all' and 'any' interfaces
+	    is.windowsTablet.api = ['not'];
+	
+	    // Object checks
+	    /* -------------------------------------------------------------------------- */
+	
+	    // has a given object got parameterized count property?
+	    is.propertyCount = function(object, count) {
+	        if (is.not.object(object) || is.not.number(count)) {
+	            return false;
+	        }
+	        var n = 0;
+	        for (var property in object) {
+	            if (hasOwnProperty.call(object, property) && ++n > count) {
+	                return false;
+	            }
+	        }
+	        return n === count;
+	    };
+	    // propertyCount method does not support 'all' and 'any' interfaces
+	    is.propertyCount.api = ['not'];
+	
+	    // is given object has parameterized property?
+	    is.propertyDefined = function(object, property) {
+	        return is.object(object) && is.string(property) && property in object;
+	    };
+	    // propertyDefined method does not support 'all' and 'any' interfaces
+	    is.propertyDefined.api = ['not'];
+	
+	    // Array checks
+	    /* -------------------------------------------------------------------------- */
+	
+	    // is a given item in an array?
+	    is.inArray = function(value, array) {
+	        if (is.not.array(array)) {
+	            return false;
+	        }
+	        for (var i = 0; i < array.length; i++) {
+	            if (array[i] === value) {
+	                return true;
+	            }
+	        }
+	        return false;
+	    };
+	    // inArray method does not support 'all' and 'any' interfaces
+	    is.inArray.api = ['not'];
+	
+	    // is a given array sorted?
+	    is.sorted = function(array, sign) {
+	        if (is.not.array(array)) {
+	            return false;
+	        }
+	        var predicate = comparator[sign] || comparator['>='];
+	        for (var i = 1; i < array.length; i++) {
+	            if (!predicate(array[i], array[i - 1])) {
+	                return false;
+	            }
+	        }
+	        return true;
+	    };
+	
+	    // API
+	    // Set 'not', 'all' and 'any' interfaces to methods based on their api property
+	    /* -------------------------------------------------------------------------- */
+	
+	    function setInterfaces() {
+	        var options = is;
+	        for (var option in options) {
+	            if (hasOwnProperty.call(options, option) && is['function'](options[option])) {
+	                var interfaces = options[option].api || ['not', 'all', 'any'];
+	                for (var i = 0; i < interfaces.length; i++) {
+	                    if (interfaces[i] === 'not') {
+	                        is.not[option] = not(is[option]);
+	                    }
+	                    if (interfaces[i] === 'all') {
+	                        is.all[option] = all(is[option]);
+	                    }
+	                    if (interfaces[i] === 'any') {
+	                        is.any[option] = any(is[option]);
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    setInterfaces();
+	
+	    // Configuration methods
+	    // Intentionally added after setInterfaces function
+	    /* -------------------------------------------------------------------------- */
+	
+	    // change namespace of library to prevent name collisions
+	    // var preferredName = is.setNamespace();
+	    // preferredName.odd(3);
+	    // => true
+	    is.setNamespace = function() {
+	        root.is = previousIs;
+	        return this;
+	    };
+	
+	    // set optional regexes to methods
+	    is.setRegexp = function(regexp, name) {
+	        for (var r in regexes) {
+	            if (hasOwnProperty.call(regexes, r) && (name === r)) {
+	                regexes[r] = regexp;
+	            }
+	        }
+	    };
+	
+	    return is;
+	}));
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(_, Backbone) {'use strict';
@@ -14718,33 +15437,33 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* global  _ Backbone document window */
 	
-	var _events = __webpack_require__(10);
+	var _events = __webpack_require__(8);
 	
 	var _events2 = _interopRequireDefault(_events);
 	
-	var _currentValues = __webpack_require__(13);
-	
-	var _currentValues2 = _interopRequireDefault(_currentValues);
-	
-	var _config = __webpack_require__(15);
+	var _config = __webpack_require__(14);
 	
 	var _config2 = _interopRequireDefault(_config);
 	
-	var _routes = __webpack_require__(16);
+	var _routes = __webpack_require__(15);
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
-	var _indexView = __webpack_require__(18);
+	var _indexView = __webpack_require__(17);
 	
 	var _indexView2 = _interopRequireDefault(_indexView);
 	
-	var _aboutView = __webpack_require__(43);
+	var _aboutView = __webpack_require__(42);
 	
 	var _aboutView2 = _interopRequireDefault(_aboutView);
 	
 	var _View = __webpack_require__(46);
 	
 	var _View2 = _interopRequireDefault(_View);
+	
+	var _globalStore = __webpack_require__(11);
+	
+	var _globalStore2 = _interopRequireDefault(_globalStore);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -14785,6 +15504,18 @@
 			key: 'navigateTo',
 			value: function navigateTo(page, params, hash) {
 	
+				// Safety here
+				// We make sure we kill the currentPage is there is a change in the url but animation are still playing (page show / hide)
+				// Usually means that user is clikcing fast on arrows
+				if (_globalStore2.default.get('isAnimating')) {
+	
+					if (this.oldPage) {
+						this.oldPage.dispose();
+					}
+					_globalStore2.default.set('isAnimating', false);
+					this.oldPage = null;
+				}
+	
 				var el = null;
 	
 				if (this.oldPage === null && this.currentPage === null) {
@@ -14794,20 +15525,24 @@
 	
 				var newPage = this.getCurrentPage(page, params);
 	
-				_currentValues2.default.isAnimating = true;
+				_globalStore2.default.set('isAnimating', true);
 	
 				if (this.currentPage) {
 	
 					this.oldPage = this.currentPage;
-					_currentValues2.default.oldPage = this.currentPage.idView;
+					// CV.oldPage = this.currentPage.idView;
+					_globalStore2.default.set('oldPage', this.currentPage.idView);
 				}
 	
-				_currentValues2.default.currentPage = newPage.id;
+				// CV.currentPage = newPage.id;
+				_globalStore2.default.set('currentPage', newPage.id);
 				this.currentPage = new newPage.View({
 					slug: params,
 					el: this.currentPage ? null : el,
 					idView: newPage.id
 				}, {});
+	
+				console.log('this.currentPage -----------------------------', this.currentPage);
 	
 				this.renderCurrentPage();
 			}
@@ -14867,6 +15602,7 @@
 					// will append page into the DOM
 					this.trigger(_events2.default.PAGE_RENDERED);
 				}
+				console.log('this.currentPage------', this.currentPage);
 	
 				var title = this.currentPage.model.attributes.metas.title;
 				document.title = title ? title : 'Framework | Default Title here';
@@ -14876,7 +15612,7 @@
 				});
 				this.currentPage.init();
 	
-				document.body.setAttribute('data-page', _currentValues2.default.currentPage);
+				document.body.setAttribute('data-page', _globalStore2.default.get('currentPage'));
 			}
 		}, {
 			key: '_onPageReady',
@@ -14930,14 +15666,17 @@
 			key: '_onPageShown',
 			value: function _onPageShown() {
 	
-				_currentValues2.default.isAnimating = false;
-				_currentValues2.default.firstTime = false;
+				// CV.isAnimating = false;
+				// CV.firstTime = false;
+				_globalStore2.default.set('isAnimating', false);
+				_globalStore2.default.set('firstTime', false);
 	
 				this.trigger(_events2.default.PAGE_SHOWN);
 			}
 		}, {
 			key: '_removeOldPage',
 			value: function _removeOldPage() {
+	
 				if (this.oldPage) {
 					this.stopListening(this.oldPage, _events2.default.HIDDEN);
 					this.stopListening(this.oldPage, _events2.default.SHOWN);
@@ -14961,7 +15700,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(2)))
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -15017,26 +15756,20 @@
 		return Config;
 	}();
 	
-	;
-	
 	var single = new Config();
 	exports.default = single;
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var routes = __webpack_require__(17);
+	var routes = __webpack_require__(16);
 	
 	var Routes = function () {
 		function Routes(routes) {
@@ -15048,7 +15781,7 @@
 		_createClass(Routes, [{
 			key: 'getRouteByUrl',
 			value: function getRouteByUrl(url) {
-				console.log(url);
+	
 				for (var id in this.routes) {
 					if (this.routes[id].url === url || this.routes[id].url === '/' + url || this.routes[id].url === '/' + url + '/') {
 						return this.routes[id];
@@ -15069,33 +15802,33 @@
 		return Routes;
 	}();
 	
-	var single = new Routes(routes);
-	exports.default = single;
+	module.exports = new Routes(routes);
+	// export default single;
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports) {
 
 	module.exports = {
 		"404": {
 			"id": "404",
 			"url": "/404",
-			"jsonUrl": "../shared/jsons/404.json"
+			"jsonUrl": "../public/assets/jsons/404.json"
 		},
 		"index": {
 			"id": "index",
 			"url": "/",
-			"jsonUrl": "../shared/jsons/index.json"
+			"jsonUrl": "../public/assets/jsons/index.json"
 		},
 		"about": {
 			"id": "about",
 			"url": "/about",
-			"jsonUrl": "../shared/jsons/about.json"
+			"jsonUrl": "../public/assets/jsons/about.json"
 		}
 	};
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(_) {'use strict';
@@ -15108,15 +15841,15 @@
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	var _pageView = __webpack_require__(19);
+	var _pageView = __webpack_require__(18);
 	
 	var _pageView2 = _interopRequireDefault(_pageView);
 	
-	var _index = __webpack_require__(21);
+	var _index = __webpack_require__(20);
 	
 	var _index2 = _interopRequireDefault(_index);
 	
-	var _index3 = __webpack_require__(42);
+	var _index3 = __webpack_require__(41);
 	
 	var _index4 = _interopRequireDefault(_index3);
 	
@@ -15126,25 +15859,21 @@
 	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global _  */
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global _ Cubic TimelineMax */
 	
 	var IndexView = function (_PageView) {
 		_inherits(IndexView, _PageView);
 	
 		function IndexView() {
 			var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-			var datas = arguments[1];
+			var data = arguments[1];
 	
 			_classCallCheck(this, IndexView);
 	
 			console.log('IndexView constructor');
 	
 			_.defaults(options, {
-				template: _index2.default,
-				// These options are assigned to the instance by Backbone
-				events: {
-					'click a': 'onLinkClicked'
-				}
+				template: _index2.default
 			});
 	
 			return _possibleConstructorReturn(this, (IndexView.__proto__ || Object.getPrototypeOf(IndexView)).call(this, options, _index4.default));
@@ -15161,7 +15890,6 @@
 			value: function initDOM() {
 	
 				_get(IndexView.prototype.__proto__ || Object.getPrototypeOf(IndexView.prototype), 'initDOM', this).call(this);
-				// PageView.prototype.initDOM.call(this);
 			}
 		}, {
 			key: 'setupDOM',
@@ -15178,7 +15906,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Backbone) {'use strict';
@@ -15191,11 +15919,11 @@
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	var _baseView = __webpack_require__(20);
+	var _baseView = __webpack_require__(19);
 	
 	var _baseView2 = _interopRequireDefault(_baseView);
 	
-	var _events = __webpack_require__(10);
+	var _events = __webpack_require__(8);
 	
 	var _events2 = _interopRequireDefault(_events);
 	
@@ -15205,46 +15933,46 @@
 	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global  _ Backbone TweenLite TimelineMax Cubic window*/
-	
-	// import CV from 'config/currentValues';
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global  Backbone TweenLite TimelineMax Cubic window*/
 	
 	var PageView = function (_BaseView) {
 		_inherits(PageView, _BaseView);
 	
 		function PageView() {
 			var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-			var datas = arguments[1];
+			var data = arguments[1];
 	
 			_classCallCheck(this, PageView);
 	
-			console.log('PageView constructor', datas);
-			return _possibleConstructorReturn(this, (PageView.__proto__ || Object.getPrototypeOf(PageView)).call(this, options, datas));
+			return _possibleConstructorReturn(this, (PageView.__proto__ || Object.getPrototypeOf(PageView)).call(this, options, data));
 		}
 	
 		_createClass(PageView, [{
 			key: 'initialize',
-			value: function initialize(options, dataP) {
-	
-				console.log('Pageview initialize', this);
+			value: function initialize(options, dataParam) {
 	
 				/**
 	   * Model
 	   * @type {Backbone Model}
 	   */
+				// here we either load local data ( so we just create model to store them and no load)
+				// or the view has her own model and manage the loading
 				this.model = this.model !== undefined ? this.model : new Backbone.Model({ asynchronous: false });
+	
+				// Here is another example with abstract model that follow all the same pattern
+				// this.model = new PageModel({url: options.id + '.json'});
 	
 				/**
 	   * Current Id View
 	   * @type {string}
 	   */
 				this.idView = options.idView !== undefined ? options.idView : this.idView;
-	
 				// Checking if data passed as attributes and merging them with model attributes
-				var data = dataP !== undefined ? dataP : null; // put in a page property to match the templating data style
+				var data = dataParam !== undefined ? dataParam : null; // put in a page property to match the templating data style
+	
 				if (data !== null) this.model.set(data);
 	
-				_get(PageView.prototype.__proto__ || Object.getPrototypeOf(PageView.prototype), 'initialize', this).call(this, options, data);
+				_get(PageView.prototype.__proto__ || Object.getPrototypeOf(PageView.prototype), 'initialize', this).call(this, options);
 			}
 		}, {
 			key: 'initializeRender',
@@ -15265,15 +15993,14 @@
 				this.$el.addClass('next-page');
 				_baseView2.default.prototype.onRendered.call(this);
 			}
-		}, {
-			key: 'initDOM',
-	
 	
 			/**
 	   * Handles the initialization of DOM element
 	   * Here we should create reference of DOM elements we want to manipulate
 	   */
 	
+		}, {
+			key: 'initDOM',
 			value: function initDOM() {
 	
 				_baseView2.default.prototype.initDOM.call(this);
@@ -15314,17 +16041,15 @@
 				this.TL.hide = new TimelineMax({ paused: true, onComplete: this.onHidden.bind(this) });
 				this.TL.hide.to(this.$el, 0.3, { autoAlpha: 0, ease: Cubic.easeInOut }, 0);
 			}
-		}, {
-			key: 'show',
-	
 	
 			/**
 	   * Bind events
 	   */
 	
+		}, {
+			key: 'show',
 			value: function show(direct) {
 				this.$el.removeClass('next-page');
-				console.log('PageView show');
 				// call now to have a transition based on the viewport size (desktop/mobile)
 				this.initTLShow();
 	
@@ -15373,6 +16098,9 @@
 		}, {
 			key: 'dispose',
 			value: function dispose() {
+	
+				console.log('------------------------ DISPOSE');
+	
 				if (this.model !== null) this.model.stopListening();
 				this.model = null;
 	
@@ -15387,7 +16115,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Backbone, _) {'use strict';
@@ -15398,13 +16126,13 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _events = __webpack_require__(10);
+	var _events = __webpack_require__(8);
 	
 	var _events2 = _interopRequireDefault(_events);
 	
-	var _currentValues = __webpack_require__(13);
+	var _router = __webpack_require__(7);
 	
-	var _currentValues2 = _interopRequireDefault(_currentValues);
+	var _router2 = _interopRequireDefault(_router);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -15419,11 +16147,9 @@
 	
 		function BaseView() {
 			var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-			var datas = arguments[1];
+			var data = arguments[1];
 	
 			_classCallCheck(this, BaseView);
-	
-			console.log('BaseView constructor');
 	
 			_.defaults(options, {
 				el: options.el,
@@ -15433,7 +16159,7 @@
 				}
 			});
 	
-			var _this = _possibleConstructorReturn(this, (BaseView.__proto__ || Object.getPrototypeOf(BaseView)).call(this, options, datas));
+			var _this = _possibleConstructorReturn(this, (BaseView.__proto__ || Object.getPrototypeOf(BaseView)).call(this, options, data));
 	
 			_this.options = options;
 	
@@ -15520,7 +16246,7 @@
 	
 				if (this.options.id !== undefined) this.id = this.options.id;
 	
-				if (this.options.dataID !== undefined) this.dataID = this.options.dataID;
+				// if (this.options.dataID !== undefined) this.dataID = this.options.dataID;
 				if (this.options.template !== undefined) this.template = this.options.template;
 				if (this.options.className !== undefined) this.className = this.options.className;
 	
@@ -15531,9 +16257,6 @@
 	
 				// Backbone.View.prototype.initialize.call(this);
 			}
-		}, {
-			key: 'render',
-	
 	
 			/*
 	   * @override
@@ -15541,9 +16264,10 @@
 	   * If this.id is provided, it tries to get the element from the DOM
 	   * If not, it generates the element based on the tempalte provided, and append it to the container
 	   */
-			value: function render() {
 	
-				console.log('this.options.el', this.options.el);
+		}, {
+			key: 'render',
+			value: function render() {
 	
 				if (this.options.el) {
 					this.setElement(this.options.el);
@@ -15558,9 +16282,8 @@
 		}, {
 			key: 'renderTemplate',
 			value: function renderTemplate() {
-				console.log('renderTemplate');
 				if (this.template === null) return;
-				var html = this.model !== null ? this.template({ datas: this.model.attributes }) : this.template();
+				var html = this.model !== null ? this.template({ data: this.model.attributes }) : this.template();
 				this.setElement(html);
 			}
 		}, {
@@ -15571,14 +16294,13 @@
 				}
 				this.trigger(_events2.default.PAGE_RENDERED);
 			}
-		}, {
-			key: 'init',
-	
 	
 			/**
 	   * @override
 	   */
 	
+		}, {
+			key: 'init',
 			value: function init(params, assets) {
 				// if (this.isInit) return;
 	
@@ -15587,17 +16309,15 @@
 	
 				this.initDOM();
 			}
-		}, {
-			key: 'initDOM',
-	
 	
 			/**
 	   * Handles the initialization of DOM element
 	   * Here we should create reference of DOM elements we want to manipulate
 	   */
 	
+		}, {
+			key: 'initDOM',
 			value: function initDOM() {
-				console.log('initDOM baseview');
 				setTimeout(this.onDOMInit.bind(this), 0);
 			}
 		}, {
@@ -15627,19 +16347,17 @@
 				this.isInit = true;
 				this.trigger(_events2.default.INIT);
 			}
-		}, {
-			key: 'bindEvents',
-	
 	
 			/**
 	   * Bind events
 	   */
+	
+		}, {
+			key: 'bindEvents',
 			value: function bindEvents() {}
 		}, {
 			key: 'onLinkClicked',
 			value: function onLinkClicked(e) {
-	
-				console.log('onLinkClicked');
 	
 				var root = location.protocol + '//' + location.host;
 				var href = e.currentTarget.href;
@@ -15649,16 +16367,16 @@
 					// do nothing
 				} else if (e.metaKey === undefined && e.ctrlKey === undefined || !e.metaKey && !e.ctrlKey) {
 					e.preventDefault();
-					_currentValues2.default.navigate(e.currentTarget.href);
+					_router2.default.navigate(e.currentTarget.href);
 				} // allow command-click and control-click to open new tab
 			}
-		}, {
-			key: 'unbindEvents',
-	
 	
 			/**
 	   * Unbind events
 	   */
+	
+		}, {
+			key: 'unbindEvents',
 			value: function unbindEvents() {}
 		}, {
 			key: 'show',
@@ -15699,13 +16417,13 @@
 			value: function update() {
 				if (this.canUpdate) this.onUpdate();
 			}
-		}, {
-			key: 'onUpdate',
-	
 	
 			/**
 	   * Called on request animation frame
 	   */
+	
+		}, {
+			key: 'onUpdate',
 			value: function onUpdate() {}
 		}, {
 			key: 'killTL',
@@ -15727,13 +16445,13 @@
 	
 				this.TL[name] = null;
 			}
-		}, {
-			key: 'destroyTL',
-	
 	
 			/**
 	   * Kill all the timelines
 	   */
+	
+		}, {
+			key: 'destroyTL',
 			value: function destroyTL() {
 				for (var name in this.TL) {
 					if (this.TL.hasOwnProperty(name)) {
@@ -15743,13 +16461,13 @@
 	
 				this.TL = {};
 			}
-		}, {
-			key: 'dispose',
-	
 	
 			/**
 	   * @override
 	   */
+	
+		}, {
+			key: 'dispose',
 			value: function dispose() {
 	
 				this.undelegateEvents();
@@ -15786,32 +16504,32 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(3)))
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Handlebars = __webpack_require__(22);
+	var Handlebars = __webpack_require__(21);
 	function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
 	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
 	    var stack1, alias1=container.escapeExpression;
 	
 	  return "<section class=\"page-wrapper\" id=\"homepage\">\n\n	<div class=\"grid\">\n		<div class=\"grid__col-12\">\n			<h1>"
-	    + alias1(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1), depth0))
+	    + alias1(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1), depth0))
 	    + "</h1>\n			<h2>"
-	    + alias1(__default(__webpack_require__(41)).call(depth0 != null ? depth0 : {},((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1),{"name":"yell","hash":{},"data":data}))
+	    + alias1(__default(__webpack_require__(40)).call(depth0 != null ? depth0 : {},((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1),{"name":"yell","hash":{},"data":data}))
 	    + "</h2>\n		</div>\n		<div class=\"grid__col-xs-6 grid__col-12\">\n				<p>\n					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et sagittis dui. Maecenas rhoncus justo aliquam urna finibus tincidunt et ut mauris.\n				</p>\n		</div>\n		<div class=\"grid__col-xs-6 grid__col-12\">\n			<p>\n				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et sagittis dui. Maecenas rhoncus justo aliquam urna finibus tincidunt et ut mauris.\n			</p>\n		</div>\n</div>\n</section>\n";
 	},"useData":true});
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Create a simple path alias to allow browserify to resolve
 	// the runtime on a supported path.
-	module.exports = __webpack_require__(23)['default'];
+	module.exports = __webpack_require__(22)['default'];
 
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15825,30 +16543,30 @@
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 	
-	var _handlebarsBase = __webpack_require__(24);
+	var _handlebarsBase = __webpack_require__(23);
 	
 	var base = _interopRequireWildcard(_handlebarsBase);
 	
 	// Each of these augment the Handlebars object. No need to setup here.
 	// (This is done to easily share code between commonjs and browse envs)
 	
-	var _handlebarsSafeString = __webpack_require__(38);
+	var _handlebarsSafeString = __webpack_require__(37);
 	
 	var _handlebarsSafeString2 = _interopRequireDefault(_handlebarsSafeString);
 	
-	var _handlebarsException = __webpack_require__(26);
+	var _handlebarsException = __webpack_require__(25);
 	
 	var _handlebarsException2 = _interopRequireDefault(_handlebarsException);
 	
-	var _handlebarsUtils = __webpack_require__(25);
+	var _handlebarsUtils = __webpack_require__(24);
 	
 	var Utils = _interopRequireWildcard(_handlebarsUtils);
 	
-	var _handlebarsRuntime = __webpack_require__(39);
+	var _handlebarsRuntime = __webpack_require__(38);
 	
 	var runtime = _interopRequireWildcard(_handlebarsRuntime);
 	
-	var _handlebarsNoConflict = __webpack_require__(40);
+	var _handlebarsNoConflict = __webpack_require__(39);
 	
 	var _handlebarsNoConflict2 = _interopRequireDefault(_handlebarsNoConflict);
 	
@@ -15883,7 +16601,7 @@
 
 
 /***/ },
-/* 24 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15894,17 +16612,17 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(25);
+	var _utils = __webpack_require__(24);
 	
-	var _exception = __webpack_require__(26);
+	var _exception = __webpack_require__(25);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
-	var _helpers = __webpack_require__(27);
+	var _helpers = __webpack_require__(26);
 	
-	var _decorators = __webpack_require__(35);
+	var _decorators = __webpack_require__(34);
 	
-	var _logger = __webpack_require__(37);
+	var _logger = __webpack_require__(36);
 	
 	var _logger2 = _interopRequireDefault(_logger);
 	
@@ -15993,7 +16711,7 @@
 
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16123,7 +16841,7 @@
 
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16155,9 +16873,20 @@
 	    Error.captureStackTrace(this, Exception);
 	  }
 	
-	  if (loc) {
-	    this.lineNumber = line;
-	    this.column = column;
+	  try {
+	    if (loc) {
+	      this.lineNumber = line;
+	
+	      // Work around issue under safari where we can't directly set the column value
+	      /* istanbul ignore next */
+	      if (Object.defineProperty) {
+	        Object.defineProperty(this, 'column', { value: column });
+	      } else {
+	        this.column = column;
+	      }
+	    }
+	  } catch (nop) {
+	    /* Ignore if the browser is very particular */
 	  }
 	}
 	
@@ -16165,11 +16894,11 @@
 	
 	exports['default'] = Exception;
 	module.exports = exports['default'];
-	//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL2xpYi9oYW5kbGViYXJzL2V4Y2VwdGlvbi5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBQ0EsSUFBTSxVQUFVLEdBQUcsQ0FBQyxhQUFhLEVBQUUsVUFBVSxFQUFFLFlBQVksRUFBRSxTQUFTLEVBQUUsTUFBTSxFQUFFLFFBQVEsRUFBRSxPQUFPLENBQUMsQ0FBQzs7QUFFbkcsU0FBUyxTQUFTLENBQUMsT0FBTyxFQUFFLElBQUksRUFBRTtBQUNoQyxNQUFJLEdBQUcsR0FBRyxJQUFJLElBQUksSUFBSSxDQUFDLEdBQUc7TUFDdEIsSUFBSSxZQUFBO01BQ0osTUFBTSxZQUFBLENBQUM7QUFDWCxNQUFJLEdBQUcsRUFBRTtBQUNQLFFBQUksR0FBRyxHQUFHLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQztBQUN0QixVQUFNLEdBQUcsR0FBRyxDQUFDLEtBQUssQ0FBQyxNQUFNLENBQUM7O0FBRTFCLFdBQU8sSUFBSSxLQUFLLEdBQUcsSUFBSSxHQUFHLEdBQUcsR0FBRyxNQUFNLENBQUM7R0FDeEM7O0FBRUQsTUFBSSxHQUFHLEdBQUcsS0FBSyxDQUFDLFNBQVMsQ0FBQyxXQUFXLENBQUMsSUFBSSxDQUFDLElBQUksRUFBRSxPQUFPLENBQUMsQ0FBQzs7O0FBRzFELE9BQUssSUFBSSxHQUFHLEdBQUcsQ0FBQyxFQUFFLEdBQUcsR0FBRyxVQUFVLENBQUMsTUFBTSxFQUFFLEdBQUcsRUFBRSxFQUFFO0FBQ2hELFFBQUksQ0FBQyxVQUFVLENBQUMsR0FBRyxDQUFDLENBQUMsR0FBRyxHQUFHLENBQUMsVUFBVSxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUM7R0FDOUM7OztBQUdELE1BQUksS0FBSyxDQUFDLGlCQUFpQixFQUFFO0FBQzNCLFNBQUssQ0FBQyxpQkFBaUIsQ0FBQyxJQUFJLEVBQUUsU0FBUyxDQUFDLENBQUM7R0FDMUM7O0FBRUQsTUFBSSxHQUFHLEVBQUU7QUFDUCxRQUFJLENBQUMsVUFBVSxHQUFHLElBQUksQ0FBQztBQUN2QixRQUFJLENBQUMsTUFBTSxHQUFHLE1BQU0sQ0FBQztHQUN0QjtDQUNGOztBQUVELFNBQVMsQ0FBQyxTQUFTLEdBQUcsSUFBSSxLQUFLLEVBQUUsQ0FBQzs7cUJBRW5CLFNBQVMiLCJmaWxlIjoiZXhjZXB0aW9uLmpzIiwic291cmNlc0NvbnRlbnQiOlsiXG5jb25zdCBlcnJvclByb3BzID0gWydkZXNjcmlwdGlvbicsICdmaWxlTmFtZScsICdsaW5lTnVtYmVyJywgJ21lc3NhZ2UnLCAnbmFtZScsICdudW1iZXInLCAnc3RhY2snXTtcblxuZnVuY3Rpb24gRXhjZXB0aW9uKG1lc3NhZ2UsIG5vZGUpIHtcbiAgbGV0IGxvYyA9IG5vZGUgJiYgbm9kZS5sb2MsXG4gICAgICBsaW5lLFxuICAgICAgY29sdW1uO1xuICBpZiAobG9jKSB7XG4gICAgbGluZSA9IGxvYy5zdGFydC5saW5lO1xuICAgIGNvbHVtbiA9IGxvYy5zdGFydC5jb2x1bW47XG5cbiAgICBtZXNzYWdlICs9ICcgLSAnICsgbGluZSArICc6JyArIGNvbHVtbjtcbiAgfVxuXG4gIGxldCB0bXAgPSBFcnJvci5wcm90b3R5cGUuY29uc3RydWN0b3IuY2FsbCh0aGlzLCBtZXNzYWdlKTtcblxuICAvLyBVbmZvcnR1bmF0ZWx5IGVycm9ycyBhcmUgbm90IGVudW1lcmFibGUgaW4gQ2hyb21lIChhdCBsZWFzdCksIHNvIGBmb3IgcHJvcCBpbiB0bXBgIGRvZXNuJ3Qgd29yay5cbiAgZm9yIChsZXQgaWR4ID0gMDsgaWR4IDwgZXJyb3JQcm9wcy5sZW5ndGg7IGlkeCsrKSB7XG4gICAgdGhpc1tlcnJvclByb3BzW2lkeF1dID0gdG1wW2Vycm9yUHJvcHNbaWR4XV07XG4gIH1cblxuICAvKiBpc3RhbmJ1bCBpZ25vcmUgZWxzZSAqL1xuICBpZiAoRXJyb3IuY2FwdHVyZVN0YWNrVHJhY2UpIHtcbiAgICBFcnJvci5jYXB0dXJlU3RhY2tUcmFjZSh0aGlzLCBFeGNlcHRpb24pO1xuICB9XG5cbiAgaWYgKGxvYykge1xuICAgIHRoaXMubGluZU51bWJlciA9IGxpbmU7XG4gICAgdGhpcy5jb2x1bW4gPSBjb2x1bW47XG4gIH1cbn1cblxuRXhjZXB0aW9uLnByb3RvdHlwZSA9IG5ldyBFcnJvcigpO1xuXG5leHBvcnQgZGVmYXVsdCBFeGNlcHRpb247XG4iXX0=
+	//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL2xpYi9oYW5kbGViYXJzL2V4Y2VwdGlvbi5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBQ0EsSUFBTSxVQUFVLEdBQUcsQ0FBQyxhQUFhLEVBQUUsVUFBVSxFQUFFLFlBQVksRUFBRSxTQUFTLEVBQUUsTUFBTSxFQUFFLFFBQVEsRUFBRSxPQUFPLENBQUMsQ0FBQzs7QUFFbkcsU0FBUyxTQUFTLENBQUMsT0FBTyxFQUFFLElBQUksRUFBRTtBQUNoQyxNQUFJLEdBQUcsR0FBRyxJQUFJLElBQUksSUFBSSxDQUFDLEdBQUc7TUFDdEIsSUFBSSxZQUFBO01BQ0osTUFBTSxZQUFBLENBQUM7QUFDWCxNQUFJLEdBQUcsRUFBRTtBQUNQLFFBQUksR0FBRyxHQUFHLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQztBQUN0QixVQUFNLEdBQUcsR0FBRyxDQUFDLEtBQUssQ0FBQyxNQUFNLENBQUM7O0FBRTFCLFdBQU8sSUFBSSxLQUFLLEdBQUcsSUFBSSxHQUFHLEdBQUcsR0FBRyxNQUFNLENBQUM7R0FDeEM7O0FBRUQsTUFBSSxHQUFHLEdBQUcsS0FBSyxDQUFDLFNBQVMsQ0FBQyxXQUFXLENBQUMsSUFBSSxDQUFDLElBQUksRUFBRSxPQUFPLENBQUMsQ0FBQzs7O0FBRzFELE9BQUssSUFBSSxHQUFHLEdBQUcsQ0FBQyxFQUFFLEdBQUcsR0FBRyxVQUFVLENBQUMsTUFBTSxFQUFFLEdBQUcsRUFBRSxFQUFFO0FBQ2hELFFBQUksQ0FBQyxVQUFVLENBQUMsR0FBRyxDQUFDLENBQUMsR0FBRyxHQUFHLENBQUMsVUFBVSxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUM7R0FDOUM7OztBQUdELE1BQUksS0FBSyxDQUFDLGlCQUFpQixFQUFFO0FBQzNCLFNBQUssQ0FBQyxpQkFBaUIsQ0FBQyxJQUFJLEVBQUUsU0FBUyxDQUFDLENBQUM7R0FDMUM7O0FBRUQsTUFBSTtBQUNGLFFBQUksR0FBRyxFQUFFO0FBQ1AsVUFBSSxDQUFDLFVBQVUsR0FBRyxJQUFJLENBQUM7Ozs7QUFJdkIsVUFBSSxNQUFNLENBQUMsY0FBYyxFQUFFO0FBQ3pCLGNBQU0sQ0FBQyxjQUFjLENBQUMsSUFBSSxFQUFFLFFBQVEsRUFBRSxFQUFDLEtBQUssRUFBRSxNQUFNLEVBQUMsQ0FBQyxDQUFDO09BQ3hELE1BQU07QUFDTCxZQUFJLENBQUMsTUFBTSxHQUFHLE1BQU0sQ0FBQztPQUN0QjtLQUNGO0dBQ0YsQ0FBQyxPQUFPLEdBQUcsRUFBRTs7R0FFYjtDQUNGOztBQUVELFNBQVMsQ0FBQyxTQUFTLEdBQUcsSUFBSSxLQUFLLEVBQUUsQ0FBQzs7cUJBRW5CLFNBQVMiLCJmaWxlIjoiZXhjZXB0aW9uLmpzIiwic291cmNlc0NvbnRlbnQiOlsiXG5jb25zdCBlcnJvclByb3BzID0gWydkZXNjcmlwdGlvbicsICdmaWxlTmFtZScsICdsaW5lTnVtYmVyJywgJ21lc3NhZ2UnLCAnbmFtZScsICdudW1iZXInLCAnc3RhY2snXTtcblxuZnVuY3Rpb24gRXhjZXB0aW9uKG1lc3NhZ2UsIG5vZGUpIHtcbiAgbGV0IGxvYyA9IG5vZGUgJiYgbm9kZS5sb2MsXG4gICAgICBsaW5lLFxuICAgICAgY29sdW1uO1xuICBpZiAobG9jKSB7XG4gICAgbGluZSA9IGxvYy5zdGFydC5saW5lO1xuICAgIGNvbHVtbiA9IGxvYy5zdGFydC5jb2x1bW47XG5cbiAgICBtZXNzYWdlICs9ICcgLSAnICsgbGluZSArICc6JyArIGNvbHVtbjtcbiAgfVxuXG4gIGxldCB0bXAgPSBFcnJvci5wcm90b3R5cGUuY29uc3RydWN0b3IuY2FsbCh0aGlzLCBtZXNzYWdlKTtcblxuICAvLyBVbmZvcnR1bmF0ZWx5IGVycm9ycyBhcmUgbm90IGVudW1lcmFibGUgaW4gQ2hyb21lIChhdCBsZWFzdCksIHNvIGBmb3IgcHJvcCBpbiB0bXBgIGRvZXNuJ3Qgd29yay5cbiAgZm9yIChsZXQgaWR4ID0gMDsgaWR4IDwgZXJyb3JQcm9wcy5sZW5ndGg7IGlkeCsrKSB7XG4gICAgdGhpc1tlcnJvclByb3BzW2lkeF1dID0gdG1wW2Vycm9yUHJvcHNbaWR4XV07XG4gIH1cblxuICAvKiBpc3RhbmJ1bCBpZ25vcmUgZWxzZSAqL1xuICBpZiAoRXJyb3IuY2FwdHVyZVN0YWNrVHJhY2UpIHtcbiAgICBFcnJvci5jYXB0dXJlU3RhY2tUcmFjZSh0aGlzLCBFeGNlcHRpb24pO1xuICB9XG5cbiAgdHJ5IHtcbiAgICBpZiAobG9jKSB7XG4gICAgICB0aGlzLmxpbmVOdW1iZXIgPSBsaW5lO1xuXG4gICAgICAvLyBXb3JrIGFyb3VuZCBpc3N1ZSB1bmRlciBzYWZhcmkgd2hlcmUgd2UgY2FuJ3QgZGlyZWN0bHkgc2V0IHRoZSBjb2x1bW4gdmFsdWVcbiAgICAgIC8qIGlzdGFuYnVsIGlnbm9yZSBuZXh0ICovXG4gICAgICBpZiAoT2JqZWN0LmRlZmluZVByb3BlcnR5KSB7XG4gICAgICAgIE9iamVjdC5kZWZpbmVQcm9wZXJ0eSh0aGlzLCAnY29sdW1uJywge3ZhbHVlOiBjb2x1bW59KTtcbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIHRoaXMuY29sdW1uID0gY29sdW1uO1xuICAgICAgfVxuICAgIH1cbiAgfSBjYXRjaCAobm9wKSB7XG4gICAgLyogSWdub3JlIGlmIHRoZSBicm93c2VyIGlzIHZlcnkgcGFydGljdWxhciAqL1xuICB9XG59XG5cbkV4Y2VwdGlvbi5wcm90b3R5cGUgPSBuZXcgRXJyb3IoKTtcblxuZXhwb3J0IGRlZmF1bHQgRXhjZXB0aW9uO1xuIl19
 
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16180,31 +16909,31 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _helpersBlockHelperMissing = __webpack_require__(28);
+	var _helpersBlockHelperMissing = __webpack_require__(27);
 	
 	var _helpersBlockHelperMissing2 = _interopRequireDefault(_helpersBlockHelperMissing);
 	
-	var _helpersEach = __webpack_require__(29);
+	var _helpersEach = __webpack_require__(28);
 	
 	var _helpersEach2 = _interopRequireDefault(_helpersEach);
 	
-	var _helpersHelperMissing = __webpack_require__(30);
+	var _helpersHelperMissing = __webpack_require__(29);
 	
 	var _helpersHelperMissing2 = _interopRequireDefault(_helpersHelperMissing);
 	
-	var _helpersIf = __webpack_require__(31);
+	var _helpersIf = __webpack_require__(30);
 	
 	var _helpersIf2 = _interopRequireDefault(_helpersIf);
 	
-	var _helpersLog = __webpack_require__(32);
+	var _helpersLog = __webpack_require__(31);
 	
 	var _helpersLog2 = _interopRequireDefault(_helpersLog);
 	
-	var _helpersLookup = __webpack_require__(33);
+	var _helpersLookup = __webpack_require__(32);
 	
 	var _helpersLookup2 = _interopRequireDefault(_helpersLookup);
 	
-	var _helpersWith = __webpack_require__(34);
+	var _helpersWith = __webpack_require__(33);
 	
 	var _helpersWith2 = _interopRequireDefault(_helpersWith);
 	
@@ -16221,14 +16950,14 @@
 
 
 /***/ },
-/* 28 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(25);
+	var _utils = __webpack_require__(24);
 	
 	exports['default'] = function (instance) {
 	  instance.registerHelper('blockHelperMissing', function (context, options) {
@@ -16266,7 +16995,7 @@
 
 
 /***/ },
-/* 29 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16276,9 +17005,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(25);
+	var _utils = __webpack_require__(24);
 	
-	var _exception = __webpack_require__(26);
+	var _exception = __webpack_require__(25);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
@@ -16366,7 +17095,7 @@
 
 
 /***/ },
-/* 30 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16376,7 +17105,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _exception = __webpack_require__(26);
+	var _exception = __webpack_require__(25);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
@@ -16397,14 +17126,14 @@
 
 
 /***/ },
-/* 31 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(25);
+	var _utils = __webpack_require__(24);
 	
 	exports['default'] = function (instance) {
 	  instance.registerHelper('if', function (conditional, options) {
@@ -16432,7 +17161,7 @@
 
 
 /***/ },
-/* 32 */
+/* 31 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16464,7 +17193,7 @@
 
 
 /***/ },
-/* 33 */
+/* 32 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16482,14 +17211,14 @@
 
 
 /***/ },
-/* 34 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(25);
+	var _utils = __webpack_require__(24);
 	
 	exports['default'] = function (instance) {
 	  instance.registerHelper('with', function (context, options) {
@@ -16521,7 +17250,7 @@
 
 
 /***/ },
-/* 35 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16532,7 +17261,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _decoratorsInline = __webpack_require__(36);
+	var _decoratorsInline = __webpack_require__(35);
 	
 	var _decoratorsInline2 = _interopRequireDefault(_decoratorsInline);
 	
@@ -16543,14 +17272,14 @@
 
 
 /***/ },
-/* 36 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(25);
+	var _utils = __webpack_require__(24);
 	
 	exports['default'] = function (instance) {
 	  instance.registerDecorator('inline', function (fn, props, container, options) {
@@ -16578,14 +17307,14 @@
 
 
 /***/ },
-/* 37 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	
-	var _utils = __webpack_require__(25);
+	var _utils = __webpack_require__(24);
 	
 	var logger = {
 	  methodMap: ['debug', 'info', 'warn', 'error'],
@@ -16631,7 +17360,7 @@
 
 
 /***/ },
-/* 38 */
+/* 37 */
 /***/ function(module, exports) {
 
 	// Build out our basic SafeString type
@@ -16652,7 +17381,7 @@
 
 
 /***/ },
-/* 39 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16672,15 +17401,15 @@
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 	
-	var _utils = __webpack_require__(25);
+	var _utils = __webpack_require__(24);
 	
 	var Utils = _interopRequireWildcard(_utils);
 	
-	var _exception = __webpack_require__(26);
+	var _exception = __webpack_require__(25);
 	
 	var _exception2 = _interopRequireDefault(_exception);
 	
-	var _base = __webpack_require__(24);
+	var _base = __webpack_require__(23);
 	
 	function checkRevision(compilerInfo) {
 	  var compilerRevision = compilerInfo && compilerInfo[0] || 1,
@@ -16820,7 +17549,7 @@
 	        blockParams = templateSpec.useBlockParams ? [] : undefined;
 	    if (templateSpec.useDepths) {
 	      if (options.depths) {
-	        depths = context !== options.depths[0] ? [context].concat(options.depths) : options.depths;
+	        depths = context != options.depths[0] ? [context].concat(options.depths) : options.depths;
 	      } else {
 	        depths = [context];
 	      }
@@ -16869,7 +17598,7 @@
 	    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 	
 	    var currentDepths = depths;
-	    if (depths && context !== depths[0]) {
+	    if (depths && context != depths[0]) {
 	      currentDepths = [context].concat(depths);
 	    }
 	
@@ -16887,7 +17616,12 @@
 	function resolvePartial(partial, context, options) {
 	  if (!partial) {
 	    if (options.name === '@partial-block') {
-	      partial = options.data['partial-block'];
+	      var data = options.data;
+	      while (data['partial-block'] === noop) {
+	        data = data._parent;
+	      }
+	      partial = data['partial-block'];
+	      data['partial-block'] = noop;
 	    } else {
 	      partial = options.partials[options.name];
 	    }
@@ -16946,11 +17680,11 @@
 	  }
 	  return prog;
 	}
-	//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL2xpYi9oYW5kbGViYXJzL3J1bnRpbWUuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7cUJBQXVCLFNBQVM7O0lBQXBCLEtBQUs7O3lCQUNLLGFBQWE7Ozs7b0JBQzhCLFFBQVE7O0FBRWxFLFNBQVMsYUFBYSxDQUFDLFlBQVksRUFBRTtBQUMxQyxNQUFNLGdCQUFnQixHQUFHLFlBQVksSUFBSSxZQUFZLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQztNQUN2RCxlQUFlLDBCQUFvQixDQUFDOztBQUUxQyxNQUFJLGdCQUFnQixLQUFLLGVBQWUsRUFBRTtBQUN4QyxRQUFJLGdCQUFnQixHQUFHLGVBQWUsRUFBRTtBQUN0QyxVQUFNLGVBQWUsR0FBRyx1QkFBaUIsZUFBZSxDQUFDO1VBQ25ELGdCQUFnQixHQUFHLHVCQUFpQixnQkFBZ0IsQ0FBQyxDQUFDO0FBQzVELFlBQU0sMkJBQWMseUZBQXlGLEdBQ3ZHLHFEQUFxRCxHQUFHLGVBQWUsR0FBRyxtREFBbUQsR0FBRyxnQkFBZ0IsR0FBRyxJQUFJLENBQUMsQ0FBQztLQUNoSyxNQUFNOztBQUVMLFlBQU0sMkJBQWMsd0ZBQXdGLEdBQ3RHLGlEQUFpRCxHQUFHLFlBQVksQ0FBQyxDQUFDLENBQUMsR0FBRyxJQUFJLENBQUMsQ0FBQztLQUNuRjtHQUNGO0NBQ0Y7O0FBRU0sU0FBUyxRQUFRLENBQUMsWUFBWSxFQUFFLEdBQUcsRUFBRTs7QUFFMUMsTUFBSSxDQUFDLEdBQUcsRUFBRTtBQUNSLFVBQU0sMkJBQWMsbUNBQW1DLENBQUMsQ0FBQztHQUMxRDtBQUNELE1BQUksQ0FBQyxZQUFZLElBQUksQ0FBQyxZQUFZLENBQUMsSUFBSSxFQUFFO0FBQ3ZDLFVBQU0sMkJBQWMsMkJBQTJCLEdBQUcsT0FBTyxZQUFZLENBQUMsQ0FBQztHQUN4RTs7QUFFRCxjQUFZLENBQUMsSUFBSSxDQUFDLFNBQVMsR0FBRyxZQUFZLENBQUMsTUFBTSxDQUFDOzs7O0FBSWxELEtBQUcs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U0FBUyxJQUFJLEdBQUc7QUFBRSxTQUFPLEVBQUUsQ0FBQztDQUFFOztBQUVyQyxTQUFTLFFBQVEsQ0FBQyxPQUFPLEVBQUUsSUFBSSxFQUFFO0FBQy9CLE1BQUksQ0FBQyxJQUFJLElBQUksRUFBRSxNQUFNLElBQUksSUFBSSxDQUFBLEFBQUMsRUFBRTtBQUM5QixRQUFJLEdBQUcsSUFBSSxHQUFHLGtCQUFZLElBQUksQ0FBQyxHQUFHLEVBQUUsQ0FBQztBQUNyQyxRQUFJLENBQUMsSUFBSSxHQUFHLE9BQU8sQ0FBQztHQUNyQjtBQUNELFNBQU8sSUFBSSxDQUFDO0NBQ2I7O0FBRUQsU0FBUyxpQkFBaUIsQ0FBQyxFQUFFLEVBQUUsSUFBSSxFQUFFLFNBQVMsRUFBRSxNQUFNLEVBQUUsSUFBSSxFQUFFLFdBQVcsRUFBRTtBQUN6RSxNQUFJLEVBQUUsQ0FBQyxTQUFTLEVBQUU7QUFDaEIsUUFBSSxLQUFLLEdBQUcsRUFBRSxDQUFDO0FBQ2YsUUFBSSxHQUFHLEVBQUUsQ0FBQyxTQUFTLENBQUMsSUFBSSxFQUFFLEtBQUssRUFBRSxTQUFTLEVBQUUsTUFBTSxJQUFJLE1BQU0sQ0FBQyxDQUFDLENBQUMsRUFBRSxJQUFJLEVBQUUsV0FBVyxFQUFFLE1BQU0sQ0FBQyxDQUFDO0FBQzVGLFNBQUssQ0FBQyxNQUFNLENBQUMsSUFBSSxFQUFFLEtBQUssQ0FBQyxDQUFDO0dBQzNCO0FBQ0QsU0FBTyxJQUFJLENBQUM7Q0FDYiIsImZpbGUiOiJydW50aW1lLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0ICogYXMgVXRpbHMgZnJvbSAnLi91dGlscyc7XG5pbXBvcnQgRXhjZXB0aW9uIGZyb20gJy4vZXhjZXB0aW9uJztcbmltcG9ydCB7IENPTVBJTEVSX1JFVklTSU9OLCBSRVZJU0lPTl9DSEFOR0VTLCBjcmVhdGVGcmFtZSB9IGZyb20gJy4vYmFzZSc7XG5cbmV4cG9ydCBmdW5jdGlvbiBjaGVja1JldmlzaW9uKGNvbXBpbGVySW5mbykge1xuICBjb25zdCBjb21waWxlclJldmlzaW9uID0gY29tcGlsZXJJbmZvICYmIGNvbXBpbGVySW5mb1swXSB8fCAxLFxuICAgICAgICBjdXJyZW50UmV2aXNpb24gPSBDT01QSUxFUl9SRVZJU0lPTjtcblxuICBpZiAoY29tcGlsZXJSZXZpc2lvbiAhPT0gY3VycmVudFJldmlzaW9uKSB7XG4gICAgaWYgKGNvbXBpbGVyUmV2aXNpb24gPCBjdXJyZW50UmV2aXNpb24pIHtcbiAgICAgIGNvbnN0IHJ1bnRpbWVWZXJzaW9ucyA9IFJFVklTSU9OX0NIQU5HRVNbY3VycmVudFJldmlzaW9uXSxcbiAgICAgICAgICAgIGNvbXBpbGVyVmVyc2lvbnMgPSBSRVZJU0lPTl9DSEFOR0VTW2NvbXBpbGVyUmV2aXNpb25dO1xuICAgICAgdGhyb3cgbmV3IEV4Y2VwdGlvbignVGVtcGxhdGUgd2FzIHByZWNvbXBpbGVkIHdpdGggYW4gb2xkZXIgdmVyc2lvbiBvZiBIYW5kbGViYXJzIHRoYW4gdGhlIGN1cnJlbnQgcnVudGltZS4gJyArXG4gICAgICAgICAgICAnUGxlYXNlIHVwZGF0ZSB5b3VyIHByZWNvbXBpbGVyIHRvIGEgbmV3ZXIgdmVyc2lvbiAoJyArIHJ1bnRpbWVWZXJzaW9ucyArICcpIG9yIGRvd25ncmFkZSB5b3VyIHJ1bnRpbWUgdG8gYW4gb2xkZXIgdmVyc2lvbiAoJyArIGNvbXBpbGVyVmVyc2lvbnMgKyAnKS4nKTtcbiAgICB9IGVsc2Uge1xuICAgICAgLy8gVXNlIHRoZSBlbWJlZGRlZCB2ZXJzaW9uIGluZm8gc2luY2UgdGhlIHJ1bnRpbWUgZG9lc24ndCBrbm93IGFib3V0IHRoaXMgcmV2aXNpb24geWV0XG4gICAgICB0aHJvdyBuZXcgRXhjZXB0aW9uKCdUZW1wbGF0ZSB3YXMgcHJlY29tcGlsZWQgd2l0aCBhIG5ld2VyIHZlcnNpb24gb2YgSGFuZGxlYmFycyB0aGFuIHRoZSBjdXJyZW50IHJ1bnRpbWUuICcgK1xuICAgICAgICAgICAgJ1BsZWFzZSB1cGRhdGUgeW91ciBydW50aW1lIHRvIGEgbmV3ZXIgdmVyc2lvbiAoJyArIGNvbXBpbGVySW5mb1sxXSArICcpLicpO1xuICAgIH1cbiAgfVxufVxuXG5leHBvcnQgZnVuY3Rpb24gdGVtcGxhdGUodGVtcGxhdGVTcGVjLCBlbnYpIHtcbiAgLyogaXN0YW5idWwgaWdub3JlIG5leHQgKi9cbiAgaWYgKCFlbnYpIHtcbiAgICB0aHJvdyBuZXcgRXhjZXB0aW9uKCdObyBlbnZpcm9ubWVudCBwYXNzZWQgdG8gdGVtcGxhdGUnKTtcbiAgfVxuICBpZiAoIXRlbXBsYXRlU3BlYyB8fCAhdGVtcGxhdGVTcGVjLm1haW4pIHtcbiAgICB0aHJvdyBuZXcgRXhjZXB0aW9uKCdVbmtub3duIHRlbXBsYXRlIG9iamVjdDogJyArIHR5cGVvZiB0ZW1wbGF0ZVNwZWMpO1xuICB9XG5cbiAgdGVtcGxhdGVTcGVjLm1haW4uZGVjb3JhdG9yID0gdGVtcGxhdGVTcGVjLm1haW5fZDtcblxuICAvLyBOb3RlOiBVc2luZyBlbnYuVk0gcmVmZXJlbmNlcyByYXRoZXIgdGhhbiBsb2NhbCB2YXIgcmVmZXJlbmNlcyB0aHJvdWdob3V0IHRoaXMgc2VjdGlvbiB0byBhbGxvd1xuICAvLyBmb3IgZXh0ZXJuYWwgdXNlcnMgdG8gb3ZlcnJpZGUgdGhlc2UgYXMgcHN1ZWRvLXN1cHBvcnRlZCBBUElzLlxuICBlbnYuVk0uY2hlY2tSZXZpc2lvbih0ZW1wbGF0ZVNwZWMuY29tcGlsZXIpO1xuXG4gIGZ1bmN0aW9uIGludm9rZVBhcnRpYWxXcmFwcGVyKHBhcnRpYWwsIGNvbnRleHQsIG9wdGlvbnMpIHtcbiAgICBpZiAob3B0aW9ucy5oYXNoKSB7XG4gICAgICBjb250ZXh0ID0gVXRpbHMuZXh0ZW5kKHt9LCBjb250ZXh0LCBvcHRpb25zLmhhc2gpO1xuICAgICAgaWYgKG9wdGlvbnMuaWRzKSB7XG4gICAgICAgIG9wdGlvbnMuaWRzWzBdID0gdHJ1ZTtcbiAgICAgIH1cbiAgICB9XG5cbiAgICBwYXJ0aWFsID0gZW52LlZNLnJlc29sdmVQYXJ0aWFsLmNhbGwodGhpcywgcGFydGlhbCwgY29udGV4dCwgb3B0aW9ucyk7XG4gICAgbGV0IHJlc3VsdCA9IGVudi5WTS5pbnZva2VQYXJ0aWFsLmNhbGwodGhpcywgcGFydGlhbCwgY29udGV4dCwgb3B0aW9ucyk7XG5cbiAgICBpZiAocmVzdWx0ID09IG51bGwgJiYgZW52LmNvbXBpbGUpIHtcbiAgICAgIG9wdGlvbnMucGFydGlhbHNbb3B0aW9ucy5uYW1lXSA9IGVudi5jb21waWxlKHBhcnRpYWwsIHRlbXBsYXRlU3BlYy5jb21waWxlck9wdGlvbnMsIGVudik7XG4gICAgICByZXN1bHQgPSBvcHRpb25zLnBhcnRpYWxzW29wdGlvbnMubmFtZV0oY29udGV4dCwgb3B0aW9ucyk7XG4gICAgfVxuICAgIGlmIChyZXN1bHQgIT0gbnVsbCkge1xuICAgICAgaWYgKG9wdGlvbnMuaW5kZW50KSB7XG4gICAgICAgIGxldCBsaW5lcyA9IHJlc3VsdC5zcGxpdCgnXFxuJyk7XG4gICAgICAgIGZvciAobGV0IGkgPSAwLCBsID0gbGluZXMubGVuZ3RoOyBpIDwgbDsgaSsrKSB7XG4gICAgICAgICAgaWYgKCFsaW5lc1tpXSAmJiBpICsgMSA9PT0gbCkge1xuICAgICAgICAgICAgYnJlYWs7XG4gICAgICAgICAgfVxuXG4gICAgICAgICAgbGluZXNbaV0gPSBvcHRpb25zLmluZGVudCArIGxpbmVzW2ldO1xuICAgICAgICB9XG4gICAgICAgIHJlc3VsdCA9IGxpbmVzLmpvaW4oJ1xcbicpO1xuICAgICAgfVxuICAgICAgcmV0dXJuIHJlc3VsdDtcbiAgICB9IGVsc2Uge1xuICAgICAgdGhyb3cgbmV3IEV4Y2VwdGlvbignVGhlIHBhcnRpYWwgJyArIG9wdGlvbnMubmFtZSArICcgY291bGQgbm90IGJlIGNvbXBpbGVkIHdoZW4gcnVubmluZyBpbiBydW50aW1lLW9ubHkgbW9kZScpO1xuICAgIH1cbiAgfVxuXG4gIC8vIEp1c3QgYWRkIHdhdGVyXG4gIGxldCBjb250YWluZXIgPSB7XG4gICAgc3RyaWN0OiBmdW5jdGlvbihvYmosIG5hbWUpIHtcbiAgICAgIGlmICghKG5hbWUgaW4gb2JqKSkge1xuICAgICAgICB0aHJvdyBuZXcgRXhjZXB0aW9uKCdcIicgKyBuYW1lICsgJ1wiIG5vdCBkZWZpbmVkIGluICcgKyBvYmopO1xuICAgICAgfVxuICAgICAgcmV0dXJuIG9ialtuYW1lXTtcbiAgICB9LFxuICAgIGxvb2t1cDogZnVuY3Rpb24oZGVwdGhzLCBuYW1lKSB7XG4gICAgICBjb25zdCBsZW4gPSBkZXB0aHMubGVuZ3RoO1xuICAgICAgZm9yIChsZXQgaSA9IDA7IGkgPCBsZW47IGkrKykge1xuICAgICAgICBpZiAoZGVwdGhzW2ldICYmIGRlcHRoc1tpXVtuYW1lXSAhPSBudWxsKSB7XG4gICAgICAgICAgcmV0dXJuIGRlcHRoc1tpXVtuYW1lXTtcbiAgICAgICAgfVxuICAgICAgfVxuICAgIH0sXG4gICAgbGFtYmRhOiBmdW5jdGlvbihjdXJyZW50LCBjb250ZXh0KSB7XG4gICAgICByZXR1cm4gdHlwZW9mIGN1cnJlbnQgPT09ICdmdW5jdGlvbicgPyBjdXJyZW50LmNhbGwoY29udGV4dCkgOiBjdXJyZW50O1xuICAgIH0sXG5cbiAgICBlc2NhcGVFeHByZXNzaW9uOiBVdGlscy5lc2NhcGVFeHByZXNzaW9uLFxuICAgIGludm9rZVBhcnRpYWw6IGludm9rZVBhcnRpYWxXcmFwcGVyLFxuXG4gICAgZm46IGZ1bmN0aW9uKGkpIHtcbiAgICAgIGxldCByZXQgPSB0ZW1wbGF0ZVNwZWNbaV07XG4gICAgICByZXQuZGVjb3JhdG9yID0gdGVtcGxhdGVTcGVjW2kgKyAnX2QnXTtcbiAgICAgIHJldHVybiByZXQ7XG4gICAgfSxcblxuICAgIHByb2dyYW1zOiBbXSxcbiAgICBwcm9ncmFtOiBmdW5jdGlvbihpLCBkYXRhLCBkZWNsYXJlZEJsb2NrUGFyYW1zLCBibG9ja1BhcmFtcywgZGVwdGhzKSB7XG4gICAgICBsZXQgcHJvZ3JhbVdyYXBwZXIgPSB0aGlzLnByb2dyYW1zW2ldLFxuICAgICAgICAgIGZuID0gdGhpcy5mbihpKTtcbiAgICAgIGlmIChkYXRhIHx8IGRlcHRocyB8fCBibG9ja1BhcmFtcyB8fCBkZWNsYXJlZEJsb2NrUGFyYW1zKSB7XG4gICAgICAgIHByb2dyYW1XcmFwcGVyID0gd3JhcFByb2dyYW0odGhpcywgaSwgZm4sIGRhdGEsIGRlY2xhcmVkQmxvY2tQYXJhbXMsIGJsb2NrUGFyYW1zLCBkZXB0aHMpO1xuICAgICAgfSBlbHNlIGlmICghcHJvZ3JhbVdyYXBwZXIpIHtcbiAgICAgICAgcHJvZ3JhbVdyYXBwZXIgPSB0aGlzLnByb2dyYW1zW2ldID0gd3JhcFByb2dyYW0odGhpcywgaSwgZm4pO1xuICAgICAgfVxuICAgICAgcmV0dXJuIHByb2dyYW1XcmFwcGVyO1xuICAgIH0sXG5cbiAgICBkYXRhOiBmdW5jdGlvbih2YWx1ZSwgZGVwdGgpIHtcbiAgICAgIHdoaWxlICh2YWx1ZSAmJiBkZXB0aC0tKSB7XG4gICAgICAgIHZhbHVlID0gdmFsdWUuX3BhcmVudDtcbiAgICAgIH1cbiAgICAgIHJldHVybiB2YWx1ZTtcbiAgICB9LFxuICAgIG1lcmdlOiBmdW5jdGlvbihwYXJhbSwgY29tbW9uKSB7XG4gICAgICBsZXQgb2JqID0gcGFyYW0gfHwgY29tbW9uO1xuXG4gICAgICBpZiAocGFyYW0gJiYgY29tbW9uICYmIChwYXJhbSAhPT0gY29tbW9uKSkge1xuICAgICAgICBvYmogPSBVdGlscy5leHRlbmQoe30sIGNvbW1vbiwgcGFyYW0pO1xuICAgICAgfVxuXG4gICAgICByZXR1cm4gb2JqO1xuICAgIH0sXG5cbiAgICBub29wOiBlbnYuVk0ubm9vcCxcbiAgICBjb21waWxlckluZm86IHRlbXBsYXRlU3BlYy5jb21waWxlclxuICB9O1xuXG4gIGZ1bmN0aW9uIHJldChjb250ZXh0LCBvcHRpb25zID0ge30pIHtcbiAgICBsZXQgZGF0YSA9IG9wdGlvbnMuZGF0YTtcblxuICAgIHJldC5fc2V0dXAob3B0aW9ucyk7XG4gICAgaWYgKCFvcHRpb25zLnBhcnRpYWwgJiYgdGVtcGxhdGVTcGVjLnVzZURhdGEpIHtcbiAgICAgIGRhdGEgPSBpbml0RGF0YShjb250ZXh0LCBkYXRhKTtcbiAgICB9XG4gICAgbGV0IGRlcHRocyxcbiAgICAgICAgYmxvY2tQYXJhbXMgPSB0ZW1wbGF0ZVNwZWMudXNlQmxvY2tQYXJhbXMgPyBbXSA6IHVuZGVmaW5lZDtcbiAgICBpZiAodGVtcGxhdGVTcGVjLnVzZURlcHRocykge1xuICAgICAgaWYgKG9wdGlvbnMuZGVwdGhzKSB7XG4gICAgICAgIGRlcHRocyA9IGNvbnRleHQgIT09IG9wdGlvbnMuZGVwdGhzWzBdID8gW2NvbnRleHRdLmNvbmNhdChvcHRpb25zLmRlcHRocykgOiBvcHRpb25zLmRlcHRocztcbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIGRlcHRocyA9IFtjb250ZXh0XTtcbiAgICAgIH1cbiAgICB9XG5cbiAgICBmdW5jdGlvbiBtYWluKGNvbnRleHQvKiwgb3B0aW9ucyovKSB7XG4gICAgICByZXR1cm4gJycgKyB0ZW1wbGF0ZVNwZWMubWFpbihjb250YWluZXIsIGNvbnRleHQsIGNvbnRhaW5lci5oZWxwZXJzLCBjb250YWluZXIucGFydGlhbHMsIGRhdGEsIGJsb2NrUGFyYW1zLCBkZXB0aHMpO1xuICAgIH1cbiAgICBtYWluID0gZXhlY3V0ZURlY29yYXRvcnModGVtcGxhdGVTcGVjLm1haW4sIG1haW4sIGNvbnRhaW5lciwgb3B0aW9ucy5kZXB0aHMgfHwgW10sIGRhdGEsIGJsb2NrUGFyYW1zKTtcbiAgICByZXR1cm4gbWFpbihjb250ZXh0LCBvcHRpb25zKTtcbiAgfVxuICByZXQuaXNUb3AgPSB0cnVlO1xuXG4gIHJldC5fc2V0dXAgPSBmdW5jdGlvbihvcHRpb25zKSB7XG4gICAgaWYgKCFvcHRpb25zLnBhcnRpYWwpIHtcbiAgICAgIGNvbnRhaW5lci5oZWxwZXJzID0gY29udGFpbmVyLm1lcmdlKG9wdGlvbnMuaGVscGVycywgZW52LmhlbHBlcnMpO1xuXG4gICAgICBpZiAodGVtcGxhdGVTcGVjLnVzZVBhcnRpYWwpIHtcbiAgICAgICAgY29udGFpbmVyLnBhcnRpYWxzID0gY29udGFpbmVyLm1lcmdlKG9wdGlvbnMucGFydGlhbHMsIGVudi5wYXJ0aWFscyk7XG4gICAgICB9XG4gICAgICBpZiAodGVtcGxhdGVTcGVjLnVzZVBhcnRpYWwgfHwgdGVtcGxhdGVTcGVjLnVzZURlY29yYXRvcnMpIHtcbiAgICAgICAgY29udGFpbmVyLmRlY29yYXRvcnMgPSBjb250YWluZXIubWVyZ2Uob3B0aW9ucy5kZWNvcmF0b3JzLCBlbnYuZGVjb3JhdG9ycyk7XG4gICAgICB9XG4gICAgfSBlbHNlIHtcbiAgICAgIGNvbnRhaW5lci5oZWxwZXJzID0gb3B0aW9ucy5oZWxwZXJzO1xuICAgICAgY29udGFpbmVyLnBhcnRpYWxzID0gb3B0aW9ucy5wYXJ0aWFscztcbiAgICAgIGNvbnRhaW5lci5kZWNvcmF0b3JzID0gb3B0aW9ucy5kZWNvcmF0b3JzO1xuICAgIH1cbiAgfTtcblxuICByZXQuX2NoaWxkID0gZnVuY3Rpb24oaSwgZGF0YSwgYmxvY2tQYXJhbXMsIGRlcHRocykge1xuICAgIGlmICh0ZW1wbGF0ZVNwZWMudXNlQmxvY2tQYXJhbXMgJiYgIWJsb2NrUGFyYW1zKSB7XG4gICAgICB0aHJvdyBuZXcgRXhjZXB0aW9uKCdtdXN0IHBhc3MgYmxvY2sgcGFyYW1zJyk7XG4gICAgfVxuICAgIGlmICh0ZW1wbGF0ZVNwZWMudXNlRGVwdGhzICYmICFkZXB0aHMpIHtcbiAgICAgIHRocm93IG5ldyBFeGNlcHRpb24oJ211c3QgcGFzcyBwYXJlbnQgZGVwdGhzJyk7XG4gICAgfVxuXG4gICAgcmV0dXJuIHdyYXBQcm9ncmFtKGNvbnRhaW5lciwgaSwgdGVtcGxhdGVTcGVjW2ldLCBkYXRhLCAwLCBibG9ja1BhcmFtcywgZGVwdGhzKTtcbiAgfTtcbiAgcmV0dXJuIHJldDtcbn1cblxuZXhwb3J0IGZ1bmN0aW9uIHdyYXBQcm9ncmFtKGNvbnRhaW5lciwgaSwgZm4sIGRhdGEsIGRlY2xhcmVkQmxvY2tQYXJhbXMsIGJsb2NrUGFyYW1zLCBkZXB0aHMpIHtcbiAgZnVuY3Rpb24gcHJvZyhjb250ZXh0LCBvcHRpb25zID0ge30pIHtcbiAgICBsZXQgY3VycmVudERlcHRocyA9IGRlcHRocztcbiAgICBpZiAoZGVwdGhzICYmIGNvbnRleHQgIT09IGRlcHRoc1swXSkge1xuICAgICAgY3VycmVudERlcHRocyA9IFtjb250ZXh0XS5jb25jYXQoZGVwdGhzKTtcbiAgICB9XG5cbiAgICByZXR1cm4gZm4oY29udGFpbmVyLFxuICAgICAgICBjb250ZXh0LFxuICAgICAgICBjb250YWluZXIuaGVscGVycywgY29udGFpbmVyLnBhcnRpYWxzLFxuICAgICAgICBvcHRpb25zLmRhdGEgfHwgZGF0YSxcbiAgICAgICAgYmxvY2tQYXJhbXMgJiYgW29wdGlvbnMuYmxvY2tQYXJhbXNdLmNvbmNhdChibG9ja1BhcmFtcyksXG4gICAgICAgIGN1cnJlbnREZXB0aHMpO1xuICB9XG5cbiAgcHJvZyA9IGV4ZWN1dGVEZWNvcmF0b3JzKGZuLCBwcm9nLCBjb250YWluZXIsIGRlcHRocywgZGF0YSwgYmxvY2tQYXJhbXMpO1xuXG4gIHByb2cucHJvZ3JhbSA9IGk7XG4gIHByb2cuZGVwdGggPSBkZXB0aHMgPyBkZXB0aHMubGVuZ3RoIDogMDtcbiAgcHJvZy5ibG9ja1BhcmFtcyA9IGRlY2xhcmVkQmxvY2tQYXJhbXMgfHwgMDtcbiAgcmV0dXJuIHByb2c7XG59XG5cbmV4cG9ydCBmdW5jdGlvbiByZXNvbHZlUGFydGlhbChwYXJ0aWFsLCBjb250ZXh0LCBvcHRpb25zKSB7XG4gIGlmICghcGFydGlhbCkge1xuICAgIGlmIChvcHRpb25zLm5hbWUgPT09ICdAcGFydGlhbC1ibG9jaycpIHtcbiAgICAgIHBhcnRpYWwgPSBvcHRpb25zLmRhdGFbJ3BhcnRpYWwtYmxvY2snXTtcbiAgICB9IGVsc2Uge1xuICAgICAgcGFydGlhbCA9IG9wdGlvbnMucGFydGlhbHNbb3B0aW9ucy5uYW1lXTtcbiAgICB9XG4gIH0gZWxzZSBpZiAoIXBhcnRpYWwuY2FsbCAmJiAhb3B0aW9ucy5uYW1lKSB7XG4gICAgLy8gVGhpcyBpcyBhIGR5bmFtaWMgcGFydGlhbCB0aGF0IHJldHVybmVkIGEgc3RyaW5nXG4gICAgb3B0aW9ucy5uYW1lID0gcGFydGlhbDtcbiAgICBwYXJ0aWFsID0gb3B0aW9ucy5wYXJ0aWFsc1twYXJ0aWFsXTtcbiAgfVxuICByZXR1cm4gcGFydGlhbDtcbn1cblxuZXhwb3J0IGZ1bmN0aW9uIGludm9rZVBhcnRpYWwocGFydGlhbCwgY29udGV4dCwgb3B0aW9ucykge1xuICBvcHRpb25zLnBhcnRpYWwgPSB0cnVlO1xuICBpZiAob3B0aW9ucy5pZHMpIHtcbiAgICBvcHRpb25zLmRhdGEuY29udGV4dFBhdGggPSBvcHRpb25zLmlkc1swXSB8fCBvcHRpb25zLmRhdGEuY29udGV4dFBhdGg7XG4gIH1cblxuICBsZXQgcGFydGlhbEJsb2NrO1xuICBpZiAob3B0aW9ucy5mbiAmJiBvcHRpb25zLmZuICE9PSBub29wKSB7XG4gICAgb3B0aW9ucy5kYXRhID0gY3JlYXRlRnJhbWUob3B0aW9ucy5kYXRhKTtcbiAgICBwYXJ0aWFsQmxvY2sgPSBvcHRpb25zLmRhdGFbJ3BhcnRpYWwtYmxvY2snXSA9IG9wdGlvbnMuZm47XG5cbiAgICBpZiAocGFydGlhbEJsb2NrLnBhcnRpYWxzKSB7XG4gICAgICBvcHRpb25zLnBhcnRpYWxzID0gVXRpbHMuZXh0ZW5kKHt9LCBvcHRpb25zLnBhcnRpYWxzLCBwYXJ0aWFsQmxvY2sucGFydGlhbHMpO1xuICAgIH1cbiAgfVxuXG4gIGlmIChwYXJ0aWFsID09PSB1bmRlZmluZWQgJiYgcGFydGlhbEJsb2NrKSB7XG4gICAgcGFydGlhbCA9IHBhcnRpYWxCbG9jaztcbiAgfVxuXG4gIGlmIChwYXJ0aWFsID09PSB1bmRlZmluZWQpIHtcbiAgICB0aHJvdyBuZXcgRXhjZXB0aW9uKCdUaGUgcGFydGlhbCAnICsgb3B0aW9ucy5uYW1lICsgJyBjb3VsZCBub3QgYmUgZm91bmQnKTtcbiAgfSBlbHNlIGlmIChwYXJ0aWFsIGluc3RhbmNlb2YgRnVuY3Rpb24pIHtcbiAgICByZXR1cm4gcGFydGlhbChjb250ZXh0LCBvcHRpb25zKTtcbiAgfVxufVxuXG5leHBvcnQgZnVuY3Rpb24gbm9vcCgpIHsgcmV0dXJuICcnOyB9XG5cbmZ1bmN0aW9uIGluaXREYXRhKGNvbnRleHQsIGRhdGEpIHtcbiAgaWYgKCFkYXRhIHx8ICEoJ3Jvb3QnIGluIGRhdGEpKSB7XG4gICAgZGF0YSA9IGRhdGEgPyBjcmVhdGVGcmFtZShkYXRhKSA6IHt9O1xuICAgIGRhdGEucm9vdCA9IGNvbnRleHQ7XG4gIH1cbiAgcmV0dXJuIGRhdGE7XG59XG5cbmZ1bmN0aW9uIGV4ZWN1dGVEZWNvcmF0b3JzKGZuLCBwcm9nLCBjb250YWluZXIsIGRlcHRocywgZGF0YSwgYmxvY2tQYXJhbXMpIHtcbiAgaWYgKGZuLmRlY29yYXRvcikge1xuICAgIGxldCBwcm9wcyA9IHt9O1xuICAgIHByb2cgPSBmbi5kZWNvcmF0b3IocHJvZywgcHJvcHMsIGNvbnRhaW5lciwgZGVwdGhzICYmIGRlcHRoc1swXSwgZGF0YSwgYmxvY2tQYXJhbXMsIGRlcHRocyk7XG4gICAgVXRpbHMuZXh0ZW5kKHByb2csIHByb3BzKTtcbiAgfVxuICByZXR1cm4gcHJvZztcbn1cbiJdfQ==
+	//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL2xpYi9oYW5kbGViYXJzL3J1bnRpbWUuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7cUJBQXVCLFNBQVM7O0lBQXBCLEtBQUs7O3lCQUNLLGFBQWE7Ozs7b0JBQzhCLFFBQVE7O0FBRWxFLFNBQVMsYUFBYSxDQUFDLFlBQVksRUFBRTtBQUMxQyxNQUFNLGdCQUFnQixHQUFHLFlBQVksSUFBSSxZQUFZLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQztNQUN2RCxlQUFlLDBCQUFvQixDQUFDOztBQUUxQyxNQUFJLGdCQUFnQixLQUFLLGVBQWUsRUFBRTtBQUN4QyxRQUFJLGdCQUFnQixHQUFHLGVBQWUsRUFBRTtBQUN0QyxVQUFNLGVBQWUsR0FBRyx1QkFBaUIsZUFBZSxDQUFDO1VBQ25ELGdCQUFnQixHQUFHLHVCQUFpQixnQkFBZ0IsQ0FBQyxDQUFDO0FBQzVELFlBQU0sMkJBQWMseUZBQXlGLEdBQ3ZHLHFEQUFxRCxHQUFHLGVBQWUsR0FBRyxtREFBbUQsR0FBRyxnQkFBZ0IsR0FBRyxJQUFJLENBQUMsQ0FBQztLQUNoSyxNQUFNOztBQUVMLFlBQU0sMkJBQWMsd0ZBQXdGLEdBQ3RHLGlEQUFpRCxHQUFHLFlBQVksQ0FBQyxDQUFDLENBQUMsR0FBRyxJQUFJLENBQUMsQ0FBQztLQUNuRjtHQUNGO0NBQ0Y7O0FBRU0sU0FBUyxRQUFRLENBQUMsWUFBWSxFQUFFLEdBQUcsRUFBRTs7QUFFMUMsTUFBSSxDQUFDLEdBQUcsRUFBRTtBQUNSLFVBQU0sMkJBQWMsbUNBQW1DLENBQUMsQ0FBQztHQUMxRDtBQUNELE1BQUksQ0FBQyxZQUFZLElBQUksQ0FBQyxZQUFZLENBQUMsSUFBSSxFQUFFO0FBQ3ZDLFVBQU0sMkJBQWMsMkJBQTJCLEdBQUcsT0FBTyxZQUFZLENBQUMsQ0FBQztHQUN4RTs7QUFFRCxjQUFZLENBQUMsSUFBSSxDQUFDLFNBQVMsR0FBRyxZQUFZLENBQUMsTUFBTSxDQUFDOzs7O0FBSWxELEtBQUcsQ0FBQyxFQUFFLENBQUMsYUFBYSxDQUFDLFlBQVksQ0FBQyxRQUFRLENBQUMsQ0FBQzs7QUFFNUMsV0FBUyxvQkFBb0IsQ0FBQyxPQUFPLEVBQUUsT0FBTyxFQUFFLE9BQU8sRUFBRTtBQUN2RCxRQUFJLE9BQU8sQ0FBQyxJQUFJLEVBQUU7QUFDaEIsYUFBTyxHQUFHLEtBQUssQ0FBQyxNQUFNLENBQUMsRUFBRSxFQUFFLE9BQU8sRUFBRSxPQUFPLENBQUMsSUFBSSxDQUFDLENBQUM7QUFDbEQsVUFBSSxPQUFPLENBQUMsR0FBRyxFQUFFO0FBQ2YsZUFBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsR0FBRyxJQUFJLENBQUM7T0FDdkI7S0FDRjs7QUFFRCxXQUFPLEdBQUcsR0FBRyxDQUFDLEVBQUUsQ0FBQyxjQUFjLENBQUMsSUFBSSxDQUFDLElBQUksRUFBRSxPQUFPLEVBQUUsT0FBTyxFQUFFLE9BQU8sQ0FBQyxDQUFDO0FBQ3RFLFFBQUksTUFBTSxHQUFHLEdBQUcsQ0FBQyxFQUFFLENBQUMsYUFBYSxDQUFDLElBQUksQ0FBQyxJQUFJLEVBQUUsT0FBTyxFQUFFLE9BQU8sRUFBRSxPQUFPLENBQUMsQ0FBQzs7QUFFeEUsUUFBSSxNQUFNLElBQUksSUFBSSxJQUFJLEdBQUcsQ0FBQyxPQUFPLEVBQUU7QUFDakMsYUFBTyxDQUFDLFFBQVEsQ0FBQyxPQUFPLENBQUMsSUFBSSxDQUFDLEdBQUcsR0FBRyxDQUFDLE9BQU8sQ0FBQyxPQUFPLEVBQUUsWUFBWSxDQUFDLGVBQWUsRUFBRSxHQUFHLENBQUMsQ0FBQztBQUN6RixZQUFNLEdBQUcsT0FBTyxDQUFDLFFBQVEsQ0FBQyxPQUFPLENBQUMsSUFBSSxDQUFDLENBQUMsT0FBTyxFQUFFLE9BQU8sQ0FBQyxDQUFDO0tBQzNEO0FBQ0QsUUFBSSxNQUFNLElBQUksSUFBSSxFQUFFO0FBQ2xCLFVBQUksT0FBTyxDQUFDLE1BQU0sRUFBRTtBQUNsQixZQUFJLEtBQUssR0FBRyxNQUFNLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxDQUFDO0FBQy9CLGFBQUssSUFBSSxDQUFDLEdBQUcsQ0FBQyxFQUFFLENBQUMsR0FBRyxLQUFLLENBQUMsTUFBTSxFQUFFLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxFQUFFLEVBQUU7QUFDNUMsY0FBSSxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUMsSUFBSSxDQUFDLEdBQUcsQ0FBQyxLQUFLLENBQUMsRUFBRTtBQUM1QixrQkFBTTtXQUNQOztBQUVELGVBQUssQ0FBQyxDQUFDLENBQUMsR0FBRyxPQUFPLENBQUMsTUFBTSxHQUFHLEtBQUssQ0FBQyxDQUFDLENBQUMsQ0FBQztTQUN0QztBQUNELGNBQU0sR0FBRyxLQUFLLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxDQUFDO09BQzNCO0FBQ0QsYUFBTyxNQUFNLENBQUM7S0FDZixNQUFNO0FBQ0wsWUFBTSwyQkFBYyxjQUFjLEdBQUcsT0FBTyxDQUFDLElBQUksR0FBRywwREFBMEQsQ0FBQyxDQUFDO0tBQ2pIO0dBQ0Y7OztBQUdELE1BQUksU0FBUyxHQUFHO0FBQ2QsVUFBTSxFQUFFLGdCQUFTLEdBQUcsRUFBRSxJQUFJLEVBQUU7QUFDMUIsVUFBSSxFQUFFLElBQUksSUFBSSxHQUFHLENBQUEsQUFBQyxFQUFFO0FBQ2xCLGNBQU0sMkJBQWMsR0FBRyxHQUFHLElBQUksR0FBRyxtQkFBbUIsR0FBRyxHQUFHLENBQUMsQ0FBQztPQUM3RDtBQUNELGFBQU8sR0FBRyxDQUFDLElBQUksQ0FBQyxDQUFDO0tBQ2xCO0FBQ0QsVUFBTSxFQUFFLGdCQUFTLE1BQU0sRUFBRSxJQUFJLEVBQUU7QUFDN0IsVUFBTSxHQUFHLEdBQUcsTUFBTSxDQUFDLE1BQU0sQ0FBQztBQUMxQixXQUFLLElBQUksQ0FBQyxHQUFHLENBQUMsRUFBRSxDQUFDLEdBQUcsR0FBRyxFQUFFLENBQUMsRUFBRSxFQUFFO0FBQzVCLFlBQUksTUFBTSxDQUFDLENBQUMsQ0FBQyxJQUFJLE1BQU0sQ0FBQyxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsSUFBSSxJQUFJLEVBQUU7QUFDeEMsaUJBQU8sTUFBTSxDQUFDLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxDQUFDO1NBQ3hCO09BQ0Y7S0FDRjtBQUNELFVBQU0sRUFBRSxnQkFBUyxPQUFPLEVBQUUsT0FBTyxFQUFFO0FBQ2pDLGFBQU8sT0FBTyxPQUFPLEtBQUssVUFBVSxHQUFHLE9BQU8sQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLEdBQUcsT0FBTyxDQUFDO0tBQ3hFOztBQUVELG9CQUFnQixFQUFFLEtBQUssQ0FBQyxnQkFBZ0I7QUFDeEMsaUJBQWEsRUFBRSxvQkFBb0I7O0FBRW5DLE1BQUUsRUFBRSxZQUFTLENBQUMsRUFBRTtBQUNkLFVBQUksR0FBRyxHQUFHLFlBQVksQ0FBQyxDQUFDLENBQUMsQ0FBQztBQUMxQixTQUFHLENBQUMsU0FBUyxHQUFHLFlBQVksQ0FBQyxDQUFDLEdBQUcsSUFBSSxDQUFDLENBQUM7QUFDdkMsYUFBTyxHQUFHLENBQUM7S0FDWjs7QUFFRCxZQUFRLEVBQUUsRUFBRTtBQUNaLFdBQU8sRUFBRSxpQkFBUyxDQUFDLEVBQUUsSUFBSSxFQUFFLG1CQUFtQixFQUFFLFdBQVcsRUFBRSxNQUFNLEVBQUU7QUFDbkUsVUFBSSxjQUFjLEdBQUcsSUFBSSxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUM7VUFDakMsRUFBRSxHQUFHLElBQUksQ0FBQyxFQUFFLENBQUMsQ0FBQyxDQUFDLENBQUM7QUFDcEIsVUFBSSxJQUFJLElBQUksTUFBTSxJQUFJLFdBQVcsSUFBSSxtQkFBbUIsRUFBRTtBQUN4RCxzQkFBYyxHQUFHLFdBQVcsQ0FBQyxJQUFJLEVBQUUsQ0FBQyxFQUFFLEVBQUUsRUFBRSxJQUFJLEVBQUUsbUJBQW1CLEVBQUUsV0FBVyxFQUFFLE1BQU0sQ0FBQyxDQUFDO09BQzNGLE1BQU0sSUFBSSxDQUFDLGNBQWMsRUFBRTtBQUMxQixzQkFBYyxHQUFHLElBQUksQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLEdBQUcsV0FBVyxDQUFDLElBQUksRUFBRSxDQUFDLEVBQUUsRUFBRSxDQUFDLENBQUM7T0FDOUQ7QUFDRCxhQUFPLGNBQWMsQ0FBQztLQUN2Qjs7QUFFRCxRQUFJLEVBQUUsY0FBUyxLQUFLLEVBQUUsS0FBSyxFQUFFO0FBQzNCLGFBQU8sS0FBSyxJQUFJLEtBQUssRUFBRSxFQUFFO0FBQ3ZCLGFBQUssR0FBRyxLQUFLLENBQUMsT0FBTyxDQUFDO09BQ3ZCO0FBQ0QsYUFBTyxLQUFLLENBQUM7S0FDZDtBQUNELFNBQUssRUFBRSxlQUFTLEtBQUssRUFBRSxNQUFNLEVBQUU7QUFDN0IsVUFBSSxHQUFHLEdBQUcsS0FBSyxJQUFJLE1BQU0sQ0FBQzs7QUFFMUIsVUFBSSxLQUFLLElBQUksTUFBTSxJQUFLLEtBQUssS0FBSyxNQUFNLEFBQUMsRUFBRTtBQUN6QyxXQUFHLEdBQUcsS0FBSyxDQUFDLE1BQU0sQ0FBQyxFQUFFLEVBQUUsTUFBTSxFQUFFLEtBQUssQ0FBQyxDQUFDO09BQ3ZDOztBQUVELGFBQU8sR0FBRyxDQUFDO0tBQ1o7O0FBRUQsUUFBSSxFQUFFLEdBQUcsQ0FBQyxFQUFFLENBQUMsSUFBSTtBQUNqQixnQkFBWSxFQUFFLFlBQVksQ0FBQyxRQUFRO0dBQ3BDLENBQUM7O0FBRUYsV0FBUyxHQUFHLENBQUMsT0FBTyxFQUFnQjtRQUFkLE9BQU8seURBQUcsRUFBRTs7QUFDaEMsUUFBSSxJQUFJLEdBQUcsT0FBTyxDQUFDLElBQUksQ0FBQzs7QUFFeEIsT0FBRyxDQUFDLE1BQU0sQ0FBQyxPQUFPLENBQUMsQ0FBQztBQUNwQixRQUFJLENBQUMsT0FBTyxDQUFDLE9BQU8sSUFBSSxZQUFZLENBQUMsT0FBTyxFQUFFO0FBQzVDLFVBQUksR0FBRyxRQUFRLENBQUMsT0FBTyxFQUFFLElBQUksQ0FBQyxDQUFDO0tBQ2hDO0FBQ0QsUUFBSSxNQUFNLFlBQUE7UUFDTixXQUFXLEdBQUcsWUFBWSxDQUFDLGNBQWMsR0FBRyxFQUFFLEdBQUcsU0FBUyxDQUFDO0FBQy9ELFFBQUksWUFBWSxDQUFDLFNBQVMsRUFBRTtBQUMxQixVQUFJLE9BQU8sQ0FBQyxNQUFNLEVBQUU7QUFDbEIsY0FBTSxHQUFHLE9BQU8sSUFBSSxPQUFPLENBQUMsTUFBTSxDQUFDLENBQUMsQ0FBQyxHQUFHLENBQUMsT0FBTyxDQUFDLENBQUMsTUFBTSxDQUFDLE9BQU8sQ0FBQyxNQUFNLENBQUMsR0FBRyxPQUFPLENBQUMsTUFBTSxDQUFDO09BQzNGLE1BQU07QUFDTCxjQUFNLEdBQUcsQ0FBQyxPQUFPLENBQUMsQ0FBQztPQUNwQjtLQUNGOztBQUVELGFBQVMsSUFBSSxDQUFDLE9BQU8sZ0JBQWU7QUFDbEMsYUFBTyxFQUFFLEdBQUcsWUFBWSxDQUFDLElBQUksQ0FBQyxTQUFTLEVBQUUsT0FBTyxFQUFFLFNBQVMsQ0FBQyxPQUFPLEVBQUUsU0FBUyxDQUFDLFFBQVEsRUFBRSxJQUFJLEVBQUUsV0FBVyxFQUFFLE1BQU0sQ0FBQyxDQUFDO0tBQ3JIO0FBQ0QsUUFBSSxHQUFHLGlCQUFpQixDQUFDLFlBQVksQ0FBQyxJQUFJLEVBQUUsSUFBSSxFQUFFLFNBQVMsRUFBRSxPQUFPLENBQUMsTUFBTSxJQUFJLEVBQUUsRUFBRSxJQUFJLEVBQUUsV0FBVyxDQUFDLENBQUM7QUFDdEcsV0FBTyxJQUFJLENBQUMsT0FBTyxFQUFFLE9BQU8sQ0FBQyxDQUFDO0dBQy9CO0FBQ0QsS0FBRyxDQUFDLEtBQUssR0FBRyxJQUFJLENBQUM7O0FBRWpCLEtBQUcsQ0FBQyxNQUFNLEdBQUcsVUFBUyxPQUFPLEVBQUU7QUFDN0IsUUFBSSxDQUFDLE9BQU8sQ0FBQyxPQUFPLEVBQUU7QUFDcEIsZUFBUyxDQUFDLE9BQU8sR0FBRyxTQUFTLENBQUMsS0FBSyxDQUFDLE9BQU8sQ0FBQyxPQUFPLEVBQUUsR0FBRyxDQUFDLE9BQU8sQ0FBQyxDQUFDOztBQUVsRSxVQUFJLFlBQVksQ0FBQyxVQUFVLEVBQUU7QUFDM0IsaUJBQVMsQ0FBQyxRQUFRLEdBQUcsU0FBUyxDQUFDLEtBQUssQ0FBQyxPQUFPLENBQUMsUUFBUSxFQUFFLEdBQUcsQ0FBQyxRQUFRLENBQUMsQ0FBQztPQUN0RTtBQUNELFVBQUksWUFBWSxDQUFDLFVBQVUsSUFBSSxZQUFZLENBQUMsYUFBYSxFQUFFO0FBQ3pELGlCQUFTLENBQUMsVUFBVSxHQUFHLFNBQVMsQ0FBQyxLQUFLLENBQUMsT0FBTyxDQUFDLFVBQVUsRUFBRSxHQUFHLENBQUMsVUFBVSxDQUFDLENBQUM7T0FDNUU7S0FDRixNQUFNO0FBQ0wsZUFBUyxDQUFDLE9BQU8sR0FBRyxPQUFPLENBQUMsT0FBTyxDQUFDO0FBQ3BDLGVBQVMsQ0FBQyxRQUFRLEdBQUcsT0FBTyxDQUFDLFFBQVEsQ0FBQztBQUN0QyxlQUFTLENBQUMsVUFBVSxHQUFHLE9BQU8sQ0FBQyxVQUFVLENBQUM7S0FDM0M7R0FDRixDQUFDOztBQUVGLEtBQUcsQ0FBQyxNQUFNLEdBQUcsVUFBUyxDQUFDLEVBQUUsSUFBSSxFQUFFLFdBQVcsRUFBRSxNQUFNLEVBQUU7QUFDbEQsUUFBSSxZQUFZLENBQUMsY0FBYyxJQUFJLENBQUMsV0FBVyxFQUFFO0FBQy9DLFlBQU0sMkJBQWMsd0JBQXdCLENBQUMsQ0FBQztLQUMvQztBQUNELFFBQUksWUFBWSxDQUFDLFNBQVMsSUFBSSxDQUFDLE1BQU0sRUFBRTtBQUNyQyxZQUFNLDJCQUFjLHlCQUF5QixDQUFDLENBQUM7S0FDaEQ7O0FBRUQsV0FBTyxXQUFXLENBQUMsU0FBUyxFQUFFLENBQUMsRUFBRSxZQUFZLENBQUMsQ0FBQyxDQUFDLEVBQUUsSUFBSSxFQUFFLENBQUMsRUFBRSxXQUFXLEVBQUUsTUFBTSxDQUFDLENBQUM7R0FDakYsQ0FBQztBQUNGLFNBQU8sR0FBRyxDQUFDO0NBQ1o7O0FBRU0sU0FBUyxXQUFXLENBQUMsU0FBUyxFQUFFLENBQUMsRUFBRSxFQUFFLEVBQUUsSUFBSSxFQUFFLG1CQUFtQixFQUFFLFdBQVcsRUFBRSxNQUFNLEVBQUU7QUFDNUYsV0FBUyxJQUFJLENBQUMsT0FBTyxFQUFnQjtRQUFkLE9BQU8seURBQUcsRUFBRTs7QUFDakMsUUFBSSxhQUFhLEdBQUcsTUFBTSxDQUFDO0FBQzNCLFFBQUksTUFBTSxJQUFJLE9BQU8sSUFBSSxNQUFNLENBQUMsQ0FBQyxDQUFDLEVBQUU7QUFDbEMsbUJBQWEsR0FBRyxDQUFDLE9BQU8sQ0FBQyxDQUFDLE1BQU0sQ0FBQyxNQUFNLENBQUMsQ0FBQztLQUMxQzs7QUFFRCxXQUFPLEVBQUUsQ0FBQyxTQUFTLEVBQ2YsT0FBTyxFQUNQLFNBQVMsQ0FBQyxPQUFPLEVBQUUsU0FBUyxDQUFDLFFBQVEsRUFDckMsT0FBTyxDQUFDLElBQUksSUFBSSxJQUFJLEVBQ3BCLFdBQVcsSUFBSSxDQUFDLE9BQU8sQ0FBQyxXQUFXLENBQUMsQ0FBQyxNQUFNLENBQUMsV0FBVyxDQUFDLEVBQ3hELGFBQWEsQ0FBQyxDQUFDO0dBQ3BCOztBQUVELE1BQUksR0FBRyxpQkFBaUIsQ0FBQyxFQUFFLEVBQUUsSUFBSSxFQUFFLFNBQVMsRUFBRSxNQUFNLEVBQUUsSUFBSSxFQUFFLFdBQVcsQ0FBQyxDQUFDOztBQUV6RSxNQUFJLENBQUMsT0FBTyxHQUFHLENBQUMsQ0FBQztBQUNqQixNQUFJLENBQUMsS0FBSyxHQUFHLE1BQU0sR0FBRyxNQUFNLENBQUMsTUFBTSxHQUFHLENBQUMsQ0FBQztBQUN4QyxNQUFJLENBQUMsV0FBVyxHQUFHLG1CQUFtQixJQUFJLENBQUMsQ0FBQztBQUM1QyxTQUFPLElBQUksQ0FBQztDQUNiOztBQUVNLFNBQVMsY0FBYyxDQUFDLE9BQU8sRUFBRSxPQUFPLEVBQUUsT0FBTyxFQUFFO0FBQ3hELE1BQUksQ0FBQyxPQUFPLEVBQUU7QUFDWixRQUFJLE9BQU8sQ0FBQyxJQUFJLEtBQUssZ0JBQWdCLEVBQUU7QUFDckMsVUFBSSxJQUFJLEdBQUcsT0FBTyxDQUFDLElBQUksQ0FBQztBQUN4QixhQUFPLElBQUksQ0FBQyxlQUFlLENBQUMsS0FBSyxJQUFJLEVBQUU7QUFDckMsWUFBSSxHQUFHLElBQUksQ0FBQyxPQUFPLENBQUM7T0FDckI7QUFDRCxhQUFPLEdBQUcsSUFBSSxDQUFDLGVBQWUsQ0FBQyxDQUFDO0FBQ2hDLFVBQUksQ0FBQyxlQUFlLENBQUMsR0FBRyxJQUFJLENBQUM7S0FDOUIsTUFBTTtBQUNMLGFBQU8sR0FBRyxPQUFPLENBQUMsUUFBUSxDQUFDLE9BQU8sQ0FBQyxJQUFJLENBQUMsQ0FBQztLQUMxQztHQUNGLE1BQU0sSUFBSSxDQUFDLE9BQU8sQ0FBQyxJQUFJLElBQUksQ0FBQyxPQUFPLENBQUMsSUFBSSxFQUFFOztBQUV6QyxXQUFPLENBQUMsSUFBSSxHQUFHLE9BQU8sQ0FBQztBQUN2QixXQUFPLEdBQUcsT0FBTyxDQUFDLFFBQVEsQ0FBQyxPQUFPLENBQUMsQ0FBQztHQUNyQztBQUNELFNBQU8sT0FBTyxDQUFDO0NBQ2hCOztBQUVNLFNBQVMsYUFBYSxDQUFDLE9BQU8sRUFBRSxPQUFPLEVBQUUsT0FBTyxFQUFFO0FBQ3ZELFNBQU8sQ0FBQyxPQUFPLEdBQUcsSUFBSSxDQUFDO0FBQ3ZCLE1BQUksT0FBTyxDQUFDLEdBQUcsRUFBRTtBQUNmLFdBQU8sQ0FBQyxJQUFJLENBQUMsV0FBVyxHQUFHLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLElBQUksT0FBTyxDQUFDLElBQUksQ0FBQyxXQUFXLENBQUM7R0FDdkU7O0FBRUQsTUFBSSxZQUFZLFlBQUEsQ0FBQztBQUNqQixNQUFJLE9BQU8sQ0FBQyxFQUFFLElBQUksT0FBTyxDQUFDLEVBQUUsS0FBSyxJQUFJLEVBQUU7QUFDckMsV0FBTyxDQUFDLElBQUksR0FBRyxrQkFBWSxPQUFPLENBQUMsSUFBSSxDQUFDLENBQUM7QUFDekMsZ0JBQVksR0FBRyxPQUFPLENBQUMsSUFBSSxDQUFDLGVBQWUsQ0FBQyxHQUFHLE9BQU8sQ0FBQyxFQUFFLENBQUM7O0FBRTFELFFBQUksWUFBWSxDQUFDLFFBQVEsRUFBRTtBQUN6QixhQUFPLENBQUMsUUFBUSxHQUFHLEtBQUssQ0FBQyxNQUFNLENBQUMsRUFBRSxFQUFFLE9BQU8sQ0FBQyxRQUFRLEVBQUUsWUFBWSxDQUFDLFFBQVEsQ0FBQyxDQUFDO0tBQzlFO0dBQ0Y7O0FBRUQsTUFBSSxPQUFPLEtBQUssU0FBUyxJQUFJLFlBQVksRUFBRTtBQUN6QyxXQUFPLEdBQUcsWUFBWSxDQUFDO0dBQ3hCOztBQUVELE1BQUksT0FBTyxLQUFLLFNBQVMsRUFBRTtBQUN6QixVQUFNLDJCQUFjLGNBQWMsR0FBRyxPQUFPLENBQUMsSUFBSSxHQUFHLHFCQUFxQixDQUFDLENBQUM7R0FDNUUsTUFBTSxJQUFJLE9BQU8sWUFBWSxRQUFRLEVBQUU7QUFDdEMsV0FBTyxPQUFPLENBQUMsT0FBTyxFQUFFLE9BQU8sQ0FBQyxDQUFDO0dBQ2xDO0NBQ0Y7O0FBRU0sU0FBUyxJQUFJLEdBQUc7QUFBRSxTQUFPLEVBQUUsQ0FBQztDQUFFOztBQUVyQyxTQUFTLFFBQVEsQ0FBQyxPQUFPLEVBQUUsSUFBSSxFQUFFO0FBQy9CLE1BQUksQ0FBQyxJQUFJLElBQUksRUFBRSxNQUFNLElBQUksSUFBSSxDQUFBLEFBQUMsRUFBRTtBQUM5QixRQUFJLEdBQUcsSUFBSSxHQUFHLGtCQUFZLElBQUksQ0FBQyxHQUFHLEVBQUUsQ0FBQztBQUNyQyxRQUFJLENBQUMsSUFBSSxHQUFHLE9BQU8sQ0FBQztHQUNyQjtBQUNELFNBQU8sSUFBSSxDQUFDO0NBQ2I7O0FBRUQsU0FBUyxpQkFBaUIsQ0FBQyxFQUFFLEVBQUUsSUFBSSxFQUFFLFNBQVMsRUFBRSxNQUFNLEVBQUUsSUFBSSxFQUFFLFdBQVcsRUFBRTtBQUN6RSxNQUFJLEVBQUUsQ0FBQyxTQUFTLEVBQUU7QUFDaEIsUUFBSSxLQUFLLEdBQUcsRUFBRSxDQUFDO0FBQ2YsUUFBSSxHQUFHLEVBQUUsQ0FBQyxTQUFTLENBQUMsSUFBSSxFQUFFLEtBQUssRUFBRSxTQUFTLEVBQUUsTUFBTSxJQUFJLE1BQU0sQ0FBQyxDQUFDLENBQUMsRUFBRSxJQUFJLEVBQUUsV0FBVyxFQUFFLE1BQU0sQ0FBQyxDQUFDO0FBQzVGLFNBQUssQ0FBQyxNQUFNLENBQUMsSUFBSSxFQUFFLEtBQUssQ0FBQyxDQUFDO0dBQzNCO0FBQ0QsU0FBTyxJQUFJLENBQUM7Q0FDYiIsImZpbGUiOiJydW50aW1lLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0ICogYXMgVXRpbHMgZnJvbSAnLi91dGlscyc7XG5pbXBvcnQgRXhjZXB0aW9uIGZyb20gJy4vZXhjZXB0aW9uJztcbmltcG9ydCB7IENPTVBJTEVSX1JFVklTSU9OLCBSRVZJU0lPTl9DSEFOR0VTLCBjcmVhdGVGcmFtZSB9IGZyb20gJy4vYmFzZSc7XG5cbmV4cG9ydCBmdW5jdGlvbiBjaGVja1JldmlzaW9uKGNvbXBpbGVySW5mbykge1xuICBjb25zdCBjb21waWxlclJldmlzaW9uID0gY29tcGlsZXJJbmZvICYmIGNvbXBpbGVySW5mb1swXSB8fCAxLFxuICAgICAgICBjdXJyZW50UmV2aXNpb24gPSBDT01QSUxFUl9SRVZJU0lPTjtcblxuICBpZiAoY29tcGlsZXJSZXZpc2lvbiAhPT0gY3VycmVudFJldmlzaW9uKSB7XG4gICAgaWYgKGNvbXBpbGVyUmV2aXNpb24gPCBjdXJyZW50UmV2aXNpb24pIHtcbiAgICAgIGNvbnN0IHJ1bnRpbWVWZXJzaW9ucyA9IFJFVklTSU9OX0NIQU5HRVNbY3VycmVudFJldmlzaW9uXSxcbiAgICAgICAgICAgIGNvbXBpbGVyVmVyc2lvbnMgPSBSRVZJU0lPTl9DSEFOR0VTW2NvbXBpbGVyUmV2aXNpb25dO1xuICAgICAgdGhyb3cgbmV3IEV4Y2VwdGlvbignVGVtcGxhdGUgd2FzIHByZWNvbXBpbGVkIHdpdGggYW4gb2xkZXIgdmVyc2lvbiBvZiBIYW5kbGViYXJzIHRoYW4gdGhlIGN1cnJlbnQgcnVudGltZS4gJyArXG4gICAgICAgICAgICAnUGxlYXNlIHVwZGF0ZSB5b3VyIHByZWNvbXBpbGVyIHRvIGEgbmV3ZXIgdmVyc2lvbiAoJyArIHJ1bnRpbWVWZXJzaW9ucyArICcpIG9yIGRvd25ncmFkZSB5b3VyIHJ1bnRpbWUgdG8gYW4gb2xkZXIgdmVyc2lvbiAoJyArIGNvbXBpbGVyVmVyc2lvbnMgKyAnKS4nKTtcbiAgICB9IGVsc2Uge1xuICAgICAgLy8gVXNlIHRoZSBlbWJlZGRlZCB2ZXJzaW9uIGluZm8gc2luY2UgdGhlIHJ1bnRpbWUgZG9lc24ndCBrbm93IGFib3V0IHRoaXMgcmV2aXNpb24geWV0XG4gICAgICB0aHJvdyBuZXcgRXhjZXB0aW9uKCdUZW1wbGF0ZSB3YXMgcHJlY29tcGlsZWQgd2l0aCBhIG5ld2VyIHZlcnNpb24gb2YgSGFuZGxlYmFycyB0aGFuIHRoZSBjdXJyZW50IHJ1bnRpbWUuICcgK1xuICAgICAgICAgICAgJ1BsZWFzZSB1cGRhdGUgeW91ciBydW50aW1lIHRvIGEgbmV3ZXIgdmVyc2lvbiAoJyArIGNvbXBpbGVySW5mb1sxXSArICcpLicpO1xuICAgIH1cbiAgfVxufVxuXG5leHBvcnQgZnVuY3Rpb24gdGVtcGxhdGUodGVtcGxhdGVTcGVjLCBlbnYpIHtcbiAgLyogaXN0YW5idWwgaWdub3JlIG5leHQgKi9cbiAgaWYgKCFlbnYpIHtcbiAgICB0aHJvdyBuZXcgRXhjZXB0aW9uKCdObyBlbnZpcm9ubWVudCBwYXNzZWQgdG8gdGVtcGxhdGUnKTtcbiAgfVxuICBpZiAoIXRlbXBsYXRlU3BlYyB8fCAhdGVtcGxhdGVTcGVjLm1haW4pIHtcbiAgICB0aHJvdyBuZXcgRXhjZXB0aW9uKCdVbmtub3duIHRlbXBsYXRlIG9iamVjdDogJyArIHR5cGVvZiB0ZW1wbGF0ZVNwZWMpO1xuICB9XG5cbiAgdGVtcGxhdGVTcGVjLm1haW4uZGVjb3JhdG9yID0gdGVtcGxhdGVTcGVjLm1haW5fZDtcblxuICAvLyBOb3RlOiBVc2luZyBlbnYuVk0gcmVmZXJlbmNlcyByYXRoZXIgdGhhbiBsb2NhbCB2YXIgcmVmZXJlbmNlcyB0aHJvdWdob3V0IHRoaXMgc2VjdGlvbiB0byBhbGxvd1xuICAvLyBmb3IgZXh0ZXJuYWwgdXNlcnMgdG8gb3ZlcnJpZGUgdGhlc2UgYXMgcHN1ZWRvLXN1cHBvcnRlZCBBUElzLlxuICBlbnYuVk0uY2hlY2tSZXZpc2lvbih0ZW1wbGF0ZVNwZWMuY29tcGlsZXIpO1xuXG4gIGZ1bmN0aW9uIGludm9rZVBhcnRpYWxXcmFwcGVyKHBhcnRpYWwsIGNvbnRleHQsIG9wdGlvbnMpIHtcbiAgICBpZiAob3B0aW9ucy5oYXNoKSB7XG4gICAgICBjb250ZXh0ID0gVXRpbHMuZXh0ZW5kKHt9LCBjb250ZXh0LCBvcHRpb25zLmhhc2gpO1xuICAgICAgaWYgKG9wdGlvbnMuaWRzKSB7XG4gICAgICAgIG9wdGlvbnMuaWRzWzBdID0gdHJ1ZTtcbiAgICAgIH1cbiAgICB9XG5cbiAgICBwYXJ0aWFsID0gZW52LlZNLnJlc29sdmVQYXJ0aWFsLmNhbGwodGhpcywgcGFydGlhbCwgY29udGV4dCwgb3B0aW9ucyk7XG4gICAgbGV0IHJlc3VsdCA9IGVudi5WTS5pbnZva2VQYXJ0aWFsLmNhbGwodGhpcywgcGFydGlhbCwgY29udGV4dCwgb3B0aW9ucyk7XG5cbiAgICBpZiAocmVzdWx0ID09IG51bGwgJiYgZW52LmNvbXBpbGUpIHtcbiAgICAgIG9wdGlvbnMucGFydGlhbHNbb3B0aW9ucy5uYW1lXSA9IGVudi5jb21waWxlKHBhcnRpYWwsIHRlbXBsYXRlU3BlYy5jb21waWxlck9wdGlvbnMsIGVudik7XG4gICAgICByZXN1bHQgPSBvcHRpb25zLnBhcnRpYWxzW29wdGlvbnMubmFtZV0oY29udGV4dCwgb3B0aW9ucyk7XG4gICAgfVxuICAgIGlmIChyZXN1bHQgIT0gbnVsbCkge1xuICAgICAgaWYgKG9wdGlvbnMuaW5kZW50KSB7XG4gICAgICAgIGxldCBsaW5lcyA9IHJlc3VsdC5zcGxpdCgnXFxuJyk7XG4gICAgICAgIGZvciAobGV0IGkgPSAwLCBsID0gbGluZXMubGVuZ3RoOyBpIDwgbDsgaSsrKSB7XG4gICAgICAgICAgaWYgKCFsaW5lc1tpXSAmJiBpICsgMSA9PT0gbCkge1xuICAgICAgICAgICAgYnJlYWs7XG4gICAgICAgICAgfVxuXG4gICAgICAgICAgbGluZXNbaV0gPSBvcHRpb25zLmluZGVudCArIGxpbmVzW2ldO1xuICAgICAgICB9XG4gICAgICAgIHJlc3VsdCA9IGxpbmVzLmpvaW4oJ1xcbicpO1xuICAgICAgfVxuICAgICAgcmV0dXJuIHJlc3VsdDtcbiAgICB9IGVsc2Uge1xuICAgICAgdGhyb3cgbmV3IEV4Y2VwdGlvbignVGhlIHBhcnRpYWwgJyArIG9wdGlvbnMubmFtZSArICcgY291bGQgbm90IGJlIGNvbXBpbGVkIHdoZW4gcnVubmluZyBpbiBydW50aW1lLW9ubHkgbW9kZScpO1xuICAgIH1cbiAgfVxuXG4gIC8vIEp1c3QgYWRkIHdhdGVyXG4gIGxldCBjb250YWluZXIgPSB7XG4gICAgc3RyaWN0OiBmdW5jdGlvbihvYmosIG5hbWUpIHtcbiAgICAgIGlmICghKG5hbWUgaW4gb2JqKSkge1xuICAgICAgICB0aHJvdyBuZXcgRXhjZXB0aW9uKCdcIicgKyBuYW1lICsgJ1wiIG5vdCBkZWZpbmVkIGluICcgKyBvYmopO1xuICAgICAgfVxuICAgICAgcmV0dXJuIG9ialtuYW1lXTtcbiAgICB9LFxuICAgIGxvb2t1cDogZnVuY3Rpb24oZGVwdGhzLCBuYW1lKSB7XG4gICAgICBjb25zdCBsZW4gPSBkZXB0aHMubGVuZ3RoO1xuICAgICAgZm9yIChsZXQgaSA9IDA7IGkgPCBsZW47IGkrKykge1xuICAgICAgICBpZiAoZGVwdGhzW2ldICYmIGRlcHRoc1tpXVtuYW1lXSAhPSBudWxsKSB7XG4gICAgICAgICAgcmV0dXJuIGRlcHRoc1tpXVtuYW1lXTtcbiAgICAgICAgfVxuICAgICAgfVxuICAgIH0sXG4gICAgbGFtYmRhOiBmdW5jdGlvbihjdXJyZW50LCBjb250ZXh0KSB7XG4gICAgICByZXR1cm4gdHlwZW9mIGN1cnJlbnQgPT09ICdmdW5jdGlvbicgPyBjdXJyZW50LmNhbGwoY29udGV4dCkgOiBjdXJyZW50O1xuICAgIH0sXG5cbiAgICBlc2NhcGVFeHByZXNzaW9uOiBVdGlscy5lc2NhcGVFeHByZXNzaW9uLFxuICAgIGludm9rZVBhcnRpYWw6IGludm9rZVBhcnRpYWxXcmFwcGVyLFxuXG4gICAgZm46IGZ1bmN0aW9uKGkpIHtcbiAgICAgIGxldCByZXQgPSB0ZW1wbGF0ZVNwZWNbaV07XG4gICAgICByZXQuZGVjb3JhdG9yID0gdGVtcGxhdGVTcGVjW2kgKyAnX2QnXTtcbiAgICAgIHJldHVybiByZXQ7XG4gICAgfSxcblxuICAgIHByb2dyYW1zOiBbXSxcbiAgICBwcm9ncmFtOiBmdW5jdGlvbihpLCBkYXRhLCBkZWNsYXJlZEJsb2NrUGFyYW1zLCBibG9ja1BhcmFtcywgZGVwdGhzKSB7XG4gICAgICBsZXQgcHJvZ3JhbVdyYXBwZXIgPSB0aGlzLnByb2dyYW1zW2ldLFxuICAgICAgICAgIGZuID0gdGhpcy5mbihpKTtcbiAgICAgIGlmIChkYXRhIHx8IGRlcHRocyB8fCBibG9ja1BhcmFtcyB8fCBkZWNsYXJlZEJsb2NrUGFyYW1zKSB7XG4gICAgICAgIHByb2dyYW1XcmFwcGVyID0gd3JhcFByb2dyYW0odGhpcywgaSwgZm4sIGRhdGEsIGRlY2xhcmVkQmxvY2tQYXJhbXMsIGJsb2NrUGFyYW1zLCBkZXB0aHMpO1xuICAgICAgfSBlbHNlIGlmICghcHJvZ3JhbVdyYXBwZXIpIHtcbiAgICAgICAgcHJvZ3JhbVdyYXBwZXIgPSB0aGlzLnByb2dyYW1zW2ldID0gd3JhcFByb2dyYW0odGhpcywgaSwgZm4pO1xuICAgICAgfVxuICAgICAgcmV0dXJuIHByb2dyYW1XcmFwcGVyO1xuICAgIH0sXG5cbiAgICBkYXRhOiBmdW5jdGlvbih2YWx1ZSwgZGVwdGgpIHtcbiAgICAgIHdoaWxlICh2YWx1ZSAmJiBkZXB0aC0tKSB7XG4gICAgICAgIHZhbHVlID0gdmFsdWUuX3BhcmVudDtcbiAgICAgIH1cbiAgICAgIHJldHVybiB2YWx1ZTtcbiAgICB9LFxuICAgIG1lcmdlOiBmdW5jdGlvbihwYXJhbSwgY29tbW9uKSB7XG4gICAgICBsZXQgb2JqID0gcGFyYW0gfHwgY29tbW9uO1xuXG4gICAgICBpZiAocGFyYW0gJiYgY29tbW9uICYmIChwYXJhbSAhPT0gY29tbW9uKSkge1xuICAgICAgICBvYmogPSBVdGlscy5leHRlbmQoe30sIGNvbW1vbiwgcGFyYW0pO1xuICAgICAgfVxuXG4gICAgICByZXR1cm4gb2JqO1xuICAgIH0sXG5cbiAgICBub29wOiBlbnYuVk0ubm9vcCxcbiAgICBjb21waWxlckluZm86IHRlbXBsYXRlU3BlYy5jb21waWxlclxuICB9O1xuXG4gIGZ1bmN0aW9uIHJldChjb250ZXh0LCBvcHRpb25zID0ge30pIHtcbiAgICBsZXQgZGF0YSA9IG9wdGlvbnMuZGF0YTtcblxuICAgIHJldC5fc2V0dXAob3B0aW9ucyk7XG4gICAgaWYgKCFvcHRpb25zLnBhcnRpYWwgJiYgdGVtcGxhdGVTcGVjLnVzZURhdGEpIHtcbiAgICAgIGRhdGEgPSBpbml0RGF0YShjb250ZXh0LCBkYXRhKTtcbiAgICB9XG4gICAgbGV0IGRlcHRocyxcbiAgICAgICAgYmxvY2tQYXJhbXMgPSB0ZW1wbGF0ZVNwZWMudXNlQmxvY2tQYXJhbXMgPyBbXSA6IHVuZGVmaW5lZDtcbiAgICBpZiAodGVtcGxhdGVTcGVjLnVzZURlcHRocykge1xuICAgICAgaWYgKG9wdGlvbnMuZGVwdGhzKSB7XG4gICAgICAgIGRlcHRocyA9IGNvbnRleHQgIT0gb3B0aW9ucy5kZXB0aHNbMF0gPyBbY29udGV4dF0uY29uY2F0KG9wdGlvbnMuZGVwdGhzKSA6IG9wdGlvbnMuZGVwdGhzO1xuICAgICAgfSBlbHNlIHtcbiAgICAgICAgZGVwdGhzID0gW2NvbnRleHRdO1xuICAgICAgfVxuICAgIH1cblxuICAgIGZ1bmN0aW9uIG1haW4oY29udGV4dC8qLCBvcHRpb25zKi8pIHtcbiAgICAgIHJldHVybiAnJyArIHRlbXBsYXRlU3BlYy5tYWluKGNvbnRhaW5lciwgY29udGV4dCwgY29udGFpbmVyLmhlbHBlcnMsIGNvbnRhaW5lci5wYXJ0aWFscywgZGF0YSwgYmxvY2tQYXJhbXMsIGRlcHRocyk7XG4gICAgfVxuICAgIG1haW4gPSBleGVjdXRlRGVjb3JhdG9ycyh0ZW1wbGF0ZVNwZWMubWFpbiwgbWFpbiwgY29udGFpbmVyLCBvcHRpb25zLmRlcHRocyB8fCBbXSwgZGF0YSwgYmxvY2tQYXJhbXMpO1xuICAgIHJldHVybiBtYWluKGNvbnRleHQsIG9wdGlvbnMpO1xuICB9XG4gIHJldC5pc1RvcCA9IHRydWU7XG5cbiAgcmV0Ll9zZXR1cCA9IGZ1bmN0aW9uKG9wdGlvbnMpIHtcbiAgICBpZiAoIW9wdGlvbnMucGFydGlhbCkge1xuICAgICAgY29udGFpbmVyLmhlbHBlcnMgPSBjb250YWluZXIubWVyZ2Uob3B0aW9ucy5oZWxwZXJzLCBlbnYuaGVscGVycyk7XG5cbiAgICAgIGlmICh0ZW1wbGF0ZVNwZWMudXNlUGFydGlhbCkge1xuICAgICAgICBjb250YWluZXIucGFydGlhbHMgPSBjb250YWluZXIubWVyZ2Uob3B0aW9ucy5wYXJ0aWFscywgZW52LnBhcnRpYWxzKTtcbiAgICAgIH1cbiAgICAgIGlmICh0ZW1wbGF0ZVNwZWMudXNlUGFydGlhbCB8fCB0ZW1wbGF0ZVNwZWMudXNlRGVjb3JhdG9ycykge1xuICAgICAgICBjb250YWluZXIuZGVjb3JhdG9ycyA9IGNvbnRhaW5lci5tZXJnZShvcHRpb25zLmRlY29yYXRvcnMsIGVudi5kZWNvcmF0b3JzKTtcbiAgICAgIH1cbiAgICB9IGVsc2Uge1xuICAgICAgY29udGFpbmVyLmhlbHBlcnMgPSBvcHRpb25zLmhlbHBlcnM7XG4gICAgICBjb250YWluZXIucGFydGlhbHMgPSBvcHRpb25zLnBhcnRpYWxzO1xuICAgICAgY29udGFpbmVyLmRlY29yYXRvcnMgPSBvcHRpb25zLmRlY29yYXRvcnM7XG4gICAgfVxuICB9O1xuXG4gIHJldC5fY2hpbGQgPSBmdW5jdGlvbihpLCBkYXRhLCBibG9ja1BhcmFtcywgZGVwdGhzKSB7XG4gICAgaWYgKHRlbXBsYXRlU3BlYy51c2VCbG9ja1BhcmFtcyAmJiAhYmxvY2tQYXJhbXMpIHtcbiAgICAgIHRocm93IG5ldyBFeGNlcHRpb24oJ211c3QgcGFzcyBibG9jayBwYXJhbXMnKTtcbiAgICB9XG4gICAgaWYgKHRlbXBsYXRlU3BlYy51c2VEZXB0aHMgJiYgIWRlcHRocykge1xuICAgICAgdGhyb3cgbmV3IEV4Y2VwdGlvbignbXVzdCBwYXNzIHBhcmVudCBkZXB0aHMnKTtcbiAgICB9XG5cbiAgICByZXR1cm4gd3JhcFByb2dyYW0oY29udGFpbmVyLCBpLCB0ZW1wbGF0ZVNwZWNbaV0sIGRhdGEsIDAsIGJsb2NrUGFyYW1zLCBkZXB0aHMpO1xuICB9O1xuICByZXR1cm4gcmV0O1xufVxuXG5leHBvcnQgZnVuY3Rpb24gd3JhcFByb2dyYW0oY29udGFpbmVyLCBpLCBmbiwgZGF0YSwgZGVjbGFyZWRCbG9ja1BhcmFtcywgYmxvY2tQYXJhbXMsIGRlcHRocykge1xuICBmdW5jdGlvbiBwcm9nKGNvbnRleHQsIG9wdGlvbnMgPSB7fSkge1xuICAgIGxldCBjdXJyZW50RGVwdGhzID0gZGVwdGhzO1xuICAgIGlmIChkZXB0aHMgJiYgY29udGV4dCAhPSBkZXB0aHNbMF0pIHtcbiAgICAgIGN1cnJlbnREZXB0aHMgPSBbY29udGV4dF0uY29uY2F0KGRlcHRocyk7XG4gICAgfVxuXG4gICAgcmV0dXJuIGZuKGNvbnRhaW5lcixcbiAgICAgICAgY29udGV4dCxcbiAgICAgICAgY29udGFpbmVyLmhlbHBlcnMsIGNvbnRhaW5lci5wYXJ0aWFscyxcbiAgICAgICAgb3B0aW9ucy5kYXRhIHx8IGRhdGEsXG4gICAgICAgIGJsb2NrUGFyYW1zICYmIFtvcHRpb25zLmJsb2NrUGFyYW1zXS5jb25jYXQoYmxvY2tQYXJhbXMpLFxuICAgICAgICBjdXJyZW50RGVwdGhzKTtcbiAgfVxuXG4gIHByb2cgPSBleGVjdXRlRGVjb3JhdG9ycyhmbiwgcHJvZywgY29udGFpbmVyLCBkZXB0aHMsIGRhdGEsIGJsb2NrUGFyYW1zKTtcblxuICBwcm9nLnByb2dyYW0gPSBpO1xuICBwcm9nLmRlcHRoID0gZGVwdGhzID8gZGVwdGhzLmxlbmd0aCA6IDA7XG4gIHByb2cuYmxvY2tQYXJhbXMgPSBkZWNsYXJlZEJsb2NrUGFyYW1zIHx8IDA7XG4gIHJldHVybiBwcm9nO1xufVxuXG5leHBvcnQgZnVuY3Rpb24gcmVzb2x2ZVBhcnRpYWwocGFydGlhbCwgY29udGV4dCwgb3B0aW9ucykge1xuICBpZiAoIXBhcnRpYWwpIHtcbiAgICBpZiAob3B0aW9ucy5uYW1lID09PSAnQHBhcnRpYWwtYmxvY2snKSB7XG4gICAgICBsZXQgZGF0YSA9IG9wdGlvbnMuZGF0YTtcbiAgICAgIHdoaWxlIChkYXRhWydwYXJ0aWFsLWJsb2NrJ10gPT09IG5vb3ApIHtcbiAgICAgICAgZGF0YSA9IGRhdGEuX3BhcmVudDtcbiAgICAgIH1cbiAgICAgIHBhcnRpYWwgPSBkYXRhWydwYXJ0aWFsLWJsb2NrJ107XG4gICAgICBkYXRhWydwYXJ0aWFsLWJsb2NrJ10gPSBub29wO1xuICAgIH0gZWxzZSB7XG4gICAgICBwYXJ0aWFsID0gb3B0aW9ucy5wYXJ0aWFsc1tvcHRpb25zLm5hbWVdO1xuICAgIH1cbiAgfSBlbHNlIGlmICghcGFydGlhbC5jYWxsICYmICFvcHRpb25zLm5hbWUpIHtcbiAgICAvLyBUaGlzIGlzIGEgZHluYW1pYyBwYXJ0aWFsIHRoYXQgcmV0dXJuZWQgYSBzdHJpbmdcbiAgICBvcHRpb25zLm5hbWUgPSBwYXJ0aWFsO1xuICAgIHBhcnRpYWwgPSBvcHRpb25zLnBhcnRpYWxzW3BhcnRpYWxdO1xuICB9XG4gIHJldHVybiBwYXJ0aWFsO1xufVxuXG5leHBvcnQgZnVuY3Rpb24gaW52b2tlUGFydGlhbChwYXJ0aWFsLCBjb250ZXh0LCBvcHRpb25zKSB7XG4gIG9wdGlvbnMucGFydGlhbCA9IHRydWU7XG4gIGlmIChvcHRpb25zLmlkcykge1xuICAgIG9wdGlvbnMuZGF0YS5jb250ZXh0UGF0aCA9IG9wdGlvbnMuaWRzWzBdIHx8IG9wdGlvbnMuZGF0YS5jb250ZXh0UGF0aDtcbiAgfVxuXG4gIGxldCBwYXJ0aWFsQmxvY2s7XG4gIGlmIChvcHRpb25zLmZuICYmIG9wdGlvbnMuZm4gIT09IG5vb3ApIHtcbiAgICBvcHRpb25zLmRhdGEgPSBjcmVhdGVGcmFtZShvcHRpb25zLmRhdGEpO1xuICAgIHBhcnRpYWxCbG9jayA9IG9wdGlvbnMuZGF0YVsncGFydGlhbC1ibG9jayddID0gb3B0aW9ucy5mbjtcblxuICAgIGlmIChwYXJ0aWFsQmxvY2sucGFydGlhbHMpIHtcbiAgICAgIG9wdGlvbnMucGFydGlhbHMgPSBVdGlscy5leHRlbmQoe30sIG9wdGlvbnMucGFydGlhbHMsIHBhcnRpYWxCbG9jay5wYXJ0aWFscyk7XG4gICAgfVxuICB9XG5cbiAgaWYgKHBhcnRpYWwgPT09IHVuZGVmaW5lZCAmJiBwYXJ0aWFsQmxvY2spIHtcbiAgICBwYXJ0aWFsID0gcGFydGlhbEJsb2NrO1xuICB9XG5cbiAgaWYgKHBhcnRpYWwgPT09IHVuZGVmaW5lZCkge1xuICAgIHRocm93IG5ldyBFeGNlcHRpb24oJ1RoZSBwYXJ0aWFsICcgKyBvcHRpb25zLm5hbWUgKyAnIGNvdWxkIG5vdCBiZSBmb3VuZCcpO1xuICB9IGVsc2UgaWYgKHBhcnRpYWwgaW5zdGFuY2VvZiBGdW5jdGlvbikge1xuICAgIHJldHVybiBwYXJ0aWFsKGNvbnRleHQsIG9wdGlvbnMpO1xuICB9XG59XG5cbmV4cG9ydCBmdW5jdGlvbiBub29wKCkgeyByZXR1cm4gJyc7IH1cblxuZnVuY3Rpb24gaW5pdERhdGEoY29udGV4dCwgZGF0YSkge1xuICBpZiAoIWRhdGEgfHwgISgncm9vdCcgaW4gZGF0YSkpIHtcbiAgICBkYXRhID0gZGF0YSA/IGNyZWF0ZUZyYW1lKGRhdGEpIDoge307XG4gICAgZGF0YS5yb290ID0gY29udGV4dDtcbiAgfVxuICByZXR1cm4gZGF0YTtcbn1cblxuZnVuY3Rpb24gZXhlY3V0ZURlY29yYXRvcnMoZm4sIHByb2csIGNvbnRhaW5lciwgZGVwdGhzLCBkYXRhLCBibG9ja1BhcmFtcykge1xuICBpZiAoZm4uZGVjb3JhdG9yKSB7XG4gICAgbGV0IHByb3BzID0ge307XG4gICAgcHJvZyA9IGZuLmRlY29yYXRvcihwcm9nLCBwcm9wcywgY29udGFpbmVyLCBkZXB0aHMgJiYgZGVwdGhzWzBdLCBkYXRhLCBibG9ja1BhcmFtcywgZGVwdGhzKTtcbiAgICBVdGlscy5leHRlbmQocHJvZywgcHJvcHMpO1xuICB9XG4gIHJldHVybiBwcm9nO1xufVxuIl19
 
 
 /***/ },
-/* 40 */
+/* 39 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/* global window */
@@ -16977,7 +17711,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 41 */
+/* 40 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -16987,7 +17721,7 @@
 	};
 
 /***/ },
-/* 42 */
+/* 41 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -17001,7 +17735,7 @@
 	};
 
 /***/ },
-/* 43 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(_) {'use strict';
@@ -17014,17 +17748,21 @@
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	var _pageView = __webpack_require__(19);
+	var _pageView = __webpack_require__(18);
 	
 	var _pageView2 = _interopRequireDefault(_pageView);
 	
-	var _about = __webpack_require__(44);
+	var _about = __webpack_require__(43);
 	
 	var _about2 = _interopRequireDefault(_about);
 	
-	var _about3 = __webpack_require__(45);
+	var _about3 = __webpack_require__(44);
 	
 	var _about4 = _interopRequireDefault(_about3);
+	
+	var _page = __webpack_require__(45);
+	
+	var _page2 = _interopRequireDefault(_page);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -17032,14 +17770,14 @@
 	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global  _   */
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global  _  */
 	
 	var AboutView = function (_PageView) {
 		_inherits(AboutView, _PageView);
 	
 		function AboutView() {
 			var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-			var datas = arguments[1];
+			var data = arguments[1];
 	
 			_classCallCheck(this, AboutView);
 	
@@ -17047,10 +17785,7 @@
 	
 			_.defaults(options, {
 				template: _about2.default,
-				// These options are assigned to the instance by Backbone
-				events: {
-					'click a': 'onLinkClicked'
-				}
+				model: new _page2.default({ url: options.idView + '.json' })
 			});
 	
 			return _possibleConstructorReturn(this, (AboutView.__proto__ || Object.getPrototypeOf(AboutView)).call(this, options, _about4.default));
@@ -17067,7 +17802,6 @@
 			value: function initDOM() {
 	
 				_get(AboutView.prototype.__proto__ || Object.getPrototypeOf(AboutView.prototype), 'initDOM', this).call(this);
-				// PageView.prototype.initDOM.call(this);
 			}
 		}, {
 			key: 'setupDOM',
@@ -17084,23 +17818,23 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 44 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Handlebars = __webpack_require__(22);
+	var Handlebars = __webpack_require__(21);
 	function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
 	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
 	    var stack1, alias1=container.escapeExpression;
 	
-	  return "<section class=\"page-wrapper\" id=\"about\">\n\n	<h1>"
-	    + alias1(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1), depth0))
+	  return "<section class=\"page-wrapper\" id=\"about\">\n	<h1>"
+	    + alias1(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1), depth0))
 	    + "</h1>\n	<h2>"
-	    + alias1(__default(__webpack_require__(41)).call(depth0 != null ? depth0 : {},((stack1 = ((stack1 = (depth0 != null ? depth0.datas : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1),{"name":"yell","hash":{},"data":data}))
+	    + alias1(__default(__webpack_require__(40)).call(depth0 != null ? depth0 : {},((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1),{"name":"yell","hash":{},"data":data}))
 	    + "</h2>\n	<a href=\"/broken-link\">Broken Link</a>\n</section>\n";
 	},"useData":true});
 
 /***/ },
-/* 45 */
+/* 44 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -17114,6 +17848,56 @@
 	};
 
 /***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Backbone, _) {'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	/* global Backbone _ */
+	
+	var PageModel = function (_Backbone$Model) {
+		_inherits(PageModel, _Backbone$Model);
+	
+		function PageModel() {
+			var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	
+			_classCallCheck(this, PageModel);
+	
+			_.defaults(options, {
+				asyncronous: true,
+				urlRoot: '/assets/jsons/'
+			});
+	
+			return _possibleConstructorReturn(this, (PageModel.__proto__ || Object.getPrototypeOf(PageModel)).call(this, options));
+		}
+	
+		_createClass(PageModel, [{
+			key: 'initialize',
+			value: function initialize(options) {
+				// Example here of dynamic JSON
+				this.url = options.url ? options.urlRoot + options.url : '';
+			}
+		}]);
+	
+		return PageModel;
+	}(Backbone.Model);
+	
+	exports.default = PageModel;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(3)))
+
+/***/ },
 /* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -17123,17 +17907,17 @@
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	var _pageView = __webpack_require__(19);
+	var _pageView = __webpack_require__(18);
 	
 	var _pageView2 = _interopRequireDefault(_pageView);
-	
-	var _index = __webpack_require__(21);
-	
-	var _index2 = _interopRequireDefault(_index);
 	
 	var _2 = __webpack_require__(47);
 	
 	var _3 = _interopRequireDefault(_2);
+	
+	var _4 = __webpack_require__(48);
+	
+	var _5 = _interopRequireDefault(_4);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -17148,21 +17932,17 @@
 	
 		function ErrorView() {
 			var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-			var datas = arguments[1];
+			var data = arguments[1];
 	
 			_classCallCheck(this, ErrorView);
 	
 			_.defaults(options, {
-				template: _index2.default,
-				// These options are assigned to the instance by Backbone
-				events: {
-					'click a': 'onLinkClicked'
-				}
+				template: _3.default
 			});
 	
-			var datasParam = _3.default;
+			var dataParam = _5.default;
 	
-			return _possibleConstructorReturn(this, (ErrorView.__proto__ || Object.getPrototypeOf(ErrorView)).call(this, options, datasParam));
+			return _possibleConstructorReturn(this, (ErrorView.__proto__ || Object.getPrototypeOf(ErrorView)).call(this, options, dataParam));
 		}
 	
 		_createClass(ErrorView, [{
@@ -17170,7 +17950,6 @@
 			value: function initDOM() {
 	
 				_get(ErrorView.prototype.__proto__ || Object.getPrototypeOf(ErrorView.prototype), 'initDOM', this).call(this);
-				// PageView.prototype.initDOM.call(this);
 			}
 		}, {
 			key: 'setupDOM',
@@ -17188,6 +17967,20 @@
 
 /***/ },
 /* 47 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Handlebars = __webpack_require__(21);
+	function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
+	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+	    var stack1;
+	
+	  return "<section class=\"page-wrapper\" id=\"404\">\n	<h1>"
+	    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.data : depth0)) != null ? stack1.content : stack1)) != null ? stack1.title : stack1), depth0))
+	    + "</h1>\n</section>\n";
+	},"useData":true});
+
+/***/ },
+/* 48 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -17201,7 +17994,7 @@
 	};
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {'use strict';
@@ -17214,17 +18007,17 @@
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	var _currentValues = __webpack_require__(13);
-	
-	var _currentValues2 = _interopRequireDefault(_currentValues);
-	
-	var _routes = __webpack_require__(16);
+	var _routes = __webpack_require__(15);
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
-	var _baseView = __webpack_require__(20);
+	var _baseView = __webpack_require__(19);
 	
 	var _baseView2 = _interopRequireDefault(_baseView);
+	
+	var _globalStore = __webpack_require__(11);
+	
+	var _globalStore2 = _interopRequireDefault(_globalStore);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -17232,7 +18025,10 @@
 	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global $ _ */
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global $ */
+	
+	// import CV from 'config/currentValues';
+	
 	
 	var NavigationView = function (_BaseView) {
 		_inherits(NavigationView, _BaseView);
@@ -17251,8 +18047,6 @@
 			key: 'initDOM',
 			value: function initDOM() {
 	
-				console.log('initDOM');
-				console.log(this);
 				this.a$.nav = this.$el.find('ul');
 				this.a$.navItems = this.a$.nav.find('li a');
 				_get(NavigationView.prototype.__proto__ || Object.getPrototypeOf(NavigationView.prototype), 'initDOM', this).call(this);
@@ -17265,7 +18059,6 @@
 		}, {
 			key: 'onLinkClicked',
 			value: function onLinkClicked(e) {
-				console.log('onLinkClicked');
 				_get(NavigationView.prototype.__proto__ || Object.getPrototypeOf(NavigationView.prototype), 'onLinkClicked', this).call(this, e);
 			}
 		}, {
@@ -17273,7 +18066,7 @@
 			value: function setNavLayout(pageURL) {
 				this.resetCurrentNavItem();
 	
-				var currentPage = pageURL ? _routes2.default.getRouteByUrl(pageURL) : _routes2.default.getRouteByID(_currentValues2.default.currentPage);
+				var currentPage = pageURL ? _routes2.default.getRouteByUrl(pageURL) : _routes2.default.getRouteByID(_globalStore2.default.get('currentPage'));
 				if (currentPage === null) return;
 	
 				var $currentNavItem = this.a$.nav.find('*[data-page="' + currentPage.id + '"]');

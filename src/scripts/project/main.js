@@ -1,7 +1,6 @@
-/* global Backbone $ document */
+/* global Backbone $ */
 
 import 'gsap';
-import 'Modernizr';
 import 'underscore';
 
 Backbone.$ = $;

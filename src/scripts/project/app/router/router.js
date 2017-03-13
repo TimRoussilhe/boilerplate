@@ -1,20 +1,21 @@
-/* global  _ Backbone  */
+/* global  _ Backbone location */
 
 import EVENTS from 'events/events';
 import MainView from 'views/mainView';
+import GlobalStore from 'state/globalStore';
 
 class Router extends Backbone.Router {
 
 	constructor(routes = {}) {
 
 		_.defaults(routes, {
-			':page/?:subpage'						: 'default',
-			 ':page/?:subpage/'						: 'default',
-			 ':page'									: 'default',
-			 ':page/'								: 'default',
-			 '(/)'									: 'default',
-			 //	http://stackoverflow.com/questions/11236338/is-there-a-way-to-catch-all-non-matched-routes-with-backbone
-			 '*notFound'								: 'notFound'
+			':page/?:subpage'		: 'default',
+			':page/?:subpage/'		: 'default',
+			':page'					: 'default',
+			':page/'				: 'default',
+			'(/)'					: 'default',
+			//	http://stackoverflow.com/questions/11236338/is-there-a-way-to-catch-all-non-matched-routes-with-backbone
+			'*notFound'				: 'notFound'
 		});
 
 		super({routes: routes});
@@ -29,7 +30,7 @@ class Router extends Backbone.Router {
 	init() {
 		this.listenToOnce(this.mainView, EVENTS.INIT, this._onMainViewInit.bind(this));
 		this.mainView.init();
-	};
+	}
 
 
 	_onMainViewInit() {
@@ -37,7 +38,7 @@ class Router extends Backbone.Router {
 			pushState: true,
 			root: this.baseURL
 		});
-	};
+	}
 
 	default(page_, subpage_) {
 
@@ -47,21 +48,21 @@ class Router extends Backbone.Router {
 		this.mainView.navigateTo(page, subpage, query);
 
 		this.history.push(page);
-	};
+	}
 
 	currentPage() {
 		return _.last(this.history);
-	};
+	}
 
 	back() {
 		console.log('back');
 		Backbone.history.navigate(this.previousPage(), {trigger: false});
-	};
+	}
 
 	previousPage() {
 		if (this.history.length <= 1) return null;
 		return this.history[this.history.length - 2];
-	};
+	}
 
 	_parseQueryString(queryString) {
 		let params = {};
@@ -83,6 +84,21 @@ class Router extends Backbone.Router {
 		);
 		}
 		return params;
+	}
+
+	navigate(href) {
+
+		console.log('ROUTER NAVIGATE', href);
+		var root = location.protocol + '//' + location.host;
+
+		// Ensure the root is part of the anchor href, meaning it's relative.
+		if (href && href.slice(0, root.length) === root) {
+
+			href = href.replace(root, '');
+			if (GlobalStore.get('isAnimating') === false) Backbone.history.navigate(href, true);
+
+		}
+
 	}
 
 }

@@ -14,7 +14,9 @@
 			"no-negated-condition": [0],
 			"no-lonely-if": [0],
 			"no-debugger": [0],
-			"padded-blocks": [1, "always"],
-			"spaced-comment": [1]
+			"padded-blocks": [0, "always"],
+			"spaced-comment": [1],
+			"space-before-blocks": [0],
+			"space-in-parens": [0]
 		}
 }

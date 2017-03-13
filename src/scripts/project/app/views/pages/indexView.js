@@ -1,23 +1,19 @@
-/* global _  */
+/* global _ Cubic TimelineMax */
 
 import PageView from 'abstract/pageView';
 import template from 'templates/index.hbs';
-import HomepageDatas from 'jsons/index.json';
+import HomepageData from 'jsons/index.json';
 
 class IndexView extends PageView {
 
-	constructor(options = {}, datas) {
+	constructor(options = {}, data) {
 		console.log('IndexView constructor');
 
 		_.defaults(options, {
-			template: template,
-			// These options are assigned to the instance by Backbone
-			events: {
-			 'click a': 'onLinkClicked'
-			}
+			template: template
 		});
 
-		super(options, HomepageDatas);
+		super(options, HomepageData);
 	}
 
 	initialize(options, data) {
@@ -28,7 +24,6 @@ class IndexView extends PageView {
 	initDOM() {
 
 		super.initDOM();
-		// PageView.prototype.initDOM.call(this);
 	}
 
 	setupDOM() {

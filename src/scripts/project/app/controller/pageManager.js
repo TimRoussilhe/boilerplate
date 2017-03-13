@@ -1,16 +1,16 @@
 /* global  _ Backbone document window */
 
 import EVENT from 'events/events';
-import CV from 'config/currentValues';
 import Config from 'config/config';
-import ROUTES from 'router/routes';
+import ROUTES from 'routes/routes';
 import IndexView from 'views/pages/indexView';
 import AboutView from 'views/pages/aboutView';
 import ErrorView from 'views/pages/404View';
+import GlobalStore from 'state/globalStore';
 
 class PageManager {
 
-	constructor(){
+	constructor() {
 		/*
 		* Instance of Page
 		* @type {abstract/controller}
@@ -38,6 +38,19 @@ class PageManager {
 	 */
 	navigateTo(page, params, hash) {
 
+
+		// Safety here
+		// We make sure we kill the currentPage is there is a change in the url but animation are still playing (page show / hide)
+		// Usually means that user is clikcing fast on arrows
+		if (GlobalStore.get('isAnimating')){
+
+			if (this.oldPage){
+				this.oldPage.dispose();
+			}
+			GlobalStore.set('isAnimating', false);
+			this.oldPage = null;
+		}
+
 		let el = null;
 
 		if (this.oldPage === null && this.currentPage === null) {
@@ -48,21 +61,25 @@ class PageManager {
 
 		let newPage = this.getCurrentPage(page, params);
 
-		CV.isAnimating = true;
+		GlobalStore.set('isAnimating', true);
 
 		if (this.currentPage) {
 
 			this.oldPage = this.currentPage;
-			CV.oldPage = this.currentPage.idView;
+			// CV.oldPage = this.currentPage.idView;
+			GlobalStore.set('oldPage', this.currentPage.idView);
 
 		}
 
-		CV.currentPage = newPage.id;
+		// CV.currentPage = newPage.id;
+		GlobalStore.set('currentPage', newPage.id);
 		this.currentPage = new newPage.View({
 			slug:    params,
 			el:      this.currentPage ? null : el,
 			idView:  newPage.id
 		}, {});
+
+		console.log('this.currentPage -----------------------------', this.currentPage);
 
 		this.renderCurrentPage();
 	}
@@ -114,6 +131,7 @@ class PageManager {
 			this.trigger(EVENT.PAGE_RENDERED);
 
 		}
+		console.log('this.currentPage------', this.currentPage);
 
 		const title = this.currentPage.model.attributes.metas.title;
 		document.title = title ? title : 'Framework | Default Title here';
@@ -121,7 +139,7 @@ class PageManager {
 		this.listenToOnce(this.currentPage, EVENT.INIT, () => this._onPageReady());
 		this.currentPage.init();
 
-		document.body.setAttribute('data-page', CV.currentPage);
+		document.body.setAttribute('data-page', GlobalStore.get('currentPage'));
 
 	}
 
@@ -131,7 +149,7 @@ class PageManager {
 
 		if (this.oldPage) {
 
-			this.trigger(EVENT.HIDE_PAGE)
+			this.trigger(EVENT.HIDE_PAGE);
 			this.listenToOnce(this.oldPage, EVENT.HIDDEN, () => this._onPageHidden());
 			this.oldPage.hide();
 
@@ -169,14 +187,17 @@ class PageManager {
 
 	_onPageShown() {
 
-		CV.isAnimating = false;
-		CV.firstTime = false;
+		// CV.isAnimating = false;
+		// CV.firstTime = false;
+		GlobalStore.set('isAnimating', false);
+		GlobalStore.set('firstTime', false);
 
 		this.trigger(EVENT.PAGE_SHOWN);
 
 	}
 
 	_removeOldPage() {
+
 		if (this.oldPage) {
 			this.stopListening(this.oldPage, EVENT.HIDDEN);
 			this.stopListening(this.oldPage, EVENT.SHOWN);

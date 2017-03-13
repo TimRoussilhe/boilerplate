@@ -1,10 +1,11 @@
 /* global document $ Backbone _ window*/
 
 import FastClick from 'FastClick';
-import CV from 'config/currentValues';
+// import CV from 'config/currentValues';
+import GlobalStore from 'state/globalStore';
 import PageManager from 'controller/pageManager';
 import EVENTS from 'events/events';
-import NavigationView from 'views/ui/navigationView';
+import NavigationView from 'views/components/navigationView';
 
 /*
  * MainView: Handles the main view logic - window/document event
@@ -53,7 +54,7 @@ class MainView extends Backbone.View {
 
 	init() {
 
-		if (CV.isMobile) {
+		if (GlobalStore.get('isMobile')) {
 			$('body').addClass('isMobile');
 			$('body').addClass('isTouch');
 			let needsClick = FastClick.prototype.needsClick;
@@ -65,13 +66,12 @@ class MainView extends Backbone.View {
 				}
 				return needsClick.apply(this, arguments);
 			};
-
 			FastClick.attach(this.el);
 		}
 
 		this.pageManager = new PageManager();
 
-		this.listenTo(this.pageManager, EVENTS.PAGE_RENDERED,() => this._appendPage());
+		this.listenTo(this.pageManager, EVENTS.PAGE_RENDERED, () => this._appendPage());
 		this.listenTo(this.pageManager, EVENTS.SHOW_PAGE, () => this._onShowPage());
 		this.listenTo(this.pageManager, EVENTS.PAGE_SHOWN, () => this._onPageShown());
 		this.listenTo(this.pageManager, EVENTS.HIDE_PAGE, () => this._onHidePage());
@@ -95,7 +95,7 @@ class MainView extends Backbone.View {
 	}
 
 	_appendPage() {
-		console.log('_appendPage',this);
+		console.log('_appendPage', this);
 		this.a$.container.append(this.pageManager.currentPage.el);
 	}
 
@@ -114,18 +114,18 @@ class MainView extends Backbone.View {
 		this.a$.container = $('#content');
 		this.a$.body = $('body');
 
-		window.addEventListener('resize', _.throttle( () => this._onResize(), 300), false);
-		window.addEventListener('scroll', () => this._onScroll , false);
-		document.addEventListener('keydown',() => this._onKeyDown(), false);
+		window.addEventListener('resize', _.throttle(() => this._onResize(), 300), false);
+		window.addEventListener('scroll', () => this._onScroll, false);
 
-		// document.addEventListener("mouseout",	$.proxy(_onMouseOut, this), false);
-		// this.$.body[0].addEventListener("mousemove",	$.proxy(_onMouseMove, this), false);
-		// this.$.body[0].addEventListener("mousedown",	$.proxy(_onMouseDown, this), false);
-		// this.$.body[0].addEventListener("mouseup",	$.proxy(_onMouseUp, this), false);
+		// document.addEventListener('keydown',() => this._onKeyDown(e), false);
+		// document.addEventListener("mouseout",	() => this._onMouseOut(e), false);
+		// this.$.body[0].addEventListener("mousemove",	() => this._onMouseMove(e), false);
+		// this.$.body[0].addEventListener("mousedown",	() => this._onMouseDown(e), false);
+		// this.$.body[0].addEventListener("mouseup",	() => this._onMouseUp(e), false);
 
-		// this.$.body[0].addEventListener("touchstart",	$.proxy(_onTouchStart, this), false);
-		// this.$.body[0].addEventListener("touchmove",	 $.proxy(_onTouchMove, this), false);
-		// this.$.body[0].addEventListener("touchend",		$.proxy(_onTouchEnd, this), false);
+		// this.$.body[0].addEventListener("touchstart",	() => this._onTouchStart(e), false);
+		// this.$.body[0].addEventListener("touchmove",	 () => this._onTouchMove(e), false);
+		// this.$.body[0].addEventListener("touchend",		() => this._onTouchEnd(e), false);
 	}
 
 	navigateTo(page, params, hash) {
@@ -144,16 +144,20 @@ class MainView extends Backbone.View {
 
 			let scrollY = window.scrollY || window.pageYOffset;
 
-			if (scrollY < CV.scrollY) {
-				CV.scrollYDirection = 'up';
+			if (scrollY < GlobalStore.get('scrollY')) {
+				GlobalStore.set('scrollYDirection', 'up');
 			} else {
-				CV.scrollYDirection = 'down';
+				GlobalStore.set('scrollYDirection', 'down');
 			}
-
-			CV.scrollY = scrollY;
+			GlobalStore.set('scrollY', scrollY);
 		}
 
-		if (this.pageManager && this.pageManager.currentPage && this.pageManager.currentPage.canUpdate) this.pageManager.currentPage.onUpdate();
+		// if (this.pageManager && this.pageManager.currentPage && this.pageManager.currentPage.canUpdate) this.pageManager.currentPage.onUpdate();
+
+		// update run through the RAF call stack:
+		for ( var c = 0; c < GlobalStore.get('rafCallStack').length; c++) {
+			GlobalStore.get('rafCallStack')[c]();
+		}
 
 		this.navigationView.onUpdate();
 
@@ -163,18 +167,37 @@ class MainView extends Backbone.View {
 
 	_onResize() {
 
-		CV.viewport.height = $(window).height();
-		CV.breakpoint = (CV.viewport.width <= 960) ? 'sml' : 'default';
+		// windoz resize
+		const width = this.getWidth();
+		const height = this.getHeight();
 
-		if (this.pageManager && this.pageManager.currentPage) this.pageManager.currentPage.onResize();
+		GlobalStore.set('viewport', {
+			width: width,
+			height: height
+		});
 
-		if (this.navigationView) {
-			this.navigationView.onResize();
-		}
+		// CV.viewport.height = $(window).height();
+		// CV.breakpoint = (CV.viewport.width <= 960) ? 'sml' : 'default';
+
+		// if (this.pageManager && this.pageManager.currentPage) this.pageManager.currentPage.onResize();
+
+		// if (this.navigationView) {
+			// this.navigationView.onResize();
+		// }
 	}
 
-	_onKeyDown(e) {
-		if (this.pageManager && this.pageManager.currentPage) this.pageManager.currentPage.onKeyDown(e);
+	getHeight() {
+		return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+	}
+
+	getWidth() {
+		return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+	}
+
+	_onKeyDown(evt) {
+
+		GlobalStore.set('onKeyDown', evt.keyCode || evt.which);
+		// if (this.pageManager && this.pageManager.currentPage) this.pageManager.currentPage.onKeyDown(e);
 	}
 
 }

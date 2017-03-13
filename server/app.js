@@ -2,13 +2,17 @@ var express 	= require('express');
 var exphbs  	= require('express-handlebars');
 var compression = require('compression');
 var helmet 		= require('helmet');
-var path = require('path');
-var parser = require('ua-parser-js');
-// var connect = require('connect-livereload');
+var path 		= require('path');
+var parser 		= require('ua-parser-js');
 var MobileDetect = require('mobile-detect');
-var helpers = require('../shared/helpers/helpers');
-var routes = require(path.join(__dirname, '../shared/jsons/routes.json'));
-var menuDatas = require(path.join(__dirname, '../shared/jsons/menu.json'));
+var helpers 	= require('../shared/helpers/helpers');
+var menuData 	= require(path.join(__dirname, '../shared/jsons/menu.json'));
+
+// Shared routes management between server and FE rendering
+var ROUTES = require(path.join(__dirname, '../shared/routes/routes.js'));
+
+// Enviromnent detection
+var env = process.env.NODE_ENV || 'dev';
 
 var app = express();
 app.use(compression());
@@ -31,15 +35,16 @@ app.use(express.static(pathPublic));
 
 app.get('/*', function(req, res) {
 
-	var currentRoute = getRouteByUrl(req.url);
-	if (currentRoute === null) currentRoute = getRouteByID('404');
+	var currentRoute = ROUTES.getRouteByUrl(req.url);
+	if (currentRoute === null) currentRoute = ROUTES.getRouteByID('404');
 
 	var json = require(path.join(__dirname, currentRoute.jsonUrl));
 
 	// the ID needs to be the template name
 	res.render(currentRoute.id, {
-		datas: json,
-		menu: menuDatas,
+		data: json,
+		env: env,
+		menu: menuData,
 		webpAvailable : detectWebP(req),
 		isMobile: detectMobile(req)
 	});
@@ -50,22 +55,6 @@ app.listen(3000, function() {
 	console.log('App running on port 3000!');
 
 });
-
-function getRouteByUrl(url) {
-	for (var id in routes) {
-		if (routes[id].url === url || routes[id].url === '/' + url || routes[id].url === '/' + url + '/') {
-			return routes[id];
-		}
-	}
-	return null;
-}
-
-function getRouteByID(id_) {
-	for (var id in routes) {
-		if (id === id_) return routes[id];
-	}
-	return null;
-};
 
 function detectWebP(req) {
 

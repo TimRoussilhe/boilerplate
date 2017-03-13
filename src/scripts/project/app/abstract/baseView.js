@@ -1,12 +1,11 @@
 /* global  _ Backbone location  */
 
 import EVENT from 'events/events';
-import CV from 'config/currentValues';
+import ROUTER from 'router/router';
 
 class BaseView extends Backbone.View {
 
-	constructor(options = {}, datas) {
-		console.log('BaseView constructor');
+	constructor(options = {}, data) {
 
 		_.defaults(options, {
 			el: options.el,
@@ -15,15 +14,13 @@ class BaseView extends Backbone.View {
 			 'click a': 'onLinkClicked'
 			}
 		});
-
-		super(options, datas);
-
+		super(options, data);
 		this.options = options;
 
 	}
 
 	initialize(options, data) {
-		console.log('baseview initialize',this);
+		console.log('baseview initialize', this);
 		/*
 		* Params object from router
 		* @type {Objet}
@@ -100,7 +97,7 @@ class BaseView extends Backbone.View {
 
 		if (this.options.id !== undefined) this.id = this.options.id;
 
-		if (this.options.dataID !== undefined) this.dataID = this.options.dataID;
+		// if (this.options.dataID !== undefined) this.dataID = this.options.dataID;
 		if (this.options.template !== undefined) this.template = this.options.template;
 		if (this.options.className !== undefined) this.className = this.options.className;
 
@@ -110,7 +107,7 @@ class BaseView extends Backbone.View {
 		}
 
 		// Backbone.View.prototype.initialize.call(this);
-	};
+	}
 
 	/*
 	 * @override
@@ -119,8 +116,6 @@ class BaseView extends Backbone.View {
 	 * If not, it generates the element based on the tempalte provided, and append it to the container
 	 */
 	render(){
-
-		console.log('this.options.el', this.options.el);
 
 		if (this.options.el) {
 			this.setElement(this.options.el);
@@ -131,21 +126,20 @@ class BaseView extends Backbone.View {
 		this.renderTemplate();
 
 		setTimeout(this.onRendered.bind(this), 0);
-	};
+	}
 
 	renderTemplate(){
-		console.log('renderTemplate');
 		if (this.template === null) return;
-		let html = (this.model !== null) ? this.template({datas: this.model.attributes}) : this.template();
+		let html = (this.model !== null) ? this.template({data: this.model.attributes}) : this.template();
 		this.setElement(html);
-	};
+	}
 
 	onRendered(){
 		if (this.className !== null) {
 			this.$el.addClass(this.className);
 		}
 		this.trigger(EVENT.PAGE_RENDERED);
-	};
+	}
 
 	/**
 	 * @override
@@ -158,7 +152,7 @@ class BaseView extends Backbone.View {
 		this.assets = assets;
 
 		this.initDOM();
-	};
+	}
 
 	/**
 	 * Handles the initialization of DOM element
@@ -166,9 +160,8 @@ class BaseView extends Backbone.View {
 	 */
 
 	initDOM(){
-		console.log('initDOM baseview');
 		setTimeout(this.onDOMInit.bind(this), 0);
-	};
+	}
 
 	setupDOM(){
 
@@ -188,21 +181,19 @@ class BaseView extends Backbone.View {
 		this.bindEvents();
 
 		this.onInit();
-	};
+	}
 
 	onInit(){
 		this.isInit = true;
 		this.trigger(EVENT.INIT);
-	};
+	}
 
 	/**
 	 * Bind events
 	 */
-	bindEvents(){};
+	bindEvents(){}
 
 	onLinkClicked(e) {
-
-		console.log('onLinkClicked');
 
 		const root = location.protocol + '//' + location.host;
 		const href = e.currentTarget.href;
@@ -216,36 +207,36 @@ class BaseView extends Backbone.View {
 			// do nothing
 		} else if ((e.metaKey === undefined && e.ctrlKey === undefined) || (!e.metaKey && !e.ctrlKey)) {
 			e.preventDefault();
-			CV.navigate(e.currentTarget.href);
+			ROUTER.navigate(e.currentTarget.href);
 		} // allow command-click and control-click to open new tab
-	};
+	}
 
 	/**
 	 * Unbind events
 	 */
-	unbindEvents(){};
+	unbindEvents(){}
 
 	show(){
 		this.onShown();
-	};
+	}
 
 	onShown(){
 		this.canUpdate = true;
 		this.isShown = true;
 
 		this.trigger(EVENT.SHOWN);
-	};
+	}
 
 	hide(){
 		this.onHidden();
-	};
+	}
 
 	onHidden(){
-		this.isShown 	 = false;
+		this.isShown = false;
 		this.canUpdate = false;
 
 		this.trigger(EVENT.HIDDEN);
-	};
+	}
 
 	onResize() {};
 
@@ -254,7 +245,7 @@ class BaseView extends Backbone.View {
 	 */
 	update() {
 		if (this.canUpdate) this.onUpdate();
-	};
+	}
 
 	/**
 	 * Called on request animation frame
@@ -276,7 +267,7 @@ class BaseView extends Backbone.View {
 		tl = null;
 
 		this.TL[name] = null;
-	};
+	}
 
 	/**
 	 * Kill all the timelines
@@ -289,7 +280,7 @@ class BaseView extends Backbone.View {
 		}
 
 		this.TL = {};
-	};
+	}
 
 	/**
 	 * @override

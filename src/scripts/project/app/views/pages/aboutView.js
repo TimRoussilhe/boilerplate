@@ -1,23 +1,21 @@
-/* global  _   */
+/* global  _  */
 
 import PageView from 'abstract/pageView';
 import template from 'templates/about.hbs';
-import AboutDatas from 'jsons/about.json';
+import AboutData from 'jsons/about.json';
+import PageModel from 'models/page.js';
 
 class AboutView extends PageView {
 
-	constructor(options = {}, datas) {
+	constructor(options = {}, data) {
 		console.log('AboutView constructor');
 
 		_.defaults(options, {
 			template: template,
-			// These options are assigned to the instance by Backbone
-			events: {
-			 'click a': 'onLinkClicked'
-			}
+			model: new PageModel({url: options.idView + '.json'})
 		});
 
-		super(options, AboutDatas);
+		super(options, AboutData);
 	}
 
 	initialize(options, data) {
@@ -28,7 +26,6 @@ class AboutView extends PageView {
 	initDOM() {
 
 		super.initDOM();
-		// PageView.prototype.initDOM.call(this);
 	}
 
 	setupDOM() {

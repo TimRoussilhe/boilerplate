@@ -1,5 +1,6 @@
-var routes = require('jsons/routes.json');
+'use strict';
 
+var routes = require('./routes.json');
 class Routes {
 
 	constructor(routes) {
@@ -7,7 +8,7 @@ class Routes {
 	}
 
 	getRouteByUrl(url) {
-		console.log(url);
+
 		for (let id in this.routes) {
 			if (this.routes[id].url === url || this.routes[id].url === '/' + url || this.routes[id].url === '/' + url + '/') {
 				return this.routes[id];
@@ -21,9 +22,9 @@ class Routes {
 			if (id === id_) return this.routes[id];
 		}
 		return null;
-	};
+	}
 
 }
 
-let single = new Routes(routes);
-export default single;
+module.exports = new Routes(routes);
+// export default single;
