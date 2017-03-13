@@ -1,6 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
-var appEntryPoint = './src/scripts/project/main.js';
+var appEntryPoint = './src/scripts/main.js';
 var includePath = path.join(__dirname, 'src/scripts');
 var outputPath = path.join(__dirname, '/public/assets/js/');
 var devTool = 'source-map';
@@ -112,7 +112,7 @@ module.exports = {
 			zepto:     'jquery'
 		},
 		modulesDirectories: [
-			'src/scripts/project/app/',
+			'src/scripts/app/',
 			'src/scripts/vendors/',
 			'shared/',
 			'public/assets/',
