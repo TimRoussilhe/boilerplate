@@ -48,7 +48,7 @@
     "gulp-files-to-json": "^0.2.1",
     "gulp-iconfont": "^8.0.1",
     "gulp-iconfont-css": "^2.1.0",
-    "gulp-imagemin": "^3.0.3",
+    "gulp-imagemin": "^3.1.1",
     "gulp-load-plugins": "^1.5.0",
     "gulp-nodemon": "^2.2.1",
     "gulp-plumber": "^1.1.0",
@@ -66,6 +66,7 @@
     "npm-zepto": "^1.1.7",
     "poststylus": "^0.2.3",
     "run-sequence": "^1.2.2",
+    "stylelint": "^7.9.0",
     "stylus": "^0.54.5",
     "underscore": "^1.8.3",
     "vinyl-buffer": "^1.0.0",
@@ -74,18 +75,17 @@
   "scripts": {
     "build:stylus": "$(npm bin)/stylus -m -w ./src/css/app.styl -o ./public/assets/css/app.css --include-css",
     "build:js": "ENV_PROD=0 webpack",
-    "build:iconfont": "gulp iconfontSequence",
-    "build:png2Sprite": "gulp png2Sprite",
-    "dist:stylus": "$(npm bin)/stylus ./src/css/app.styl -o ./public/assets/css/app.min.css --include-css -c",
-    "dist:autoprefixer": "postcss --use autoprefixer -c autoprefixer-options.json ./public/assets/css/app.min.css -d ./public/assets/css/min-prefixed",
+    "dist:stylus": "$(npm bin)/stylus ./src/css/app.styl -o ./build/assets/css/app.min.css --include-css -c",
+    "dist:autoprefixer": "postcss --use autoprefixer -c autoprefixer-options.json ./build/assets/css/app.min.css --replace",
     "dist:js": "ENV_PROD=1 webpack",
-    "lint:css": "stylelint ./public/assets/css/*.css",
+    "lint:css": "stylelint ./build/assets/css/*.css",
     "lint:js": "eslint ./src/scripts/project",
     "watch:js": "ENV_PROD=0 webpack --progress --colors --watch --cache",
     "svgs-to-jsons": "gulp svgs-to-jsons",
     "server": "gulp dev",
+    "build": "gulp build",
     "dev": "concurrently -p \"[{name}]\" -n \"WEBPACK\" -c \"bgBlue.bold,bgRed.bold\" \"npm run watch:js\"",
     "start": "npm run server & npm run dev",
-    "deploy": "npm run dist:stylus && npm run dist:autoprefixer && npm run dist:js && npm run lint:js && npm run lint:css"
+    "deploy": "npm run dist:stylus && npm run dist:autoprefixer && npm run dist:js && npm run lint:js && npm run build "
   }
 }

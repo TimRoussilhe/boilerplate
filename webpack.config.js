@@ -37,7 +37,7 @@ if (PROD) {
 			})
 		);
 
-	outputPath = path.join(__dirname, '/public/assets/js/');
+	outputPath = path.join(__dirname, '/build/assets/js/');
 
 	filename = 'bundle.min.js';
 

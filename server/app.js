@@ -13,7 +13,7 @@ var svgs 		= require(path.join(__dirname, '../shared/jsons/svgs.json'));
 var ROUTES = require(path.join(__dirname, '../shared/routes/routes.js'));
 
 // Enviromnent detection
-var env = process.env.NODE_ENV || 'dev';
+var env = process.env.NODE_ENV || 'development';
 
 var app = express();
 app.use(compression());
@@ -31,7 +31,7 @@ app.engine('.hbs', exphbs({
 
 app.set('view engine', '.hbs');
 
-var pathPublic = path.join(__dirname, '../public');
+var pathPublic = env === 'development' ? path.join(__dirname, '../public') : path.join(__dirname, '../build');
 app.use(express.static(pathPublic));
 
 app.get('/*', function(req, res) {
@@ -45,6 +45,7 @@ app.get('/*', function(req, res) {
 	res.render(currentRoute.id, {
 		data: json,
 		env: env,
+		production : process.env.NODE_ENV === 'production',
 		menu: menuData,
 		svgs: svgs,
 		webpAvailable : detectWebP(req),
