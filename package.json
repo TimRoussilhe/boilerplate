@@ -49,6 +49,7 @@
     "gulp-iconfont": "^8.0.1",
     "gulp-iconfont-css": "^2.1.0",
     "gulp-imagemin": "^3.0.3",
+    "gulp-load-plugins": "^1.5.0",
     "gulp-nodemon": "^2.2.1",
     "gulp-plumber": "^1.1.0",
     "gulp-sourcemaps": "^2.4.1",
@@ -82,7 +83,7 @@
     "lint:js": "eslint ./src/scripts/project",
     "watch:js": "ENV_PROD=0 webpack --progress --colors --watch --cache",
     "svgs-to-jsons": "gulp svgs-to-jsons",
-    "server": "gulp browser-sync",
+    "server": "gulp dev",
     "dev": "concurrently -p \"[{name}]\" -n \"WEBPACK\" -c \"bgBlue.bold,bgRed.bold\" \"npm run watch:js\"",
     "start": "npm run server & npm run dev",
     "deploy": "npm run dist:stylus && npm run dist:autoprefixer && npm run dist:js && npm run lint:js && npm run lint:css"

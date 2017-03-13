@@ -17,6 +17,7 @@
 			"padded-blocks": [0, "always"],
 			"spaced-comment": [1],
 			"space-before-blocks": [0],
-			"space-in-parens": [0]
+			"space-in-parens": [0],
+			"require-jsdoc": [0]
 		}
 }
