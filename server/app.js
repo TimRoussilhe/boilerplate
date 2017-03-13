@@ -7,6 +7,7 @@ var parser 		= require('ua-parser-js');
 var MobileDetect = require('mobile-detect');
 var helpers 	= require('../shared/helpers/helpers');
 var menuData 	= require(path.join(__dirname, '../shared/jsons/menu.json'));
+var svgs 		= require(path.join(__dirname, '../shared/jsons/svgs.json'));
 
 // Shared routes management between server and FE rendering
 var ROUTES = require(path.join(__dirname, '../shared/routes/routes.js'));
@@ -45,14 +46,15 @@ app.get('/*', function(req, res) {
 		data: json,
 		env: env,
 		menu: menuData,
+		svgs: svgs,
 		webpAvailable : detectWebP(req),
 		isMobile: detectMobile(req)
 	});
 });
 
-app.listen(3000, function() {
+app.listen(4040, function() {
 
-	console.log('App running on port 3000!');
+	console.log('App running on port 4040!');
 
 });
 

@@ -14,6 +14,10 @@ var autoprefixer = require('autoprefixer');
 var poststylus = require('poststylus');
 var fs = require('fs');
 
+// Using gulp watch to look for added / removed file
+var watch = require('gulp-watch');
+var runSequence = require('run-sequence');
+
 // Compile sass into CSS & auto-inject into browsers
 gulp.task('stylus', () => {
 	var options = JSON.parse(fs.readFileSync('./postcss-options.json'));
@@ -38,7 +42,8 @@ gulp.task('nodemon', (cb) => {
 	var started = false;
 	return nodemon({
 		script: './server/app.js',
-		watch: ['./shared', './server']
+		watch: ['./shared', './server'],
+		env: {NODE_ENV: 'development'}
 	}).on('start', () => {
 		// to avoid nodemon being started multiple times
 		if (!started) {
@@ -50,12 +55,15 @@ gulp.task('nodemon', (cb) => {
 
 gulp.task('browser-sync', ['nodemon'], () => {
 	browserSync.init(null, {
-		proxy: 'http://localhost:3000',
+		proxy: 'http://localhost:4040',
 		files: ['public/**/*.*'],
 		browser: 'google chrome',
 		port: 7000
 	});
 	gulp.watch('./src/css/**/**/*.styl', ['stylus']);
+	watch('./public/assets/svgs/**/*.svg', () => {
+		runSequence('svgs-to-jsons');
+	});
 });
 
 

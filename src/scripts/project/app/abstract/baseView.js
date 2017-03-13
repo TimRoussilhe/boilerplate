@@ -2,6 +2,7 @@
 
 import EVENT from 'events/events';
 import ROUTER from 'router/router';
+import svgsJSON from 'jsons/svgs.json';
 
 class BaseView extends Backbone.View {
 
@@ -130,7 +131,10 @@ class BaseView extends Backbone.View {
 
 	renderTemplate(){
 		if (this.template === null) return;
-		let html = (this.model !== null) ? this.template({data: this.model.attributes}) : this.template();
+		let html = this.template({
+			data: (this.model !== null) ? this.model.attributes : null,
+			svgs: this.svgsJSON ? this.svgsJSON : null
+		});
 		this.setElement(html);
 	}
 

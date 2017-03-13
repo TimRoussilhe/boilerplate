@@ -54,6 +54,7 @@
     "gulp-sourcemaps": "^2.4.1",
     "gulp-stylus": "^2.6.0",
     "gulp-svgmin": "^1.2.3",
+    "gulp-watch": "^4.3.11",
     "gulp.spritesmith": "^6.2.1",
     "handlebars": "^4.0.5",
     "handlebars-loader": "^1.4.0",
