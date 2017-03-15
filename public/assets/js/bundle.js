@@ -16289,7 +16289,7 @@
 				if (this.template === null) return;
 				var html = this.template({
 					data: this.model !== null ? this.model.attributes : null,
-					svgs: this.svgsJSON ? this.svgsJSON : null
+					svgs: _svgs2.default ? _svgs2.default : null
 				});
 				this.setElement(html);
 			}

@@ -133,7 +133,7 @@ class BaseView extends Backbone.View {
 		if (this.template === null) return;
 		let html = this.template({
 			data: (this.model !== null) ? this.model.attributes : null,
-			svgs: this.svgsJSON ? this.svgsJSON : null
+			svgs: svgsJSON ? svgsJSON : null
 		});
 		this.setElement(html);
 	}
