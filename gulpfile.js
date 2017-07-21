@@ -8,9 +8,9 @@ function getTask(task, options) {
 
 gulp.task('browserSync', getTask('browserSync').default);
 gulp.task('svgs-to-json', getTask('svgs-to-json'));
-gulp.task('stylus', getTask('stylus'));
-gulp.task('nodemon:dev', getTask('nodemon', {env:'development'}));
-gulp.task('nodemon:prod', getTask('nodemon', {env:'production'}));
+gulp.task('sass', getTask('sass'));
+// gulp.task('nodemon:dev', getTask('nodemon', {env:'development'}));
+// gulp.task('nodemon:prod', getTask('nodemon', {env:'production'}));
 gulp.task('copyAssets', getTask('copyAssets'));
 gulp.task('imageMin', getTask('imageMin'));
 

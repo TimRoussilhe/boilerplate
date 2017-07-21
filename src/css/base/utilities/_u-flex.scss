@@ -1,0 +1,84 @@
+$gutter: 15;
+
+/*
+  For more information about flex, check out Chris Coyier's article: https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+  Based on -> https://github.com/kristoferjoseph/flexboxgrid/blob/master/css/flexboxgrid.css
+*/
+/* ---- Flex alignment classes ---- */
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  &.reverse {
+    flex-direction: row-reverse;
+  }
+  &.full {
+    margin: 0;
+    padding: 0;
+  }
+  &.show-overlay {
+    // Show the grid overlay blocks with color
+    [class*='col-'] {
+      position: relative;
+      &::before {
+        content: "";
+        z-index: 100;
+        display: block;
+        position: absolute;
+        background-color: rgba(215, 215, 215, 0.5);
+        width: calc(100% - #{$gutter + px});
+        height: 100%;
+      }
+    }
+  }
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  &.reverse {
+    flex-direction: column-reverse;
+  }
+}
+/* Vertical Align */
+.vertical-align-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* Justify-content */
+.start {
+  justify-content: flex-start;
+}
+.center {
+  justify-content: center;
+}
+.end {
+  justify-content: flex-end;
+}
+.around {
+  justify-content: space-around;
+}
+.between {
+  justify-content: space-between;
+}
+/* Align-items */
+.top {
+  align-items: flex-start;
+}
+.middle {
+  align-items: center;
+}
+.bottom {
+  align-items: flex-end;
+}
+.column {
+  flex-direction: column;
+}
+/* Order */
+.first {
+  order: -1;
+}
+.last {
+  order: 1;
+}

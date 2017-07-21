@@ -132,11 +132,7 @@ module.exports = {
 			},
 			{test: /\.json$/, loader: 'json-loader'},
 			{test: /zepto\.js$/, loader: 'exports?Zepto; delete window.$; delete window.Zepto;'},
-			{test: /\.hbs$/, loader: 'handlebars-loader', query: {
-				helperDirs: [
-					__dirname + "/shared/helpers",
-				]
-			}}
+			{test: /\.twig$/, loader: 'twig-loader'}
 		]
 	},
 

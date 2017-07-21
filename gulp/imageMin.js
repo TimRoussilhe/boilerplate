@@ -4,6 +4,6 @@ module.exports = (gulp, $) => {
 	return () => {
 		gulp.src('public/assets/images/**/*.*')
 			.pipe(imagemin())
-			.pipe(gulp.dest('build/assets/images'))
+			.pipe(gulp.dest('build/assets/images'));
 	};
 };

@@ -1,0 +1,113 @@
+// Fonts size
+
+/*
+ I had to define @mixin to be able to re-use them in _reponsive-utils.
+ it's not optimized as it generates 2 different classes, but it does the job
+*/
+
+
+.--skew-up {
+  transform: skewY(-15deg);
+}
+
+/* Footer */
+// footer-links
+// footer-mobile-480
+@mixin f-footer-regular14() {
+	color: $c-white;
+	@include ffRegular();
+	@include fontStyle(14,22,$ls-body);
+}
+.--f-footer-regular14 {
+	@include f-footer-regular14();
+}
+
+// FOOTER
+// footer-mobile-320
+@mixin f-footer-regular10() {
+	color: $c-white;
+	@include ffRegular();
+	@include fontStyle(10,16,$ls-body);
+}
+.--f-footer-regular10 {
+	@include f-footer-regular10();
+}
+
+@mixin f-footer-regular12() {
+	@include ffRegular();
+	@include fontStyle(12,13,$ls-body);
+}
+.--f-footer-regular12 {
+	@include f-footer-regular12();
+}
+
+// Font color
+.--c-white {
+	color: $c-white;
+}
+.--c-black {
+	color: $c-black;
+}
+
+.--c-tangerine {
+	color: $c-tangerine;
+}
+
+.--c-med-grey {
+	color: $c-med-grey;
+}
+
+.--c-dark-grey {
+	color: $c-dark-grey;
+}
+
+.--c-orange {
+	color: $c-orange;
+}
+
+.--c-charcoal-grey  {
+	color: $c-charcoal-grey;
+}
+
+.--c-cool-grey  {
+	color: $c-cool-grey;
+}
+
+.--c-light-grey  {
+	color: $c-light-grey;
+}
+.--c-stack-grey {
+	color: $c-stack-grey;
+}
+
+.--c-800-grey {
+	color: $c-800-grey;
+}
+.--c-600-grey {
+	color: $c-600-grey;
+}
+.--c-500-grey {
+	color: $c-500-grey;
+}
+.--c-400-grey {
+	color: $c-500-grey;
+}
+
+.--c-flag-red   {
+	color:$c-flag-red;
+}
+.--c-flag-orange   {
+	color:$c-flag-orange;
+}
+.--c-flag-yellow   {
+	color:$c-flag-yellow;
+}
+.--c-flag-green   {
+	color:$c-flag-green;
+}
+.--c-flag-blue   {
+	color:$c-flag-blue;
+}
+.--c-flag-purple   {
+	color:$c-flag-purple;
+}

@@ -2,12 +2,14 @@
 	"index": {
 		"id": "index",
 		"url": "/",
-		"jsonUrl": "../public/assets/jsons/index.json"
+		"template": "index",
+		"json": "index.json"
 	},
 	"about": {
 		"id": "about",
 		"url": "/about",
-		"jsonUrl": "../public/assets/jsons/about.json"
+		"template": "about",
+		"json": "about.json"
 	},
 	"404": {
 		"id": "404",

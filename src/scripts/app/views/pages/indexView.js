@@ -1,8 +1,8 @@
 /* global _ Cubic TimelineMax */
 
 import PageView from 'abstract/pageView';
-import template from 'templates/index.hbs';
-import HomepageData from 'jsons/index.json';
+import template from 'templates/index.twig';
+import PageModel from 'models/page.js';
 
 class IndexView extends PageView {
 
@@ -10,10 +10,11 @@ class IndexView extends PageView {
 		console.log('IndexView constructor');
 
 		_.defaults(options, {
-			template: template
+			template: template,
+			model: new PageModel({url: options.idView + '.json'})
 		});
 
-		super(options, HomepageData);
+		super(options, data);
 	}
 
 	initialize(options, data) {

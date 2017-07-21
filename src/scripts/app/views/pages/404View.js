@@ -1,7 +1,7 @@
 /* global  _   */
 
 import PageView from 'abstract/pageView';
-import template from 'templates/404.hbs';
+import template from 'templates/index.twig';
 import ErrorData from 'jsons/404.json';
 
 class ErrorView extends PageView {

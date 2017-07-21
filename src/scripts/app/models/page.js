@@ -15,7 +15,6 @@ class PageModel extends Backbone.Model {
 	initialize(options) {
         // Example here of dynamic JSON
 		this.url = options.url ? options.urlRoot + options.url : '';
-
 	}
 }
 

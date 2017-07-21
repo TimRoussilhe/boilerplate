@@ -1,0 +1,30 @@
+// import mixins
+@import 'mixins/mixins';
+
+// import variables
+@import 'vars/fonts';
+@import 'vars/z-indexes';
+@import 'vars/colors';
+@import 'vars/transitions';
+@import 'vars/sizes';
+@import 'vars/media-queries';
+@import 'vars/img';
+
+// import utlities
+@import 'utilities/_u-align';
+@import 'utilities/_u-flex';
+@import 'utilities/_u-scroll';
+
+
+@import 'ui-resets';
+
+// Definitions
+@import 'font-defs';
+@import 'ui-defs';
+@import 'responsive-utils';
+
+body{
+    background: blue;
+    text-align: left;
+}
+

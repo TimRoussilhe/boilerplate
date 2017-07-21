@@ -158,5 +158,4 @@ class PageView extends BaseView {
 
 }
 
-
 export default PageView;

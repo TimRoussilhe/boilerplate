@@ -1,0 +1,52 @@
+@import '../font-faces';
+
+// font families
+// $ff-base: 'ProductSans-Light', 'Helvetica', 'Arial', sans-serif;
+$ff-title: 'ProductSans-Bold', 'Helvetica', 'Arial', sans-serif;
+$ff-bold: 'Roboto-Bold', 'Helvetica', 'Arial', sans-serif;
+$ff-regular: 'Roboto-Regular', 'Helvetica', 'Arial', sans-serif;
+$ff-medium: 'Roboto-Medium', 'Helvetica', 'Arial', sans-serif;
+
+$fw-regular: normal;
+
+// font sizes
+$fs-base: 1.4rem;
+
+// Font Definitions
+
+// @mixin ffLight() {
+// 	font-family: $ff-base;
+// 	font-weight: 300;
+// 	font-style: normal;
+// }
+
+$ls-title: -0.5px;
+$ls-body: 0px;
+$ls-allcaps: 0.5px;
+$ls-search: -1px;
+$ls-sidebar: 0.2px;
+
+@mixin ffRegular() {
+	font-family: $ff-regular;
+	font-weight: normal;
+	font-style: normal;
+}
+
+@mixin ffMedium() {
+	font-family: $ff-medium;
+	font-weight: 500;
+	font-style: normal;
+}
+
+@mixin ffBold() {
+	font-family: $ff-bold;
+	font-weight: bold;
+	font-style: normal;
+}
+
+@mixin ffTitle() {
+	font-family: $ff-title;
+	font-weight: bold;
+	font-style: normal;
+}
+

@@ -8,10 +8,10 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>{{datas.metas.title}}</title>
+		<title>{{data.metas.title}}</title>
 
 		<!-- Meta -->
-		<meta property="description" content="{{datas.metas.description}}" />
+		<meta property="description" content="{{data.metas.description}}" />
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<meta name="robots" content="index, follow">
@@ -53,11 +53,11 @@
 		<link rel="shortcut icon" type="image/ico" href="assets/favicon/favicon.ico" />
 
 		<!-- CSS -->
-		{{#if @root.production}}
-			<link rel="stylesheet" type="text/css" href="../assets/css/app.min.css">
-		{{else}}
-			<link rel="stylesheet" type="text/css" href="../assets/css/app.css">
-		{{/if}}
+		{% if env == 'production' %}
+			<link rel="stylesheet" type="text/css" href="assets/css/app.min.css">
+		{% else %}
+			<link rel="stylesheet" type="text/css" href="assets/css/app.css">
+		{% endif %}
 
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css"></noscript>
 
@@ -66,8 +66,9 @@
 		<body>
 			<nav id="main-nav">
 				<ul>
-					{{#each menu}}
-						<li><a data-page="{{this.id}}" href="{{this.url}}"" title="">{{this.label}}</a></li>
-					{{/each}}
+					
+					<li><a data-page="index" href="/" title="">Home</a></li>
+					<li><a data-page="about" href="/about" title="">About</a></li>
+			
 				</ul>
 			</nav>

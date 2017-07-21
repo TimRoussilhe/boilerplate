@@ -1,8 +1,7 @@
 /* global  _  */
 
 import PageView from 'abstract/pageView';
-import template from 'templates/about.hbs';
-import AboutData from 'jsons/about.json';
+import template from 'templates/about.twig';
 import PageModel from 'models/page.js';
 
 class AboutView extends PageView {
@@ -15,7 +14,7 @@ class AboutView extends PageView {
 			model: new PageModel({url: options.idView + '.json'})
 		});
 
-		super(options, AboutData);
+		super(options, data);
 	}
 
 	initialize(options, data) {
