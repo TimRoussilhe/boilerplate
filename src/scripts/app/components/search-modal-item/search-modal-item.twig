@@ -1,0 +1,23 @@
+<li class="row">
+	<a href="{{route.url}}" class="item-{% if has_experience %}experience{% elseif is_ngo %}ngo{% else %}parade{% endif %} row col-root-with-gutter-all-8 col-lg-12 {% if is_ngo %}is-ngo{% endif %}" {% if is_ngo %}target="_blank"{% endif %}>
+		<span class="icon marker col-root-gutter-all-1 {% if has_experience %}has-experience-icon{% elseif is_ngo %}is-ngo-icon{% endif %}">
+			{% if has_experience %} 
+				{{SVG.pin_pride_logo|raw}} 
+			{% elseif is_ngo %}
+				{{SVG.ball|raw}} 
+			{% else %} 
+				{{SVG.map_pin|raw}} 
+			{% endif %}
+		</span>
+		<span class="title col-root-with-gutter-all-3 col-root-with-gutter-lg-4 col-root-with-gutter-md-6">{{title}}</span>
+		<span class="date col-root-with-gutter-all-3 col-root-with-gutter-lg-2">
+			{% if is_ngo == false %}{{date.month}} {{date.day}}<span class="year">, {{date.year}}</span>{% endif %}
+		</span>
+		<span class="distance {% if has_experience %}experience{% elseif is_ngo %}is-ngo-distance{% endif %}"> 
+			{% if has_experience %} {{ui.label_experience}} 
+			{% elseif is_ngo %} <span class="label">{{ui.label_go_to_website}}</span> <span class="icon-external">{{SVG.arrow_top_right|raw}}</span>
+			{% else %} {{distanceStr}} {% endif %}
+		</span>
+	</a>
+	<span class="border-item col-root-with-gutter-all-8 col-lg-12"></span>
+</li>

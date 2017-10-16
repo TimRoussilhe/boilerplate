@@ -1,0 +1,8 @@
+// ACTION
+export const SET_DATA_SIDEBAR = 'SET_DATA_SIDEBAR';
+export const SHOW_SIDEBAR = 'SHOW_SIDEBAR';
+export const HIDE_SIDEBAR = 'HIDE_SIDEBAR';
+export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
+export const HOVER_CITY = 'HOVER_CITY';
+export const BLOCK_SIDEBAR = 'BLOCK_SIDEBAR';
+export const UNBLOCK_SIDEBAR = 'UNBLOCK_SIDEBAR';

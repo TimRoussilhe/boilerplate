@@ -1,0 +1,55 @@
+<section class="modal gif-modal">
+
+	{#<div class="back-wrapper">
+		<button class="back-icon">{{SVG.back_arrow|raw}}</button> <p class="--ff-ui-label --c-cool-grey">{{ui.back_label}}</p>
+	</div>#}
+
+	<button class="close">{{SVG.close_x|raw}}</button>
+
+	<div class="gif-modal-container">
+
+		{#<div class="gif-step01 o-grid">
+			<h1 class="--ff-title --c-cool-grey">{{title}}#<span class='--c-flag-red'>S</span><span class='--c-flag-orange'>h</span><span class='--c-flag-yellow'>o</span><span class='--c-flag-green'>w</span><span class='--c-flag-blue'>U</span><span class='--c-flag-purple'>p</span></h1>
+			<ul class="row">
+				{% for gif in city %}
+					<li class="gif-modal-col no-gutter col-all-4 gutter-all-1 gutter-md-1 col-md-6 gutter-sm-0 col-sm-12" data-id="{{gif.id}}" data-gif="{{gif.src}}" data-jpeg="{{gif.jpeg_src}}"><img src="{{gif.jpeg_src}}" /></li>
+				{% endfor %}
+
+				<!-- default -->
+				{% for gif in default_gifs %}
+					<li class="gif-modal-col no-gutter col-all-4 gutter-all-1 no-gutter gutter-md-1 col-md-6 gutter-sm-0 col-sm-12" data-id="{{gif.id}}" data-gif="{{gif.src}}" data-jpeg="{{gif.jpeg_src}}"><img src="{{gif.jpeg_src}}" /></li>
+				{% endfor %}
+				{% for gif in default_gifs %}
+					<li class="gif-modal-col no-gutter col-all-4 gutter-all-1 no-gutter gutter-md-1 col-md-6 gutter-sm-0 col-sm-12" data-id="{{gif.id}}" data-gif="{{gif.src}}" data-jpeg="{{gif.jpeg_src}}"><img src="{{gif.jpeg_src}}" /></li>
+				{% endfor %}
+				{% for gif in default_gifs %}
+					<li class="gif-modal-col no-gutter col-all-4 gutter-all-1 no-gutter gutter-md-1 col-md-6 gutter-sm-0 col-sm-12" data-id="{{gif.id}}" data-gif="{{gif.src}}" data-jpeg="{{gif.jpeg_src}}"><img src="{{gif.jpeg_src}}" /></li>
+				{% endfor %}
+				{% for gif in default_gifs %}
+					<li class="gif-modal-col no-gutter col-all-4 gutter-all-1 no-gutter gutter-md-1 col-md-6 gutter-sm-0 col-sm-12" data-id="{{gif.id}}" data-gif="{{gif.src}}" data-jpeg="{{gif.jpeg_src}}"><img src="{{gif.jpeg_src}}" /></li>
+				{% endfor %}
+			</ul>
+		</div>#}
+
+		<div class="gif-share vertical-align-wrapper">
+
+			<div class="gif-share-wrapper">
+
+				<div class="gif-share-image-container">
+					<img src="{{mainGif.src}}" alt="">
+				</div>
+
+				<div class="gif-share-socials-wrapper">
+					<p class="--c-cool-grey --f-uppercase-bold14 social-label">{{share_label}}</p>
+					<ul>
+						<li class="social-item twitter"><button class="--btn-square" share-id="twitter" share-url="{{shareUrl}}" share-hashtags="ishowup">{{SVG.twitter|raw}}</button></li>
+						<li class="social-item facebook"><button class="--btn-square" share-url="{{shareUrl}}" share-id="facebook">{{SVG.facebook|raw}}</button></li>
+						<li class="social-item download"><a class="--btn-square" target="_blank" href="{{mainGif.src}}" download="logo.gif">{{SVG.download|raw}}</a></li>
+					</ul>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</section>

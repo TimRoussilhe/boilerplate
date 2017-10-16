@@ -1,0 +1,44 @@
+<aside class="sidebar">
+    <div class="sidebar-content">
+        <button class="find-your-parade --f-regular13">
+            <span class="label --c-charcoal-grey">{{ui.label_find_your_pride}}</span>
+            <span class="icon">{{SVG.search|raw}}</span>
+        </button>
+
+        <div id="minimap-container"></div>
+
+        <nav class="cities-nav">
+            <ul>
+            <span class="sidebar-content-label">
+                <h2 class="--f-regular15 --c-charcoal-grey ">{{explore_pride}}</h2>
+            </span>
+                {% for city in cities %}
+                    <li class="city-{{loop.index}}">
+                        <a href="{{city.url}}" id="{{city.info.params.id}}" class="{% if city.info.has_experience == true %} has-experience{% endif %}">
+                            {{city.info.label}}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <!-- <div class="overlay"></div> -->
+        </nav>
+
+        <!-- <a href="#" class="next-city --f-regular12 --c-med-grey">
+            {{scroll_down_to_explore}}
+            {{SVG.down_arrow|raw}}
+        </a> -->
+
+        <nav class="secondary-nav">
+            <ul>
+                {#<li><a href="{{home.url}}">{{homeLabel}}</a></li>
+                <li><button class="about">{{secondaryNavLinks.about.label}}</button></li>
+                <li><a href="{{secondaryNavLinks.privacy_policy.url}}">{{secondaryNavLinks.privacy_policy.label}}</a></li>
+                <li><a href="{{secondaryNavLinks.terms.url}}">{{secondaryNavLinks.terms.label}}</a></li>#}
+                <li><a href="{{footerLinks.about.url}}" target="_blank">{{footerLinks.about.label}}</a></li>
+                <li><a href="{{footerLinks.privacy.url}}" target="_blank">{{footerLinks.privacy.label}}</a></li>
+                <li><a href="{{footerLinks.terms.url}}" target="_blank">{{footerLinks.terms.label}}</a></li>
+                <div class="share-wrapper"></div>
+            </ul>
+        </nav>
+    </div>
+</aside>

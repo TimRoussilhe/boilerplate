@@ -1,0 +1,13 @@
+// ACTION
+export const SET_HOTSPOTS_LIST = 'SET_HOTSPOTS_LIST';
+export const SET_HOTSPOT_ID = 'SET_HOTSPOT_ID';
+export const RESET_HOTSPOTS = 'RESET_HOTSPOTS';
+export const SET_HOTSPOT_OPEN_IT = 'SET_HOTSPOT_OPEN_IT';
+export const SET_NEXT_HOTSPOT_INIT = 'SET_NEXT_HOTSPOT_INIT';
+export const SET_IS_SHOWN_HOTSPOT = 'SET_IS_SHOWN_HOTSPOT';
+export const SET_BACK_BUTTON_URL = 'SET_BACK_BUTTON_URL';
+
+// CONSTANTS
+export const VIDEO_HOTSPOT = 'Video';
+export const PHOTO_HOTSPOT = 'Photo Story';
+export const AUDIO_HOTSPOT = 'Audio Story';

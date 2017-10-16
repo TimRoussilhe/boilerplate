@@ -8,7 +8,6 @@
 @import 'vars/transitions';
 @import 'vars/sizes';
 @import 'vars/media-queries';
-@import 'vars/img';
 
 // import utlities
 @import 'utilities/_u-align';
@@ -24,7 +23,7 @@
 @import 'responsive-utils';
 
 body{
-    background: blue;
+    // background: blue;
     text-align: left;
 }
 

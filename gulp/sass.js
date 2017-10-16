@@ -18,9 +18,9 @@ module.exports = (gulp, $) => {
 		return gulp.src('./src/css/app.scss')
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
-            .pipe(sass())
+      .pipe(sass())
 			.pipe(sourcemaps.write())
-            .pipe(autoprefixer(options.autoprefixer))
+      .pipe(autoprefixer(options.autoprefixer))
 			.pipe(gulp.dest('./public/assets/css/'))
 			.pipe(browserSync.stream());
 	};
