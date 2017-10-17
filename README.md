@@ -1,4 +1,4 @@
-# Isomoprhic Boilerplate
+# JULIEN RENVOYE FOLIO 2017
 ######  Backbone / Webpack / Express / Stylus / ES6 ...
 
 - **Creator:** Timothee Roussilhe
