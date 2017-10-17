@@ -1,5 +1,6 @@
 // LOCATION
 export const HOMEPAGE = 'HOMEPAGE';
+export const ABOUT = 'ABOUT';
 export const PARADE_DETAIL = 'PARADE_DETAIL';
 export const REDIRECT = 'REDIRECT';
 export const PARADE_EXPERIENCE = 'PARADE_EXPERIENCE';

@@ -82,11 +82,14 @@ var _is_js2 = _interopRequireDefault(_is_js);
 
 var _router = __webpack_require__(4);
 
+var _App = __webpack_require__(48);
+
+var _App2 = _interopRequireDefault(_App);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-// import App from 'containers/app/App';
 // import {configureAnalytics} from 'utils/analytics';
 
 var Entry = function () {
@@ -106,7 +109,7 @@ var Entry = function () {
 			console.log('init');
 
 			var router = (0, _router.configureRoute)();
-			// this.app = new App();
+			this.app = new _App2.default();
 			// custom Detectizr setup
 			var root = (0, _zepto2.default)('html');
 
@@ -2758,12 +2761,24 @@ var _page = __webpack_require__(5);
 
 var _page2 = _interopRequireDefault(_page);
 
+var _store = __webpack_require__(10);
+
+var _store2 = _interopRequireDefault(_store);
+
+var _routes = __webpack_require__(9);
+
+var _routes2 = _interopRequireDefault(_routes);
+
+var _actions = __webpack_require__(46);
+
+var _locations = __webpack_require__(47);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import store from 'store';
+console.log('store', _store2.default);
 
 // Actions
-// import {navigate, setRoutes, setQuery, setMeta, setLang, setUIData, setHash} from 'containers/app/actions';
+
 // import {setLoaderData} from 'containers/loader/actions';
 // import {setSidebarData} from 'containers/sidebar/actions';
 // import {setFooterData} from 'containers/footer/actions';
@@ -2776,15 +2791,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Constants
 // import {JSON_DIR, SET_END_POINT, SET_SEARCH_END_POINT} from 'constants/api';
 // import {LIST_CITIES} from 'constants/cities';
-
-// import {
-// 	HOMEPAGE,
-// 	NOT_FOUND,
-// 	ABOUT,
-// 	PARADE_DETAIL,
-// 	PARADE_EXPERIENCE_HOTSPOT,
-// 	REDIRECT,
-// } from 'constants/locations';
 
 // Utils
 // import {loadJSON} from 'utils/load';
@@ -2804,31 +2810,20 @@ var preRouting = function preRouting(ctx, next) {
 	next();
 };
 
-// const _initHotspots = (hotspots) => {
-// 	const aHotspots = [];
-// 	LIST_CITIES.forEach((city) => {
-// 		// now, find the hotspots related
-// 		hotspots.forEach((hotspot) => {
-// 			if (hotspot.city_id === city) aHotspots.push(hotspot);
-// 		});
-// 	});
-
-// 	store.dispatch(setHotspotsList(aHotspots));
-// };
-
 var routesFn = {
 	ROOT: function ROOT(ctx) {
 		// Roots redirect to the current lang
 		// const lang = store.getState().get('app').get('lang');
 		// page('/');
+		// store.dispatch(navigate(HOMEPAGE, ctx.params));
 	},
-	// HOMEPAGE: (ctx) => {
-	// 	const appLoaded = store.getState().get('app').get('appLoaded');
-	// 	// If coming from an other page, reset the current city to null!
-	// 	// if (appLoaded) store.dispatch(setCurrentCity(null));
-
-	// 	store.dispatch(navigate(HOMEPAGE, ctx.params));
-	// },
+	index: function index(ctx) {
+		_store2.default.dispatch((0, _actions.navigate)(_locations.HOMEPAGE, ctx.params));
+	},
+	about: function about(ctx) {
+		console.log('about navigate');
+		_store2.default.dispatch((0, _actions.navigate)(_locations.ABOUT, ctx.params));
+	},
 	// PARADE_DETAIL: (ctx) => {
 	// 	// set current city
 	// 	// store.dispatch(setCurrentCity(ctx.params.id));
@@ -2849,113 +2844,50 @@ var routesFn = {
 	// },
 	NOT_FOUND: function NOT_FOUND(ctx) {
 		console.log('404!');
-		// store.dispatch(navigate(NOT_FOUND, ctx.params));
+		_store2.default.dispatch((0, _actions.navigate)(_locations.NOT_FOUND, ctx.params));
 	}
 };
-
-// Load app.json to get all the routes + some global variables/copy
-// Then dynamically create routes using page();
-// export function initRouter() {
-
-// 	return new Promise((resolve, reject) => {
-// 		// const urlConfig = `${JSON_DIR}${'/config.json'}`;
-// 		const urlConfig = '/api/manifest/?format=json&tp=' + Date.now();
-
-// 		// Load config first
-// 		loadJSON(urlConfig).then((config) => {
-// 			if (!config) {
-// 				reject();
-// 				return;
-// 			}
-
-// 			const lang = store.getState().get('app').get('lang');
-// 			// console.log('config', config);
-
-// 			// Set endPoints
-// 			// SET_END_POINT(config.endpoint);
-// 			// SET_SEARCH_END_POINT(config[lang].search);
-
-// 			// store.dispatch(setLang(config.lang));
-// 			console.log('END_POINT', config.endpoint);
-
-// 			// Load app.json
-// 			const url = config[lang].app;
-
-// 			loadJSON(url).then((data) => {
-// 				if (!data) {
-// 					reject();
-// 					return;
-// 				}
-
-// 				// console.log('data', data);
-
-// 				// Set routes
-
-// 				// EXCEPTION ROUTES
-// 				const routes_ = {};
-// 				for (const key in data.routes) {
-// 					if (data.routes[key]) {
-// 						const value = data.routes[key];
-// 						routes_[key] = value;
-// 						if (value.location === PARADE_DETAIL) {
-// 							const key_ = key.replace('/' + lang, '');
-// 							const value_ = {
-// 								location: REDIRECT,
-// 								params: {
-// 									redirect: key,
-// 								},
-// 							};
-// 							routes_[key_] = value_;
-// 						}
-// 					}
-// 				}
-
-// 				console.log('routes_', routes_);
-
-// 				// store.dispatch(setRoutes(data.routes));
-// 				store.dispatch(setRoutes(routes_));
-
-// 				// Set Cities
-// 				// store.dispatch(setListCities(LIST_CITIES));
-// 				// store.dispatch(setCurrentCity(data.global.current_city));
-
-// 				// Set Globals
-// 				// store.dispatch(setLoaderData(data.global.loader));
-// 				// store.dispatch(setSidebarData(data.global.sidebar));
-// 				// store.dispatch(setFooterData(data.global.footer));
-// 				// store.dispatch(setModalsData(data.global.modals));
-// 				// store.dispatch(setUIData(data.global.ui));
-// 				// store.dispatch(setMeta(data.global.default.meta, true));
-
-// 				// Set hotposts
-// 				// _initHotspots(data.hotspots);
-
-// 				// Setup routes dynamically
-// 				const routes = store.getState().get('app').get('routes');
-
-// 				routes.entrySeq().forEach(([key, value]) => {
-// 					page(key, preRouting, (ctx) => {
-// 						ctx.params = value.get('params') ? value.get('params').toJS() : {};
-// 						routesFn[value.get('location')](ctx);
-// 					});
-// 				});
-
-// 				// Roots redirect to the current lang
-// 				page('/', preRouting, routesFn.ROOT);
-
-// 				// 404
-// 				page('*', preRouting, routesFn.NOT_FOUND);
-
-// 				resolve();
-// 			});
-// 		});
-// 	});
-
-// }
 
 function initRouter() {
 
 	return new Promise(function (resolve, reject) {
+
+		// // store.dispatch(setRoutes(data.routes));
+		_store2.default.dispatch((0, _actions.setRoutes)(_routes2.default));
+
+		//  // Set Cities
+		// store.dispatch(setListCities(LIST_CITIES));
+		// store.dispatch(setCurrentCity(data.global.current_city));
+
+		// // Set Globals
+		// store.dispatch(setLoaderData(data.global.loader));
+		// store.dispatch(setSidebarData(data.global.sidebar));
+		// store.dispatch(setFooterData(data.global.footer));
+		// store.dispatch(setModalsData(data.global.modals));
+		// store.dispatch(setUIData(data.global.ui));
+		// store.dispatch(setMeta(data.global.default.meta, true));
+
+		// Setup routes dynamically
+		console.log('routes', _routes2.default);
+
+		var _loop = function _loop(key) {
+
+			if (!_routes2.default.hasOwnProperty(key)) return 'continue';
+
+			var route = _routes2.default[key];
+			console.log('route', route);
+			console.log('route', route.id);
+
+			(0, _page2.default)(route.url, preRouting, function (ctx) {
+				routesFn[route.id](ctx);
+			});
+		};
+
+		for (var key in _routes2.default) {
+			var _ret = _loop(key);
+
+			if (_ret === 'continue') continue;
+		}
 
 		// Roots redirect to the current lang
 		(0, _page2.default)('/', preRouting, routesFn.ROOT);
@@ -4197,6 +4129,2520 @@ function pathToRegexp (path, keys, options) {
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+module.exports = {"404":{"id":"404","url":"/404","jsonUrl":"../public/assets/jsons/404.json"},"index":{"id":"index","url":"/","template":"index","json":"index.json"},"about":{"id":"about","url":"/about","template":"about","json":"about.json"}}
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _redux = __webpack_require__(11);
+
+var _reducers = __webpack_require__(37);
+
+var _reducers2 = _interopRequireDefault(_reducers);
+
+var _reduxResponsive = __webpack_require__(17);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var USE_DEV_TOOLS = true && true && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+
+// const stateTransformer = (state) => {
+// 	if (Iterable.isIterable(state)) return state.toJS();
+// 	return state;
+// };
+
+// import {createLogger} from 'redux-logger';
+// import configureStore from 'store/configure-store';
+// import {setStore, setCompareFn} from 'utils/redux-watch-immutable';
+// import _ from 'underscore';
+
+// const store = configureStore();
+
+// // IMPORTANT
+// const compare = (a, b) => {
+// 	return _.isEqual(a, b);
+// };
+
+// // Config redux watch
+// setStore(store);
+// setCompareFn(compare);
+
+// export default store;
+
+var middlewares = [];
+
+var composeEnhancers = USE_DEV_TOOLS ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : _redux.compose;
+
+var store = (0, _redux.createStore)(_reducers2.default, {}, composeEnhancers(_reduxResponsive.responsiveStoreEnhancer, _redux.applyMiddleware.apply(undefined, middlewares)));
+
+exports.default = store;
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__combineReducers__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__compose__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(15);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createStore", function() { return __WEBPACK_IMPORTED_MODULE_0__createStore__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "combineReducers", function() { return __WEBPACK_IMPORTED_MODULE_1__combineReducers__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "bindActionCreators", function() { return __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "applyMiddleware", function() { return __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "compose", function() { return __WEBPACK_IMPORTED_MODULE_4__compose__["a"]; });
+
+
+
+
+
+
+
+/*
+* This is a dummy function to check if the function name has been altered by minification.
+* If the function has been minified and NODE_ENV !== 'production', warn the user.
+*/
+function isCrushed() {}
+
+if ("development" !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+  Object(__WEBPACK_IMPORTED_MODULE_5__utils_warning__["a" /* default */])('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
+}
+
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActionTypes; });
+/* harmony export (immutable) */ __webpack_exports__["b"] = createStore;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_symbol_observable__);
+
+
+
+/**
+ * These are private action types reserved by Redux.
+ * For any unknown actions, you must return the current state.
+ * If the current state is undefined, you must return the initial state.
+ * Do not reference these action types directly in your code.
+ */
+var ActionTypes = {
+  INIT: '@@redux/INIT'
+
+  /**
+   * Creates a Redux store that holds the state tree.
+   * The only way to change the data in the store is to call `dispatch()` on it.
+   *
+   * There should only be a single store in your app. To specify how different
+   * parts of the state tree respond to actions, you may combine several reducers
+   * into a single reducer function by using `combineReducers`.
+   *
+   * @param {Function} reducer A function that returns the next state tree, given
+   * the current state tree and the action to handle.
+   *
+   * @param {any} [preloadedState] The initial state. You may optionally specify it
+   * to hydrate the state from the server in universal apps, or to restore a
+   * previously serialized user session.
+   * If you use `combineReducers` to produce the root reducer function, this must be
+   * an object with the same shape as `combineReducers` keys.
+   *
+   * @param {Function} [enhancer] The store enhancer. You may optionally specify it
+   * to enhance the store with third-party capabilities such as middleware,
+   * time travel, persistence, etc. The only store enhancer that ships with Redux
+   * is `applyMiddleware()`.
+   *
+   * @returns {Store} A Redux store that lets you read the state, dispatch actions
+   * and subscribe to changes.
+   */
+};function createStore(reducer, preloadedState, enhancer) {
+  var _ref2;
+
+  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+    enhancer = preloadedState;
+    preloadedState = undefined;
+  }
+
+  if (typeof enhancer !== 'undefined') {
+    if (typeof enhancer !== 'function') {
+      throw new Error('Expected the enhancer to be a function.');
+    }
+
+    return enhancer(createStore)(reducer, preloadedState);
+  }
+
+  if (typeof reducer !== 'function') {
+    throw new Error('Expected the reducer to be a function.');
+  }
+
+  var currentReducer = reducer;
+  var currentState = preloadedState;
+  var currentListeners = [];
+  var nextListeners = currentListeners;
+  var isDispatching = false;
+
+  function ensureCanMutateNextListeners() {
+    if (nextListeners === currentListeners) {
+      nextListeners = currentListeners.slice();
+    }
+  }
+
+  /**
+   * Reads the state tree managed by the store.
+   *
+   * @returns {any} The current state tree of your application.
+   */
+  function getState() {
+    return currentState;
+  }
+
+  /**
+   * Adds a change listener. It will be called any time an action is dispatched,
+   * and some part of the state tree may potentially have changed. You may then
+   * call `getState()` to read the current state tree inside the callback.
+   *
+   * You may call `dispatch()` from a change listener, with the following
+   * caveats:
+   *
+   * 1. The subscriptions are snapshotted just before every `dispatch()` call.
+   * If you subscribe or unsubscribe while the listeners are being invoked, this
+   * will not have any effect on the `dispatch()` that is currently in progress.
+   * However, the next `dispatch()` call, whether nested or not, will use a more
+   * recent snapshot of the subscription list.
+   *
+   * 2. The listener should not expect to see all state changes, as the state
+   * might have been updated multiple times during a nested `dispatch()` before
+   * the listener is called. It is, however, guaranteed that all subscribers
+   * registered before the `dispatch()` started will be called with the latest
+   * state by the time it exits.
+   *
+   * @param {Function} listener A callback to be invoked on every dispatch.
+   * @returns {Function} A function to remove this change listener.
+   */
+  function subscribe(listener) {
+    if (typeof listener !== 'function') {
+      throw new Error('Expected listener to be a function.');
+    }
+
+    var isSubscribed = true;
+
+    ensureCanMutateNextListeners();
+    nextListeners.push(listener);
+
+    return function unsubscribe() {
+      if (!isSubscribed) {
+        return;
+      }
+
+      isSubscribed = false;
+
+      ensureCanMutateNextListeners();
+      var index = nextListeners.indexOf(listener);
+      nextListeners.splice(index, 1);
+    };
+  }
+
+  /**
+   * Dispatches an action. It is the only way to trigger a state change.
+   *
+   * The `reducer` function, used to create the store, will be called with the
+   * current state tree and the given `action`. Its return value will
+   * be considered the **next** state of the tree, and the change listeners
+   * will be notified.
+   *
+   * The base implementation only supports plain object actions. If you want to
+   * dispatch a Promise, an Observable, a thunk, or something else, you need to
+   * wrap your store creating function into the corresponding middleware. For
+   * example, see the documentation for the `redux-thunk` package. Even the
+   * middleware will eventually dispatch plain object actions using this method.
+   *
+   * @param {Object} action A plain object representing “what changed”. It is
+   * a good idea to keep actions serializable so you can record and replay user
+   * sessions, or use the time travelling `redux-devtools`. An action must have
+   * a `type` property which may not be `undefined`. It is a good idea to use
+   * string constants for action types.
+   *
+   * @returns {Object} For convenience, the same action object you dispatched.
+   *
+   * Note that, if you use a custom middleware, it may wrap `dispatch()` to
+   * return something else (for example, a Promise you can await).
+   */
+  function dispatch(action) {
+    if (!Object(__WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__["a" /* default */])(action)) {
+      throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
+    }
+
+    if (typeof action.type === 'undefined') {
+      throw new Error('Actions may not have an undefined "type" property. ' + 'Have you misspelled a constant?');
+    }
+
+    if (isDispatching) {
+      throw new Error('Reducers may not dispatch actions.');
+    }
+
+    try {
+      isDispatching = true;
+      currentState = currentReducer(currentState, action);
+    } finally {
+      isDispatching = false;
+    }
+
+    var listeners = currentListeners = nextListeners;
+    for (var i = 0; i < listeners.length; i++) {
+      var listener = listeners[i];
+      listener();
+    }
+
+    return action;
+  }
+
+  /**
+   * Replaces the reducer currently used by the store to calculate the state.
+   *
+   * You might need this if your app implements code splitting and you want to
+   * load some of the reducers dynamically. You might also need this if you
+   * implement a hot reloading mechanism for Redux.
+   *
+   * @param {Function} nextReducer The reducer for the store to use instead.
+   * @returns {void}
+   */
+  function replaceReducer(nextReducer) {
+    if (typeof nextReducer !== 'function') {
+      throw new Error('Expected the nextReducer to be a function.');
+    }
+
+    currentReducer = nextReducer;
+    dispatch({ type: ActionTypes.INIT });
+  }
+
+  /**
+   * Interoperability point for observable/reactive libraries.
+   * @returns {observable} A minimal observable of state changes.
+   * For more information, see the observable proposal:
+   * https://github.com/tc39/proposal-observable
+   */
+  function observable() {
+    var _ref;
+
+    var outerSubscribe = subscribe;
+    return _ref = {
+      /**
+       * The minimal observable subscription method.
+       * @param {Object} observer Any object that can be used as an observer.
+       * The observer object should have a `next` method.
+       * @returns {subscription} An object with an `unsubscribe` method that can
+       * be used to unsubscribe the observable from the store, and prevent further
+       * emission of values from the observable.
+       */
+      subscribe: function subscribe(observer) {
+        if (typeof observer !== 'object') {
+          throw new TypeError('Expected the observer to be an object.');
+        }
+
+        function observeState() {
+          if (observer.next) {
+            observer.next(getState());
+          }
+        }
+
+        observeState();
+        var unsubscribe = outerSubscribe(observeState);
+        return { unsubscribe: unsubscribe };
+      }
+    }, _ref[__WEBPACK_IMPORTED_MODULE_1_symbol_observable___default.a] = function () {
+      return this;
+    }, _ref;
+  }
+
+  // When a store is created, an "INIT" action is dispatched so that every
+  // reducer returns their initial state. This effectively populates
+  // the initial state tree.
+  dispatch({ type: ActionTypes.INIT });
+
+  return _ref2 = {
+    dispatch: dispatch,
+    subscribe: subscribe,
+    getState: getState,
+    replaceReducer: replaceReducer
+  }, _ref2[__WEBPACK_IMPORTED_MODULE_1_symbol_observable___default.a] = observable, _ref2;
+}
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getPrototype_js__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(29);
+
+
+
+
+/** `Object#toString` result references. */
+var objectTag = '[object Object]';
+
+/** Used for built-in method references. */
+var funcProto = Function.prototype,
+    objectProto = Object.prototype;
+
+/** Used to resolve the decompiled source of functions. */
+var funcToString = funcProto.toString;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/** Used to infer the `Object` constructor. */
+var objectCtorString = funcToString.call(Object);
+
+/**
+ * Checks if `value` is a plain object, that is, an object created by the
+ * `Object` constructor or one with a `[[Prototype]]` of `null`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.8.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
+ * @example
+ *
+ * function Foo() {
+ *   this.a = 1;
+ * }
+ *
+ * _.isPlainObject(new Foo);
+ * // => false
+ *
+ * _.isPlainObject([1, 2, 3]);
+ * // => false
+ *
+ * _.isPlainObject({ 'x': 0, 'y': 0 });
+ * // => true
+ *
+ * _.isPlainObject(Object.create(null));
+ * // => true
+ */
+function isPlainObject(value) {
+  if (!Object(__WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__["a" /* default */])(value) || Object(__WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__["a" /* default */])(value) != objectTag) {
+    return false;
+  }
+  var proto = Object(__WEBPACK_IMPORTED_MODULE_1__getPrototype_js__["a" /* default */])(value);
+  if (proto === null) {
+    return true;
+  }
+  var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
+  return typeof Ctor == 'function' && Ctor instanceof Ctor &&
+    funcToString.call(Ctor) == objectCtorString;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (isPlainObject);
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__root_js__ = __webpack_require__(23);
+
+
+/** Built-in value references. */
+var Symbol = __WEBPACK_IMPORTED_MODULE_0__root_js__["a" /* default */].Symbol;
+
+/* harmony default export */ __webpack_exports__["a"] = (Symbol);
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = warning;
+/**
+ * Prints a warning in the console if it exists.
+ *
+ * @param {String} message The warning message.
+ * @returns {void}
+ */
+function warning(message) {
+  /* eslint-disable no-console */
+  if (typeof console !== 'undefined' && typeof console.error === 'function') {
+    console.error(message);
+  }
+  /* eslint-enable no-console */
+  try {
+    // This error was thrown as a convenience so that if you enable
+    // "break on all exceptions" in your console,
+    // it would pause the execution at this line.
+    throw new Error(message);
+    /* eslint-disable no-empty */
+  } catch (e) {}
+  /* eslint-enable no-empty */
+}
+
+/***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = compose;
+/**
+ * Composes single-argument functions from right to left. The rightmost
+ * function can take multiple arguments as it provides the signature for
+ * the resulting composite function.
+ *
+ * @param {...Function} funcs The functions to compose.
+ * @returns {Function} A function obtained by composing the argument functions
+ * from right to left. For example, compose(f, g, h) is identical to doing
+ * (...args) => f(g(h(...args))).
+ */
+
+function compose() {
+  for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
+    funcs[_key] = arguments[_key];
+  }
+
+  if (funcs.length === 0) {
+    return function (arg) {
+      return arg;
+    };
+  }
+
+  if (funcs.length === 1) {
+    return funcs[0];
+  }
+
+  return funcs.reduce(function (a, b) {
+    return function () {
+      return a(b.apply(undefined, arguments));
+    };
+  });
+}
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createResponsiveStateReducer", function() { return createResponsiveStateReducer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createResponsiveStoreEnhancer", function() { return createResponsiveStoreEnhancer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "responsiveStateReducer", function() { return responsiveStateReducer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "responsiveStoreEnhancer", function() { return responsiveStoreEnhancer; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_createReducer__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_createEnhancer__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions_types__ = __webpack_require__(21);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "CALCULATE_RESPONSIVE_STATE", function() { return __WEBPACK_IMPORTED_MODULE_2__actions_types__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions_creators__ = __webpack_require__(20);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "calculateResponsiveState", function() { return __WEBPACK_IMPORTED_MODULE_3__actions_creators__["a"]; });
+// local imports
+
+
+
+
+
+// external API
+var createResponsiveStateReducer = __WEBPACK_IMPORTED_MODULE_0__util_createReducer__["a" /* default */];
+var createResponsiveStoreEnhancer = __WEBPACK_IMPORTED_MODULE_1__util_createEnhancer__["a" /* default */];
+// provide default responsive state reducer/enhancers
+var responsiveStateReducer = createResponsiveStateReducer();
+var responsiveStoreEnhancer = createResponsiveStoreEnhancer();
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports =  __webpack_require__(39);
+
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ('redux-responsive/CALCULATE_RESPONSIVE_STATE');
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__calculateResponsiveState__ = __webpack_require__(42);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__calculateResponsiveState__["a"]; });
+
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__CALCULATE_RESPONSIVE_STATE__ = __webpack_require__(19);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__CALCULATE_RESPONSIVE_STATE__["a"]; });
+
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRawTag_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__objectToString_js__ = __webpack_require__(26);
+
+
+
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = __WEBPACK_IMPORTED_MODULE_0__Symbol_js__["a" /* default */] ? __WEBPACK_IMPORTED_MODULE_0__Symbol_js__["a" /* default */].toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? Object(__WEBPACK_IMPORTED_MODULE_1__getRawTag_js__["a" /* default */])(value)
+    : Object(__WEBPACK_IMPORTED_MODULE_2__objectToString_js__["a" /* default */])(value);
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (baseGetTag);
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__ = __webpack_require__(24);
+
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__["a" /* default */] || freeSelf || Function('return this')();
+
+/* harmony default export */ __webpack_exports__["a"] = (root);
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+/* harmony default export */ __webpack_exports__["a"] = (freeGlobal);
+
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
+
+/***/ }),
+/* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(14);
+
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/** Built-in value references. */
+var symToStringTag = __WEBPACK_IMPORTED_MODULE_0__Symbol_js__["a" /* default */] ? __WEBPACK_IMPORTED_MODULE_0__Symbol_js__["a" /* default */].toStringTag : undefined;
+
+/**
+ * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the raw `toStringTag`.
+ */
+function getRawTag(value) {
+  var isOwn = hasOwnProperty.call(value, symToStringTag),
+      tag = value[symToStringTag];
+
+  try {
+    value[symToStringTag] = undefined;
+    var unmasked = true;
+  } catch (e) {}
+
+  var result = nativeObjectToString.call(value);
+  if (unmasked) {
+    if (isOwn) {
+      value[symToStringTag] = tag;
+    } else {
+      delete value[symToStringTag];
+    }
+  }
+  return result;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (getRawTag);
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/**
+ * Converts `value` to a string using `Object.prototype.toString`.
+ *
+ * @private
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ */
+function objectToString(value) {
+  return nativeObjectToString.call(value);
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (objectToString);
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__overArg_js__ = __webpack_require__(28);
+
+
+/** Built-in value references. */
+var getPrototype = Object(__WEBPACK_IMPORTED_MODULE_0__overArg_js__["a" /* default */])(Object.getPrototypeOf, Object);
+
+/* harmony default export */ __webpack_exports__["a"] = (getPrototype);
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/**
+ * Creates a unary function that invokes `func` with its argument transformed.
+ *
+ * @private
+ * @param {Function} func The function to wrap.
+ * @param {Function} transform The argument transform.
+ * @returns {Function} Returns the new function.
+ */
+function overArg(func, transform) {
+  return function(arg) {
+    return func(transform(arg));
+  };
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (overArg);
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return value != null && typeof value == 'object';
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (isObjectLike);
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(31);
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global, module) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _ponyfill = __webpack_require__(33);
+
+var _ponyfill2 = _interopRequireDefault(_ponyfill);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var root; /* global window */
+
+
+if (typeof self !== 'undefined') {
+  root = self;
+} else if (typeof window !== 'undefined') {
+  root = window;
+} else if (typeof global !== 'undefined') {
+  root = global;
+} else if (true) {
+  root = module;
+} else {
+  root = Function('return this')();
+}
+
+var result = (0, _ponyfill2['default'])(root);
+exports['default'] = result;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(32)(module)))
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports) {
+
+module.exports = function(module) {
+	if(!module.webpackPolyfill) {
+		module.deprecate = function() {};
+		module.paths = [];
+		// module.parent = undefined by default
+		if(!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function() {
+				return module.i;
+			}
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports['default'] = symbolObservablePonyfill;
+function symbolObservablePonyfill(root) {
+	var result;
+	var _Symbol = root.Symbol;
+
+	if (typeof _Symbol === 'function') {
+		if (_Symbol.observable) {
+			result = _Symbol.observable;
+		} else {
+			result = _Symbol('observable');
+			_Symbol.observable = result;
+		}
+	} else {
+		result = '@@observable';
+	}
+
+	return result;
+};
+
+/***/ }),
+/* 34 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = combineReducers;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_es_isPlainObject__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_warning__ = __webpack_require__(15);
+
+
+
+
+function getUndefinedStateErrorMessage(key, action) {
+  var actionType = action && action.type;
+  var actionName = actionType && '"' + actionType.toString() + '"' || 'an action';
+
+  return 'Given action ' + actionName + ', reducer "' + key + '" returned undefined. ' + 'To ignore an action, you must explicitly return the previous state. ' + 'If you want this reducer to hold no value, you can return null instead of undefined.';
+}
+
+function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, unexpectedKeyCache) {
+  var reducerKeys = Object.keys(reducers);
+  var argumentName = action && action.type === __WEBPACK_IMPORTED_MODULE_0__createStore__["a" /* ActionTypes */].INIT ? 'preloadedState argument passed to createStore' : 'previous state received by the reducer';
+
+  if (reducerKeys.length === 0) {
+    return 'Store does not have a valid reducer. Make sure the argument passed ' + 'to combineReducers is an object whose values are reducers.';
+  }
+
+  if (!Object(__WEBPACK_IMPORTED_MODULE_1_lodash_es_isPlainObject__["a" /* default */])(inputState)) {
+    return 'The ' + argumentName + ' has unexpected type of "' + {}.toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] + '". Expected argument to be an object with the following ' + ('keys: "' + reducerKeys.join('", "') + '"');
+  }
+
+  var unexpectedKeys = Object.keys(inputState).filter(function (key) {
+    return !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key];
+  });
+
+  unexpectedKeys.forEach(function (key) {
+    unexpectedKeyCache[key] = true;
+  });
+
+  if (unexpectedKeys.length > 0) {
+    return 'Unexpected ' + (unexpectedKeys.length > 1 ? 'keys' : 'key') + ' ' + ('"' + unexpectedKeys.join('", "') + '" found in ' + argumentName + '. ') + 'Expected to find one of the known reducer keys instead: ' + ('"' + reducerKeys.join('", "') + '". Unexpected keys will be ignored.');
+  }
+}
+
+function assertReducerShape(reducers) {
+  Object.keys(reducers).forEach(function (key) {
+    var reducer = reducers[key];
+    var initialState = reducer(undefined, { type: __WEBPACK_IMPORTED_MODULE_0__createStore__["a" /* ActionTypes */].INIT });
+
+    if (typeof initialState === 'undefined') {
+      throw new Error('Reducer "' + key + '" returned undefined during initialization. ' + 'If the state passed to the reducer is undefined, you must ' + 'explicitly return the initial state. The initial state may ' + 'not be undefined. If you don\'t want to set a value for this reducer, ' + 'you can use null instead of undefined.');
+    }
+
+    var type = '@@redux/PROBE_UNKNOWN_ACTION_' + Math.random().toString(36).substring(7).split('').join('.');
+    if (typeof reducer(undefined, { type: type }) === 'undefined') {
+      throw new Error('Reducer "' + key + '" returned undefined when probed with a random type. ' + ('Don\'t try to handle ' + __WEBPACK_IMPORTED_MODULE_0__createStore__["a" /* ActionTypes */].INIT + ' or other actions in "redux/*" ') + 'namespace. They are considered private. Instead, you must return the ' + 'current state for any unknown actions, unless it is undefined, ' + 'in which case you must return the initial state, regardless of the ' + 'action type. The initial state may not be undefined, but can be null.');
+    }
+  });
+}
+
+/**
+ * Turns an object whose values are different reducer functions, into a single
+ * reducer function. It will call every child reducer, and gather their results
+ * into a single state object, whose keys correspond to the keys of the passed
+ * reducer functions.
+ *
+ * @param {Object} reducers An object whose values correspond to different
+ * reducer functions that need to be combined into one. One handy way to obtain
+ * it is to use ES6 `import * as reducers` syntax. The reducers may never return
+ * undefined for any action. Instead, they should return their initial state
+ * if the state passed to them was undefined, and the current state for any
+ * unrecognized action.
+ *
+ * @returns {Function} A reducer function that invokes every reducer inside the
+ * passed object, and builds a state object with the same shape.
+ */
+function combineReducers(reducers) {
+  var reducerKeys = Object.keys(reducers);
+  var finalReducers = {};
+  for (var i = 0; i < reducerKeys.length; i++) {
+    var key = reducerKeys[i];
+
+    if (true) {
+      if (typeof reducers[key] === 'undefined') {
+        Object(__WEBPACK_IMPORTED_MODULE_2__utils_warning__["a" /* default */])('No reducer provided for key "' + key + '"');
+      }
+    }
+
+    if (typeof reducers[key] === 'function') {
+      finalReducers[key] = reducers[key];
+    }
+  }
+  var finalReducerKeys = Object.keys(finalReducers);
+
+  var unexpectedKeyCache = void 0;
+  if (true) {
+    unexpectedKeyCache = {};
+  }
+
+  var shapeAssertionError = void 0;
+  try {
+    assertReducerShape(finalReducers);
+  } catch (e) {
+    shapeAssertionError = e;
+  }
+
+  return function combination() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    if (shapeAssertionError) {
+      throw shapeAssertionError;
+    }
+
+    if (true) {
+      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
+      if (warningMessage) {
+        Object(__WEBPACK_IMPORTED_MODULE_2__utils_warning__["a" /* default */])(warningMessage);
+      }
+    }
+
+    var hasChanged = false;
+    var nextState = {};
+    for (var _i = 0; _i < finalReducerKeys.length; _i++) {
+      var _key = finalReducerKeys[_i];
+      var reducer = finalReducers[_key];
+      var previousStateForKey = state[_key];
+      var nextStateForKey = reducer(previousStateForKey, action);
+      if (typeof nextStateForKey === 'undefined') {
+        var errorMessage = getUndefinedStateErrorMessage(_key, action);
+        throw new Error(errorMessage);
+      }
+      nextState[_key] = nextStateForKey;
+      hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
+    }
+    return hasChanged ? nextState : state;
+  };
+}
+
+/***/ }),
+/* 35 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = bindActionCreators;
+function bindActionCreator(actionCreator, dispatch) {
+  return function () {
+    return dispatch(actionCreator.apply(undefined, arguments));
+  };
+}
+
+/**
+ * Turns an object whose values are action creators, into an object with the
+ * same keys, but with every function wrapped into a `dispatch` call so they
+ * may be invoked directly. This is just a convenience method, as you can call
+ * `store.dispatch(MyActionCreators.doSomething())` yourself just fine.
+ *
+ * For convenience, you can also pass a single function as the first argument,
+ * and get a function in return.
+ *
+ * @param {Function|Object} actionCreators An object whose values are action
+ * creator functions. One handy way to obtain it is to use ES6 `import * as`
+ * syntax. You may also pass a single function.
+ *
+ * @param {Function} dispatch The `dispatch` function available on your Redux
+ * store.
+ *
+ * @returns {Function|Object} The object mimicking the original object, but with
+ * every action creator wrapped into the `dispatch` call. If you passed a
+ * function as `actionCreators`, the return value will also be a single
+ * function.
+ */
+function bindActionCreators(actionCreators, dispatch) {
+  if (typeof actionCreators === 'function') {
+    return bindActionCreator(actionCreators, dispatch);
+  }
+
+  if (typeof actionCreators !== 'object' || actionCreators === null) {
+    throw new Error('bindActionCreators expected an object or a function, instead received ' + (actionCreators === null ? 'null' : typeof actionCreators) + '. ' + 'Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?');
+  }
+
+  var keys = Object.keys(actionCreators);
+  var boundActionCreators = {};
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var actionCreator = actionCreators[key];
+    if (typeof actionCreator === 'function') {
+      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch);
+    }
+  }
+  return boundActionCreators;
+}
+
+/***/ }),
+/* 36 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = applyMiddleware;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__compose__ = __webpack_require__(16);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+/**
+ * Creates a store enhancer that applies middleware to the dispatch method
+ * of the Redux store. This is handy for a variety of tasks, such as expressing
+ * asynchronous actions in a concise manner, or logging every action payload.
+ *
+ * See `redux-thunk` package as an example of the Redux middleware.
+ *
+ * Because middleware is potentially asynchronous, this should be the first
+ * store enhancer in the composition chain.
+ *
+ * Note that each middleware will be given the `dispatch` and `getState` functions
+ * as named arguments.
+ *
+ * @param {...Function} middlewares The middleware chain to be applied.
+ * @returns {Function} A store enhancer applying the middleware.
+ */
+function applyMiddleware() {
+  for (var _len = arguments.length, middlewares = Array(_len), _key = 0; _key < _len; _key++) {
+    middlewares[_key] = arguments[_key];
+  }
+
+  return function (createStore) {
+    return function (reducer, preloadedState, enhancer) {
+      var store = createStore(reducer, preloadedState, enhancer);
+      var _dispatch = store.dispatch;
+      var chain = [];
+
+      var middlewareAPI = {
+        getState: store.getState,
+        dispatch: function dispatch(action) {
+          return _dispatch(action);
+        }
+      };
+      chain = middlewares.map(function (middleware) {
+        return middleware(middlewareAPI);
+      });
+      _dispatch = __WEBPACK_IMPORTED_MODULE_0__compose__["a" /* default */].apply(undefined, chain)(store.dispatch);
+
+      return _extends({}, store, {
+        dispatch: _dispatch
+      });
+    };
+  };
+}
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _redux = __webpack_require__(11);
+
+var _reduxResponsive = __webpack_require__(17);
+
+var _reducers = __webpack_require__(44);
+
+var _reducers2 = _interopRequireDefault(_reducers);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// import experience from 'containers/experience/reducers';
+// import cities from './cities';
+
+var rootReducer = (0, _redux.combineReducers)({
+	app: _reducers2.default,
+	// layout,
+	// footer,
+	// homepage,
+	// loader,
+	// gif,
+	// ytmodal,
+	// gmaps,
+	// header,
+	// modal,
+	// search,
+	// minimap,
+	// sidebar,
+	// cities,
+	// experience,
+	browser: (0, _reduxResponsive.createResponsiveStateReducer)({
+		mobile: 640,
+		tablet: 768,
+		tabletH: 1024,
+		desktop: 1280,
+		desktopM: 1440,
+		desktopL: 1680,
+		desktopXL: 1920
+	}, {
+		extraFields: function extraFields() {
+			return {
+				width: window.innerWidth,
+				height: window.innerHeight
+			};
+		}
+	})
+});
+
+// import layout from 'containers/layout/reducers';
+// import loader from 'containers/loader/reducers';
+// import footer from 'containers/footer/reducers';
+// import homepage from 'containers/homepage/reducers';
+// import sidebar from 'containers/sidebar/reducers';
+// import header from 'containers/header/reducers';
+// import modal from 'containers/modal/reducers';
+// import search from 'containers/search-modal/reducers';
+// import gif from 'containers/gif-modal/reducers';
+// import ytmodal from 'containers/yt-modal/reducers';
+// import gmaps from 'containers/parade-detail-gmaps/reducers';
+// import minimap from 'containers/mini-map/reducers';
+exports.default = rootReducer;
+
+/***/ }),
+/* 38 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export defaultBreakpoints */
+/* unused harmony export getOrderMap */
+/* unused harmony export getLessThan */
+/* unused harmony export getIs */
+/* unused harmony export getGreaterThan */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mediaquery__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mediaquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_mediaquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__actions_types_CALCULATE_RESPONSIVE_STATE__ = __webpack_require__(19);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+// third party imports
+
+// local imports
+
+
+// default breakpoints
+var defaultBreakpoints = {
+    extraSmall: 480,
+    small: 768,
+    medium: 992,
+    large: 1200
+};
+// media type to default to when no `window` present
+var defaultMediaType = 'infinity';
+// orientation to default to when no `window` present
+var defaultOrientation = null;
+
+// a lightweight version of lodash.transform
+var transform = function transform(obj, f) {
+    // a place to mutate
+    var internal = {};
+    // basically we have to reduce the keys down to an object and pass the k/v pairs to each f
+    Object.keys(obj).forEach(function (key) {
+        return f(internal, obj[key], key);
+    });
+    // return the object we've been building up
+    return internal;
+};
+
+/**
+ * Compute a mapping of media type to its ordering where ordering is defined
+ * such that large > medium > small.
+ * @args (object) breakpoints - the breakpoint object
+ */
+function getOrderMap(bps) {
+    // grab the keys in the appropriate order
+    var keys = Object.keys(bps).sort(function (a, b) {
+        // get the associated values
+        var valueA = bps[a];
+        var valueB = bps[b];
+
+        // if a is a number and b is a string
+        if (typeof valueA === 'number' && typeof valueB === 'string') {
+            // put the number first
+            return -1;
+        } else if (typeof valueB === 'number' && typeof valueA === 'string') {
+            // return the number first
+            return 1;
+        }
+
+        // otherwise treat it like normal
+        return valueA >= valueB ? 1 : -1;
+    });
+
+    // map the original breakpoint object
+    return transform(bps, function (result, breakpoint, mediaType) {
+        // figure out the index of the mediatype
+        var index = keys.indexOf(mediaType);
+
+        // if there is an entry in the sort for this
+        if (index !== -1) {
+            // to its index in the sorted list
+            result[mediaType] = index;
+        }
+    });
+}
+
+/**
+ * Compute the `lessThan` object based on the browser width.
+ * @arg {number} browserWidth - Width of the browser.
+ * @arg {object} breakpoints - The breakpoints object.
+ * @arg {currentMediaType} breakpoints - The curent media type.
+ * @returns {object} The `lessThan` object.  Its keys are the same as the
+ * keys of the breakpoints object.  The value for each key indicates whether
+ * or not the browser width is less than the breakpoint.
+ */
+function getLessThan(currentMediaType, breakpointOrder) {
+    // get the ordering of the current media type
+    var currentOrder = breakpointOrder[currentMediaType];
+
+    return transform(breakpointOrder, function (result, breakpoint, mediaType) {
+        // if the breakpoint is a number
+        if (typeof breakpoint === 'number' && breakpointOrder[mediaType]) {
+            // store wether or not it is less than the breakpoint
+            result[mediaType] = currentOrder < breakpointOrder[mediaType];
+            // handle non numerical breakpoints specially
+        } else {
+            result[mediaType] = false;
+        }
+    });
+}
+
+/**
+ * Compute the `lessThan` object based on the browser width.
+ * @arg {object} breakpoints - The breakpoints object.
+ * @arg {currentMediaType} breakpoints - The curent media type.
+ * @returns {object} The `lessThan` object.  Its keys are the same as the
+ * keys of the breakpoints object.  The value for each key indicates whether
+ * or not the browser width is less than the breakpoint.
+ */
+function getIs(currentMediaType, breakpoints) {
+    return transform(breakpoints, function (result, breakpoint, mediaType) {
+        // if the breakpoint is a number
+        if (typeof breakpoint === 'number' && breakpoints[mediaType]) {
+            // store wether or not it is less than the breakpoint
+            result[mediaType] = mediaType === currentMediaType;
+            // handle non numerical breakpoints specially
+        } else {
+            result[mediaType] = false;
+        }
+    });
+}
+
+/**
+ * Compute the `greaterThan` object based on the browser width.
+ * @arg {number} browserWidth - Width of the browser.
+ * @arg {object} breakpoints - The breakpoints object.
+ * @returns {object} The `greaterThan` object.  Its keys are the same as the
+ * keys of the breakpoints object.  The value for each key indicates whether
+ * or not the browser width is greater than the breakpoint.
+ */
+function getGreaterThan(currentMediaType, breakpointOrder) {
+    // get the ordering of the current media type
+    var currentOrder = breakpointOrder[currentMediaType];
+
+    return transform(breakpointOrder, function (result, breakpoint, mediaType) {
+        // if the breakpoint is a number
+        if (typeof breakpoint === 'number') {
+            // store wether or not it is less than the breakpoint
+            result[mediaType] = currentOrder > breakpointOrder[mediaType];
+            // handle non numerical breakpoints specially
+        } else {
+            result[mediaType] = false;
+        }
+    });
+}
+
+/**
+ * Gets the current media type from the global `window`.
+ * @arg {object} mediaQueries - The media queries object.
+ * @arg {string} infinityMediaType - The infinity media type.
+ * @returns {string} The window's current media type.  This is the key of the
+ * breakpoint that is the next breakpoint larger than the window.
+ */
+function getMediaType(matchMedia, mediaQueries, infinityMediaType) {
+    // if there's no window
+    if (typeof matchMedia === 'undefined') {
+        // return the infinity media type
+        return infinityMediaType;
+    }
+
+    // there is a window, so compute the true media type
+    return Object.keys(mediaQueries).reduce(function (result, query) {
+        // return the new type if the query matches otherwise the previous one
+        return matchMedia(mediaQueries[query]).matches ? query : result;
+        // use the infinity media type
+    }, infinityMediaType);
+}
+
+/**
+ * Gets the current media type from the global `window`.
+ * @arg {object} mediaQueries - The media queries object.
+ * @returns {string} The window's current media type.  This is the key of the
+ * breakpoint that is the next breakpoint larger than the window.
+ */
+function getOrientation(matchMedia) {
+    // if there's no window
+    if (typeof matchMedia === 'undefined') {
+        // return the default
+        return defaultOrientation;
+    }
+
+    var mediaQueries = {
+        portrait: '(orientation: portrait)',
+        landscape: '(orientation: landscape)'
+    };
+
+    // there is a window, so compute the true orientation
+    return Object.keys(mediaQueries).reduce(function (result, query) {
+        // return the new type if the query matches otherwise the previous one
+        return matchMedia(mediaQueries[query]).matches ? query : result;
+        // use the default orientation
+    }, defaultOrientation);
+}
+
+// export the reducer factory
+/* harmony default export */ __webpack_exports__["a"] = (function (breakpoints) {
+    var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        initialMediaType = _ref.initialMediaType,
+        _ref$infinity = _ref.infinity,
+        infinity = _ref$infinity === undefined ? defaultMediaType : _ref$infinity,
+        _ref$extraFields = _ref.extraFields,
+        extraFields = _ref$extraFields === undefined ? function () {
+        return {};
+    } : _ref$extraFields;
+
+    // accept null values
+    if (!breakpoints) {
+        breakpoints = defaultBreakpoints; // eslint-disable-line
+    }
+
+    // add `infinity` breakpoint for upper bound
+    breakpoints[infinity] = Infinity;
+    // media queries associated with the breakpoints
+    var mediaQueries = __WEBPACK_IMPORTED_MODULE_0_mediaquery___default.a.asObject(breakpoints);
+    // figure out the ordering
+    var mediaOrdering = getOrderMap(breakpoints);
+
+    // return reducer for handling the responsive state
+    return function (state, _ref2) {
+        var type = _ref2.type,
+            matchMedia = _ref2.matchMedia;
+
+        // if told to recalculate state or state has not yet been initialized
+        if (type === __WEBPACK_IMPORTED_MODULE_1__actions_types_CALCULATE_RESPONSIVE_STATE__["a" /* default */] || typeof state === 'undefined') {
+            // if the state has never been set before and we have an initial type
+            var mediaType = !state && initialMediaType
+            // use it
+            ? initialMediaType
+            // otherwise figure out the media type from the browser
+            : getMediaType(matchMedia, mediaQueries, infinity);
+            // the current orientation
+            var orientation = getOrientation(matchMedia);
+            // build the responsive state
+            var responsiveState = {
+                _responsiveState: true,
+                lessThan: getLessThan(mediaType, mediaOrdering),
+                greaterThan: getGreaterThan(mediaType, mediaOrdering),
+                is: getIs(mediaType, breakpoints),
+                mediaType: mediaType,
+                orientation: orientation,
+                breakpoints: breakpoints
+            };
+
+            // return calculated state
+            return _extends({}, responsiveState, extraFields(responsiveState));
+        }
+        // otherwise return the previous state
+        return state;
+    };
+});
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var MQ = {
+
+  asArray: function asArray(obj) {
+    var bp = this.getBreakPoints(obj);
+    var custom = this.getCustomQueries(obj);
+
+    return this._translate(this._makeSteps(this._toSortedArray(bp)))
+      .concat(this._objToArr(custom));
+  },
+
+  asObject: function asObject(obj) {
+    return this._arrToObj(this.asArray(obj));
+  },
+
+  getBreakPoints: function getBreakPoints(obj) {
+    return Object.keys(obj).reduce(function (prev, next) {
+      if (typeof obj[next] === 'number') {
+        prev[next] = obj[next];
+      }
+      return prev;
+    }, {});
+  },
+
+  getCustomQueries: function getCustomQueries(obj) {
+    return Object.keys(obj).reduce(function (prev, next) {
+      if (typeof obj[next] === 'string') {
+        prev[next] = obj[next];
+      }
+      return prev;
+    }, {});
+  },
+
+  _toSortedArray: function _toSortedArray(obj) {
+    return Object.keys(obj).map(function (el) {
+      return [el, obj[el]];
+    }).sort(function (a, b) {
+      return a[1] - b[1];
+    });
+  },
+
+  _makeSteps: function _makeSteps(arr) {
+    return (arr[arr.length - 1][1] === Infinity)?
+      arr
+      : arr.concat([Infinity]);
+  },
+
+  _translate: function _translate(arr) {
+    return arr.map(function (el, index) {
+      return (index === 0)?
+        [el[0], 'screen and (max-width: ' + el[1] + 'px)']
+        : (index === arr.length - 1)?
+          [(el[0] || 'default'), 'screen and (min-width: ' +
+            (arr[index - 1][1] + 1) + 'px)']
+          : [el[0], 'screen and (min-width: ' + (arr[index-1][1] + 1) +
+            'px) and (max-width: ' + el[1] + 'px)'];
+    });
+  },
+
+  _objToArr: function _objToArr(obj) {
+    return Object.keys(obj).map(function (el) {
+      return [el, obj[el]];
+    });
+  },
+
+  _arrToObj: function _arrToObj(arr) {
+    return arr.reduce(function (prev, next) {
+      prev[next[0]] = next[1];
+      return prev;
+    }, {});
+  }
+};
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = MQ;
+} else {
+  if (true) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
+      return MQ;
+    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  }
+  else {
+    window.MQ = MQ;
+  }
+}
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__handlers__ = __webpack_require__(41);
+// local imports
+
+
+/**
+ * Creates a store enhancer based off an (optional) throttle time.
+ * @arg {object} [options={calculateInitialState}] - Options object.
+ * @arg {boolean} [options.calculateInitialState=true] - True if the responsive
+ * state must be calculated initially, false otherwise.
+ * @returns {function} - The store enhancer (which adds event listeners to
+ * dispatch actions on window resize).
+ */
+/* harmony default export */ __webpack_exports__["a"] = (function () {
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        _ref$calculateInitial = _ref.calculateInitialState,
+        calculateInitialState = _ref$calculateInitial === undefined ? true : _ref$calculateInitial;
+
+    // return the store enhancer (an enhanced version of `createStore`)
+    return function (createStore) {
+        return function () {
+            // create the store
+            var store = createStore.apply(undefined, arguments);
+            // if there is a `window`
+            if (typeof window !== 'undefined' && typeof window.matchMedia !== 'undefined') {
+                // add the handlers that only fire when the responsive state changes
+                Object(__WEBPACK_IMPORTED_MODULE_0__handlers__["a" /* default */])({ store: store, window: window, calculateInitialState: calculateInitialState });
+            }
+
+            // return the store so that the call is transparent
+            return store;
+        };
+    };
+});
+
+/***/ }),
+/* 41 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mediaquery__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mediaquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_mediaquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__actions_creators__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getBreakpoints__ = __webpack_require__(43);
+// see: https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Testing_media_queries
+
+// external imports
+
+// local imports
+
+
+
+// this function adds event handlers to the window that only tirgger
+// when the responsive state changes
+/* harmony default export */ __webpack_exports__["a"] = (function (_ref) {
+    var store = _ref.store,
+        window = _ref.window,
+        calculateInitialState = _ref.calculateInitialState;
+
+    // the function to call when calculating the new responsive state
+    var refreshResponsiveState = function refreshResponsiveState() {
+        return store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_1__actions_creators__["a" /* calculateResponsiveState */])(window));
+    };
+
+    // get the object of media queries corresponding to the breakpoints in the store
+    var mediaQueries = __WEBPACK_IMPORTED_MODULE_0_mediaquery___default.a.asObject(Object(__WEBPACK_IMPORTED_MODULE_2__getBreakpoints__["a" /* default */])(store));
+
+    // for every breakpoint range
+    Object.keys(mediaQueries).forEach(function (breakpoint) {
+        // create a media query list for the breakpoint
+        var mediaQueryList = window.matchMedia(mediaQueries[breakpoint]);
+
+        /* eslint-disable no-loop-func */
+
+        // whenever any of the media query lists status changes
+        mediaQueryList.addListener(function (query) {
+            // if a new query was matched
+            if (query.matches) {
+                // recaulate the state
+                refreshResponsiveState();
+            }
+        });
+    });
+
+    // make sure we update the responsive state when the browser changes orientation
+    window.addEventListener('orientationchange', refreshResponsiveState);
+
+    // if we are supposed to calculate the initial state
+    if (calculateInitialState) {
+        // then do so
+        refreshResponsiveState();
+    }
+});
+
+/***/ }),
+/* 42 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__types__ = __webpack_require__(21);
+// action type
+
+
+/**
+ * Action creator taking window-like object and returning action to calculate
+ * responsive state.
+ * @arg {object} window - Any window-like object (has keys `innerWidth` and
+ * `matchMedia`).
+ * @arg {number} window.innerWidth - The value for the browser width (to pass to
+ * the responsive state reducer logic).  See browser global `window.innerWidth`.
+ * @arg {function} window.matchMedia - The method with which to match media
+ * queries (to pass to the responsive sate reducer logic).  See global
+ * `window.matchMedia`.
+ * @returns {object} The resulting action.  Action will have type
+ * `CALCULATE_RESPONSIVE_STATE`, and will be directly given the two keys taken
+ * from the `window` argument.
+ */
+/* harmony default export */ __webpack_exports__["a"] = (function () {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      innerWidth = _ref.innerWidth,
+      innerHeight = _ref.innerHeight,
+      matchMedia = _ref.matchMedia;
+
+  return {
+    type: __WEBPACK_IMPORTED_MODULE_0__types__["a" /* CALCULATE_RESPONSIVE_STATE */],
+    innerWidth: innerWidth,
+    innerHeight: innerHeight,
+    matchMedia: matchMedia
+  };
+});
+
+/***/ }),
+/* 43 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * Returns the value found in obj at path. Delegates to obj.getIn if available.
+ * @param obj
+ * @param path
+ * @returns {*}
+ */
+function getIn(obj, path) {
+    if (obj.getIn) {
+        return obj.getIn(path);
+    }
+    return path.reduce(function (accum, next) {
+        return accum[next];
+    }, obj);
+}
+
+/**
+ * Returns all keys of an object. Delegates to either obj.keys or Object.keys.
+ * @param obj
+ * @returns {*}
+ */
+
+function keys(obj) {
+    if (obj.keys) {
+        return Array.from(obj.keys());
+    }
+    return Object.keys(obj);
+}
+
+/**
+ * An implementation of breadth-first search. Looks for marker key in the tree.
+ * @param tree
+ * @param marker
+ * @param [maxDepth]
+ * @returns {*}
+ */
+function findMarker(tree, marker) {
+    var maxDepth = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 20;
+
+    var rootPath = [];
+    var queue = [rootPath];
+
+    var _loop = function _loop() {
+        var currentPath = queue.shift();
+        if (currentPath.length > maxDepth) {
+            return 'continue';
+        }
+        var currentObj = getIn(tree, currentPath);
+        if (currentObj) {
+            if (currentObj[marker]) {
+                return {
+                    v: currentPath
+                };
+            }
+            queue.push.apply(queue, _toConsumableArray(keys(currentObj).map(function (k) {
+                return currentPath.concat(k);
+            })));
+        }
+    };
+
+    while (queue.length > 0) {
+        var _ret = _loop();
+
+        switch (_ret) {
+            case 'continue':
+                continue;
+
+            default:
+                if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+        }
+    }
+    return false;
+}
+
+/**
+ * Searches through the given redux store and returns the breakpoints found inside.
+ * @arg {object} - The redux state.
+ * @returns {object} - The breakpoints associated with the responsive state inside the store.
+ */
+function getBreakpoints(store) {
+    // grab the current state of the store
+    var storeState = store.getState();
+
+    var responsiveStatePath = findMarker(storeState, '_responsiveState');
+
+    // if we couldn't find a responsive reducer at the root of the project
+    if (!responsiveStatePath) {
+        throw new Error('Could not find responsive state reducer. ' + 'If you are still running into trouble, please open a ticket on github.');
+    }
+
+    // return the breakpoints in the redux store
+    return getIn(storeState, responsiveStatePath).breakpoints;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (getBreakpoints);
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.app = undefined;
+
+var _constants = __webpack_require__(45);
+
+// import {
+// 	LANGS,
+// } from 'constants/langs';
+
+var InitialState = {
+	routes: [],
+	params: null,
+	location: null
+};
+
+// const initialState = new InitialState();
+
+// Updates an entity cache in response to any action with response.entities.
+var app = exports.app = function app() {
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : InitialState;
+	var action = arguments[1];
+
+	switch (action.type) {
+		case _constants.SET_META:
+			{
+				// Set default meta
+				if (action.isDefault) {
+					var meta = {};
+					meta.default_title = action.meta.title;
+					meta.default_description = action.meta.description;
+
+					state = state.set('meta', fromJS(meta));
+				}
+
+				var stateMeta = state.get('meta');
+
+				var defaultTitle = stateMeta.default_title;
+				var defaultDescription = stateMeta.default_description;
+				var title = action.meta && action.meta.title ? action.meta.title : defaultTitle;
+				var description = action.meta && action.meta.description ? action.meta.description : defaultDescription;
+
+				stateMeta = stateMeta.set('title', title);
+				stateMeta = stateMeta.set('description', description);
+
+				return state.set('meta', stateMeta);
+			}
+		case _constants.SET_UI:
+			{
+				return state.set('ui', fromJS(action.data));
+			}
+		case _constants.SET_HASH:
+			{
+				return state.set('hash', action.hash);
+			}
+		case _constants.SET_ROUTES:
+			{
+				return Object.assign({}, state, {
+					routes: action.routes
+				});
+			}
+		case _constants.SET_QUERY:
+			{
+				return state.set('query', fromJS(action.query));
+			}
+		case _constants.NAVIGATION:
+			{
+				return Object.assign({}, state, {
+					params: action.params,
+					location: action.location
+				});
+			}
+		case _constants.APP_LOADED:
+			{
+				return state.set('appLoaded', action.appLoaded);
+			}
+		case _constants.CHANGE_LANG:
+			{
+				if (LANGS.indexOf(action.lang) > -1) return state.set('lang', action.lang);
+				return state;
+			}
+		default:
+			{
+				return state;
+			}
+	}
+};
+
+exports.default = app;
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// ACTION
+var NAVIGATION = exports.NAVIGATION = 'NAVIGATION';
+var APP_LOADED = exports.APP_LOADED = 'APP_LOADED';
+var CHANGE_LANG = exports.CHANGE_LANG = 'CHANGE_LANG';
+var SET_ROUTES = exports.SET_ROUTES = 'SET_ROUTES';
+var SET_QUERY = exports.SET_QUERY = 'SET_QUERY';
+var SET_META = exports.SET_META = 'SET_META';
+var SET_UI = exports.SET_UI = 'SET_UI';
+var SET_HASH = exports.SET_HASH = 'SET_HASH';
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.navigate = navigate;
+exports.setMeta = setMeta;
+exports.setHash = setHash;
+exports.setUIData = setUIData;
+exports.setQuery = setQuery;
+exports.setRoutes = setRoutes;
+exports.setAppLoaded = setAppLoaded;
+exports.setLang = setLang;
+
+var _constants = __webpack_require__(45);
+
+function navigate(location) {
+	var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+	return {
+		type: _constants.NAVIGATION,
+		location: location,
+		params: params
+	};
+}
+
+function setMeta() {
+	var meta = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	var isDefault = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+	return {
+		type: _constants.SET_META,
+		meta: meta,
+		isDefault: isDefault
+	};
+}
+
+function setHash(hash) {
+	return {
+		type: _constants.SET_HASH,
+		hash: hash || null
+	};
+}
+
+function setUIData(data) {
+	return {
+		type: _constants.SET_UI,
+		data: data
+	};
+}
+
+function setQuery(query) {
+	return {
+		type: _constants.SET_QUERY,
+		query: query || {}
+	};
+}
+
+function setRoutes(routes) {
+	return {
+		type: _constants.SET_ROUTES,
+		routes: routes
+	};
+}
+
+function setAppLoaded(appLoaded) {
+	return {
+		type: _constants.APP_LOADED,
+		appLoaded: appLoaded
+	};
+}
+
+function setLang(lang) {
+	return {
+		type: _constants.CHANGE_LANG,
+		lang: lang
+	};
+}
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// LOCATION
+var HOMEPAGE = exports.HOMEPAGE = 'HOMEPAGE';
+var ABOUT = exports.ABOUT = 'ABOUT';
+var PARADE_DETAIL = exports.PARADE_DETAIL = 'PARADE_DETAIL';
+var REDIRECT = exports.REDIRECT = 'REDIRECT';
+var PARADE_EXPERIENCE = exports.PARADE_EXPERIENCE = 'PARADE_EXPERIENCE';
+var PARADE_EXPERIENCE_HOTSPOT = exports.PARADE_EXPERIENCE_HOTSPOT = 'PARADE_EXPERIENCE_HOTSPOT';
+var NOT_FOUND = exports.NOT_FOUND = 'NOT_FOUND';
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // Abstract
+// import AbstractPageComponent from 'abstract/component/DOM/page';
+
+// Containers
+// import Layout from 'containers/layout/Layout';
+// import HomepageContainer from 'containers/homepage/Homepage';
+// import ParadeDetailContainer from 'containers/parade-detail/ParadeDetail';
+// import ExperiencePageContainer from 'containers/experience-page/ExperiencePage';
+// import NotFoundContainer from 'containers/not-found/NotFound';
+
+// Constants
+
+// import {SEARCH_MODAL, ABOUT_MODAL} from 'containers/modal/constants';
+
+// Watchers
+// import Loader from 'containers/loader/Loader';
+
+// Actions
+
+// import {showModal} from 'containers/modal/actions';
+
+
+var _locations = __webpack_require__(47);
+
+var _actions = __webpack_require__(46);
+
+var _store = __webpack_require__(10);
+
+var _store2 = _interopRequireDefault(_store);
+
+var _reduxWatch = __webpack_require__(49);
+
+var _reduxWatch2 = _interopRequireDefault(_reduxWatch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var App = function () {
+	function App() {
+		_classCallCheck(this, App);
+
+		this.prevLocation = null;
+		this.location = null;
+		this.layout = null;
+		this.loader = null;
+		this.page = null;
+		this.oldPage = null;
+
+		console.log('store.getState()', _store2.default.getState());
+		var w = (0, _reduxWatch2.default)(_store2.default.getState, 'app.location');
+
+		_store2.default.subscribe(w(function (newVal, oldVal, objectPath) {
+			console.log('%s changed from %s to %s', objectPath, oldVal, newVal);
+			// admin.name changed from JP to JOE
+		}));
+	}
+
+	_createClass(App, [{
+		key: 'init',
+		value: function init() {
+			this.layout = new Layout();
+			// this.loader = new Loader();
+
+
+			// return layout promise
+			return this.layout.init();
+		}
+	}, {
+		key: 'onIdChanged',
+		value: function onIdChanged(id, prevId) {
+			var location = this.getState().get('app').get('location');
+			if (id !== prevId && id && prevId && this.location === location) {
+				this.routing(location, true);
+			}
+		}
+	}, {
+		key: 'onLocationChanged',
+		value: function onLocationChanged(location, prevLocation) {
+			this.prevLocation = prevLocation;
+			if (location !== prevLocation) {
+				this.location = location;
+				this.routing(location, false);
+			}
+		}
+	}, {
+		key: 'routing',
+		value: function routing(location) {
+			var _this = this;
+
+			var fromSamePage = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+			var page = null;
+
+			switch (location) {
+				case _locations.HOMEPAGE:
+					page = new HomepageContainer();break;
+				case _locations.PARADE_DETAIL:
+					page = new ParadeDetailContainer();break;
+				case _locations.PARADE_EXPERIENCE_HOTSPOT:
+					page = new ExperiencePageContainer();break;
+				case _locations.NOT_FOUND:
+					page = new NotFoundContainer();break;
+				default:
+					page = new AbstractPageComponent();
+			}
+
+			if (page === null) {
+				console.error('Error: page is null');
+				return;
+			}
+
+			this.oldPage = this.page;
+			this.page = page;
+
+			// Init the next page now
+			console.log('INIT PAGE', this.page);
+			this.page.init().then(function () {
+				// Resize the current page for position
+				// this.page.resize();
+				_this.layout.triggerResize();
+
+				// Meta
+				_this.layout.setMeta();
+
+				if (_this.oldPage && hideNow) {
+					console.log('HIDE OLD PAGE', _this.oldPage);
+					_this.oldPage.hide().then(function () {
+						_this.oldPage.dispose();
+						_this.oldPage = null;
+					});
+				}
+
+				// Show next
+				_this.page.show().then(function () {
+					if (!_this.getState().get('app').get('appLoaded')) _this.dispatch((0, _actions.setAppLoaded)(true));
+
+					// at this point, dispose
+					if (_this.oldPage && !hideNow) {
+						console.log('dispose again?');
+						_this.oldPage.dispose();
+						_this.oldPage = null;
+					}
+				});
+
+				// If there was data already, we are not waiting for a loader screen to finish
+				// we show it now!
+
+				// if (hasData) {
+				//     this.page.show().then(() => {
+				//         if (!this.getState().get('app').get('appLoaded')) this.dispatch(setAppLoaded(true));
+				//     });
+				// }
+			});
+		}
+	}]);
+
+	return App;
+}();
+
+exports.default = App;
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var getValue = __webpack_require__(50).get
+
+function defaultCompare (a, b) {
+  return a === b
+}
+
+function watch (getState, objectPath, compare) {
+  compare = compare || defaultCompare
+  var currentValue = getValue(getState(), objectPath)
+  return function w (fn) {
+    return function () {
+      var newValue = getValue(getState(), objectPath)
+      if (!compare(currentValue, newValue)) {
+        var oldValue = currentValue
+        currentValue = newValue
+        fn(newValue, oldValue, objectPath)
+      }
+    }
+  }
+}
+
+module.exports = watch
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory){
+  'use strict';
+
+  /*istanbul ignore next:cant test*/
+  if (typeof module === 'object' && typeof module.exports === 'object') {
+    module.exports = factory();
+  } else if (true) {
+    // AMD. Register as an anonymous module.
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {
+    // Browser globals
+    root.objectPath = factory();
+  }
+})(this, function(){
+  'use strict';
+
+  var
+    toStr = Object.prototype.toString,
+    _hasOwnProperty = Object.prototype.hasOwnProperty;
+
+  function isEmpty(value){
+    if (!value) {
+      return true;
+    }
+    if (isArray(value) && value.length === 0) {
+        return true;
+    } else if (!isString(value)) {
+        for (var i in value) {
+            if (_hasOwnProperty.call(value, i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+  }
+
+  function toString(type){
+    return toStr.call(type);
+  }
+
+  function isNumber(value){
+    return typeof value === 'number' || toString(value) === "[object Number]";
+  }
+
+  function isString(obj){
+    return typeof obj === 'string' || toString(obj) === "[object String]";
+  }
+
+  function isObject(obj){
+    return typeof obj === 'object' && toString(obj) === "[object Object]";
+  }
+
+  function isArray(obj){
+    return typeof obj === 'object' && typeof obj.length === 'number' && toString(obj) === '[object Array]';
+  }
+
+  function isBoolean(obj){
+    return typeof obj === 'boolean' || toString(obj) === '[object Boolean]';
+  }
+
+  function getKey(key){
+    var intKey = parseInt(key);
+    if (intKey.toString() === key) {
+      return intKey;
+    }
+    return key;
+  }
+
+  function set(obj, path, value, doNotReplace){
+    if (isNumber(path)) {
+      path = [path];
+    }
+    if (isEmpty(path)) {
+      return obj;
+    }
+    if (isString(path)) {
+      return set(obj, path.split('.').map(getKey), value, doNotReplace);
+    }
+    var currentPath = path[0];
+
+    if (path.length === 1) {
+      var oldVal = obj[currentPath];
+      if (oldVal === void 0 || !doNotReplace) {
+        obj[currentPath] = value;
+      }
+      return oldVal;
+    }
+
+    if (obj[currentPath] === void 0) {
+      //check if we assume an array
+      if(isNumber(path[1])) {
+        obj[currentPath] = [];
+      } else {
+        obj[currentPath] = {};
+      }
+    }
+
+    return set(obj[currentPath], path.slice(1), value, doNotReplace);
+  }
+
+  function del(obj, path) {
+    if (isNumber(path)) {
+      path = [path];
+    }
+
+    if (isEmpty(obj)) {
+      return void 0;
+    }
+
+    if (isEmpty(path)) {
+      return obj;
+    }
+    if(isString(path)) {
+      return del(obj, path.split('.'));
+    }
+
+    var currentPath = getKey(path[0]);
+    var oldVal = obj[currentPath];
+
+    if(path.length === 1) {
+      if (oldVal !== void 0) {
+        if (isArray(obj)) {
+          obj.splice(currentPath, 1);
+        } else {
+          delete obj[currentPath];
+        }
+      }
+    } else {
+      if (obj[currentPath] !== void 0) {
+        return del(obj[currentPath], path.slice(1));
+      }
+    }
+
+    return obj;
+  }
+
+  var objectPath = function(obj) {
+    return Object.keys(objectPath).reduce(function(proxy, prop) {
+      if (typeof objectPath[prop] === 'function') {
+        proxy[prop] = objectPath[prop].bind(objectPath, obj);
+      }
+
+      return proxy;
+    }, {});
+  };
+
+  objectPath.has = function (obj, path) {
+    if (isEmpty(obj)) {
+      return false;
+    }
+
+    if (isNumber(path)) {
+      path = [path];
+    } else if (isString(path)) {
+      path = path.split('.');
+    }
+
+    if (isEmpty(path) || path.length === 0) {
+      return false;
+    }
+
+    for (var i = 0; i < path.length; i++) {
+      var j = path[i];
+      if ((isObject(obj) || isArray(obj)) && _hasOwnProperty.call(obj, j)) {
+        obj = obj[j];
+      } else {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  objectPath.ensureExists = function (obj, path, value){
+    return set(obj, path, value, true);
+  };
+
+  objectPath.set = function (obj, path, value, doNotReplace){
+    return set(obj, path, value, doNotReplace);
+  };
+
+  objectPath.insert = function (obj, path, value, at){
+    var arr = objectPath.get(obj, path);
+    at = ~~at;
+    if (!isArray(arr)) {
+      arr = [];
+      objectPath.set(obj, path, arr);
+    }
+    arr.splice(at, 0, value);
+  };
+
+  objectPath.empty = function(obj, path) {
+    if (isEmpty(path)) {
+      return obj;
+    }
+    if (isEmpty(obj)) {
+      return void 0;
+    }
+
+    var value, i;
+    if (!(value = objectPath.get(obj, path))) {
+      return obj;
+    }
+
+    if (isString(value)) {
+      return objectPath.set(obj, path, '');
+    } else if (isBoolean(value)) {
+      return objectPath.set(obj, path, false);
+    } else if (isNumber(value)) {
+      return objectPath.set(obj, path, 0);
+    } else if (isArray(value)) {
+      value.length = 0;
+    } else if (isObject(value)) {
+      for (i in value) {
+        if (_hasOwnProperty.call(value, i)) {
+          delete value[i];
+        }
+      }
+    } else {
+      return objectPath.set(obj, path, null);
+    }
+  };
+
+  objectPath.push = function (obj, path /*, values */){
+    var arr = objectPath.get(obj, path);
+    if (!isArray(arr)) {
+      arr = [];
+      objectPath.set(obj, path, arr);
+    }
+
+    arr.push.apply(arr, Array.prototype.slice.call(arguments, 2));
+  };
+
+  objectPath.coalesce = function (obj, paths, defaultValue) {
+    var value;
+
+    for (var i = 0, len = paths.length; i < len; i++) {
+      if ((value = objectPath.get(obj, paths[i])) !== void 0) {
+        return value;
+      }
+    }
+
+    return defaultValue;
+  };
+
+  objectPath.get = function (obj, path, defaultValue){
+    if (isNumber(path)) {
+      path = [path];
+    }
+    if (isEmpty(path)) {
+      return obj;
+    }
+    if (isEmpty(obj)) {
+      return defaultValue;
+    }
+    if (isString(path)) {
+      return objectPath.get(obj, path.split('.'), defaultValue);
+    }
+
+    var currentPath = getKey(path[0]);
+
+    if (path.length === 1) {
+      if (obj[currentPath] === void 0) {
+        return defaultValue;
+      }
+      return obj[currentPath];
+    }
+
+    return objectPath.get(obj[currentPath], path.slice(1), defaultValue);
+  };
+
+  objectPath.del = function(obj, path) {
+    return del(obj, path);
+  };
+
+  return objectPath;
+});
 
 
 /***/ })

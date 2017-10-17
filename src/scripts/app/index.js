@@ -2,7 +2,7 @@ import $ from 'zepto';
 import is from 'is_js';
 
 import {configureRoute, initRouter} from 'router';
-// import App from 'containers/app/App';
+import App from 'containers/app/App';
 // import {configureAnalytics} from 'utils/analytics';
 
 class Entry {
@@ -19,7 +19,7 @@ class Entry {
 		console.log('init');
 
 		const router = configureRoute();
-		// this.app = new App();
+		this.app = new App();
 		// custom Detectizr setup
 		const root = $('html');
 

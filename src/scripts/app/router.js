@@ -1,8 +1,12 @@
 import page from 'page';
-// import store from 'store';
+import store from 'store';
+
+console.log('store', store);
+
+import routes from 'routes/routes.json';
 
 // Actions
-// import {navigate, setRoutes, setQuery, setMeta, setLang, setUIData, setHash} from 'containers/app/actions';
+import {navigate, setRoutes, setQuery, setMeta, setLang, setUIData, setHash} from 'containers/app/actions';
 // import {setLoaderData} from 'containers/loader/actions';
 // import {setSidebarData} from 'containers/sidebar/actions';
 // import {setFooterData} from 'containers/footer/actions';
@@ -16,14 +20,12 @@ import page from 'page';
 // import {JSON_DIR, SET_END_POINT, SET_SEARCH_END_POINT} from 'constants/api';
 // import {LIST_CITIES} from 'constants/cities';
 
-// import {
-// 	HOMEPAGE,
-// 	NOT_FOUND,
-// 	ABOUT,
-// 	PARADE_DETAIL,
-// 	PARADE_EXPERIENCE_HOTSPOT,
-// 	REDIRECT,
-// } from 'constants/locations';
+import {
+	HOMEPAGE,
+	NOT_FOUND,
+	ABOUT,
+	REDIRECT,
+} from 'constants/locations';
 
 // Utils
 // import {loadJSON} from 'utils/load';
@@ -43,31 +45,21 @@ const preRouting = (ctx, next) => {
 	next();
 };
 
-// const _initHotspots = (hotspots) => {
-// 	const aHotspots = [];
-// 	LIST_CITIES.forEach((city) => {
-// 		// now, find the hotspots related
-// 		hotspots.forEach((hotspot) => {
-// 			if (hotspot.city_id === city) aHotspots.push(hotspot);
-// 		});
-// 	});
-
-// 	store.dispatch(setHotspotsList(aHotspots));
-// };
 
 const routesFn = {
 	ROOT: (ctx) => {
 		// Roots redirect to the current lang
 		// const lang = store.getState().get('app').get('lang');
 		// page('/');
+		// store.dispatch(navigate(HOMEPAGE, ctx.params));
 	},
-	// HOMEPAGE: (ctx) => {
-	// 	const appLoaded = store.getState().get('app').get('appLoaded');
-	// 	// If coming from an other page, reset the current city to null!
-	// 	// if (appLoaded) store.dispatch(setCurrentCity(null));
-
-	// 	store.dispatch(navigate(HOMEPAGE, ctx.params));
-	// },
+	index: (ctx) => {
+		store.dispatch(navigate(HOMEPAGE, ctx.params));
+	},
+	about: (ctx) => {
+		console.log('about navigate');
+		store.dispatch(navigate(ABOUT, ctx.params));
+	},
 	// PARADE_DETAIL: (ctx) => {
 	// 	// set current city
 	// 	// store.dispatch(setCurrentCity(ctx.params.id));
@@ -88,113 +80,44 @@ const routesFn = {
 	// },
 	NOT_FOUND: (ctx) => {
 		console.log('404!');
-		// store.dispatch(navigate(NOT_FOUND, ctx.params));
+		store.dispatch(navigate(NOT_FOUND, ctx.params));
 	},
 };
-
-// Load app.json to get all the routes + some global variables/copy
-// Then dynamically create routes using page();
-// export function initRouter() {
-
-// 	return new Promise((resolve, reject) => {
-// 		// const urlConfig = `${JSON_DIR}${'/config.json'}`;
-// 		const urlConfig = '/api/manifest/?format=json&tp=' + Date.now();
-
-// 		// Load config first
-// 		loadJSON(urlConfig).then((config) => {
-// 			if (!config) {
-// 				reject();
-// 				return;
-// 			}
-
-// 			const lang = store.getState().get('app').get('lang');
-// 			// console.log('config', config);
-
-// 			// Set endPoints
-// 			// SET_END_POINT(config.endpoint);
-// 			// SET_SEARCH_END_POINT(config[lang].search);
-
-// 			// store.dispatch(setLang(config.lang));
-// 			console.log('END_POINT', config.endpoint);
-
-// 			// Load app.json
-// 			const url = config[lang].app;
-
-// 			loadJSON(url).then((data) => {
-// 				if (!data) {
-// 					reject();
-// 					return;
-// 				}
-
-// 				// console.log('data', data);
-
-// 				// Set routes
-
-// 				// EXCEPTION ROUTES
-// 				const routes_ = {};
-// 				for (const key in data.routes) {
-// 					if (data.routes[key]) {
-// 						const value = data.routes[key];
-// 						routes_[key] = value;
-// 						if (value.location === PARADE_DETAIL) {
-// 							const key_ = key.replace('/' + lang, '');
-// 							const value_ = {
-// 								location: REDIRECT,
-// 								params: {
-// 									redirect: key,
-// 								},
-// 							};
-// 							routes_[key_] = value_;
-// 						}
-// 					}
-// 				}
-
-// 				console.log('routes_', routes_);
-
-// 				// store.dispatch(setRoutes(data.routes));
-// 				store.dispatch(setRoutes(routes_));
-
-// 				// Set Cities
-// 				// store.dispatch(setListCities(LIST_CITIES));
-// 				// store.dispatch(setCurrentCity(data.global.current_city));
-
-// 				// Set Globals
-// 				// store.dispatch(setLoaderData(data.global.loader));
-// 				// store.dispatch(setSidebarData(data.global.sidebar));
-// 				// store.dispatch(setFooterData(data.global.footer));
-// 				// store.dispatch(setModalsData(data.global.modals));
-// 				// store.dispatch(setUIData(data.global.ui));
-// 				// store.dispatch(setMeta(data.global.default.meta, true));
-
-// 				// Set hotposts
-// 				// _initHotspots(data.hotspots);
-
-// 				// Setup routes dynamically
-// 				const routes = store.getState().get('app').get('routes');
-
-// 				routes.entrySeq().forEach(([key, value]) => {
-// 					page(key, preRouting, (ctx) => {
-// 						ctx.params = value.get('params') ? value.get('params').toJS() : {};
-// 						routesFn[value.get('location')](ctx);
-// 					});
-// 				});
-
-// 				// Roots redirect to the current lang
-// 				page('/', preRouting, routesFn.ROOT);
-
-// 				// 404
-// 				page('*', preRouting, routesFn.NOT_FOUND);
-
-// 				resolve();
-// 			});
-// 		});
-// 	});
-
-// }
 
 export function initRouter() {
 
 	return new Promise((resolve, reject) => {
+
+		// // store.dispatch(setRoutes(data.routes));
+		store.dispatch(setRoutes(routes));
+
+		//  // Set Cities
+		// store.dispatch(setListCities(LIST_CITIES));
+		// store.dispatch(setCurrentCity(data.global.current_city));
+
+		// // Set Globals
+		// store.dispatch(setLoaderData(data.global.loader));
+		// store.dispatch(setSidebarData(data.global.sidebar));
+		// store.dispatch(setFooterData(data.global.footer));
+		// store.dispatch(setModalsData(data.global.modals));
+		// store.dispatch(setUIData(data.global.ui));
+		// store.dispatch(setMeta(data.global.default.meta, true));
+
+		// Setup routes dynamically
+		console.log('routes', routes);
+		for (let key in routes) {
+
+			if (!routes.hasOwnProperty(key)) continue;
+
+			let route = routes[key];
+			console.log('route', route);
+			console.log('route', route.id);
+
+			page(route.url, preRouting, (ctx) => {
+				routesFn[route.id](ctx);
+			});
+
+		}
 
 		// Roots redirect to the current lang
 		page('/', preRouting, routesFn.ROOT);
@@ -207,7 +130,6 @@ export function initRouter() {
 	});
 
 }
-
 
 export function configureRoute(options = {}) {
 	if (options.base) page.base(options.base);
