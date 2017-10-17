@@ -1,240 +1,214 @@
-import DOMComponent from 'abstract/component/DOM';
+import DOMComponent from 'abstract/DOMcomponent';
 
 // Containers
 import Header from 'containers/header/Header';
-import Footer from 'containers/footer/Footer';
-import Sidebar from 'containers/sidebar/Sidebar';
-import Modal from 'containers/modal/Modal';
-import Experience from 'containers/experience/Experience';
-import RotateScreen from 'components/rotate-screen/RotateScreen';
-import ParadeDetailGMaps from 'containers/parade-detail-gmaps/ParadeDetailGMaps';
+// import Footer from 'containers/footer/Footer';
+// import Sidebar from 'containers/sidebar/Sidebar';
+// import Modal from 'containers/modal/Modal';
+// import Experience from 'containers/experience/Experience';
+// import RotateScreen from 'components/rotate-screen/RotateScreen';
+// import ParadeDetailGMaps from 'containers/parade-detail-gmaps/ParadeDetailGMaps';
 
 import $ from 'zepto';
 
 // Actions
-import {showSidebar} from 'containers/sidebar/actions';
-import {showHeader} from 'containers/header/actions';
-import {showFooter} from 'containers/footer/actions';
+// import {showSidebar} from 'containers/sidebar/actions';
+// import {showHeader} from 'containers/header/actions';
+// import {showFooter} from 'containers/footer/actions';
 
-import {getScriptGmaps} from 'containers/parade-detail-gmaps/actions';
+// import {getScriptGmaps} from 'containers/parade-detail-gmaps/actions';
 
 // Constants
-import {NOT_FOUND, PARADE_DETAIL, PARADE_EXPERIENCE_HOTSPOT} from 'constants/locations';
+// import {NOT_FOUND, PARADE_DETAIL, PARADE_EXPERIENCE_HOTSPOT} from 'constants/locations';
 
 // Utils
 import {trackPage} from 'utils/analytics';
 import {debounce} from 'utils/misc';
 
-import Detectizr from 'detectizr';
+// import Detectizr from 'detectizr';
 // import FastClick from 'fastclick';
 
 class Layout extends DOMComponent {
 
-    constructor(props) {
-        super(props);
+	constructor(props) {
+		super(props);
 
-        this.watchers = {
-            'layout.modalScroll': ::this.updateModal,
-            'layout.scrollEnabled': ::this.updateScroll,
-            'layout.scrollDisabled': ::this.disableScroll,
-            'app.location': ::this.setContentClass,
-            'gmaps.hasScript': ::this.gmapsHasScript,
-            'header.isHamburgerActive': ::this.toggleScrollPast
-        };
-        this.scrollTicket = false;
+		// this.watchers = {
+		//     'layout.modalScroll': ::this.updateModal,
+		//     'layout.scrollEnabled': ::this.updateScroll,
+		//     'layout.scrollDisabled': ::this.disableScroll,
+		//     'app.location': ::this.setContentClass,
+		//     'gmaps.hasScript': ::this.gmapsHasScript,
+		//     'header.isHamburgerActive': ::this.toggleScrollPast
+		// };
+		this.scrollTicket = false;
 
-        this.header = null;
-        this.sidebar = null;
-        this.rotateScreen = null;
-        this.footer = null;
-        this.modal = null;
-        this.experience = null;
-        this.paradeDetailGMaps = null;
+		this.header = null;
+		// this.sidebar = null;
+		// this.rotateScreen = null;
+		// this.footer = null;
+		// this.modal = null;
+		// this.experience = null;
+		// this.paradeDetailGMaps = null;
 
-        this.el = document.body;
-    }
+		this.el = document.body;
+		console.log('this.$el', this.$el);
 
-    initDOM() {
-        const scrollObj = {
-            x: window.scrollX || window.pageXOffset,
-            y: window.scrollY || window.pageYOffset
-        };
+	}
 
-        this.$els.content = this.$el.find('#content');
-        this.$els.title = this.$el.find('head > title');
-        this.$els.metaDescription = this.$el.find('head > meta[name=description]');
+	initDOM() {
+		const scrollObj = {
+			x: window.scrollX || window.pageXOffset,
+			y: window.scrollY || window.pageYOffset,
+		};
 
-        // if you need to remove fastclick event of an element
-        // just add needsclick as a class
-        // const needsClick = FastClick.prototype.needsClick;
-        // FastClick.prototype.needsClick = function(target) {
-        //     return needsClick.apply(this, arguments);
-        // };
-        // FastClick.attach(this.el);
+		this.$content = this.$el.find('#content');
+		this.$title = this.$el.find('head > title');
+		this.$metaDescription = this.$el.find('head > meta[name=description]');
 
-        this.actions.scroll(scrollObj);
-    }
+		// if you need to remove fastclick event of an element
+		// just add needsclick as a class
+		// const needsClick = FastClick.prototype.needsClick;
+		// FastClick.prototype.needsClick = function(target) {
+		//     return needsClick.apply(this, arguments);
+		// };
+		// FastClick.attach(this.el);
 
-    onDOMInit() {
-        const aInitPromises = [];
+		this.actions.scroll(scrollObj);
+	}
 
-        this.header = new Header();
-        aInitPromises.push(this.header.init());
+	onDOMInit() {
+		const aInitPromises = [];
 
-        this.sidebar = new Sidebar();
-        aInitPromises.push(this.sidebar.init());
+		this.header = new Header();
+		aInitPromises.push(this.header.init());
 
-        this.modal = new Modal();
-        aInitPromises.push(this.modal.init());
+		// this.sidebar = new Sidebar();
+		// aInitPromises.push(this.sidebar.init());
 
-        this.experience = new Experience();
-        aInitPromises.push(this.experience.init());
+		// this.modal = new Modal();
+		// aInitPromises.push(this.modal.init());
 
-        this.footer = new Footer();
-        aInitPromises.push(this.footer.init());
+		// this.experience = new Experience();
+		// aInitPromises.push(this.experience.init());
 
-        this.rotateScreen = new RotateScreen();
-        aInitPromises.push(this.rotateScreen.init());
+		// this.footer = new Footer();
+		// aInitPromises.push(this.footer.init());
 
-        this.paradeDetailGMaps = new ParadeDetailGMaps();
-        aInitPromises.push(this.paradeDetailGMaps.init());
+		// this.rotateScreen = new RotateScreen();
+		// aInitPromises.push(this.rotateScreen.init());
 
-        // scroll top
-        window.scrollTo(0, 0);
-        this._calcVH();
+		// this.paradeDetailGMaps = new ParadeDetailGMaps();
+		// aInitPromises.push(this.paradeDetailGMaps.init());
 
-        Promise.all(aInitPromises).then(() => {
-            // Load Gmaps script now!
-            this.dispatch(getScriptGmaps());
-        });
-    }
+		// scroll top
+		window.scrollTo(0, 0);
 
-    gmapsHasScript() {
-        // unsubscribe it
-        this.unsubscribe('gmaps.hasScript');
+		Promise.all(aInitPromises).then(() => {
+			// Load Gmaps script now!
+			// this.dispatch(getScriptGmaps());
+			super.onDOMInit();
 
-        // now, get Youtube script
-        // this.dispatch(getScriptYoutube());
-        this.getYoutubeScript();
+		});
+	}
 
-        // super.onDOMInit();
-    }
+	toggleScrollPast(isHamburgerActive) {
+		isHamburgerActive ? this.el.classList.add('u-scroll-past') : this.el.classList.remove('u-scroll-past');
+	}
 
-    getYoutubeScript() {
-        window.onYouTubeIframeAPIReady = ::this.youtubeHasScript();
-        const tag = document.createElement('script');
+	bindEvents() {
+		window.addEventListener('orientationchange', debounce(() => {
+			// this._calcVH();
+			this.actions.resize(window);
+		}, 300), false);
+		window.addEventListener('resize', debounce(() => {
+			// this._calcVH();
+			this.actions.resize(window);
+		}, 300), false);
+		window.addEventListener('scroll', () => {
+			this.scrollTicket = true;
+		}, false);
 
-        tag.src = 'https://www.youtube.com/iframe_api';
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    }
+		// Actually, unsubscribe to any this.events to avoid any double trigger because of body
+		this.undelegateEvents();
+	}
 
-    youtubeHasScript() {
-        window.onYouTubeIframeAPIReady = null;
-        super.onDOMInit();
-    }
+	onUpdate() {
+		if (this.scrollTicket) {
+			this.scrollTicket = false;
+			const scrollObj = {
+				x: window.scrollX || window.pageXOffset,
+				y: window.scrollY || window.pageYOffset,
+			};
+			this.actions.scroll(scrollObj);
+		}
+	}
 
-    toggleScrollPast(isHamburgerActive) {
-        isHamburgerActive ? this.el.classList.add('u-scroll-past') : this.el.classList.remove('u-scroll-past');
-    }
+	showComponent() {
+		// if (this.states.isShown) return;
+		const location = this.getState().get('app').get('location');
 
-    bindEvents() {
-        window.addEventListener('orientationchange', debounce(() => {
-            this._calcVH();
-            this.actions.resize(window);
-        }, 300), false);
-        window.addEventListener('resize', debounce(() => {
-            this._calcVH();
-            this.actions.resize(window);
-        }, 300), false);
-        window.addEventListener('scroll', () => { this.scrollTicket = true; }, false);
+		setTimeout(() => {
+			if (location !== NOT_FOUND) this.dispatch(showSidebar());
+			if (location !== PARADE_DETAIL) this.dispatch(showHeader());
+			if (location !== PARADE_DETAIL && location !== PARADE_EXPERIENCE_HOTSPOT) this.dispatch(showFooter());
+			super.showComponent();
+		}, 0);
+	}
 
-        // Actually, unsubscribe to any this.events to avoid any double trigger because of body
-        this.undelegateEvents();
-    }
+	triggerResize() {
+		$(window).trigger('resize');
+	}
 
-    _calcVH() {
-        if (Detectizr.device.type === 'desktop' || Detectizr.os.name !== 'android') return;
-        // this.el.style.height = height + 'px';
-        const top = parseInt(this.$els.content[0].getBoundingClientRect().top, 10);
-        const height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - top;
-        // console.log('height', height, top);
-        this.$els.content[0].style.height = height + 'px';
-    // document.getElementById("selector").setAttribute("style", "height:" + vH + "px;");
-    }
+	setMeta() {
 
-    onUpdate() {
-        if (this.scrollTicket) {
-            this.scrollTicket = false;
-            const scrollObj = {
-                x: window.scrollX || window.pageXOffset,
-                y: window.scrollY || window.pageYOffset
-            };
-            this.actions.scroll(scrollObj);
-        }
-    }
+		// here display currentpage meta
 
-    showComponent() {
-        // if (this.states.isShown) return;
-        const location = this.getState().get('app').get('location');
 
-        setTimeout(() => {
-            if (location !== NOT_FOUND) this.dispatch(showSidebar());
-            if (location !== PARADE_DETAIL) this.dispatch(showHeader());
-            if (location !== PARADE_DETAIL && location !== PARADE_EXPERIENCE_HOTSPOT) this.dispatch(showFooter());
-            super.showComponent();
-        }, 0);
-    }
+		// const meta = this.getState().get('app').get('meta');
 
-    triggerResize() {
-        $(window).trigger('resize');
-    }
+		// document.title = meta.get('title');
+		// this.$els.title.text(meta.get('title'));
+		// this.$els.metaDescription.val(meta.get('description'));
 
-    setMeta() {
-        const meta = this.getState().get('app').get('meta');
+		// // Analytics
+		// trackPage();
+	}
 
-        document.title = meta.get('title');
-        this.$els.title.text(meta.get('title'));
-        this.$els.metaDescription.val(meta.get('description'));
+	setContentClass(location) {
+		this.el.setAttribute('location', location);
+	}
 
-        // Analytics
-        trackPage();
-    }
+	updateScroll() {
+		const isScrollEnabled = this.getState().get('layout').get('scrollEnabled');
+		if (isScrollEnabled) {
+			this.$el.addClass('scroll-enabled');
+		} else {
+			this.$el.removeClass('scroll-enabled');
+		}
+	}
 
-    setContentClass(location) {
-        this.el.setAttribute('location', location);
-    }
+	disableScroll() {
+		const isScrollDisabled = this.getState().get('layout').get('scrollDisabled');
+		if (isScrollDisabled) {
+			this.$el.addClass('scroll-disabled');
+		} else {
+			this.$el.removeClass('scroll-disabled');
+		}
+	}
 
-    updateScroll() {
-        const isScrollEnabled = this.getState().get('layout').get('scrollEnabled');
-        if (isScrollEnabled) {
-            this.$el.addClass('scroll-enabled');
-        } else {
-            this.$el.removeClass('scroll-enabled');
-        }
-    }
+	updateModal() {
+		const isModalScroll = this.getState().get('layout').get('modalScroll');
+		if (isModalScroll) {
+			this.$el.addClass('modal-scroll');
+		} else {
+			this.$el.removeClass('modal-scroll');
+		}
+	}
 
-    disableScroll() {
-        const isScrollDisabled = this.getState().get('layout').get('scrollDisabled');
-        if (isScrollDisabled) {
-            this.$el.addClass('scroll-disabled');
-        } else {
-            this.$el.removeClass('scroll-disabled');
-        }
-    }
-
-     updateModal() {
-        const isModalScroll = this.getState().get('layout').get('modalScroll');
-        if (isModalScroll) {
-            this.$el.addClass('modal-scroll');
-        } else {
-            this.$el.removeClass('modal-scroll');
-        }
-    }
-
-    resize() {
-        if (!this.states.isShown) return;
-    }
+	resize() {
+		if (!this.states.isShown) return;
+	}
 }
 
 export default Layout;

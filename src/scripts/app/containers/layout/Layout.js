@@ -1,5 +1,6 @@
-import AbstractContainers from 'abstract/container';
+import AbstractContainers from 'abstract/container.js';
 import {calculateResponsiveState} from 'redux-responsive';
+import store from 'store';
 
 // Components
 import Layout from 'components/layout/Layout';
@@ -9,28 +10,37 @@ import {scroll} from './actions';
 
 class LayoutContainer extends AbstractContainers {
 
-    component = Layout;
+	constructor() {
+		super();
+		this.Component = Layout;
 
-    initActions() {
-        this.options.actions.resize = ::this.resizeAction;
-        this.options.actions.scroll = ::this.scrollAction;
-    }
+	}
 
-    resizeAction(wdw) {
-        this.dispatch(calculateResponsiveState(wdw));
-    }
+	// init(){
+	// 	console.log('laoyut init');
 
-    scrollAction(scrollObj) {
-        this.dispatch(scroll(scrollObj));
-    }
+	// }
 
-    triggerResize() {
-        this._component.triggerResize();
-    }
+	initActions() {
+		this.options.actions.resize = () => this.resizeAction();
+		this.options.actions.scroll = () => this.scrollAction();
+	}
 
-    setMeta() {
-        this._component.setMeta();
-    }
+	resizeAction(wdw) {
+		store.dispatch(calculateResponsiveState(wdw));
+	}
+
+	scrollAction(scrollObj) {
+		store.dispatch(scroll(scrollObj));
+	}
+
+	triggerResize() {
+		this._component.triggerResize();
+	}
+
+	setMeta() {
+		this._component.setMeta();
+	}
 }
 
 export default LayoutContainer;

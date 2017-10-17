@@ -22,7 +22,7 @@ class MainView extends Backbone.View {
 			 el: document.body,
 			 $el: $(document.body),
 			 className: 'test',
-			 idView: 'mainpage'
+			 idView: 'mainpage',
 		 });
 
 		 super(options);
@@ -34,15 +34,15 @@ class MainView extends Backbone.View {
 	 */
 	initialize(options) {
 
-		this.el    	= document.body;
-		this.$el   	= $(this.el);
+		this.el = document.body;
+		this.$el = $(this.el);
 
 		this.idView = 'mainpage';
 
 		this.a$ = {
 			container : null,
 			html : null,
-			body : null
+			body : null,
 		};
 
 		this.pageManager = null;
@@ -155,7 +155,7 @@ class MainView extends Backbone.View {
 		// if (this.pageManager && this.pageManager.currentPage && this.pageManager.currentPage.canUpdate) this.pageManager.currentPage.onUpdate();
 
 		// update run through the RAF call stack:
-		for ( var c = 0; c < GlobalStore.get('rafCallStack').length; c++) {
+		for ( let c = 0; c < GlobalStore.get('rafCallStack').length; c++) {
 			GlobalStore.get('rafCallStack')[c]();
 		}
 
@@ -173,7 +173,7 @@ class MainView extends Backbone.View {
 
 		GlobalStore.set('viewport', {
 			width: width,
-			height: height
+			height: height,
 		});
 
 		// CV.viewport.height = $(window).height();
@@ -182,7 +182,7 @@ class MainView extends Backbone.View {
 		// if (this.pageManager && this.pageManager.currentPage) this.pageManager.currentPage.onResize();
 
 		// if (this.navigationView) {
-			// this.navigationView.onResize();
+		// this.navigationView.onResize();
 		// }
 	}
 

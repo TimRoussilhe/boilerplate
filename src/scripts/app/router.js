@@ -1,8 +1,5 @@
 import page from 'page';
 import store from 'store';
-
-console.log('store', store);
-
 import routes from 'routes/routes.json';
 
 // Actions
@@ -54,6 +51,7 @@ const routesFn = {
 		// store.dispatch(navigate(HOMEPAGE, ctx.params));
 	},
 	index: (ctx) => {
+		console.log('index navigate');
 		store.dispatch(navigate(HOMEPAGE, ctx.params));
 	},
 	about: (ctx) => {
@@ -104,14 +102,10 @@ export function initRouter() {
 		// store.dispatch(setMeta(data.global.default.meta, true));
 
 		// Setup routes dynamically
-		console.log('routes', routes);
 		for (let key in routes) {
 
 			if (!routes.hasOwnProperty(key)) continue;
-
 			let route = routes[key];
-			console.log('route', route);
-			console.log('route', route.id);
 
 			page(route.url, preRouting, (ctx) => {
 				routesFn[route.id](ctx);
@@ -119,12 +113,11 @@ export function initRouter() {
 
 		}
 
-		// Roots redirect to the current lang
+		// // Roots redirect to the current lang
 		page('/', preRouting, routesFn.ROOT);
 
 		// 404
 		page('*', preRouting, routesFn.NOT_FOUND);
-
 		resolve();
 
 	});

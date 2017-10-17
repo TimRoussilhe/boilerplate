@@ -17,78 +17,60 @@ import {setMeta} from 'containers/app/actions';
  */
 class PageContainer extends AbstractContainer {
 
-    constructor(options) {
-        super(options);
-        this.TYPE_LOADER = BAR_LOADER;
+	constructor(options) {
+		super(options);
+		this.TYPE_LOADER = BAR_LOADER;
 
-        // this.watchers = {
-        //     'loader.isShown': this._isLoaderShown
-        // };
-    }
+		// this.watchers = {
+		//     'loader.isShown': this._isLoaderShown
+		// };
+	}
 
-    // to override if needed
-    fetchData() {
-        console.log('PAge:fetchData');
-        const endPoint = this.getState().get('app').get('prms').get('end_point');
+	// to override if needed
+	fetchData() {
+		console.log('PAge:fetchData');
+		const endPoint = this.getState().get('app').get('prms').get('end_point');
 
-        if (!endPoint) {
-            this.promises.data.resolve();
-            return;
-        }
+		if (!endPoint) {
+			this.promises.data.resolve();
+			return;
+		}
 
-        this.subscribe({
-            path: 'loader.isShown',
-            cb: ::this._isLoaderShown
-        });
+		this.subscribe({
+			path: 'loader.isShown',
+			cb: () => this._isLoaderShown(),
+		});
 
-        // display a loader
-        this.showLoader(this.TYPE_LOADER);
+		// display a loader
+		this.showLoader(this.TYPE_LOADER);
 
-        // loadJSON(`${END_POINT}${endPoint}`).then((data) => {
-        //     if (!data) {
-        //         console.info('data are empty', this);
-        //         this.promises.data.resolve();
-        //         return;
-        //     }
+		// loadJSON(`${END_POINT}${endPoint}`).then((data) => {
+		//     if (!data) {
+		//         console.info('data are empty', this);
+		//         this.promises.data.resolve();
+		//         return;
+		//     }
 
-        //     this.data = data;
-        //     this.loadAssets();
-        // });
-    }
+		//     this.data = data;
+		//     this.loadAssets();
+		// });
+	}
 
-    _isLoaderShown(isShown) {
-        if (isShown && !this.states.isInit) {
-            this.unsubscribe('loader.isShown');
-            const endPoint = this.getState().get('app').get('prms').get('end_point');
+	loadAssets() {
+		this.promises.data.resolve();
+	}
 
-            loadJSON(`${END_POINT}${endPoint}`).then((data) => {
-                if (!data) {
-                    console.info('data are empty', this);
-                    this.promises.data.resolve();
-                    return;
-                }
+	initData() {
+		this.dispatch(setMeta(this.data.meta));
+	}
 
-                this.data = data;
-                this.loadAssets();
-            });
-        }
-    }
+	onInit() {
+		// hide loader if there's one
+		const isLoading = this.getState().get('loader').get('isLoading');
+		if (isLoading) this.hideLoader();
 
-    loadAssets() {
-        this.promises.data.resolve();
-    }
-
-    initData() {
-        this.dispatch(setMeta(this.data.meta));
-    }
-
-    onInit() {
-        // hide loader if there's one
-        const isLoading = this.getState().get('loader').get('isLoading');
-        if (isLoading) this.hideLoader();
-
-        super.onInit();
-    }
+		super.onInit();
+	}
 
 }
 

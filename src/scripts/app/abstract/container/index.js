@@ -93,8 +93,7 @@ class AbstractContainer extends Component {
     }
 
     show() {
-        // this.hideLoader();
-        return this._component.show();
+				return this._component.show();
     }
 
     hide() {

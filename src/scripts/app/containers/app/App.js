@@ -2,14 +2,14 @@
 // import AbstractPageComponent from 'abstract/component/DOM/page';
 
 // Containers
-// import Layout from 'containers/layout/Layout';
-// import HomepageContainer from 'containers/homepage/Homepage';
+import Layout from 'containers/layout/Layout';
+import HomepageContainer from 'containers/homepage/Homepage';
 // import ParadeDetailContainer from 'containers/parade-detail/ParadeDetail';
 // import ExperiencePageContainer from 'containers/experience-page/ExperiencePage';
 // import NotFoundContainer from 'containers/not-found/NotFound';
 
 // Constants
-import {HOMEPAGE, PARADE_DETAIL, NOT_FOUND, PARADE_EXPERIENCE_HOTSPOT} from 'constants/locations';
+import {HOMEPAGE, ABOUT, NOT_FOUND} from 'constants/locations';
 // import {SEARCH_MODAL, ABOUT_MODAL} from 'containers/modal/constants';
 
 // Watchers
@@ -33,23 +33,29 @@ class App {
 		this.page = null;
 		this.oldPage = null;
 
-		console.log('store.getState()', store.getState());
-		let w = watch(store.getState, 'app.location');
-
-		store.subscribe(w((newVal, oldVal, objectPath) => {
-			console.log('%s changed from %s to %s', objectPath, oldVal, newVal);
-			// admin.name changed from JP to JOE
-		}));
+		this.bindStoreEvents();
 
 	}
 
 	init() {
 		this.layout = new Layout();
-		// this.loader = new Loader();
-
 
 		// return layout promise
 		return this.layout.init();
+	}
+
+
+	// TODO refactor this into the base component
+	// add proper bind undinb store listener
+	bindStoreEvents() {
+
+		let w = watch(store.getState, 'app.location');
+
+		store.subscribe(w((newVal, oldVal, objectPath) => this.onLocationChanged(newVal, oldVal)));
+		// 	console.log('%s changed from %s to %s', objectPath, oldVal, newVal);
+		// 	// admin.name changed from JP to JOE
+		// }));
+
 	}
 
 	onIdChanged(id, prevId) {
@@ -60,6 +66,10 @@ class App {
 	}
 
 	onLocationChanged(location, prevLocation) {
+
+		console.log('location', location);
+		console.log('prevLocation', prevLocation);
+
 		this.prevLocation = prevLocation;
 		if (location !== prevLocation) {
 			this.location = location;
@@ -72,8 +82,7 @@ class App {
 
 		switch (location) {
 		case HOMEPAGE: page = new HomepageContainer(); break;
-		case PARADE_DETAIL: page = new ParadeDetailContainer(); break;
-		case PARADE_EXPERIENCE_HOTSPOT: page = new ExperiencePageContainer(); break;
+		case ABOUT: page = new HomepageContainer(); break;
 		case NOT_FOUND: page = new NotFoundContainer(); break;
 		default: page = new AbstractPageComponent();
 		}
@@ -89,6 +98,9 @@ class App {
 		// Init the next page now
 		console.log('INIT PAGE', this.page);
 		this.page.init().then(() => {
+
+			console.log('ON PAGE INIT');
+
 			// Resize the current page for position
 			// this.page.resize();
 			this.layout.triggerResize();
@@ -96,7 +108,7 @@ class App {
 			// Meta
 			this.layout.setMeta();
 
-			if (this.oldPage && hideNow) {
+			if (this.oldPage) {
 				console.log('HIDE OLD PAGE', this.oldPage);
 				this.oldPage.hide()
 					.then(() => {
@@ -107,10 +119,10 @@ class App {
 
 			// Show next
 			this.page.show().then(() => {
-				if (!this.getState().get('app').get('appLoaded')) this.dispatch(setAppLoaded(true));
+				// if (!this.getState().get('app').get('appLoaded')) this.dispatch(setAppLoaded(true));
 
 				// at this point, dispose
-				if (this.oldPage && !hideNow) {
+				if (this.oldPage) {
 					console.log('dispose again?');
 					this.oldPage.dispose();
 					this.oldPage = null;

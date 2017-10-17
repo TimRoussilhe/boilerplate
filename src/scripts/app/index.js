@@ -26,17 +26,14 @@ class Entry {
 		is.mobile() && root.addClass('isMobile');
 		is.tablet() && root.addClass('isTablet');
 
+		console.log('initRouter Done');
+
 		initRouter().then(() => {
-
-			console.log('initRouter Done');
-
-		    // this.app.init()
-		    // // .then(() => {
-		    // //  this.app.show();
-		    // // })
-		    // .then(() => {
-		    router.start();
-		    // });
+			this.app.init()
+				.then(() => {
+					console.log('init then');
+					router.start();
+				});
 		});
 	}
 

@@ -76,7 +76,7 @@ class PageManager {
 		this.currentPage = new newPage.View({
 			slug:    params,
 			el:      this.currentPage ? null : el,
-			idView:  newPage.id
+			idView:  newPage.id,
 		}, {});
 
 		console.log('this.currentPage -----------------------------', this.currentPage);

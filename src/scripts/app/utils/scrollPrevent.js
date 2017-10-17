@@ -1,4 +1,3 @@
-import Detectizr from 'detectizr';
 import Lethargy from 'lethargy';
 
 
@@ -46,16 +45,16 @@ class ScrollPrevent {
     bindEvents() {
         if (!this.el) return;
 
-        this.el.addEventListener('mousewheel', ::this.approveScroll, false);
-        this.el.addEventListener('wheel', ::this.approveScroll, false);
-        
+        this.el.addEventListener('mousewheel', () => this.approveScroll(), false);
+        this.el.addEventListener('wheel', () => this.approveScroll(), false);
+
     }
 
     unbindEvents() {
         if (!this.el) return;
 
-        this.el.removeEventListener('mousewheel', ::this.approveScroll, false);
-        this.el.removeEventListener('wheel', ::this.approveScroll, false);
+        this.el.removeEventListener('mousewheel', () => this.approveScroll(), false);
+        this.el.removeEventListener('wheel', () => this.approveScroll(), false);
 
     }
 

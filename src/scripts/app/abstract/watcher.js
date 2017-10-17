@@ -23,10 +23,10 @@ class Watcher {
         return this._watchers;
     }
 
-	/**
-     * Object as associative array of all <subscriptions> objects
-     * @type {Object}
-     */
+		/**
+		 * Object as associative array of all <subscriptions> objects
+		 * @type {Object}
+		 */
     subscriptions = {};
 
     dispose() {
