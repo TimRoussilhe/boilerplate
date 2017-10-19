@@ -10,9 +10,6 @@ import {
 
 import {getRoute} from 'containers/app/selectors';
 
-import {showModal} from 'containers/modal/actions';
-import {ABOUT_MODAL} from 'containers/modal/constants';
-
 class HeaderContainer extends AbstractContainer {
 
 	constructor(options) {
