@@ -15,8 +15,8 @@ import {ABOUT_MODAL} from 'containers/modal/constants';
 
 class HeaderContainer extends AbstractContainer {
 
-	constructor() {
-		super();
+	constructor(options) {
+		super(options);
 		this.Component = Header;
 	}
 

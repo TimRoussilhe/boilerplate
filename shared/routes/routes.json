@@ -11,9 +11,10 @@
 		"template": "about",
 		"json": "about.json"
 	},
-	"404": {
-		"id": "404",
-		"url": "/404",
-		"jsonUrl": "../public/assets/jsons/404.json"
+	"error": {
+		"id": "error",
+		"url": "/error",
+		"template": "error",
+		"jsonUrl": "error.json"
 	}
 }

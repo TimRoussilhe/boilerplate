@@ -1,5 +1,5 @@
 import AbstractDOMComponent from 'abstract/DOMcomponent';
-import Tpl from './header.twig';
+// import Tpl from './header.twig';
 
 // import {toggleSidebar} from 'containers/sidebar/actions';
 import {hideHamburgerMenu, toggleHamburgerMenu} from 'containers/header/actions';
@@ -15,7 +15,7 @@ class Header extends AbstractDOMComponent {
 	constructor(props) {
 		super(props);
 
-		this.template = Tpl;
+		// this.template = Tpl;
 
 		// this.watchers = {
 		//     'header.isShown': ::this.render,
@@ -40,7 +40,7 @@ class Header extends AbstractDOMComponent {
 	onDOMInit() {
 		console.log('HEADER ONDOMINIT');
 
-		document.getElementById('header-container').appendChild(this.el);
+		// document.getElementById('header-container').appendChild(this.el);
 		this.$menuEl = document.getElementById('btn-menu');
 		this.$navgiationHeader = this.$el.find('.navigation-header');
 		super.onDOMInit();

@@ -3,7 +3,7 @@ import store from 'store';
 import routes from 'routes/routes.json';
 
 // Actions
-import {navigate, setRoutes, setQuery, setMeta, setLang, setUIData, setHash} from 'containers/app/actions';
+import {navigate, setRoutes} from 'containers/app/actions';
 // import {setLoaderData} from 'containers/loader/actions';
 // import {setSidebarData} from 'containers/sidebar/actions';
 // import {setFooterData} from 'containers/footer/actions';
@@ -19,9 +19,8 @@ import {navigate, setRoutes, setQuery, setMeta, setLang, setUIData, setHash} fro
 
 import {
 	HOMEPAGE,
-	NOT_FOUND,
 	ABOUT,
-	REDIRECT,
+	NOT_FOUND,
 } from 'constants/locations';
 
 // Utils
@@ -69,12 +68,6 @@ const routesFn = {
 	// 	// store.dispatch(setCurrentCity(ctx.params.id));
 	// 	// console.log('ctx.params', ctx.params);
 	// 	store.dispatch(navigate(PARADE_EXPERIENCE_HOTSPOT, ctx.params));
-	// },
-	// REDIRECT: (ctx) => {
-	// 	// set current city
-	// 	// store.dispatch(setCurrentCity(ctx.params.id));
-	// 	// console.log('ctx.params', ctx.params);
-	// 	page(ctx.params.redirect);
 	// },
 	NOT_FOUND: (ctx) => {
 		console.log('404!');

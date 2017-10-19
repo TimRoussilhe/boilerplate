@@ -1,5 +1,5 @@
 import AbstractPageComponent from 'abstract/Pagecomponent';
-import Tpl from './homepage.twig';
+import Tpl from 'templates/index.twig';
 
 // import HomepageIntroPageContainer from 'containers/homepage-intro-page/HomepageIntroPage';
 
@@ -30,9 +30,7 @@ class Homepage extends AbstractPageComponent {
 	constructor(options) {
 		super(options);
 
-		// this.template = Tpl;
-
-		this.selector = '#homepage';
+		this.template = Tpl;
 
 		this.states = {
 			isAnimating: false,

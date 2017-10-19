@@ -12,8 +12,8 @@ class BaseView extends Backbone.View {
 			el: options.el,
 			// These options are assigned to the instance by Backbone
 			events: {
-			 'click a': 'onLinkClicked'
-			}
+			 'click a': 'onLinkClicked',
+			},
 		});
 		super(options, data);
 		this.options = options;
@@ -133,7 +133,7 @@ class BaseView extends Backbone.View {
 		if (this.template === null) return;
 		let html = this.template({
 			data: (this.model !== null) ? this.model.attributes : null,
-			svgs: svgsJSON ? svgsJSON : null
+			svgs: svgsJSON ? svgsJSON : null,
 		});
 		this.setElement(html);
 	}

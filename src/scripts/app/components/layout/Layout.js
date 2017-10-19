@@ -22,7 +22,7 @@ import $ from 'zepto';
 // import {NOT_FOUND, PARADE_DETAIL, PARADE_EXPERIENCE_HOTSPOT} from 'constants/locations';
 
 // Utils
-import {trackPage} from 'utils/analytics';
+// import {trackPage} from 'utils/analytics';
 import {debounce} from 'utils/misc';
 
 // import Detectizr from 'detectizr';
@@ -80,7 +80,9 @@ class Layout extends DOMComponent {
 	onDOMInit() {
 		const aInitPromises = [];
 
-		this.header = new Header();
+		this.header = new Header({
+			el: document.getElementById('main-nav'),
+		});
 		aInitPromises.push(this.header.init());
 
 		// this.sidebar = new Sidebar();

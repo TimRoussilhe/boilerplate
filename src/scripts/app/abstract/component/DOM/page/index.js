@@ -23,7 +23,7 @@ class PageComponent extends AbstractDOMComponent {
 
 	onDOMInit() {
 		// append to main container
-		document.getElementById('content').appendChild(this.el);
+		// document.getElementById('content').appendChild(this.el);
 		// $('#content').append(this.$el);
 		super.onDOMInit();
 	}

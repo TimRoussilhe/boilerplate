@@ -1,4 +1,4 @@
-import AbstractContainers from 'abstract/container.js';
+import AbstractContainer from 'abstract/container.js';
 import {calculateResponsiveState} from 'redux-responsive';
 import store from 'store';
 
@@ -8,7 +8,7 @@ import Layout from 'components/layout/Layout';
 // Actions
 import {scroll} from './actions';
 
-class LayoutContainer extends AbstractContainers {
+class LayoutContainer extends AbstractContainer {
 
 	constructor() {
 		super();

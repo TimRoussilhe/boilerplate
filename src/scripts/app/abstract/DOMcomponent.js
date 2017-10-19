@@ -1,4 +1,6 @@
 import _ from 'underscore';
+import store from 'store';
+
 const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 
 /**
@@ -97,10 +99,16 @@ class Component {
 		};
 
 
-		this.selector = props.selector ? props.selector : null;
-
+		/**
+		* El
+		* If el is passed from parent, this means the DOM is allready render
+		and we just need to scope it
+		* @type {DOM}
+		*/
 		this.el = props.el ? props.el : null;
 		this.$el = props.$el ? props.$el : null;
+		console.log('this.el', this.el);
+		console.log('props.el', props.el);
 
 		this.template = props.template ? props.template : null;
 
@@ -108,7 +116,7 @@ class Component {
 		this.actions = props.actions ? props.actions : {};
 
 		this.events = {
-			'click a': () => this.hyperlink(),
+			'click a': (e) => this.hyperlink(e),
 		};
 
 	}
@@ -272,10 +280,9 @@ class Component {
 	 */
 	setElement() {
 		console.log('this.el', this.el);
-		console.log('this.selector', this.selector);
 
-		if (this.el === null && this.selector === null && this.template === null) {
-			console.error('You must provide a template or an el or a selector to scope a component. Creating an empty div instead', this);
+		if (this.el === null && this.template === null) {
+			console.error('You must provide a template or an el to scope a component. Creating an empty div instead', this);
 			this.el = document.createElement('div');
 		}
 
@@ -287,10 +294,6 @@ class Component {
 		if (this.$el !== null) {
 			this.el = this.$el[0];
 			return;
-		}
-
-		if (this.selector !== null) {
-			this.el = $(this.selector);
 		}
 
 		if (this.template !== null) {
@@ -414,21 +417,26 @@ class Component {
 
 	// TODO : add connection to isAnimating
 	hyperlink(e) {
-		const href = e.currentTarget.href;
-		const route = !e.currentTarget.classList.contains('no-route');
+		// const href = e.currentTarget.href;
+		// const route = !e.currentTarget.classList.contains('no-route');
 
-		// internal link
-		if ((href.substr(0, 4) !== 'http' || href.indexOf(window.location.origin) >= 0) && route) {
+		// // internal link
+		// if ((href.substr(0, 4) !== 'http' || href.indexOf(window.location.origin) >= 0) && route) {
+		// 	e.preventDefault();
+
+		// 	// // if is loading or loader still shown, we block the navigation
+		// 	// const isLoading = this.getState().get('loader').get('isLoading');
+		// 	// const isLoaderShown = this.getState().get('loader').get('isShown');
+
+		// 	if (!isLoading && !isLoaderShown) {
+		// 		this.navigate(href);
+		// 	}
+		// }
+		const isAnimating = store.getState().app.isAnimating;
+		if (isAnimating){
 			e.preventDefault();
-
-			// if is loading or loader still shown, we block the navigation
-			const isLoading = this.getState().get('loader').get('isLoading');
-			const isLoaderShown = this.getState().get('loader').get('isShown');
-
-			if (!isLoading && !isLoaderShown) {
-				this.navigate(href);
-			}
 		}
+
 	}
 
 	/**
@@ -467,6 +475,12 @@ class Component {
 		this.handlers = {};
 		this.promises = {};
 
+		this.undelegateEvents();
+		this.destroyTL();
+		this.$el.remove();
+		this.$el = null;
+		this.$els = {};
+		this._events = {};
 
 		// TODO : unsubscribe redux-watch
 	}

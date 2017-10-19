@@ -1,10 +1,13 @@
-import AbstractPageComponent from 'abstract/component/DOM/page';
-import Tpl from './not-found.twig';
+import AbstractPageComponent from 'abstract/Pagecomponent';
+import Tpl from 'templates/error.twig';
 
 class NotFound extends AbstractPageComponent {
 
-    template = Tpl;
-    selector = '#app-not-found';
+	constructor(options) {
+		super(options);
+
+		this.template = Tpl;
+	}
 
 }
 

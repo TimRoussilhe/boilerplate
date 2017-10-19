@@ -1,12 +1,9 @@
 import {
 	SET_ROUTES,
-	SET_QUERY,
-	SET_META,
-	SET_HASH,
-	SET_UI,
-	APP_LOADED,
-	CHANGE_LANG,
 	NAVIGATION,
+	SET_ANIMATING,
+	SET_PAGE,
+	SET_OLDPAGE,
 } from './constants';
 
 export function navigate(location, params = {}) {
@@ -25,27 +22,6 @@ export function setMeta(meta = null, isDefault = false) {
 	};
 }
 
-export function setHash(hash) {
-	return {
-		type: SET_HASH,
-		hash: hash || null,
-	};
-}
-
-export function setUIData(data) {
-	return {
-		type: SET_UI,
-		data: data,
-	};
-}
-
-export function setQuery(query) {
-	return {
-		type: SET_QUERY,
-		query: query || {},
-	};
-}
-
 export function setRoutes(routes) {
 	return {
 		type: SET_ROUTES,
@@ -53,16 +29,23 @@ export function setRoutes(routes) {
 	};
 }
 
-export function setAppLoaded(appLoaded) {
+export function setAnimating(animatingState) {
 	return {
-		type: APP_LOADED,
-		appLoaded: appLoaded,
+		type: SET_ANIMATING,
+		isAnimating: animatingState,
 	};
 }
 
-export function setLang(lang) {
+export function setPage(page) {
 	return {
-		type: CHANGE_LANG,
-		lang: lang,
+		type: SET_PAGE,
+		page: page,
+	};
+}
+
+export function setOldPage(page) {
+	return {
+		type: SET_OLDPAGE,
+		page: page,
 	};
 }

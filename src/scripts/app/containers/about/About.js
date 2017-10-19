@@ -1,10 +1,10 @@
 import AbstractPageContainer from 'abstract/Pagecontainer';
-import Homepage from 'components/homepage/Homepage';
+import Homepage from 'components/about/About';
 
 // actions
 // import {setIntroListHomepage} from './actions';
 
-class HomepageContainer extends AbstractPageContainer {
+class AboutContainer extends AbstractPageContainer {
 
 	constructor(options) {
 		super(options);
@@ -14,7 +14,7 @@ class HomepageContainer extends AbstractPageContainer {
 	}
 
 	initData() {
-		console.log('HomepageContainer:initData');
+		console.log('AboutContainer:initData');
 		// const list = {
 		// 	default_landing: false,
 		// };
@@ -29,4 +29,4 @@ class HomepageContainer extends AbstractPageContainer {
 	}
 }
 
-export default HomepageContainer;
+export default AboutContainer;

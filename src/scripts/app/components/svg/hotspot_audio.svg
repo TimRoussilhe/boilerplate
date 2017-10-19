@@ -1,8 +1,0 @@
-<svg viewBox="0 0 36 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <defs></defs>
-    <g stroke="none" stroke-width="1" fill-rule="evenodd">
-        <g>
-            <path d="M18,0 C8.1,0 0,8.1 0,18 L0,32 C0,35.3 2.7,38 6,38 L12,38 L12,22 L4,22 L4,18 C4,10.3 10.3,4 18,4 C25.7,4 32,10.3 32,18 L32,22 L24,22 L24,38 L30,38 C33.3,38 36,35.3 36,32 L36,18 C36,8.1 27.9,0 18,0 L18,0 Z"></path>
-        </g>
-    </g>
-</svg>

@@ -15,6 +15,7 @@ class AbstractContainer{
 	}
 
 	constructor(options = {}) {
+		console.log('options', options);
 
 		/**
     * Component asociated to the container
@@ -43,6 +44,15 @@ class AbstractContainer{
 		this.options = options;
 		this.data = options.data ? options.data : null;
 		this.options.actions = options.actions ? options.actions : {};
+
+		// /**
+		// * El
+		// * @type {DOM}
+		// */
+		// this.options.el = options.el ? options.el : null;
+
+		console.log('this.options', this.options);
+
 
 		this._promises = {
 			init: {

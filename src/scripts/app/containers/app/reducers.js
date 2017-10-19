@@ -1,12 +1,9 @@
 import {
-	SET_QUERY,
 	SET_ROUTES,
-	SET_META,
+	SET_PAGE,
+	SET_OLDPAGE,
 	NAVIGATION,
-	SET_HASH,
-	CHANGE_LANG,
-	SET_UI,
-	APP_LOADED,
+	SET_ANIMATING,
 } from './constants';
 
 // import {
@@ -17,6 +14,9 @@ const InitialState = {
 	routes: [],
 	params: null,
 	location: null,
+	isAnimating: false,
+	page: null,
+	oldPage: null,
 };
 
 // const initialState = new InitialState();
@@ -46,22 +46,6 @@ export const app = (state = InitialState, action) => {
 
 	// 	return state.set('meta', stateMeta);
 	// }
-	// case SET_UI: {
-	// 	return state.set('ui', fromJS(action.data));
-	// }
-	// case SET_HASH: {
-	// 	return state.set('hash', action.hash);
-	// }
-	// case SET_QUERY: {
-	// 	return state.set('query', fromJS(action.query));
-	// }
-	// case APP_LOADED: {
-	// 	return state.set('appLoaded', action.appLoaded);
-	// }
-	// case CHANGE_LANG: {
-	// 	if (LANGS.indexOf(action.lang) > -1) return state.set('lang', action.lang);
-	// 	return state;
-	// }
 
 	case SET_ROUTES: {
 		return Object.assign({}, state, {
@@ -74,7 +58,24 @@ export const app = (state = InitialState, action) => {
 			location: action.location,
 		});
 	}
-
+	case SET_ANIMATING: {
+		return {
+			...state,
+			isAnimating: action.isAnimating,
+		};
+	}
+	case SET_PAGE: {
+		return {
+			...state,
+			page: action.page,
+		};
+	}
+	case SET_OLDPAGE: {
+		return {
+			...state,
+			oldPage: action.oldPage,
+		};
+	}
 	default: {
 		return state;
 	}

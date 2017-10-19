@@ -4,9 +4,10 @@
 // Containers
 import Layout from 'containers/layout/Layout';
 import HomepageContainer from 'containers/homepage/Homepage';
+import AboutContainer from 'containers/about/About';
 // import ParadeDetailContainer from 'containers/parade-detail/ParadeDetail';
 // import ExperiencePageContainer from 'containers/experience-page/ExperiencePage';
-// import NotFoundContainer from 'containers/not-found/NotFound';
+import NotFoundContainer from 'containers/not-found/NotFound';
 
 // Constants
 import {HOMEPAGE, ABOUT, NOT_FOUND} from 'constants/locations';
@@ -16,7 +17,7 @@ import {HOMEPAGE, ABOUT, NOT_FOUND} from 'constants/locations';
 // import Loader from 'containers/loader/Loader';
 
 // Actions
-import {setAppLoaded} from './actions';
+import {setAnimating, setPage, setOldPage} from './actions';
 // import {showModal} from 'containers/modal/actions';
 import store from 'store';
 import watch from 'redux-watch';
@@ -58,12 +59,12 @@ class App {
 
 	}
 
-	onIdChanged(id, prevId) {
-		const location = this.getState().get('app').get('location');
-		if (id !== prevId && id && prevId && this.location === location) {
-			this.routing(location, true);
-		}
-	}
+	// onIdChanged(id, prevId) {
+	// 	const location = this.getState().get('app').get('location');
+	// 	if (id !== prevId && id && prevId && this.location === location) {
+	// 		this.routing(location, true);
+	// 	}
+	// }
 
 	onLocationChanged(location, prevLocation) {
 
@@ -78,25 +79,45 @@ class App {
 	}
 
 	routing(location, fromSamePage = false) {
-		let page = null;
+		let Page = null;
+		console.log('location', location);
 
 		switch (location) {
-		case HOMEPAGE: page = new HomepageContainer(); break;
-		case ABOUT: page = new HomepageContainer(); break;
-		case NOT_FOUND: page = new NotFoundContainer(); break;
-		default: page = new AbstractPageComponent();
+		case HOMEPAGE: Page = HomepageContainer; break;
+		case ABOUT: Page = AboutContainer; break;
+		case NOT_FOUND: Page = NotFoundContainer; break;
+		default: Page = AbstractPageComponent;
 		}
 
-		if (page === null) {
+		if (Page === null) {
 			console.error('Error: page is null');
 			return;
 		}
+		store.dispatch(setAnimating(true));
 
-		this.oldPage = this.page;
-		this.page = page;
+		// First Render from the server
+		let el = null;
+		if (this.oldPage === null && this.page === null) {
+			el = document.getElementsByClassName('page-wrapper')[0];
+		}
+		console.log('el', el);
+
+		if (this.page) {
+
+			this.oldPage = this.page;
+			store.dispatch(setOldPage(this.oldPage));
+
+		}
+
+		// Define first page and pass el if the page el is allready in the dom
+		this.page = new Page({
+			el: el ? el : null,
+		});
+
+		store.dispatch(setPage(this.page));
 
 		// Init the next page now
-		console.log('INIT PAGE', this.page);
+
 		this.page.init().then(() => {
 
 			console.log('ON PAGE INIT');
@@ -112,6 +133,7 @@ class App {
 				console.log('HIDE OLD PAGE', this.oldPage);
 				this.oldPage.hide()
 					.then(() => {
+						console.log('OLD PAGE HIDDEN');
 						this.oldPage.dispose();
 						this.oldPage = null;
 					});
@@ -120,6 +142,9 @@ class App {
 			// Show next
 			this.page.show().then(() => {
 				// if (!this.getState().get('app').get('appLoaded')) this.dispatch(setAppLoaded(true));
+				console.log('CURRENT PAGE SHOW');
+
+				store.dispatch(setAnimating(false));
 
 				// at this point, dispose
 				if (this.oldPage) {
@@ -129,14 +154,6 @@ class App {
 				}
 			});
 
-			// If there was data already, we are not waiting for a loader screen to finish
-			// we show it now!
-
-			// if (hasData) {
-			//     this.page.show().then(() => {
-			//         if (!this.getState().get('app').get('appLoaded')) this.dispatch(setAppLoaded(true));
-			//     });
-			// }
 		});
 	}
 

@@ -5,10 +5,17 @@ $app->get('/{page}', function ($request, $response, $args) {
 
     $currentPage = $args['page'];
 
+		// var_dump($currentPage);
+
     // GET GLOBAL ROUTES
     $route_path = file_get_contents($this->settings['renderer']['routes_path']);
 		$routes = json_decode($route_path);
-    $currentRoute = $routes->$currentPage;
+		$currentRoute = $routes->$currentPage;
+
+		// 404
+		if ($currentRoute == NULL) {
+			$currentRoute = $routes->error;
+		}
 
     // SVGS
 		$svgs_path = file_get_contents($this->settings['renderer']['svgs_path']);
@@ -27,13 +34,13 @@ $app->get('/{page}', function ($request, $response, $args) {
     }
 
     $content = $this->view->render($response, 'layout.twig', [
-		'data' => $data,
-        'env' => $env,
-        // 'config' => $static['config'],
-		'svgs' => $svgs,
-		// 'bundleJS' => $configBundle['bundleJS'],
-		// 'bundleCSS' => $configBundle['bundleCSS'],
-		'template'=> $currentRoute->template .'.twig'
+			'data' => $data,
+    	'env' => $env,
+      // 'config' => $static['config'],
+			'svgs' => $svgs,
+			// 'bundleJS' => $configBundle['bundleJS'],
+			// 'bundleCSS' => $configBundle['bundleCSS'],
+			'template'=> $currentRoute->template .'.twig'
 	]);
 
 });

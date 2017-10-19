@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "assets/js/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 25);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -74,13 +74,13 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _redux = __webpack_require__(6);
+var _redux = __webpack_require__(8);
 
-var _reducers = __webpack_require__(44);
+var _reducers = __webpack_require__(45);
 
 var _reducers2 = _interopRequireDefault(_reducers);
 
-var _reduxResponsive = __webpack_require__(3);
+var _reduxResponsive = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -119,6 +119,964 @@ exports.default = store;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createResponsiveStateReducer", function() { return createResponsiveStateReducer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createResponsiveStoreEnhancer", function() { return createResponsiveStoreEnhancer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "responsiveStateReducer", function() { return responsiveStateReducer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "responsiveStoreEnhancer", function() { return responsiveStoreEnhancer; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_createReducer__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_createEnhancer__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions_types__ = __webpack_require__(18);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "CALCULATE_RESPONSIVE_STATE", function() { return __WEBPACK_IMPORTED_MODULE_2__actions_types__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions_creators__ = __webpack_require__(17);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "calculateResponsiveState", function() { return __WEBPACK_IMPORTED_MODULE_3__actions_creators__["a"]; });
+// local imports
+
+
+
+
+
+// external API
+var createResponsiveStateReducer = __WEBPACK_IMPORTED_MODULE_0__util_createReducer__["a" /* default */];
+var createResponsiveStoreEnhancer = __WEBPACK_IMPORTED_MODULE_1__util_createEnhancer__["a" /* default */];
+// provide default responsive state reducer/enhancers
+var responsiveStateReducer = createResponsiveStateReducer();
+var responsiveStoreEnhancer = createResponsiveStoreEnhancer();
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// LOCATION
+var HOMEPAGE = exports.HOMEPAGE = 'HOMEPAGE';
+var ABOUT = exports.ABOUT = 'ABOUT';
+var PARADE_DETAIL = exports.PARADE_DETAIL = 'PARADE_DETAIL';
+var REDIRECT = exports.REDIRECT = 'REDIRECT';
+var PARADE_EXPERIENCE = exports.PARADE_EXPERIENCE = 'PARADE_EXPERIENCE';
+var PARADE_EXPERIENCE_HOTSPOT = exports.PARADE_EXPERIENCE_HOTSPOT = 'PARADE_EXPERIENCE_HOTSPOT';
+var NOT_FOUND = exports.NOT_FOUND = 'NOT_FOUND';
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Container: Handles actions and data for a component
+ * @constructor
+ */
+var AbstractContainer = function () {
+	_createClass(AbstractContainer, [{
+		key: 'promises',
+		set: function set(newPromises) {
+			if (!this._promises) this._promises = {};
+			for (var promise in newPromises) {
+				this._promises[promise] = newPromises[promise];
+			}
+		},
+		get: function get() {
+			return this._promises;
+		}
+	}]);
+
+	function AbstractContainer() {
+		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+		_classCallCheck(this, AbstractContainer);
+
+		console.log('options', options);
+
+		/**
+    * Component asociated to the container
+    * @type {Object}
+    */
+		this._component = null;
+
+		/**
+  * Component Class
+  * @type {Object}
+  */
+		this.Component = null;
+
+		/**
+  * Data Object
+  * @type {Object}
+  */
+		this.data = null;
+
+		/**
+  * Options Object
+  * @type {Object}
+  */
+		this.options = null;
+
+		this.options = options;
+		this.data = options.data ? options.data : null;
+		this.options.actions = options.actions ? options.actions : {};
+
+		// /**
+		// * El
+		// * @type {DOM}
+		// */
+		// this.options.el = options.el ? options.el : null;
+
+		console.log('this.options', this.options);
+
+		this._promises = {
+			init: {
+				resolve: null,
+				reject: null
+			},
+			data: {
+				resolve: null,
+				reject: null
+			}
+		};
+
+		this.states = {
+			canUpdate: false,
+			isInit: false,
+			isAnimating: false,
+			isShown: false
+		};
+	}
+
+	/**
+  * Init
+  * @return Promise a Promise the component is init
+  */
+
+
+	_createClass(AbstractContainer, [{
+		key: 'init',
+		value: function init() {
+			var _this = this;
+
+			console.log('this', this);
+			console.log('this.Component', this.Component);
+
+			return new Promise(function (resolve, reject) {
+				_this.promises.init.resolve = resolve;
+				_this.promises.init.reject = reject;
+
+				var isInit = _this.states.isInit;
+
+
+				if (isInit) {
+					_this.promises.init.reject();
+					return;
+				}
+
+				_this.initComponent();
+			});
+		}
+	}, {
+		key: 'getComponent',
+		value: function getComponent() {
+			return this._component;
+		}
+	}, {
+		key: 'initComponent',
+		value: function initComponent() {
+			var _this2 = this;
+
+			this.getData().then(function () {
+				_this2.initActions();
+				_this2.initData();
+
+				_this2.options.data = _this2.data;
+				_this2._component = new _this2.Component(_this2.options);
+				_this2._component.init().then(function () {
+					_this2.onInit();
+				});
+			});
+		}
+
+		/**
+   * Once the component is init
+   */
+
+	}, {
+		key: 'onInit',
+		value: function onInit() {
+			console.log('ONInit');
+			this.setState({ isInit: true, canUpdate: true });
+			this.promises.init.resolve();
+		}
+	}, {
+		key: 'setState',
+		value: function setState() {
+			var partialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+			var callback = arguments[1];
+			var needRender = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+			if ((typeof partialState === 'undefined' ? 'undefined' : _typeof(partialState)) !== 'object' && typeof partialState !== 'function' && partialState !== null) {
+				console.error('setState(...): takes an object of state variables to update or a ' + 'function which returns an object of state variables.');
+				return;
+			}
+
+			for (var key in partialState) {
+				// eslint-disable-line guard-for-in
+				this.states[key] = partialState[key];
+			}
+
+			if (callback) callback();
+			if (needRender) this.render();
+		}
+	}, {
+		key: 'getData',
+		value: function getData() {
+			var _this3 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this3.promises.data.resolve = resolve;
+				_this3.promises.data.reject = reject;
+
+				_this3.fetchData();
+			});
+		}
+	}, {
+		key: 'fetchData',
+		value: function fetchData() {
+			this.promises.data.resolve();
+		}
+
+		// If we went to parse and do something with the data
+
+	}, {
+		key: 'initData',
+		value: function initData() {}
+
+		// Reference any actions here to pass to the component after
+
+	}, {
+		key: 'initActions',
+		value: function initActions() {}
+	}, {
+		key: 'resize',
+		value: function resize() {
+			return this._component.resize();
+		}
+	}, {
+		key: 'show',
+		value: function show() {
+			return this._component.show();
+		}
+	}, {
+		key: 'hide',
+		value: function hide() {
+			return this._component.hide();
+		}
+	}, {
+		key: 'dispose',
+		value: function dispose() {
+			this._component.dispose();
+			this._component = null;
+			return this;
+		}
+	}, {
+		key: 'reRender',
+		value: function reRender() {
+			var _this4 = this;
+
+			this.hide().then(function () {
+				_this4.dispose();
+				_this4.init().then(function () {
+					_this4.show();
+				});
+			});
+		}
+	}]);
+
+	return AbstractContainer;
+}();
+
+exports.default = AbstractContainer;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _underscore = __webpack_require__(57);
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
+var _store = __webpack_require__(0);
+
+var _store2 = _interopRequireDefault(_store);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var delegateEventSplitter = /^(\S+)\s*(.*)$/;
+
+/**
+ * Component: Defines a component with basic methods
+ * @constructor
+ */
+
+var Component = function () {
+	_createClass(Component, [{
+		key: 'events',
+		set: function set(events) {
+			for (var event in events) {
+				// eslint-disable-line guard-for-in
+				this._events[event] = events[event];
+			}
+			this.delegateEvents();
+		},
+		get: function get() {
+			return this._events;
+		}
+	}, {
+		key: 'promises',
+		set: function set(promises) {
+			for (var promise in promises) {
+				this.promises[promise] = promises[promise];
+			}
+		},
+		get: function get() {
+			return this._promises;
+		}
+	}, {
+		key: 'states',
+		set: function set(states) {
+			for (var state in states) {
+				// eslint-disable-line guard-for-in
+				this._states[state] = states[state];
+			}
+		},
+		get: function get() {
+			return this._states;
+		}
+	}]);
+
+	function Component(props) {
+		var _this = this;
+
+		_classCallCheck(this, Component);
+
+		/**
+  	 * Object as associative array of all the <handlers> objects
+  	 * @type {Object}
+  	 */
+		this.handlers = {};
+
+		/**
+  	 * Object as associative array of all the <DOM.events> objects
+  	 * @type {Object}
+  	 */
+		this._events = {};
+
+		/**
+   * Object as associative array of all the <promises> objects
+   * @type {Object}
+   */
+		this._promises = {
+			init: {
+				resolve: null,
+				reject: null
+			},
+			show: {
+				resolve: null,
+				reject: null
+			},
+			hidden: {
+				resolve: null,
+				reject: null
+			}
+		};
+
+		/**
+  	 * Object as associative array of all the states
+  	 * @type {Object}
+  	 */
+		this._states = {};
+
+		/**
+   * Object as associative array of all the timelines
+   * @type {Object}
+   */
+		this.TL = {};
+
+		/**
+     * uniqueId
+     * @type {String}
+     */
+		this.cid = _underscore2.default.uniqueId('component');
+
+		this.props = props;
+		this.states = {
+			canUpdate: false,
+			isInit: false,
+			isAnimating: false,
+			isShown: false
+		};
+
+		/**
+  * El
+  * If el is passed from parent, this means the DOM is allready render
+  and we just need to scope it
+  * @type {DOM}
+  */
+		this.el = props.el ? props.el : null;
+		this.$el = props.$el ? props.$el : null;
+		console.log('this.el', this.el);
+		console.log('props.el', props.el);
+
+		this.template = props.template ? props.template : null;
+
+		this.data = props.data ? props.data : this.data;
+		this.actions = props.actions ? props.actions : {};
+
+		this.events = {
+			'click a': function clickA(e) {
+				return _this.hyperlink(e);
+			}
+		};
+	}
+
+	/**
+  * Init
+  * @return {Promise} A Promise the component is init
+  */
+
+
+	_createClass(Component, [{
+		key: 'init',
+		value: function init() {
+			var _this2 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this2.promises.init.resolve = resolve;
+				_this2.promises.init.reject = reject;
+
+				var isInit = _this2.states.isInit;
+
+
+				if (isInit) {
+					_this2.promises.init.reject();
+					return;
+				}
+
+				_this2.initComponent();
+			});
+		}
+
+		/**
+   * Init the component.
+   * Override and trigger onInit when we have to wait for computer procesing, like canvas initialization for instance.
+   */
+
+	}, {
+		key: 'initComponent',
+		value: function initComponent() {
+			this.render();
+		}
+
+		/**
+      * Init all your DOM elements here
+      */
+
+	}, {
+		key: 'initDOM',
+		value: function initDOM() {}
+
+		/**
+      * Setup your DOM elements here ( for example defaut style before animation )
+      */
+
+	}, {
+		key: 'setupDOM',
+		value: function setupDOM() {}
+
+		/**
+   * Init the Timeline here
+   */
+
+	}, {
+		key: 'initTL',
+		value: function initTL() {}
+	}, {
+		key: 'onDOMInit',
+		value: function onDOMInit() {
+			this.bindEvents();
+			this.bindGlobalStoreEvents();
+			this.onInit();
+		}
+
+		/**
+   * Once the component is init
+   */
+
+	}, {
+		key: 'onInit',
+		value: function onInit() {
+			console.log('ONInit');
+			this.setState({ isInit: true, canUpdate: true });
+			this.promises.init.resolve();
+		}
+
+		/**
+   * Bind your events here
+   */
+
+	}, {
+		key: 'bindEvents',
+		value: function bindEvents() {}
+
+		/**
+   * Bind your store events here
+   */
+
+	}, {
+		key: 'bindGlobalStoreEvents',
+		value: function bindGlobalStoreEvents() {}
+
+		/**
+   * Unbind yout events here
+   */
+
+	}, {
+		key: 'unbindEvents',
+		value: function unbindEvents() {}
+
+		/**
+   * Set callbacks, where `this.events` is a hash of
+   *
+   * *{"event selector": "callback"}*
+   *
+   *  {
+   *      'mousedown .title':  'edit',
+   *      'click .button':     'save',
+   *      'click .open':       function(e) { ... }
+   *   }
+   * @param {Object} Events Objcets
+   */
+
+	}, {
+		key: 'delegateEvents',
+		value: function delegateEvents(events) {
+
+			events || (events = _underscore2.default.result(this, 'events'));
+			if (!events) return this;
+			this.undelegateEvents();
+			for (var key in events) {
+				var method = events[key];
+				if (!_underscore2.default.isFunction(method)) method = this[method];
+				if (!method) continue;
+				var match = key.match(delegateEventSplitter);
+				this.delegate(match[1], match[2], _underscore2.default.bind(method, this));
+			}
+			return this;
+		}
+
+		/**
+      * Add a single event listener to the view's element (or a child element
+      * using `selector`). This only works for delegate-able events: not `focus`,
+      * `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
+      */
+
+	}, {
+		key: 'delegate',
+		value: function delegate(eventName, selector, listener) {
+			if (this.$el) this.$el.on(eventName + '.delegateEvents' + this.cid, selector, listener);
+			return this;
+		}
+
+		// Clears all callbacks previously bound to the view by `delegateEvents`.
+		// You usually don't need to use this, but may wish to if you have multiple
+		// Backbone views attached to the same DOM element.
+
+	}, {
+		key: 'undelegateEvents',
+		value: function undelegateEvents() {
+			if (this.$el) this.$el.off('.delegateEvents' + this.cid);
+			return this;
+		}
+
+		// A finer-grained `undelegateEvents` for removing a single delegated event.
+		// `selector` and `listener` are both optional.
+
+	}, {
+		key: 'undelegate',
+		value: function undelegate(eventName, selector, listener) {
+			this.$el.off(eventName + '.delegateEvents' + this.cid, selector, listener);
+			return this;
+		}
+	}, {
+		key: 'setState',
+		value: function setState() {
+			var partialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+			var callback = arguments[1];
+			var needRender = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+			if ((typeof partialState === 'undefined' ? 'undefined' : _typeof(partialState)) !== 'object' && typeof partialState !== 'function' && partialState !== null) {
+				console.error('setState(...): takes an object of state variables to update or a ' + 'function which returns an object of state variables.');
+				return;
+			}
+
+			for (var key in partialState) {
+				// eslint-disable-line guard-for-in
+				this.states[key] = partialState[key];
+			}
+
+			if (callback) callback();
+			if (needRender) this.render();
+		}
+
+		/**
+   * Call render function if you wanna change the component
+   * based on states/data
+   */
+
+	}, {
+		key: 'render',
+		value: function render() {
+			var _this3 = this;
+
+			// Default components just need to scope a piece of DOM from constructor
+			this.setElement();
+			setTimeout(function () {
+				return _this3.onRender();
+			}, 0);
+		}
+
+		/**
+   * Render your component
+   * This is where we scope the main elements
+   */
+
+	}, {
+		key: 'setElement',
+		value: function setElement() {
+			console.log('this.el', this.el);
+
+			if (this.el === null && this.template === null) {
+				console.error('You must provide a template or an el to scope a component. Creating an empty div instead', this);
+				this.el = document.createElement('div');
+			}
+
+			if (this.el !== null) {
+				this.$el = $(this.el);
+				return;
+			}
+
+			if (this.$el !== null) {
+				this.el = this.$el[0];
+				return;
+			}
+
+			if (this.template !== null) {
+				this.renderTemplate();
+				return;
+			}
+		}
+
+		/**
+   * Render your template
+   */
+
+	}, {
+		key: 'renderTemplate',
+		value: function renderTemplate() {
+			this.$el = $(this.template());
+			this.el = this.$el[0];
+		}
+	}, {
+		key: 'onRender',
+		value: function onRender() {
+			var _this4 = this;
+
+			console.log('onRender');
+
+			this.initDOM();
+			this.setupDOM();
+			this.initTL();
+			this.delegateEvents();
+			setTimeout(function () {
+				return _this4.onDOMInit();
+			}, 0);
+		}
+
+		/**
+   * Update
+      *
+   */
+
+	}, {
+		key: 'update',
+		value: function update() {
+			if (this.states.canUpdate) this.onUpdate();
+		}
+
+		/**
+   * Called on scroll
+   */
+
+	}, {
+		key: 'onScroll',
+		value: function onScroll() {}
+
+		/**
+   * Called on update
+   */
+
+	}, {
+		key: 'onUpdate',
+		value: function onUpdate() {}
+
+		/**
+   * Called on resize
+      * In our scenario this will listen to the GlobalStore Events
+   */
+
+	}, {
+		key: 'onResize',
+		value: function onResize() {}
+
+		/**
+   * Show the component
+   */
+
+	}, {
+		key: 'show',
+		value: function show() {
+			var _this5 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this5.promises.show.resolve = resolve;
+				_this5.promises.show.reject = reject;
+				_this5.setState({ isAnimating: true, canUpdate: true });
+				_this5.showComponent();
+			});
+		}
+	}, {
+		key: 'showComponent',
+		value: function showComponent() {
+			this.onShown();
+		}
+
+		/**
+  	 * The component is shown
+  	 */
+
+	}, {
+		key: 'onShown',
+		value: function onShown() {
+			this.setState({ isShown: true, isAnimating: false });
+			this.promises.show.resolve();
+		}
+
+		/**
+   * Hide the component
+   */
+
+	}, {
+		key: 'hide',
+		value: function hide() {
+			var _this6 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this6.promises.hidden.resolve = resolve;
+				_this6.promises.hidden.reject = reject;
+				_this6.setState({ isAnimating: true });
+				_this6.hideComponent();
+			});
+		}
+	}, {
+		key: 'hideComponent',
+		value: function hideComponent() {
+			this.onHidden();
+		}
+
+		/**
+   * The component is shown
+   */
+
+	}, {
+		key: 'onHidden',
+		value: function onHidden() {
+			this.setState({ isAnimating: false, isShown: false, canUpdate: false });
+			this.promises.hidden.resolve();
+		}
+
+		/**
+   * Navigate using the router
+   */
+
+	}, {
+		key: 'navigate',
+		value: function navigate(url) {
+			var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+			// if absolute, make sure to add the root
+			if (url.indexOf(window.location.origin) >= 0) {
+				url = url.replace(window.location.origin, '');
+			}
+
+			var re = new RegExp(/^.*\//);
+			var rootUrl = re.exec(window.location.href);
+
+			// If internal
+			if (url.indexOf(rootUrl) >= 0) {
+				// make it relative
+				url = url.replace(window.location.origin, '');
+				url = url.replace(rootUrl, '');
+			}
+
+			page(url);
+		}
+
+		// TODO : add connection to isAnimating
+
+	}, {
+		key: 'hyperlink',
+		value: function hyperlink(e) {
+			// const href = e.currentTarget.href;
+			// const route = !e.currentTarget.classList.contains('no-route');
+
+			// // internal link
+			// if ((href.substr(0, 4) !== 'http' || href.indexOf(window.location.origin) >= 0) && route) {
+			// 	e.preventDefault();
+
+			// 	// // if is loading or loader still shown, we block the navigation
+			// 	// const isLoading = this.getState().get('loader').get('isLoading');
+			// 	// const isLoaderShown = this.getState().get('loader').get('isShown');
+
+			// 	if (!isLoading && !isLoaderShown) {
+			// 		this.navigate(href);
+			// 	}
+			// }
+			var isAnimating = _store2.default.getState().app.isAnimating;
+			if (isAnimating) {
+				e.preventDefault();
+			}
+		}
+
+		/**
+   * Kill a timeline by name
+   * @param {string} name of the timeline stocked in this.TL.
+   */
+
+	}, {
+		key: 'killTL',
+		value: function killTL(name) {
+			if (this.TL[name] === undefined || this.TL[name] === null) return;
+
+			var tl = this.TL[name];
+
+			tl.stop();
+			tl.kill();
+			tl.clear();
+			tl = null;
+
+			this.TL[name] = null;
+		}
+
+		/**
+   * Kill all the timelines
+   */
+
+	}, {
+		key: 'destroyTL',
+		value: function destroyTL() {
+			for (var name in this.TL) {
+				if (this.TL[name]) this.killTL(name);
+			}
+			this.TL = {};
+		}
+
+		/**
+   * Dispose the component
+   */
+
+	}, {
+		key: 'dispose',
+		value: function dispose() {
+			this.setState({ isInit: false, isShown: false, canUpdate: false });
+			this.unbindEvents();
+			this.handlers = {};
+			this.promises = {};
+
+			this.undelegateEvents();
+			this.destroyTL();
+			this.$el.remove();
+			this.$el = null;
+			this.$els = {};
+			this._events = {};
+
+			// TODO : unsubscribe redux-watch
+		}
+	}]);
+
+	return Component;
+}();
+
+exports.default = Component;
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*** IMPORTS FROM imports-loader ***/
@@ -1779,82 +2737,7 @@ window.$ === undefined && (window.$ = Zepto)
 }.call(window));
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createResponsiveStateReducer", function() { return createResponsiveStateReducer; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createResponsiveStoreEnhancer", function() { return createResponsiveStoreEnhancer; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "responsiveStateReducer", function() { return responsiveStateReducer; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "responsiveStoreEnhancer", function() { return responsiveStoreEnhancer; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_createReducer__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_createEnhancer__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions_types__ = __webpack_require__(16);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "CALCULATE_RESPONSIVE_STATE", function() { return __WEBPACK_IMPORTED_MODULE_2__actions_types__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions_creators__ = __webpack_require__(15);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "calculateResponsiveState", function() { return __WEBPACK_IMPORTED_MODULE_3__actions_creators__["a"]; });
-// local imports
-
-
-
-
-
-// external API
-var createResponsiveStateReducer = __WEBPACK_IMPORTED_MODULE_0__util_createReducer__["a" /* default */];
-var createResponsiveStoreEnhancer = __WEBPACK_IMPORTED_MODULE_1__util_createEnhancer__["a" /* default */];
-// provide default responsive state reducer/enhancers
-var responsiveStateReducer = createResponsiveStateReducer();
-var responsiveStoreEnhancer = createResponsiveStoreEnhancer();
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-// LOCATION
-var HOMEPAGE = exports.HOMEPAGE = 'HOMEPAGE';
-var ABOUT = exports.ABOUT = 'ABOUT';
-var PARADE_DETAIL = exports.PARADE_DETAIL = 'PARADE_DETAIL';
-var REDIRECT = exports.REDIRECT = 'REDIRECT';
-var PARADE_EXPERIENCE = exports.PARADE_EXPERIENCE = 'PARADE_EXPERIENCE';
-var PARADE_EXPERIENCE_HOTSPOT = exports.PARADE_EXPERIENCE_HOTSPOT = 'PARADE_EXPERIENCE_HOTSPOT';
-var NOT_FOUND = exports.NOT_FOUND = 'NOT_FOUND';
-
-/***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -2044,17 +2927,17 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__combineReducers__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__compose__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__combineReducers__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__compose__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(13);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createStore", function() { return __WEBPACK_IMPORTED_MODULE_0__createStore__["b"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "combineReducers", function() { return __WEBPACK_IMPORTED_MODULE_1__combineReducers__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "bindActionCreators", function() { return __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__["a"]; });
@@ -2080,14 +2963,14 @@ if ("development" !== 'production' && typeof isCrushed.name === 'string' && isCr
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActionTypes; });
 /* harmony export (immutable) */ __webpack_exports__["b"] = createStore;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_symbol_observable__);
 
 
@@ -2339,13 +3222,13 @@ var ActionTypes = {
 }
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getPrototype_js__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getPrototype_js__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(38);
 
 
 
@@ -2411,11 +3294,11 @@ function isPlainObject(value) {
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__root_js__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__root_js__ = __webpack_require__(32);
 
 
 /** Built-in value references. */
@@ -2425,7 +3308,7 @@ var Symbol = __WEBPACK_IMPORTED_MODULE_0__root_js__["a" /* default */].Symbol;
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -2453,7 +3336,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2481,7 +3364,7 @@ function warning(message) {
 }
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2520,27 +3403,10 @@ function compose() {
 }
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports =  __webpack_require__(46);
-
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = ('redux-responsive/CALCULATE_RESPONSIVE_STATE');
-
-/***/ }),
-/* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__calculateResponsiveState__ = __webpack_require__(49);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__calculateResponsiveState__["a"]; });
+module.exports =  __webpack_require__(47);
 
 
 
@@ -2549,13 +3415,30 @@ module.exports =  __webpack_require__(46);
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__CALCULATE_RESPONSIVE_STATE__ = __webpack_require__(14);
+/* harmony default export */ __webpack_exports__["a"] = ('redux-responsive/CALCULATE_RESPONSIVE_STATE');
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__calculateResponsiveState__ = __webpack_require__(50);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__calculateResponsiveState__["a"]; });
+
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__CALCULATE_RESPONSIVE_STATE__ = __webpack_require__(16);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__CALCULATE_RESPONSIVE_STATE__["a"]; });
 
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2566,16 +3449,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 // ACTION
 var NAVIGATION = exports.NAVIGATION = 'NAVIGATION';
-var APP_LOADED = exports.APP_LOADED = 'APP_LOADED';
-var CHANGE_LANG = exports.CHANGE_LANG = 'CHANGE_LANG';
 var SET_ROUTES = exports.SET_ROUTES = 'SET_ROUTES';
-var SET_QUERY = exports.SET_QUERY = 'SET_QUERY';
 var SET_META = exports.SET_META = 'SET_META';
-var SET_UI = exports.SET_UI = 'SET_UI';
-var SET_HASH = exports.SET_HASH = 'SET_HASH';
+var SET_ANIMATING = exports.SET_ANIMATING = 'SET_ANIMATING';
+var SET_PAGE = exports.SET_PAGE = 'SET_PAGE';
+var SET_OLDPAGE = exports.SET_OLDPAGE = 'SET_OLDPAGE';
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2586,14 +3467,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.navigate = navigate;
 exports.setMeta = setMeta;
-exports.setHash = setHash;
-exports.setUIData = setUIData;
-exports.setQuery = setQuery;
 exports.setRoutes = setRoutes;
-exports.setAppLoaded = setAppLoaded;
-exports.setLang = setLang;
+exports.setAnimating = setAnimating;
+exports.setPage = setPage;
+exports.setOldPage = setOldPage;
 
-var _constants = __webpack_require__(17);
+var _constants = __webpack_require__(19);
 
 function navigate(location) {
 	var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -2610,30 +3489,9 @@ function setMeta() {
 	var isDefault = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
 	return {
-		type: _constants.SET_META,
+		type: SET_META,
 		meta: meta,
 		isDefault: isDefault
-	};
-}
-
-function setHash(hash) {
-	return {
-		type: _constants.SET_HASH,
-		hash: hash || null
-	};
-}
-
-function setUIData(data) {
-	return {
-		type: _constants.SET_UI,
-		data: data
-	};
-}
-
-function setQuery(query) {
-	return {
-		type: _constants.SET_QUERY,
-		query: query || {}
 	};
 }
 
@@ -2644,879 +3502,49 @@ function setRoutes(routes) {
 	};
 }
 
-function setAppLoaded(appLoaded) {
+function setAnimating(animatingState) {
 	return {
-		type: _constants.APP_LOADED,
-		appLoaded: appLoaded
+		type: _constants.SET_ANIMATING,
+		isAnimating: animatingState
 	};
 }
 
-function setLang(lang) {
+function setPage(page) {
 	return {
-		type: _constants.CHANGE_LANG,
-		lang: lang
+		type: _constants.SET_PAGE,
+		page: page
 	};
 }
 
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * Container: Handles actions and data for a component
- * @constructor
- */
-var AbstractContainer = function () {
-	_createClass(AbstractContainer, [{
-		key: 'promises',
-		set: function set(newPromises) {
-			if (!this._promises) this._promises = {};
-			for (var promise in newPromises) {
-				this._promises[promise] = newPromises[promise];
-			}
-		},
-		get: function get() {
-			return this._promises;
-		}
-	}]);
-
-	function AbstractContainer() {
-		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-		_classCallCheck(this, AbstractContainer);
-
-		/**
-    * Component asociated to the container
-    * @type {Object}
-    */
-		this._component = null;
-
-		/**
-  * Component Class
-  * @type {Object}
-  */
-		this.Component = null;
-
-		/**
-  * Data Object
-  * @type {Object}
-  */
-		this.data = null;
-
-		/**
-  * Options Object
-  * @type {Object}
-  */
-		this.options = null;
-
-		this.options = options;
-		this.data = options.data ? options.data : null;
-		this.options.actions = options.actions ? options.actions : {};
-
-		this._promises = {
-			init: {
-				resolve: null,
-				reject: null
-			},
-			data: {
-				resolve: null,
-				reject: null
-			}
-		};
-
-		this.states = {
-			canUpdate: false,
-			isInit: false,
-			isAnimating: false,
-			isShown: false
-		};
-	}
-
-	/**
-  * Init
-  * @return Promise a Promise the component is init
-  */
-
-
-	_createClass(AbstractContainer, [{
-		key: 'init',
-		value: function init() {
-			var _this = this;
-
-			console.log('this', this);
-			console.log('this.Component', this.Component);
-
-			return new Promise(function (resolve, reject) {
-				_this.promises.init.resolve = resolve;
-				_this.promises.init.reject = reject;
-
-				var isInit = _this.states.isInit;
-
-
-				if (isInit) {
-					_this.promises.init.reject();
-					return;
-				}
-
-				_this.initComponent();
-			});
-		}
-	}, {
-		key: 'getComponent',
-		value: function getComponent() {
-			return this._component;
-		}
-	}, {
-		key: 'initComponent',
-		value: function initComponent() {
-			var _this2 = this;
-
-			this.getData().then(function () {
-				_this2.initActions();
-				_this2.initData();
-
-				_this2.options.data = _this2.data;
-				_this2._component = new _this2.Component(_this2.options);
-				_this2._component.init().then(function () {
-					_this2.onInit();
-				});
-			});
-		}
-
-		/**
-   * Once the component is init
-   */
-
-	}, {
-		key: 'onInit',
-		value: function onInit() {
-			console.log('ONInit');
-			this.setState({ isInit: true, canUpdate: true });
-			this.promises.init.resolve();
-		}
-	}, {
-		key: 'setState',
-		value: function setState() {
-			var partialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-			var callback = arguments[1];
-			var needRender = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
-			if ((typeof partialState === 'undefined' ? 'undefined' : _typeof(partialState)) !== 'object' && typeof partialState !== 'function' && partialState !== null) {
-				console.error('setState(...): takes an object of state variables to update or a ' + 'function which returns an object of state variables.');
-				return;
-			}
-
-			for (var key in partialState) {
-				// eslint-disable-line guard-for-in
-				this.states[key] = partialState[key];
-			}
-
-			if (callback) callback();
-			if (needRender) this.render();
-		}
-	}, {
-		key: 'getData',
-		value: function getData() {
-			var _this3 = this;
-
-			return new Promise(function (resolve, reject) {
-				_this3.promises.data.resolve = resolve;
-				_this3.promises.data.reject = reject;
-
-				_this3.fetchData();
-			});
-		}
-	}, {
-		key: 'fetchData',
-		value: function fetchData() {
-			this.promises.data.resolve();
-		}
-
-		// If we went to parse and do something with the data
-
-	}, {
-		key: 'initData',
-		value: function initData() {}
-
-		// Reference any actions here to pass to the component after
-
-	}, {
-		key: 'initActions',
-		value: function initActions() {}
-	}, {
-		key: 'resize',
-		value: function resize() {
-			return this._component.resize();
-		}
-	}, {
-		key: 'show',
-		value: function show() {
-			return this._component.show();
-		}
-	}, {
-		key: 'hide',
-		value: function hide() {
-			return this._component.hide();
-		}
-	}, {
-		key: 'dispose',
-		value: function dispose() {
-			this._component.dispose();
-			this._component = null;
-			return this;
-		}
-	}, {
-		key: 'reRender',
-		value: function reRender() {
-			var _this4 = this;
-
-			this.hide().then(function () {
-				_this4.dispose();
-				_this4.init().then(function () {
-					_this4.show();
-				});
-			});
-		}
-	}]);
-
-	return AbstractContainer;
-}();
-
-exports.default = AbstractContainer;
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _underscore = __webpack_require__(56);
-
-var _underscore2 = _interopRequireDefault(_underscore);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var delegateEventSplitter = /^(\S+)\s*(.*)$/;
-
-/**
- * Component: Defines a component with basic methods
- * @constructor
- */
-
-var Component = function () {
-	_createClass(Component, [{
-		key: 'events',
-		set: function set(events) {
-			for (var event in events) {
-				// eslint-disable-line guard-for-in
-				this._events[event] = events[event];
-			}
-			this.delegateEvents();
-		},
-		get: function get() {
-			return this._events;
-		}
-	}, {
-		key: 'promises',
-		set: function set(promises) {
-			for (var promise in promises) {
-				this.promises[promise] = promises[promise];
-			}
-		},
-		get: function get() {
-			return this._promises;
-		}
-	}, {
-		key: 'states',
-		set: function set(states) {
-			for (var state in states) {
-				// eslint-disable-line guard-for-in
-				this._states[state] = states[state];
-			}
-		},
-		get: function get() {
-			return this._states;
-		}
-	}]);
-
-	function Component(props) {
-		var _this = this;
-
-		_classCallCheck(this, Component);
-
-		/**
-  	 * Object as associative array of all the <handlers> objects
-  	 * @type {Object}
-  	 */
-		this.handlers = {};
-
-		/**
-  	 * Object as associative array of all the <DOM.events> objects
-  	 * @type {Object}
-  	 */
-		this._events = {};
-
-		/**
-   * Object as associative array of all the <promises> objects
-   * @type {Object}
-   */
-		this._promises = {
-			init: {
-				resolve: null,
-				reject: null
-			},
-			show: {
-				resolve: null,
-				reject: null
-			},
-			hidden: {
-				resolve: null,
-				reject: null
-			}
-		};
-
-		/**
-  	 * Object as associative array of all the states
-  	 * @type {Object}
-  	 */
-		this._states = {};
-
-		/**
-   * Object as associative array of all the timelines
-   * @type {Object}
-   */
-		this.TL = {};
-
-		/**
-     * uniqueId
-     * @type {String}
-     */
-		this.cid = _underscore2.default.uniqueId('component');
-
-		this.props = props;
-		this.states = {
-			canUpdate: false,
-			isInit: false,
-			isAnimating: false,
-			isShown: false
-		};
-
-		this.selector = props.selector ? props.selector : null;
-
-		this.el = props.el ? props.el : null;
-		this.$el = props.$el ? props.$el : null;
-
-		this.template = props.template ? props.template : null;
-
-		this.data = props.data ? props.data : this.data;
-		this.actions = props.actions ? props.actions : {};
-
-		this.events = {
-			'click a': function clickA() {
-				return _this.hyperlink();
-			}
-		};
-	}
-
-	/**
-  * Init
-  * @return {Promise} A Promise the component is init
-  */
-
-
-	_createClass(Component, [{
-		key: 'init',
-		value: function init() {
-			var _this2 = this;
-
-			return new Promise(function (resolve, reject) {
-				_this2.promises.init.resolve = resolve;
-				_this2.promises.init.reject = reject;
-
-				var isInit = _this2.states.isInit;
-
-
-				if (isInit) {
-					_this2.promises.init.reject();
-					return;
-				}
-
-				_this2.initComponent();
-			});
-		}
-
-		/**
-   * Init the component.
-   * Override and trigger onInit when we have to wait for computer procesing, like canvas initialization for instance.
-   */
-
-	}, {
-		key: 'initComponent',
-		value: function initComponent() {
-			this.render();
-		}
-
-		/**
-      * Init all your DOM elements here
-      */
-
-	}, {
-		key: 'initDOM',
-		value: function initDOM() {}
-
-		/**
-      * Setup your DOM elements here ( for example defaut style before animation )
-      */
-
-	}, {
-		key: 'setupDOM',
-		value: function setupDOM() {}
-
-		/**
-   * Init the Timeline here
-   */
-
-	}, {
-		key: 'initTL',
-		value: function initTL() {}
-	}, {
-		key: 'onDOMInit',
-		value: function onDOMInit() {
-			this.bindEvents();
-			this.bindGlobalStoreEvents();
-			this.onInit();
-		}
-
-		/**
-   * Once the component is init
-   */
-
-	}, {
-		key: 'onInit',
-		value: function onInit() {
-			console.log('ONInit');
-			this.setState({ isInit: true, canUpdate: true });
-			this.promises.init.resolve();
-		}
-
-		/**
-   * Bind your events here
-   */
-
-	}, {
-		key: 'bindEvents',
-		value: function bindEvents() {}
-
-		/**
-   * Bind your store events here
-   */
-
-	}, {
-		key: 'bindGlobalStoreEvents',
-		value: function bindGlobalStoreEvents() {}
-
-		/**
-   * Unbind yout events here
-   */
-
-	}, {
-		key: 'unbindEvents',
-		value: function unbindEvents() {}
-
-		/**
-   * Set callbacks, where `this.events` is a hash of
-   *
-   * *{"event selector": "callback"}*
-   *
-   *  {
-   *      'mousedown .title':  'edit',
-   *      'click .button':     'save',
-   *      'click .open':       function(e) { ... }
-   *   }
-   * @param {Object} Events Objcets
-   */
-
-	}, {
-		key: 'delegateEvents',
-		value: function delegateEvents(events) {
-
-			events || (events = _underscore2.default.result(this, 'events'));
-			if (!events) return this;
-			this.undelegateEvents();
-			for (var key in events) {
-				var method = events[key];
-				if (!_underscore2.default.isFunction(method)) method = this[method];
-				if (!method) continue;
-				var match = key.match(delegateEventSplitter);
-				this.delegate(match[1], match[2], _underscore2.default.bind(method, this));
-			}
-			return this;
-		}
-
-		/**
-      * Add a single event listener to the view's element (or a child element
-      * using `selector`). This only works for delegate-able events: not `focus`,
-      * `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
-      */
-
-	}, {
-		key: 'delegate',
-		value: function delegate(eventName, selector, listener) {
-			if (this.$el) this.$el.on(eventName + '.delegateEvents' + this.cid, selector, listener);
-			return this;
-		}
-
-		// Clears all callbacks previously bound to the view by `delegateEvents`.
-		// You usually don't need to use this, but may wish to if you have multiple
-		// Backbone views attached to the same DOM element.
-
-	}, {
-		key: 'undelegateEvents',
-		value: function undelegateEvents() {
-			if (this.$el) this.$el.off('.delegateEvents' + this.cid);
-			return this;
-		}
-
-		// A finer-grained `undelegateEvents` for removing a single delegated event.
-		// `selector` and `listener` are both optional.
-
-	}, {
-		key: 'undelegate',
-		value: function undelegate(eventName, selector, listener) {
-			this.$el.off(eventName + '.delegateEvents' + this.cid, selector, listener);
-			return this;
-		}
-	}, {
-		key: 'setState',
-		value: function setState() {
-			var partialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-			var callback = arguments[1];
-			var needRender = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
-			if ((typeof partialState === 'undefined' ? 'undefined' : _typeof(partialState)) !== 'object' && typeof partialState !== 'function' && partialState !== null) {
-				console.error('setState(...): takes an object of state variables to update or a ' + 'function which returns an object of state variables.');
-				return;
-			}
-
-			for (var key in partialState) {
-				// eslint-disable-line guard-for-in
-				this.states[key] = partialState[key];
-			}
-
-			if (callback) callback();
-			if (needRender) this.render();
-		}
-
-		/**
-   * Call render function if you wanna change the component
-   * based on states/data
-   */
-
-	}, {
-		key: 'render',
-		value: function render() {
-			var _this3 = this;
-
-			// Default components just need to scope a piece of DOM from constructor
-			this.setElement();
-			setTimeout(function () {
-				return _this3.onRender();
-			}, 0);
-		}
-
-		/**
-   * Render your component
-   * This is where we scope the main elements
-   */
-
-	}, {
-		key: 'setElement',
-		value: function setElement() {
-			console.log('this.el', this.el);
-			console.log('this.selector', this.selector);
-
-			if (this.el === null && this.selector === null && this.template === null) {
-				console.error('You must provide a template or an el or a selector to scope a component. Creating an empty div instead', this);
-				this.el = document.createElement('div');
-			}
-
-			if (this.el !== null) {
-				this.$el = $(this.el);
-				return;
-			}
-
-			if (this.$el !== null) {
-				this.el = this.$el[0];
-				return;
-			}
-
-			if (this.selector !== null) {
-				this.el = $(this.selector);
-			}
-
-			if (this.template !== null) {
-				this.renderTemplate();
-				return;
-			}
-		}
-
-		/**
-   * Render your template
-   */
-
-	}, {
-		key: 'renderTemplate',
-		value: function renderTemplate() {
-			this.$el = $(this.template());
-			this.el = this.$el[0];
-		}
-	}, {
-		key: 'onRender',
-		value: function onRender() {
-			var _this4 = this;
-
-			console.log('onRender');
-
-			this.initDOM();
-			this.setupDOM();
-			this.initTL();
-			this.delegateEvents();
-			setTimeout(function () {
-				return _this4.onDOMInit();
-			}, 0);
-		}
-
-		/**
-   * Update
-      *
-   */
-
-	}, {
-		key: 'update',
-		value: function update() {
-			if (this.states.canUpdate) this.onUpdate();
-		}
-
-		/**
-   * Called on scroll
-   */
-
-	}, {
-		key: 'onScroll',
-		value: function onScroll() {}
-
-		/**
-   * Called on update
-   */
-
-	}, {
-		key: 'onUpdate',
-		value: function onUpdate() {}
-
-		/**
-   * Called on resize
-      * In our scenario this will listen to the GlobalStore Events
-   */
-
-	}, {
-		key: 'onResize',
-		value: function onResize() {}
-
-		/**
-   * Show the component
-   */
-
-	}, {
-		key: 'show',
-		value: function show() {
-			var _this5 = this;
-
-			return new Promise(function (resolve, reject) {
-				_this5.promises.show.resolve = resolve;
-				_this5.promises.show.reject = reject;
-				_this5.setState({ isAnimating: true, canUpdate: true });
-				_this5.showComponent();
-			});
-		}
-	}, {
-		key: 'showComponent',
-		value: function showComponent() {
-			this.onShown();
-		}
-
-		/**
-  	 * The component is shown
-  	 */
-
-	}, {
-		key: 'onShown',
-		value: function onShown() {
-			this.setState({ isShown: true, isAnimating: false });
-			this.promises.show.resolve();
-		}
-
-		/**
-   * Hide the component
-   */
-
-	}, {
-		key: 'hide',
-		value: function hide() {
-			var _this6 = this;
-
-			return new Promise(function (resolve, reject) {
-				_this6.promises.hidden.resolve = resolve;
-				_this6.promises.hidden.reject = reject;
-				_this6.setState({ isAnimating: true });
-				_this6.hideComponent();
-			});
-		}
-	}, {
-		key: 'hideComponent',
-		value: function hideComponent() {
-			this.onHidden();
-		}
-
-		/**
-   * The component is shown
-   */
-
-	}, {
-		key: 'onHidden',
-		value: function onHidden() {
-			this.setState({ isAnimating: false, isShown: false, canUpdate: false });
-			this.promises.hidden.resolve();
-		}
-
-		/**
-   * Navigate using the router
-   */
-
-	}, {
-		key: 'navigate',
-		value: function navigate(url) {
-			var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-			// if absolute, make sure to add the root
-			if (url.indexOf(window.location.origin) >= 0) {
-				url = url.replace(window.location.origin, '');
-			}
-
-			var re = new RegExp(/^.*\//);
-			var rootUrl = re.exec(window.location.href);
-
-			// If internal
-			if (url.indexOf(rootUrl) >= 0) {
-				// make it relative
-				url = url.replace(window.location.origin, '');
-				url = url.replace(rootUrl, '');
-			}
-
-			page(url);
-		}
-
-		// TODO : add connection to isAnimating
-
-	}, {
-		key: 'hyperlink',
-		value: function hyperlink(e) {
-			var href = e.currentTarget.href;
-			var route = !e.currentTarget.classList.contains('no-route');
-
-			// internal link
-			if ((href.substr(0, 4) !== 'http' || href.indexOf(window.location.origin) >= 0) && route) {
-				e.preventDefault();
-
-				// if is loading or loader still shown, we block the navigation
-				var isLoading = this.getState().get('loader').get('isLoading');
-				var isLoaderShown = this.getState().get('loader').get('isShown');
-
-				if (!isLoading && !isLoaderShown) {
-					this.navigate(href);
-				}
-			}
-		}
-
-		/**
-   * Kill a timeline by name
-   * @param {string} name of the timeline stocked in this.TL.
-   */
-
-	}, {
-		key: 'killTL',
-		value: function killTL(name) {
-			if (this.TL[name] === undefined || this.TL[name] === null) return;
-
-			var tl = this.TL[name];
-
-			tl.stop();
-			tl.kill();
-			tl.clear();
-			tl = null;
-
-			this.TL[name] = null;
-		}
-
-		/**
-   * Kill all the timelines
-   */
-
-	}, {
-		key: 'destroyTL',
-		value: function destroyTL() {
-			for (var name in this.TL) {
-				if (this.TL[name]) this.killTL(name);
-			}
-			this.TL = {};
-		}
-
-		/**
-   * Dispose the component
-   */
-
-	}, {
-		key: 'dispose',
-		value: function dispose() {
-			this.setState({ isInit: false, isShown: false, canUpdate: false });
-			this.unbindEvents();
-			this.handlers = {};
-			this.promises = {};
-
-			// TODO : unsubscribe redux-watch
-		}
-	}]);
-
-	return Component;
-}();
-
-exports.default = Component;
+function setOldPage(page) {
+	return {
+		type: _constants.SET_OLDPAGE,
+		page: page
+	};
+}
 
 /***/ }),
 /* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(__dirname, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
+ * Twig.js 0.8.9
+ *
+ * @copyright 2011-2015 John Roepke and the Twig.js Contributors
+ * @license   Available under the BSD 2-Clause License
+ * @link      https://github.com/justjohn/twig.js
+ */
+var Twig=function(Twig){Twig.VERSION="0.8.9";return Twig}(Twig||{});var Twig=function(Twig){"use strict";Twig.trace=false;Twig.debug=false;Twig.cache=true;Twig.placeholders={parent:"{{|PARENT|}}"};Twig.indexOf=function(arr,searchElement){if(Array.prototype.hasOwnProperty("indexOf")){return arr.indexOf(searchElement)}if(arr===void 0||arr===null){throw new TypeError}var t=Object(arr);var len=t.length>>>0;if(len===0){return-1}var n=0;if(arguments.length>0){n=Number(arguments[1]);if(n!==n){n=0}else if(n!==0&&n!==Infinity&&n!==-Infinity){n=(n>0||-1)*Math.floor(Math.abs(n))}}if(n>=len){return-1}var k=n>=0?n:Math.max(len-Math.abs(n),0);for(;k<len;k++){if(k in t&&t[k]===searchElement){return k}}if(arr==searchElement){return 0}return-1};Twig.forEach=function(arr,callback,thisArg){if(Array.prototype.forEach){return arr.forEach(callback,thisArg)}var T,k;if(arr==null){throw new TypeError(" this is null or not defined")}var O=Object(arr);var len=O.length>>>0;if({}.toString.call(callback)!="[object Function]"){throw new TypeError(callback+" is not a function")}if(thisArg){T=thisArg}k=0;while(k<len){var kValue;if(k in O){kValue=O[k];callback.call(T,kValue,k,O)}k++}};Twig.merge=function(target,source,onlyChanged){Twig.forEach(Object.keys(source),function(key){if(onlyChanged&&!(key in target)){return}target[key]=source[key]});return target};Twig.Error=function(message){this.message=message;this.name="TwigException";this.type="TwigException"};Twig.Error.prototype.toString=function(){var output=this.name+": "+this.message;return output};Twig.log={trace:function(){if(Twig.trace&&console){console.log(Array.prototype.slice.call(arguments))}},debug:function(){if(Twig.debug&&console){console.log(Array.prototype.slice.call(arguments))}}};if(typeof console!=="undefined"){if(typeof console.error!=="undefined"){Twig.log.error=function(){console.error.apply(console,arguments)}}else if(typeof console.log!=="undefined"){Twig.log.error=function(){console.log.apply(console,arguments)}}}else{Twig.log.error=function(){}}Twig.ChildContext=function(context){var ChildContext=function ChildContext(){};ChildContext.prototype=context;return new ChildContext};Twig.token={};Twig.token.type={output:"output",logic:"logic",comment:"comment",raw:"raw",output_whitespace_pre:"output_whitespace_pre",output_whitespace_post:"output_whitespace_post",output_whitespace_both:"output_whitespace_both",logic_whitespace_pre:"logic_whitespace_pre",logic_whitespace_post:"logic_whitespace_post",logic_whitespace_both:"logic_whitespace_both"};Twig.token.definitions=[{type:Twig.token.type.raw,open:"{% raw %}",close:"{% endraw %}"},{type:Twig.token.type.raw,open:"{% verbatim %}",close:"{% endverbatim %}"},{type:Twig.token.type.output_whitespace_pre,open:"{{-",close:"}}"},{type:Twig.token.type.output_whitespace_post,open:"{{",close:"-}}"},{type:Twig.token.type.output_whitespace_both,open:"{{-",close:"-}}"},{type:Twig.token.type.logic_whitespace_pre,open:"{%-",close:"%}"},{type:Twig.token.type.logic_whitespace_post,open:"{%",close:"-%}"},{type:Twig.token.type.logic_whitespace_both,open:"{%-",close:"-%}"},{type:Twig.token.type.output,open:"{{",close:"}}"},{type:Twig.token.type.logic,open:"{%",close:"%}"},{type:Twig.token.type.comment,open:"{#",close:"#}"}];Twig.token.strings=['"',"'"];Twig.token.findStart=function(template){var output={position:null,close_position:null,def:null},i,token_template,first_key_position,close_key_position;for(i=0;i<Twig.token.definitions.length;i++){token_template=Twig.token.definitions[i];first_key_position=template.indexOf(token_template.open);close_key_position=template.indexOf(token_template.close);Twig.log.trace("Twig.token.findStart: ","Searching for ",token_template.open," found at ",first_key_position);if(first_key_position>=0){if(token_template.open.length!==token_template.close.length){if(close_key_position<0){continue}}}if(first_key_position>=0&&(output.position===null||first_key_position<output.position)){output.position=first_key_position;output.def=token_template;output.close_position=close_key_position}else if(first_key_position>=0&&output.position!==null&&first_key_position===output.position){if(token_template.open.length>output.def.open.length){output.position=first_key_position;output.def=token_template;output.close_position=close_key_position}else if(token_template.open.length===output.def.open.length){if(token_template.close.length>output.def.close.length){if(close_key_position>=0&&close_key_position<output.close_position){output.position=first_key_position;output.def=token_template;output.close_position=close_key_position}}else if(close_key_position>=0&&close_key_position<output.close_position){output.position=first_key_position;output.def=token_template;output.close_position=close_key_position}}}}delete output["close_position"];return output};Twig.token.findEnd=function(template,token_def,start){var end=null,found=false,offset=0,str_pos=null,str_found=null,pos=null,end_offset=null,this_str_pos=null,end_str_pos=null,i,l;while(!found){str_pos=null;str_found=null;pos=template.indexOf(token_def.close,offset);if(pos>=0){end=pos;found=true}else{throw new Twig.Error("Unable to find closing bracket '"+token_def.close+"'"+" opened near template position "+start)}if(token_def.type===Twig.token.type.comment){break}if(token_def.type===Twig.token.type.raw){break}l=Twig.token.strings.length;for(i=0;i<l;i+=1){this_str_pos=template.indexOf(Twig.token.strings[i],offset);if(this_str_pos>0&&this_str_pos<pos&&(str_pos===null||this_str_pos<str_pos)){str_pos=this_str_pos;str_found=Twig.token.strings[i]}}if(str_pos!==null){end_offset=str_pos+1;end=null;found=false;while(true){end_str_pos=template.indexOf(str_found,end_offset);if(end_str_pos<0){throw"Unclosed string in template"}if(template.substr(end_str_pos-1,1)!=="\\"){offset=end_str_pos+1;break}else{end_offset=end_str_pos+1}}}}return end};Twig.tokenize=function(template){var tokens=[],error_offset=0,found_token=null,end=null;while(template.length>0){found_token=Twig.token.findStart(template);Twig.log.trace("Twig.tokenize: ","Found token: ",found_token);if(found_token.position!==null){if(found_token.position>0){tokens.push({type:Twig.token.type.raw,value:template.substring(0,found_token.position)})}template=template.substr(found_token.position+found_token.def.open.length);error_offset+=found_token.position+found_token.def.open.length;end=Twig.token.findEnd(template,found_token.def,error_offset);Twig.log.trace("Twig.tokenize: ","Token ends at ",end);tokens.push({type:found_token.def.type,value:template.substring(0,end).trim()});if(template.substr(end+found_token.def.close.length,1)==="\n"){switch(found_token.def.type){case"logic_whitespace_pre":case"logic_whitespace_post":case"logic_whitespace_both":case"logic":end+=1;break}}template=template.substr(end+found_token.def.close.length);error_offset+=end+found_token.def.close.length}else{tokens.push({type:Twig.token.type.raw,value:template});template=""}}return tokens};Twig.compile=function(tokens){try{var output=[],stack=[],intermediate_output=[],token=null,logic_token=null,unclosed_token=null,prev_token=null,prev_output=null,prev_intermediate_output=null,prev_template=null,next_token=null,tok_output=null,type=null,open=null,next=null;var compile_output=function(token){Twig.expression.compile.apply(this,[token]);if(stack.length>0){intermediate_output.push(token)}else{output.push(token)}};var compile_logic=function(token){logic_token=Twig.logic.compile.apply(this,[token]);type=logic_token.type;open=Twig.logic.handler[type].open;next=Twig.logic.handler[type].next;Twig.log.trace("Twig.compile: ","Compiled logic token to ",logic_token," next is: ",next," open is : ",open);if(open!==undefined&&!open){prev_token=stack.pop();prev_template=Twig.logic.handler[prev_token.type];if(Twig.indexOf(prev_template.next,type)<0){throw new Error(type+" not expected after a "+prev_token.type)}prev_token.output=prev_token.output||[];prev_token.output=prev_token.output.concat(intermediate_output);intermediate_output=[];tok_output={type:Twig.token.type.logic,token:prev_token};if(stack.length>0){intermediate_output.push(tok_output)}else{output.push(tok_output)}}if(next!==undefined&&next.length>0){Twig.log.trace("Twig.compile: ","Pushing ",logic_token," to logic stack.");if(stack.length>0){prev_token=stack.pop();prev_token.output=prev_token.output||[];prev_token.output=prev_token.output.concat(intermediate_output);stack.push(prev_token);intermediate_output=[]}stack.push(logic_token)}else if(open!==undefined&&open){tok_output={type:Twig.token.type.logic,token:logic_token};if(stack.length>0){intermediate_output.push(tok_output)}else{output.push(tok_output)}}};while(tokens.length>0){token=tokens.shift();prev_output=output[output.length-1];prev_intermediate_output=intermediate_output[intermediate_output.length-1];next_token=tokens[0];Twig.log.trace("Compiling token ",token);switch(token.type){case Twig.token.type.raw:if(stack.length>0){intermediate_output.push(token)}else{output.push(token)}break;case Twig.token.type.logic:compile_logic.call(this,token);break;case Twig.token.type.comment:break;case Twig.token.type.output:compile_output.call(this,token);break;case Twig.token.type.logic_whitespace_pre:case Twig.token.type.logic_whitespace_post:case Twig.token.type.logic_whitespace_both:case Twig.token.type.output_whitespace_pre:case Twig.token.type.output_whitespace_post:case Twig.token.type.output_whitespace_both:if(token.type!==Twig.token.type.output_whitespace_post&&token.type!==Twig.token.type.logic_whitespace_post){if(prev_output){if(prev_output.type===Twig.token.type.raw){output.pop();if(prev_output.value.match(/^\s*$/)===null){prev_output.value=prev_output.value.trim();output.push(prev_output)}}}if(prev_intermediate_output){if(prev_intermediate_output.type===Twig.token.type.raw){intermediate_output.pop();if(prev_intermediate_output.value.match(/^\s*$/)===null){prev_intermediate_output.value=prev_intermediate_output.value.trim();intermediate_output.push(prev_intermediate_output)}}}}switch(token.type){case Twig.token.type.output_whitespace_pre:case Twig.token.type.output_whitespace_post:case Twig.token.type.output_whitespace_both:compile_output.call(this,token);break;case Twig.token.type.logic_whitespace_pre:case Twig.token.type.logic_whitespace_post:case Twig.token.type.logic_whitespace_both:compile_logic.call(this,token);break}if(token.type!==Twig.token.type.output_whitespace_pre&&token.type!==Twig.token.type.logic_whitespace_pre){if(next_token){if(next_token.type===Twig.token.type.raw){tokens.shift();if(next_token.value.match(/^\s*$/)===null){next_token.value=next_token.value.trim();tokens.unshift(next_token)}}}}break}Twig.log.trace("Twig.compile: "," Output: ",output," Logic Stack: ",stack," Pending Output: ",intermediate_output)}if(stack.length>0){unclosed_token=stack.pop();throw new Error("Unable to find an end tag for "+unclosed_token.type+", expecting one of "+unclosed_token.next)}return output}catch(ex){Twig.log.error("Error compiling twig template "+this.id+": ");if(ex.stack){Twig.log.error(ex.stack)}else{Twig.log.error(ex.toString())}if(this.options.rethrow)throw ex}};Twig.parse=function(tokens,context){try{var output=[],chain=true,that=this;Twig.forEach(tokens,function parseToken(token){Twig.log.debug("Twig.parse: ","Parsing token: ",token);switch(token.type){case Twig.token.type.raw:output.push(Twig.filters.raw(token.value));break;case Twig.token.type.logic:var logic_token=token.token,logic=Twig.logic.parse.apply(that,[logic_token,context,chain]);if(logic.chain!==undefined){chain=logic.chain}if(logic.context!==undefined){context=logic.context}if(logic.output!==undefined){output.push(logic.output)}break;case Twig.token.type.comment:break;case Twig.token.type.output_whitespace_pre:case Twig.token.type.output_whitespace_post:case Twig.token.type.output_whitespace_both:case Twig.token.type.output:Twig.log.debug("Twig.parse: ","Output token: ",token.stack);output.push(Twig.expression.parse.apply(that,[token.stack,context]));break}});return Twig.output.apply(this,[output])}catch(ex){Twig.log.error("Error parsing twig template "+this.id+": ");if(ex.stack){Twig.log.error(ex.stack)}else{Twig.log.error(ex.toString())}if(this.options.rethrow)throw ex;if(Twig.debug){return ex.toString()}}};Twig.prepare=function(data){var tokens,raw_tokens;Twig.log.debug("Twig.prepare: ","Tokenizing ",data);raw_tokens=Twig.tokenize.apply(this,[data]);Twig.log.debug("Twig.prepare: ","Compiling ",raw_tokens);tokens=Twig.compile.apply(this,[raw_tokens]);Twig.log.debug("Twig.prepare: ","Compiled ",tokens);return tokens};Twig.output=function(output){if(!this.options.autoescape){return output.join("")}var strategy="html";if(typeof this.options.autoescape=="string")strategy=this.options.autoescape;var escaped_output=[];Twig.forEach(output,function(str){if(str&&(str.twig_markup!==true&&str.twig_markup!=strategy)){str=Twig.filters.escape(str,[strategy])}escaped_output.push(str)});return Twig.Markup(escaped_output.join(""))};Twig.Templates={loaders:{},parsers:{},registry:{}};Twig.validateId=function(id){if(id==="prototype"){throw new Twig.Error(id+" is not a valid twig identifier")}else if(Twig.cache&&Twig.Templates.registry.hasOwnProperty(id)){throw new Twig.Error("There is already a template with the ID "+id)}return true};Twig.Templates.registerLoader=function(method_name,func,scope){if(typeof func!=="function"){throw new Twig.Error("Unable to add loader for "+method_name+": Invalid function reference given.")}if(scope){func=func.bind(scope)}this.loaders[method_name]=func};Twig.Templates.unRegisterLoader=function(method_name){if(this.isRegisteredLoader(method_name)){delete this.loaders[method_name]}};Twig.Templates.isRegisteredLoader=function(method_name){return this.loaders.hasOwnProperty(method_name)};Twig.Templates.registerParser=function(method_name,func,scope){if(typeof func!=="function"){throw new Twig.Error("Unable to add parser for "+method_name+": Invalid function regerence given.")}if(scope){func=func.bind(scope)}this.parsers[method_name]=func};Twig.Templates.unRegisterParser=function(method_name){if(this.isRegisteredParser(method_name)){delete this.parsers[method_name]}};Twig.Templates.isRegisteredParser=function(method_name){return this.parsers.hasOwnProperty(method_name)};Twig.Templates.save=function(template){if(template.id===undefined){throw new Twig.Error("Unable to save template with no id")}Twig.Templates.registry[template.id]=template};Twig.Templates.load=function(id){if(!Twig.Templates.registry.hasOwnProperty(id)){return null}return Twig.Templates.registry[id]};Twig.Templates.loadRemote=function(location,params,callback,error_callback){var loader;if(params.async===undefined){params.async=true}if(params.id===undefined){params.id=location}if(Twig.cache&&Twig.Templates.registry.hasOwnProperty(params.id)){if(typeof callback==="function"){callback(Twig.Templates.registry[params.id])}return Twig.Templates.registry[params.id]}params.parser=params.parser||"twig";loader=this.loaders[params.method]||this.loaders.fs;return loader.apply(this,arguments)};function is(type,obj){var clas=Object.prototype.toString.call(obj).slice(8,-1);return obj!==undefined&&obj!==null&&clas===type}Twig.Template=function(params){var data=params.data,id=params.id,blocks=params.blocks,macros=params.macros||{},base=params.base,path=params.path,url=params.url,name=params.name,method=params.method,options=params.options;this.id=id;this.method=method;this.base=base;this.path=path;this.url=url;this.name=name;this.macros=macros;this.options=options;this.reset(blocks);if(is("String",data)){this.tokens=Twig.prepare.apply(this,[data])}else{this.tokens=data}if(id!==undefined){Twig.Templates.save(this)}};Twig.Template.prototype.reset=function(blocks){Twig.log.debug("Twig.Template.reset","Reseting template "+this.id);this.blocks={};this.importedBlocks=[];this.originalBlockTokens={};this.child={blocks:blocks||{}};this.extend=null};Twig.Template.prototype.render=function(context,params){params=params||{};var output,url;this.context=context||{};this.reset();if(params.blocks){this.blocks=params.blocks}if(params.macros){this.macros=params.macros}output=Twig.parse.apply(this,[this.tokens,this.context]);if(this.extend){var ext_template;if(this.options.allowInlineIncludes){ext_template=Twig.Templates.load(this.extend);if(ext_template){ext_template.options=this.options}}if(!ext_template){url=Twig.path.parsePath(this,this.extend);ext_template=Twig.Templates.loadRemote(url,{method:this.getLoaderMethod(),base:this.base,async:false,id:url,options:this.options})}this.parent=ext_template;return this.parent.render(this.context,{blocks:this.blocks})}if(params.output=="blocks"){return this.blocks}else if(params.output=="macros"){return this.macros}else{return output}};Twig.Template.prototype.importFile=function(file){var url,sub_template;if(!this.url&&this.options.allowInlineIncludes){file=this.path?this.path+"/"+file:file;sub_template=Twig.Templates.load(file);if(!sub_template){sub_template=Twig.Templates.loadRemote(url,{id:file,method:this.getLoaderMethod(),async:false,options:this.options});if(!sub_template){throw new Twig.Error("Unable to find the template "+file)}}sub_template.options=this.options;return sub_template}url=Twig.path.parsePath(this,file);sub_template=Twig.Templates.loadRemote(url,{method:this.getLoaderMethod(),base:this.base,async:false,options:this.options,id:url});return sub_template};Twig.Template.prototype.importBlocks=function(file,override){var sub_template=this.importFile(file),context=this.context,that=this,key;override=override||false;sub_template.render(context);Twig.forEach(Object.keys(sub_template.blocks),function(key){if(override||that.blocks[key]===undefined){that.blocks[key]=sub_template.blocks[key];that.importedBlocks.push(key)}})};Twig.Template.prototype.importMacros=function(file){var url=Twig.path.parsePath(this,file);var remoteTemplate=Twig.Templates.loadRemote(url,{method:this.getLoaderMethod(),async:false,id:url});return remoteTemplate};Twig.Template.prototype.getLoaderMethod=function(){if(this.path){return"fs"}if(this.url){return"ajax"}return this.method||"fs"};Twig.Template.prototype.compile=function(options){return Twig.compiler.compile(this,options)};Twig.Markup=function(content,strategy){if(typeof strategy=="undefined"){strategy=true}if(typeof content==="string"&&content.length>0){content=new String(content);content.twig_markup=strategy}return content};return Twig}(Twig||{});(function(Twig){"use strict";Twig.Templates.registerLoader("ajax",function(location,params,callback,error_callback){var template,xmlhttp,precompiled=params.precompiled,parser=this.parsers[params.parser]||this.parser.twig;if(typeof XMLHttpRequest==="undefined"){throw new Twig.Error("Unsupported platform: Unable to do ajax requests "+'because there is no "XMLHTTPRequest" implementation')}xmlhttp=new XMLHttpRequest;xmlhttp.onreadystatechange=function(){var data=null;if(xmlhttp.readyState===4){if(xmlhttp.status===200||window.cordova&&xmlhttp.status==0){Twig.log.debug("Got template ",xmlhttp.responseText);if(precompiled===true){data=JSON.parse(xmlhttp.responseText)}else{data=xmlhttp.responseText}params.url=location;params.data=data;template=parser.call(this,params);if(typeof callback==="function"){callback(template)}}else{if(typeof error_callback==="function"){error_callback(xmlhttp)}}}};xmlhttp.open("GET",location,!!params.async);xmlhttp.send();if(params.async){return true}else{return template}})})(Twig);(function(Twig){"use strict";var fs,path;try{fs=__webpack_require__(61);path=__webpack_require__(22)}catch(e){}Twig.Templates.registerLoader("fs",function(location,params,callback,error_callback){var template,data=null,precompiled=params.precompiled,parser=this.parsers[params.parser]||this.parser.twig;if(!fs||!path){throw new Twig.Error("Unsupported platform: Unable to load from file "+'because there is no "fs" or "path" implementation')}var loadTemplateFn=function(err,data){if(err){if(typeof error_callback==="function"){error_callback(err)}return}if(precompiled===true){data=JSON.parse(data)}params.data=data;params.path=params.path||location;template=parser.call(this,params);if(typeof callback==="function"){callback(template)}};params.path=params.path||location;if(params.async){fs.stat(params.path,function(err,stats){if(err||!stats.isFile()){throw new Twig.Error("Unable to find template file "+location)}fs.readFile(params.path,"utf8",loadTemplateFn)});return true}else{if(!fs.statSync(params.path).isFile()){throw new Twig.Error("Unable to find template file "+location)}data=fs.readFileSync(params.path,"utf8");loadTemplateFn(undefined,data);return template}})})(Twig);(function(Twig){"use strict";Twig.Templates.registerParser("source",function(params){return params.data||""})})(Twig);(function(Twig){"use strict";Twig.Templates.registerParser("twig",function(params){return new Twig.Template(params)})})(Twig);(function(){"use strict";if(!String.prototype.trim){String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g,"")}}if(!Object.keys)Object.keys=function(o){if(o!==Object(o)){throw new TypeError("Object.keys called on non-object")}var ret=[],p;for(p in o)if(Object.prototype.hasOwnProperty.call(o,p))ret.push(p);return ret}})();var Twig=function(Twig){Twig.lib={};var sprintfLib=function(){var re={not_string:/[^s]/,number:/[diefg]/,json:/[j]/,not_json:/[^j]/,text:/^[^\x25]+/,modulo:/^\x25{2}/,placeholder:/^\x25(?:([1-9]\d*)\$|\(([^\)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-gijosuxX])/,key:/^([a-z_][a-z_\d]*)/i,key_access:/^\.([a-z_][a-z_\d]*)/i,index_access:/^\[(\d+)\]/,sign:/^[\+\-]/};function sprintf(){var key=arguments[0],cache=sprintf.cache;if(!(cache[key]&&cache.hasOwnProperty(key))){cache[key]=sprintf.parse(key)}return sprintf.format.call(null,cache[key],arguments)}sprintf.format=function(parse_tree,argv){var cursor=1,tree_length=parse_tree.length,node_type="",arg,output=[],i,k,match,pad,pad_character,pad_length,is_positive=true,sign="";for(i=0;i<tree_length;i++){node_type=get_type(parse_tree[i]);if(node_type==="string"){output[output.length]=parse_tree[i]}else if(node_type==="array"){match=parse_tree[i];if(match[2]){arg=argv[cursor];for(k=0;k<match[2].length;k++){if(!arg.hasOwnProperty(match[2][k])){throw new Error(sprintf("[sprintf] property '%s' does not exist",match[2][k]))}arg=arg[match[2][k]]}}else if(match[1]){arg=argv[match[1]]}else{arg=argv[cursor++]}if(get_type(arg)=="function"){arg=arg()}if(re.not_string.test(match[8])&&re.not_json.test(match[8])&&(get_type(arg)!="number"&&isNaN(arg))){throw new TypeError(sprintf("[sprintf] expecting number but found %s",get_type(arg)))}if(re.number.test(match[8])){is_positive=arg>=0}switch(match[8]){case"b":arg=arg.toString(2);break;case"c":arg=String.fromCharCode(arg);break;case"d":case"i":arg=parseInt(arg,10);break;case"j":arg=JSON.stringify(arg,null,match[6]?parseInt(match[6]):0);break;case"e":arg=match[7]?arg.toExponential(match[7]):arg.toExponential();break;case"f":arg=match[7]?parseFloat(arg).toFixed(match[7]):parseFloat(arg);break;case"g":arg=match[7]?parseFloat(arg).toPrecision(match[7]):parseFloat(arg);break;case"o":arg=arg.toString(8);break;case"s":arg=(arg=String(arg))&&match[7]?arg.substring(0,match[7]):arg;break;case"u":arg=arg>>>0;break;case"x":arg=arg.toString(16);break;case"X":arg=arg.toString(16).toUpperCase();break}if(re.json.test(match[8])){output[output.length]=arg}else{if(re.number.test(match[8])&&(!is_positive||match[3])){sign=is_positive?"+":"-";arg=arg.toString().replace(re.sign,"")}else{sign=""}pad_character=match[4]?match[4]==="0"?"0":match[4].charAt(1):" ";pad_length=match[6]-(sign+arg).length;pad=match[6]?pad_length>0?str_repeat(pad_character,pad_length):"":"";output[output.length]=match[5]?sign+arg+pad:pad_character==="0"?sign+pad+arg:pad+sign+arg}}}return output.join("")};sprintf.cache={};sprintf.parse=function(fmt){var _fmt=fmt,match=[],parse_tree=[],arg_names=0;while(_fmt){if((match=re.text.exec(_fmt))!==null){parse_tree[parse_tree.length]=match[0]}else if((match=re.modulo.exec(_fmt))!==null){parse_tree[parse_tree.length]="%"}else if((match=re.placeholder.exec(_fmt))!==null){if(match[2]){arg_names|=1;var field_list=[],replacement_field=match[2],field_match=[];if((field_match=re.key.exec(replacement_field))!==null){field_list[field_list.length]=field_match[1];while((replacement_field=replacement_field.substring(field_match[0].length))!==""){if((field_match=re.key_access.exec(replacement_field))!==null){field_list[field_list.length]=field_match[1]}else if((field_match=re.index_access.exec(replacement_field))!==null){field_list[field_list.length]=field_match[1]}else{throw new SyntaxError("[sprintf] failed to parse named argument key")}}}else{throw new SyntaxError("[sprintf] failed to parse named argument key")}match[2]=field_list}else{arg_names|=2}if(arg_names===3){throw new Error("[sprintf] mixing positional and named placeholders is not (yet) supported")}parse_tree[parse_tree.length]=match}else{throw new SyntaxError("[sprintf] unexpected placeholder")}_fmt=_fmt.substring(match[0].length)}return parse_tree};var vsprintf=function(fmt,argv,_argv){_argv=(argv||[]).slice(0);_argv.splice(0,0,fmt);return sprintf.apply(null,_argv)};function get_type(variable){return Object.prototype.toString.call(variable).slice(8,-1).toLowerCase()}function str_repeat(input,multiplier){return Array(multiplier+1).join(input)}return{sprintf:sprintf,vsprintf:vsprintf}}();var sprintf=sprintfLib.sprintf;var vsprintf=sprintfLib.vsprintf;Twig.lib.sprintf=sprintf;Twig.lib.vsprintf=vsprintf;(function(){var shortDays="Sun,Mon,Tue,Wed,Thu,Fri,Sat".split(",");var fullDays="Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday".split(",");var shortMonths="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec".split(",");var fullMonths="January,February,March,April,May,June,July,August,September,October,November,December".split(",");function getOrdinalFor(intNum){return(intNum=Math.abs(intNum)%100)%10==1&&intNum!=11?"st":intNum%10==2&&intNum!=12?"nd":intNum%10==3&&intNum!=13?"rd":"th"}function getISO8601Year(aDate){var d=new Date(aDate.getFullYear()+1,0,4);if((d-aDate)/864e5<7&&(aDate.getDay()+6)%7<(d.getDay()+6)%7)return d.getFullYear();if(aDate.getMonth()>0||aDate.getDate()>=4)return aDate.getFullYear();return aDate.getFullYear()-((aDate.getDay()+6)%7-aDate.getDate()>2?1:0)}function getISO8601Week(aDate){var d=new Date(getISO8601Year(aDate),0,4);d.setDate(d.getDate()-(d.getDay()+6)%7);return parseInt((aDate-d)/6048e5)+1}Twig.lib.formatDate=function(date,format){if(typeof format!=="string"||/^\s*$/.test(format))return date+"";var jan1st=new Date(date.getFullYear(),0,1);var me=date;return format.replace(/[dDjlNSwzWFmMntLoYyaABgGhHisuU]/g,function(option){switch(option){case"d":return("0"+me.getDate()).replace(/^.+(..)$/,"$1");case"D":return shortDays[me.getDay()];case"j":return me.getDate();case"l":return fullDays[me.getDay()];case"N":return(me.getDay()+6)%7+1;case"S":return getOrdinalFor(me.getDate());case"w":return me.getDay();case"z":return Math.ceil((jan1st-me)/864e5);case"W":return("0"+getISO8601Week(me)).replace(/^.(..)$/,"$1");case"F":return fullMonths[me.getMonth()];case"m":return("0"+(me.getMonth()+1)).replace(/^.+(..)$/,"$1");case"M":return shortMonths[me.getMonth()];case"n":return me.getMonth()+1;case"t":return new Date(me.getFullYear(),me.getMonth()+1,-1).getDate();case"L":return new Date(me.getFullYear(),1,29).getDate()==29?1:0;case"o":return getISO8601Year(me);case"Y":return me.getFullYear();case"y":return(me.getFullYear()+"").replace(/^.+(..)$/,"$1");case"a":return me.getHours()<12?"am":"pm";case"A":return me.getHours()<12?"AM":"PM";case"B":return Math.floor(((me.getUTCHours()+1)%24+me.getUTCMinutes()/60+me.getUTCSeconds()/3600)*1e3/24);case"g":return me.getHours()%12!=0?me.getHours()%12:12;case"G":return me.getHours();case"h":return("0"+(me.getHours()%12!=0?me.getHours()%12:12)).replace(/^.+(..)$/,"$1");case"H":return("0"+me.getHours()).replace(/^.+(..)$/,"$1");case"i":return("0"+me.getMinutes()).replace(/^.+(..)$/,"$1");case"s":return("0"+me.getSeconds()).replace(/^.+(..)$/,"$1");case"u":return me.getMilliseconds();case"U":return me.getTime()/1e3}})}})();Twig.lib.strip_tags=function(input,allowed){allowed=(((allowed||"")+"").toLowerCase().match(/<[a-z][a-z0-9]*>/g)||[]).join("");var tags=/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,commentsAndPhpTags=/<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;return input.replace(commentsAndPhpTags,"").replace(tags,function($0,$1){return allowed.indexOf("<"+$1.toLowerCase()+">")>-1?$0:""})};Twig.lib.parseISO8601Date=function(s){var re=/(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)(\.\d+)?(Z|([+-])(\d\d):(\d\d))/;var d=[];d=s.match(re);if(!d){throw"Couldn't parse ISO 8601 date string '"+s+"'"}var a=[1,2,3,4,5,6,10,11];for(var i in a){d[a[i]]=parseInt(d[a[i]],10)}d[7]=parseFloat(d[7]);var ms=Date.UTC(d[1],d[2]-1,d[3],d[4],d[5],d[6]);if(d[7]>0){ms+=Math.round(d[7]*1e3)}if(d[8]!="Z"&&d[10]){var offset=d[10]*60*60*1e3;if(d[11]){offset+=d[11]*60*1e3}if(d[9]=="-"){ms-=offset}else{ms+=offset}}return new Date(ms)};Twig.lib.strtotime=function(text,now){var parsed,match,today,year,date,days,ranges,len,times,regex,i,fail=false;if(!text){return fail}text=text.replace(/^\s+|\s+$/g,"").replace(/\s{2,}/g," ").replace(/[\t\r\n]/g,"").toLowerCase();match=text.match(/^(\d{1,4})([\-\.\/\:])(\d{1,2})([\-\.\/\:])(\d{1,4})(?:\s(\d{1,2}):(\d{2})?:?(\d{2})?)?(?:\s([A-Z]+)?)?$/);if(match&&match[2]===match[4]){if(match[1]>1901){switch(match[2]){case"-":{if(match[3]>12||match[5]>31){return fail}return new Date(match[1],parseInt(match[3],10)-1,match[5],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}case".":{return fail}case"/":{if(match[3]>12||match[5]>31){return fail}return new Date(match[1],parseInt(match[3],10)-1,match[5],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}}}else if(match[5]>1901){switch(match[2]){case"-":{if(match[3]>12||match[1]>31){return fail}return new Date(match[5],parseInt(match[3],10)-1,match[1],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}case".":{if(match[3]>12||match[1]>31){return fail}return new Date(match[5],parseInt(match[3],10)-1,match[1],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}case"/":{if(match[1]>12||match[3]>31){return fail}return new Date(match[5],parseInt(match[1],10)-1,match[3],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}}}else{switch(match[2]){case"-":{if(match[3]>12||match[5]>31||match[1]<70&&match[1]>38){return fail}year=match[1]>=0&&match[1]<=38?+match[1]+2e3:match[1];return new Date(year,parseInt(match[3],10)-1,match[5],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}case".":{if(match[5]>=70){if(match[3]>12||match[1]>31){return fail}return new Date(match[5],parseInt(match[3],10)-1,match[1],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}if(match[5]<60&&!match[6]){if(match[1]>23||match[3]>59){return fail}today=new Date;return new Date(today.getFullYear(),today.getMonth(),today.getDate(),match[1]||0,match[3]||0,match[5]||0,match[9]||0)/1e3}return fail}case"/":{if(match[1]>12||match[3]>31||match[5]<70&&match[5]>38){return fail}year=match[5]>=0&&match[5]<=38?+match[5]+2e3:match[5];return new Date(year,parseInt(match[1],10)-1,match[3],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}case":":{if(match[1]>23||match[3]>59||match[5]>59){return fail}today=new Date;return new Date(today.getFullYear(),today.getMonth(),today.getDate(),match[1]||0,match[3]||0,match[5]||0)/1e3}}}}if(text==="now"){return now===null||isNaN(now)?(new Date).getTime()/1e3|0:now|0}if(!isNaN(parsed=Date.parse(text))){return parsed/1e3|0}if(match=text.match(/^([0-9]{4}-[0-9]{2}-[0-9]{2})[ t]([0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?)([\+-][0-9]{2}(:[0-9]{2})?|z)/)){if(match[4]=="z"){match[4]="Z"}else if(match[4].match(/^([\+-][0-9]{2})$/)){match[4]=match[4]+":00"}if(!isNaN(parsed=Date.parse(match[1]+"T"+match[2]+match[4]))){return parsed/1e3|0}}date=now?new Date(now*1e3):new Date;days={sun:0,mon:1,tue:2,wed:3,thu:4,fri:5,sat:6};ranges={yea:"FullYear",mon:"Month",day:"Date",hou:"Hours",min:"Minutes",sec:"Seconds"};function lastNext(type,range,modifier){
+var diff,day=days[range];if(typeof day!=="undefined"){diff=day-date.getDay();if(diff===0){diff=7*modifier}else if(diff>0&&type==="last"){diff-=7}else if(diff<0&&type==="next"){diff+=7}date.setDate(date.getDate()+diff)}}function process(val){var splt=val.split(" "),type=splt[0],range=splt[1].substring(0,3),typeIsNumber=/\d+/.test(type),ago=splt[2]==="ago",num=(type==="last"?-1:1)*(ago?-1:1);if(typeIsNumber){num*=parseInt(type,10)}if(ranges.hasOwnProperty(range)&&!splt[1].match(/^mon(day|\.)?$/i)){return date["set"+ranges[range]](date["get"+ranges[range]]()+num)}if(range==="wee"){return date.setDate(date.getDate()+num*7)}if(type==="next"||type==="last"){lastNext(type,range,num)}else if(!typeIsNumber){return false}return true}times="(years?|months?|weeks?|days?|hours?|minutes?|min|seconds?|sec"+"|sunday|sun\\.?|monday|mon\\.?|tuesday|tue\\.?|wednesday|wed\\.?"+"|thursday|thu\\.?|friday|fri\\.?|saturday|sat\\.?)";regex="([+-]?\\d+\\s"+times+"|"+"(last|next)\\s"+times+")(\\sago)?";match=text.match(new RegExp(regex,"gi"));if(!match){return fail}for(i=0,len=match.length;i<len;i++){if(!process(match[i])){return fail}}return date.getTime()/1e3};Twig.lib.is=function(type,obj){var clas=Object.prototype.toString.call(obj).slice(8,-1);return obj!==undefined&&obj!==null&&clas===type};Twig.lib.copy=function(src){var target={},key;for(key in src)target[key]=src[key];return target};Twig.lib.replaceAll=function(string,search,replace){return string.split(search).join(replace)};Twig.lib.chunkArray=function(arr,size){var returnVal=[],x=0,len=arr.length;if(size<1||!Twig.lib.is("Array",arr)){return[]}while(x<len){returnVal.push(arr.slice(x,x+=size))}return returnVal};Twig.lib.round=function round(value,precision,mode){var m,f,isHalf,sgn;precision|=0;m=Math.pow(10,precision);value*=m;sgn=value>0|-(value<0);isHalf=value%1===.5*sgn;f=Math.floor(value);if(isHalf){switch(mode){case"PHP_ROUND_HALF_DOWN":value=f+(sgn<0);break;case"PHP_ROUND_HALF_EVEN":value=f+f%2*sgn;break;case"PHP_ROUND_HALF_ODD":value=f+!(f%2);break;default:value=f+(sgn>0)}}return(isHalf?value:Math.round(value))/m};Twig.lib.max=function max(){var ar,retVal,i=0,n=0,argv=arguments,argc=argv.length,_obj2Array=function(obj){if(Object.prototype.toString.call(obj)==="[object Array]"){return obj}else{var ar=[];for(var i in obj){if(obj.hasOwnProperty(i)){ar.push(obj[i])}}return ar}},_compare=function(current,next){var i=0,n=0,tmp=0,nl=0,cl=0;if(current===next){return 0}else if(typeof current==="object"){if(typeof next==="object"){current=_obj2Array(current);next=_obj2Array(next);cl=current.length;nl=next.length;if(nl>cl){return 1}else if(nl<cl){return-1}for(i=0,n=cl;i<n;++i){tmp=_compare(current[i],next[i]);if(tmp==1){return 1}else if(tmp==-1){return-1}}return 0}return-1}else if(typeof next==="object"){return 1}else if(isNaN(next)&&!isNaN(current)){if(current==0){return 0}return current<0?1:-1}else if(isNaN(current)&&!isNaN(next)){if(next==0){return 0}return next>0?1:-1}if(next==current){return 0}return next>current?1:-1};if(argc===0){throw new Error("At least one value should be passed to max()")}else if(argc===1){if(typeof argv[0]==="object"){ar=_obj2Array(argv[0])}else{throw new Error("Wrong parameter count for max()")}if(ar.length===0){throw new Error("Array must contain at least one element for max()")}}else{ar=argv}retVal=ar[0];for(i=1,n=ar.length;i<n;++i){if(_compare(retVal,ar[i])==1){retVal=ar[i]}}return retVal};Twig.lib.min=function min(){var ar,retVal,i=0,n=0,argv=arguments,argc=argv.length,_obj2Array=function(obj){if(Object.prototype.toString.call(obj)==="[object Array]"){return obj}var ar=[];for(var i in obj){if(obj.hasOwnProperty(i)){ar.push(obj[i])}}return ar},_compare=function(current,next){var i=0,n=0,tmp=0,nl=0,cl=0;if(current===next){return 0}else if(typeof current==="object"){if(typeof next==="object"){current=_obj2Array(current);next=_obj2Array(next);cl=current.length;nl=next.length;if(nl>cl){return 1}else if(nl<cl){return-1}for(i=0,n=cl;i<n;++i){tmp=_compare(current[i],next[i]);if(tmp==1){return 1}else if(tmp==-1){return-1}}return 0}return-1}else if(typeof next==="object"){return 1}else if(isNaN(next)&&!isNaN(current)){if(current==0){return 0}return current<0?1:-1}else if(isNaN(current)&&!isNaN(next)){if(next==0){return 0}return next>0?1:-1}if(next==current){return 0}return next>current?1:-1};if(argc===0){throw new Error("At least one value should be passed to min()")}else if(argc===1){if(typeof argv[0]==="object"){ar=_obj2Array(argv[0])}else{throw new Error("Wrong parameter count for min()")}if(ar.length===0){throw new Error("Array must contain at least one element for min()")}}else{ar=argv}retVal=ar[0];for(i=1,n=ar.length;i<n;++i){if(_compare(retVal,ar[i])==-1){retVal=ar[i]}}return retVal};return Twig}(Twig||{});var Twig=function(Twig){"use strict";Twig.logic={};Twig.logic.type={if_:"Twig.logic.type.if",endif:"Twig.logic.type.endif",for_:"Twig.logic.type.for",endfor:"Twig.logic.type.endfor",else_:"Twig.logic.type.else",elseif:"Twig.logic.type.elseif",set:"Twig.logic.type.set",setcapture:"Twig.logic.type.setcapture",endset:"Twig.logic.type.endset",filter:"Twig.logic.type.filter",endfilter:"Twig.logic.type.endfilter",shortblock:"Twig.logic.type.shortblock",block:"Twig.logic.type.block",endblock:"Twig.logic.type.endblock",extends_:"Twig.logic.type.extends",use:"Twig.logic.type.use",include:"Twig.logic.type.include",spaceless:"Twig.logic.type.spaceless",endspaceless:"Twig.logic.type.endspaceless",macro:"Twig.logic.type.macro",endmacro:"Twig.logic.type.endmacro",import_:"Twig.logic.type.import",from:"Twig.logic.type.from",embed:"Twig.logic.type.embed",endembed:"Twig.logic.type.endembed"};Twig.logic.definitions=[{type:Twig.logic.type.if_,regex:/^if\s+([\s\S]+)$/,next:[Twig.logic.type.else_,Twig.logic.type.elseif,Twig.logic.type.endif],open:true,compile:function(token){var expression=token.match[1];token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;delete token.match;return token},parse:function(token,context,chain){var output="",result=Twig.expression.parse.apply(this,[token.stack,context]);chain=true;if(result){chain=false;output=Twig.parse.apply(this,[token.output,context])}return{chain:chain,output:output}}},{type:Twig.logic.type.elseif,regex:/^elseif\s+([^\s].*)$/,next:[Twig.logic.type.else_,Twig.logic.type.elseif,Twig.logic.type.endif],open:false,compile:function(token){var expression=token.match[1];token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;delete token.match;return token},parse:function(token,context,chain){var output="";if(chain&&Twig.expression.parse.apply(this,[token.stack,context])===true){chain=false;output=Twig.parse.apply(this,[token.output,context])}return{chain:chain,output:output}}},{type:Twig.logic.type.else_,regex:/^else$/,next:[Twig.logic.type.endif,Twig.logic.type.endfor],open:false,parse:function(token,context,chain){var output="";if(chain){output=Twig.parse.apply(this,[token.output,context])}return{chain:chain,output:output}}},{type:Twig.logic.type.endif,regex:/^endif$/,next:[],open:false},{type:Twig.logic.type.for_,regex:/^for\s+([a-zA-Z0-9_,\s]+)\s+in\s+([^\s].*?)(?:\s+if\s+([^\s].*))?$/,next:[Twig.logic.type.else_,Twig.logic.type.endfor],open:true,compile:function(token){var key_value=token.match[1],expression=token.match[2],conditional=token.match[3],kv_split=null;token.key_var=null;token.value_var=null;if(key_value.indexOf(",")>=0){kv_split=key_value.split(",");if(kv_split.length===2){token.key_var=kv_split[0].trim();token.value_var=kv_split[1].trim()}else{throw new Twig.Error("Invalid expression in for loop: "+key_value)}}else{token.value_var=key_value}token.expression=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;if(conditional){token.conditional=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:conditional}]).stack}delete token.match;return token},parse:function(token,context,continue_chain){var result=Twig.expression.parse.apply(this,[token.expression,context]),output=[],len,index=0,keyset,that=this,conditional=token.conditional,buildLoop=function(index,len){var isConditional=conditional!==undefined;return{index:index+1,index0:index,revindex:isConditional?undefined:len-index,revindex0:isConditional?undefined:len-index-1,first:index===0,last:isConditional?undefined:index===len-1,length:isConditional?undefined:len,parent:context}},loop=function(key,value){var inner_context=Twig.ChildContext(context);inner_context[token.value_var]=value;if(token.key_var){inner_context[token.key_var]=key}inner_context.loop=buildLoop(index,len);if(conditional===undefined||Twig.expression.parse.apply(that,[conditional,inner_context])){output.push(Twig.parse.apply(that,[token.output,inner_context]));index+=1}delete inner_context["loop"];delete inner_context[token.value_var];delete inner_context[token.key_var];Twig.merge(context,inner_context,true)};if(Twig.lib.is("Array",result)){len=result.length;Twig.forEach(result,function(value){var key=index;loop(key,value)})}else if(Twig.lib.is("Object",result)){if(result._keys!==undefined){keyset=result._keys}else{keyset=Object.keys(result)}len=keyset.length;Twig.forEach(keyset,function(key){if(key==="_keys")return;loop(key,result[key])})}continue_chain=output.length===0;return{chain:continue_chain,output:Twig.output.apply(this,[output])}}},{type:Twig.logic.type.endfor,regex:/^endfor$/,next:[],open:false},{type:Twig.logic.type.set,regex:/^set\s+([a-zA-Z0-9_,\s]+)\s*=\s*([\s\S]+)$/,next:[],open:true,compile:function(token){var key=token.match[1].trim(),expression=token.match[2],expression_stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;token.key=key;token.expression=expression_stack;delete token.match;return token},parse:function(token,context,continue_chain){var value=Twig.expression.parse.apply(this,[token.expression,context]),key=token.key;context[key]=value;return{chain:continue_chain,context:context}}},{type:Twig.logic.type.setcapture,regex:/^set\s+([a-zA-Z0-9_,\s]+)$/,next:[Twig.logic.type.endset],open:true,compile:function(token){var key=token.match[1].trim();token.key=key;delete token.match;return token},parse:function(token,context,continue_chain){var value=Twig.parse.apply(this,[token.output,context]),key=token.key;this.context[key]=value;context[key]=value;return{chain:continue_chain,context:context}}},{type:Twig.logic.type.endset,regex:/^endset$/,next:[],open:false},{type:Twig.logic.type.filter,regex:/^filter\s+(.+)$/,next:[Twig.logic.type.endfilter],open:true,compile:function(token){var expression="|"+token.match[1].trim();token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;delete token.match;return token},parse:function(token,context,chain){var unfiltered=Twig.parse.apply(this,[token.output,context]),stack=[{type:Twig.expression.type.string,value:unfiltered}].concat(token.stack);var output=Twig.expression.parse.apply(this,[stack,context]);return{chain:chain,output:output}}},{type:Twig.logic.type.endfilter,regex:/^endfilter$/,next:[],open:false},{type:Twig.logic.type.block,regex:/^block\s+([a-zA-Z0-9_]+)$/,next:[Twig.logic.type.endblock],open:true,compile:function(token){token.block=token.match[1].trim();delete token.match;return token},parse:function(token,context,chain){var block_output,output,isImported=Twig.indexOf(this.importedBlocks,token.block)>-1,hasParent=this.blocks[token.block]&&Twig.indexOf(this.blocks[token.block],Twig.placeholders.parent)>-1;if(this.blocks[token.block]===undefined||isImported||hasParent||context.loop||token.overwrite){if(token.expression){block_output=Twig.expression.parse.apply(this,[{type:Twig.expression.type.string,value:Twig.expression.parse.apply(this,[token.output,context])},context])}else{block_output=Twig.expression.parse.apply(this,[{type:Twig.expression.type.string,value:Twig.parse.apply(this,[token.output,context])},context])}if(isImported){this.importedBlocks.splice(this.importedBlocks.indexOf(token.block),1)}if(hasParent){this.blocks[token.block]=Twig.Markup(this.blocks[token.block].replace(Twig.placeholders.parent,block_output))}else{this.blocks[token.block]=block_output}this.originalBlockTokens[token.block]={type:token.type,block:token.block,output:token.output,overwrite:true}}if(this.child.blocks[token.block]){output=this.child.blocks[token.block]}else{output=this.blocks[token.block]}return{chain:chain,output:output}}},{type:Twig.logic.type.shortblock,regex:/^block\s+([a-zA-Z0-9_]+)\s+(.+)$/,next:[],open:true,compile:function(token){token.expression=token.match[2].trim();token.output=Twig.expression.compile({type:Twig.expression.type.expression,value:token.expression}).stack;token.block=token.match[1].trim();delete token.match;return token},parse:function(token,context,chain){return Twig.logic.handler[Twig.logic.type.block].parse.apply(this,arguments)}},{type:Twig.logic.type.endblock,regex:/^endblock(?:\s+([a-zA-Z0-9_]+))?$/,next:[],open:false},{type:Twig.logic.type.extends_,regex:/^extends\s+(.+)$/,next:[],open:true,compile:function(token){var expression=token.match[1].trim();delete token.match;token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;return token},parse:function(token,context,chain){var file=Twig.expression.parse.apply(this,[token.stack,context]);this.extend=file;return{chain:chain,output:""}}},{type:Twig.logic.type.use,regex:/^use\s+(.+)$/,next:[],open:true,compile:function(token){var expression=token.match[1].trim();delete token.match;token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;return token},parse:function(token,context,chain){var file=Twig.expression.parse.apply(this,[token.stack,context]);this.importBlocks(file);return{chain:chain,output:""}}},{type:Twig.logic.type.include,regex:/^include\s+(ignore missing\s+)?(.+?)\s*(?:with\s+([\S\s]+?))?\s*(only)?$/,next:[],open:true,compile:function(token){var match=token.match,includeMissing=match[1]!==undefined,expression=match[2].trim(),withContext=match[3],only=match[4]!==undefined&&match[4].length;delete token.match;token.only=only;token.includeMissing=includeMissing;token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;if(withContext!==undefined){token.withStack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:withContext.trim()}]).stack}return token},parse:function(token,context,chain){var innerContext={},withContext,i,template;if(!token.only){innerContext=Twig.ChildContext(context)}if(token.withStack!==undefined){withContext=Twig.expression.parse.apply(this,[token.withStack,context]);for(i in withContext){if(withContext.hasOwnProperty(i))innerContext[i]=withContext[i]}}var file=Twig.expression.parse.apply(this,[token.stack,innerContext]);if(file instanceof Twig.Template){template=file}else{template=this.importFile(file)}return{chain:chain,output:template.render(innerContext)}}},{type:Twig.logic.type.spaceless,regex:/^spaceless$/,next:[Twig.logic.type.endspaceless],open:true,parse:function(token,context,chain){var unfiltered=Twig.parse.apply(this,[token.output,context]),rBetweenTagSpaces=/>\s+</g,output=unfiltered.replace(rBetweenTagSpaces,"><").trim();return{chain:chain,output:output}}},{type:Twig.logic.type.endspaceless,regex:/^endspaceless$/,next:[],open:false},{type:Twig.logic.type.macro,regex:/^macro\s+([a-zA-Z0-9_]+)\s*\(\s*((?:[a-zA-Z0-9_]+(?:,\s*)?)*)\s*\)$/,next:[Twig.logic.type.endmacro],open:true,compile:function(token){var macroName=token.match[1],parameters=token.match[2].split(/[\s,]+/);for(var i=0;i<parameters.length;i++){for(var j=0;j<parameters.length;j++){if(parameters[i]===parameters[j]&&i!==j){throw new Twig.Error("Duplicate arguments for parameter: "+parameters[i])}}}token.macroName=macroName;token.parameters=parameters;delete token.match;return token},parse:function(token,context,chain){var template=this;this.macros[token.macroName]=function(){var macroContext={_self:template.macros};for(var i=0;i<token.parameters.length;i++){var prop=token.parameters[i];if(typeof arguments[i]!=="undefined"){macroContext[prop]=arguments[i]}else{macroContext[prop]=undefined}}return Twig.parse.apply(template,[token.output,macroContext])};return{chain:chain,output:""}}},{type:Twig.logic.type.endmacro,regex:/^endmacro$/,next:[],open:false},{type:Twig.logic.type.import_,regex:/^import\s+(.+)\s+as\s+([a-zA-Z0-9_]+)$/,next:[],open:true,compile:function(token){var expression=token.match[1].trim(),contextName=token.match[2].trim();delete token.match;token.expression=expression;token.contextName=contextName;token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;return token},parse:function(token,context,chain){if(token.expression!=="_self"){var file=Twig.expression.parse.apply(this,[token.stack,context]);var template=this.importFile(file||token.expression);context[token.contextName]=template.render({},{output:"macros"})}else{context[token.contextName]=this.macros}return{chain:chain,output:""}}},{type:Twig.logic.type.from,regex:/^from\s+(.+)\s+import\s+([a-zA-Z0-9_, ]+)$/,next:[],open:true,compile:function(token){var expression=token.match[1].trim(),macroExpressions=token.match[2].trim().split(/[ ,]+/),macroNames={};for(var i=0;i<macroExpressions.length;i++){var res=macroExpressions[i];var macroMatch=res.match(/^([a-zA-Z0-9_]+)\s+(.+)\s+as\s+([a-zA-Z0-9_]+)$/);if(macroMatch){macroNames[macroMatch[1].trim()]=macroMatch[2].trim()}else if(res.match(/^([a-zA-Z0-9_]+)$/)){macroNames[res]=res}else{}}delete token.match;token.expression=expression;token.macroNames=macroNames;token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;return token},parse:function(token,context,chain){var macros;if(token.expression!=="_self"){var file=Twig.expression.parse.apply(this,[token.stack,context]);var template=this.importFile(file||token.expression);macros=template.render({},{output:"macros"})}else{macros=this.macros}for(var macroName in token.macroNames){if(macros.hasOwnProperty(macroName)){context[token.macroNames[macroName]]=macros[macroName]}}return{chain:chain,output:""}}},{type:Twig.logic.type.embed,regex:/^embed\s+(ignore missing\s+)?(.+?)\s*(?:with\s+(.+?))?\s*(only)?$/,next:[Twig.logic.type.endembed],open:true,compile:function(token){var match=token.match,includeMissing=match[1]!==undefined,expression=match[2].trim(),withContext=match[3],only=match[4]!==undefined&&match[4].length;delete token.match;token.only=only;token.includeMissing=includeMissing;token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;if(withContext!==undefined){token.withStack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:withContext.trim()}]).stack}return token},parse:function(token,context,chain){var innerContext={},withContext,i,template;if(!token.only){for(i in context){if(context.hasOwnProperty(i))innerContext[i]=context[i]}}if(token.withStack!==undefined){withContext=Twig.expression.parse.apply(this,[token.withStack,context]);for(i in withContext){if(withContext.hasOwnProperty(i))innerContext[i]=withContext[i]}}var file=Twig.expression.parse.apply(this,[token.stack,innerContext]);if(file instanceof Twig.Template){template=file}else{template=this.importFile(file)}this.blocks={};var output=Twig.parse.apply(this,[token.output,innerContext]);return{chain:chain,output:template.render(innerContext,{blocks:this.blocks})}}},{type:Twig.logic.type.endembed,regex:/^endembed$/,next:[],open:false}];Twig.logic.handler={};Twig.logic.extendType=function(type,value){value=value||"Twig.logic.type"+type;Twig.logic.type[type]=value};Twig.logic.extend=function(definition){if(!definition.type){throw new Twig.Error("Unable to extend logic definition. No type provided for "+definition)}else{Twig.logic.extendType(definition.type)}Twig.logic.handler[definition.type]=definition};while(Twig.logic.definitions.length>0){Twig.logic.extend(Twig.logic.definitions.shift())}Twig.logic.compile=function(raw_token){var expression=raw_token.value.trim(),token=Twig.logic.tokenize.apply(this,[expression]),token_template=Twig.logic.handler[token.type];if(token_template.compile){token=token_template.compile.apply(this,[token]);Twig.log.trace("Twig.logic.compile: ","Compiled logic token to ",token)}return token};Twig.logic.tokenize=function(expression){var token={},token_template_type=null,token_type=null,token_regex=null,regex_array=null,regex=null,match=null;expression=expression.trim();for(token_template_type in Twig.logic.handler){if(Twig.logic.handler.hasOwnProperty(token_template_type)){token_type=Twig.logic.handler[token_template_type].type;token_regex=Twig.logic.handler[token_template_type].regex;regex_array=[];if(token_regex instanceof Array){regex_array=token_regex}else{regex_array.push(token_regex)}while(regex_array.length>0){regex=regex_array.shift();match=regex.exec(expression.trim());if(match!==null){token.type=token_type;token.match=match;Twig.log.trace("Twig.logic.tokenize: ","Matched a ",token_type," regular expression of ",match);return token}}}}throw new Twig.Error("Unable to parse '"+expression.trim()+"'")};Twig.logic.parse=function(token,context,chain){var output="",token_template;context=context||{};Twig.log.debug("Twig.logic.parse: ","Parsing logic token ",token);token_template=Twig.logic.handler[token.type];if(token_template.parse){output=token_template.parse.apply(this,[token,context,chain])}return output};return Twig}(Twig||{});var Twig=function(Twig){"use strict";Twig.expression={};Twig.expression.reservedWords=["true","false","null","TRUE","FALSE","NULL","_context"];Twig.expression.type={comma:"Twig.expression.type.comma",operator:{unary:"Twig.expression.type.operator.unary",binary:"Twig.expression.type.operator.binary"},string:"Twig.expression.type.string",bool:"Twig.expression.type.bool",array:{start:"Twig.expression.type.array.start",end:"Twig.expression.type.array.end"},object:{start:"Twig.expression.type.object.start",end:"Twig.expression.type.object.end"},parameter:{start:"Twig.expression.type.parameter.start",end:"Twig.expression.type.parameter.end"},key:{period:"Twig.expression.type.key.period",brackets:"Twig.expression.type.key.brackets"},filter:"Twig.expression.type.filter",_function:"Twig.expression.type._function",variable:"Twig.expression.type.variable",number:"Twig.expression.type.number",_null:"Twig.expression.type.null",context:"Twig.expression.type.context",test:"Twig.expression.type.test"};Twig.expression.set={operations:[Twig.expression.type.filter,Twig.expression.type.operator.unary,Twig.expression.type.operator.binary,Twig.expression.type.array.end,Twig.expression.type.object.end,Twig.expression.type.parameter.end,Twig.expression.type.comma,Twig.expression.type.test],expressions:[Twig.expression.type._function,Twig.expression.type.bool,Twig.expression.type.string,Twig.expression.type.variable,Twig.expression.type.number,Twig.expression.type._null,Twig.expression.type.context,Twig.expression.type.parameter.start,Twig.expression.type.array.start,Twig.expression.type.object.start]};Twig.expression.set.operations_extended=Twig.expression.set.operations.concat([Twig.expression.type.key.period,Twig.expression.type.key.brackets]);Twig.expression.fn={compile:{push:function(token,stack,output){output.push(token)},push_both:function(token,stack,output){output.push(token);stack.push(token)}},parse:{push:function(token,stack,context){stack.push(token)},push_value:function(token,stack,context){stack.push(token.value)}}};Twig.expression.definitions=[{type:Twig.expression.type.test,regex:/^is\s+(not)?\s*([a-zA-Z_][a-zA-Z0-9_]*)/,next:Twig.expression.set.operations.concat([Twig.expression.type.parameter.start]),compile:function(token,stack,output){token.filter=token.match[2];token.modifier=token.match[1];delete token.match;delete token.value;output.push(token)},parse:function(token,stack,context){var value=stack.pop(),params=token.params&&Twig.expression.parse.apply(this,[token.params,context]),result=Twig.test(token.filter,value,params);if(token.modifier=="not"){stack.push(!result)}else{stack.push(result)}}},{type:Twig.expression.type.comma,regex:/^,/,next:Twig.expression.set.expressions.concat([Twig.expression.type.array.end,Twig.expression.type.object.end]),compile:function(token,stack,output){var i=stack.length-1,stack_token;delete token.match;delete token.value;for(;i>=0;i--){stack_token=stack.pop();if(stack_token.type===Twig.expression.type.object.start||stack_token.type===Twig.expression.type.parameter.start||stack_token.type===Twig.expression.type.array.start){stack.push(stack_token);break}output.push(stack_token)}output.push(token)}},{type:Twig.expression.type.operator.binary,regex:/(^[\+\-~%\?\:]|^[!=]==?|^[!<>]=?|^\*\*?|^\/\/?|^and\s+|^or\s+|^in\s+|^not in\s+|^\.\.)/,next:Twig.expression.set.expressions.concat([Twig.expression.type.operator.unary]),compile:function(token,stack,output){delete token.match;token.value=token.value.trim();var value=token.value,operator=Twig.expression.operator.lookup(value,token);Twig.log.trace("Twig.expression.compile: ","Operator: ",operator," from ",value);while(stack.length>0&&(stack[stack.length-1].type==Twig.expression.type.operator.unary||stack[stack.length-1].type==Twig.expression.type.operator.binary)&&(operator.associativity===Twig.expression.operator.leftToRight&&operator.precidence>=stack[stack.length-1].precidence||operator.associativity===Twig.expression.operator.rightToLeft&&operator.precidence>stack[stack.length-1].precidence)){var temp=stack.pop();output.push(temp)}if(value===":"){if(stack[stack.length-1]&&stack[stack.length-1].value==="?"){}else{var key_token=output.pop();if(key_token.type===Twig.expression.type.string||key_token.type===Twig.expression.type.variable){token.key=key_token.value}else if(key_token.type===Twig.expression.type.number){token.key=key_token.value.toString()}else if(key_token.type===Twig.expression.type.parameter.end&&key_token.expression){token.params=key_token.params}else{throw new Twig.Error("Unexpected value before ':' of "+key_token.type+" = "+key_token.value)}output.push(token);return}}else{stack.push(operator)}},parse:function(token,stack,context){if(token.key){stack.push(token)}else if(token.params){token.key=Twig.expression.parse.apply(this,[token.params,context]);stack.push(token);delete token.params}else{Twig.expression.operator.parse(token.value,stack)}}},{type:Twig.expression.type.operator.unary,regex:/(^not\s+)/,next:Twig.expression.set.expressions,compile:function(token,stack,output){delete token.match;token.value=token.value.trim();var value=token.value,operator=Twig.expression.operator.lookup(value,token);Twig.log.trace("Twig.expression.compile: ","Operator: ",operator," from ",value);while(stack.length>0&&(stack[stack.length-1].type==Twig.expression.type.operator.unary||stack[stack.length-1].type==Twig.expression.type.operator.binary)&&(operator.associativity===Twig.expression.operator.leftToRight&&operator.precidence>=stack[stack.length-1].precidence||operator.associativity===Twig.expression.operator.rightToLeft&&operator.precidence>stack[stack.length-1].precidence)){var temp=stack.pop();output.push(temp)}stack.push(operator)},parse:function(token,stack,context){Twig.expression.operator.parse(token.value,stack)}},{type:Twig.expression.type.string,regex:/^(["'])(?:(?=(\\?))\2[\s\S])*?\1/,next:Twig.expression.set.operations,compile:function(token,stack,output){var value=token.value;delete token.match;if(value.substring(0,1)==='"'){value=value.replace('\\"','"')}else{value=value.replace("\\'","'")}token.value=value.substring(1,value.length-1).replace(/\\n/g,"\n").replace(/\\r/g,"\r");Twig.log.trace("Twig.expression.compile: ","String value: ",token.value);output.push(token)},parse:Twig.expression.fn.parse.push_value},{type:Twig.expression.type.parameter.start,regex:/^\(/,next:Twig.expression.set.expressions.concat([Twig.expression.type.parameter.end]),compile:Twig.expression.fn.compile.push_both,parse:Twig.expression.fn.parse.push},{type:Twig.expression.type.parameter.end,regex:/^\)/,next:Twig.expression.set.operations_extended,compile:function(token,stack,output){var stack_token,end_token=token;stack_token=stack.pop();while(stack.length>0&&stack_token.type!=Twig.expression.type.parameter.start){output.push(stack_token);stack_token=stack.pop()}var param_stack=[];while(token.type!==Twig.expression.type.parameter.start){param_stack.unshift(token);token=output.pop()}param_stack.unshift(token);var is_expression=false;token=output[output.length-1];if(token===undefined||token.type!==Twig.expression.type._function&&token.type!==Twig.expression.type.filter&&token.type!==Twig.expression.type.test&&token.type!==Twig.expression.type.key.brackets&&token.type!==Twig.expression.type.key.period){end_token.expression=true;param_stack.pop();param_stack.shift();end_token.params=param_stack;output.push(end_token)}else{end_token.expression=false;token.params=param_stack}},parse:function(token,stack,context){var new_array=[],array_ended=false,value=null;if(token.expression){value=Twig.expression.parse.apply(this,[token.params,context]);stack.push(value)}else{while(stack.length>0){value=stack.pop();if(value&&value.type&&value.type==Twig.expression.type.parameter.start){array_ended=true;break}new_array.unshift(value)}if(!array_ended){throw new Twig.Error("Expected end of parameter set.")}stack.push(new_array)}}},{type:Twig.expression.type.array.start,regex:/^\[/,next:Twig.expression.set.expressions.concat([Twig.expression.type.array.end]),compile:Twig.expression.fn.compile.push_both,parse:Twig.expression.fn.parse.push},{type:Twig.expression.type.array.end,regex:/^\]/,next:Twig.expression.set.operations_extended,compile:function(token,stack,output){var i=stack.length-1,stack_token;for(;i>=0;i--){stack_token=stack.pop();if(stack_token.type===Twig.expression.type.array.start){break}output.push(stack_token)}output.push(token)},parse:function(token,stack,context){var new_array=[],array_ended=false,value=null;while(stack.length>0){value=stack.pop();if(value.type&&value.type==Twig.expression.type.array.start){array_ended=true;break}new_array.unshift(value)}if(!array_ended){throw new Twig.Error("Expected end of array.")}stack.push(new_array)}},{type:Twig.expression.type.object.start,regex:/^\{/,next:Twig.expression.set.expressions.concat([Twig.expression.type.object.end]),compile:Twig.expression.fn.compile.push_both,parse:Twig.expression.fn.parse.push},{type:Twig.expression.type.object.end,regex:/^\}/,next:Twig.expression.set.operations_extended,compile:function(token,stack,output){var i=stack.length-1,stack_token;for(;i>=0;i--){stack_token=stack.pop();if(stack_token&&stack_token.type===Twig.expression.type.object.start){break}output.push(stack_token)}output.push(token)},parse:function(end_token,stack,context){var new_object={},object_ended=false,token=null,token_key=null,has_value=false,value=null;while(stack.length>0){token=stack.pop();if(token&&token.type&&token.type===Twig.expression.type.object.start){object_ended=true;break}if(token&&token.type&&(token.type===Twig.expression.type.operator.binary||token.type===Twig.expression.type.operator.unary)&&token.key){if(!has_value){throw new Twig.Error("Missing value for key '"+token.key+"' in object definition.")}new_object[token.key]=value;if(new_object._keys===undefined)new_object._keys=[];new_object._keys.unshift(token.key);value=null;has_value=false}else{has_value=true;value=token}}if(!object_ended){throw new Twig.Error("Unexpected end of object.")}stack.push(new_object)}},{type:Twig.expression.type.filter,regex:/^\|\s?([a-zA-Z_][a-zA-Z0-9_\-]*)/,next:Twig.expression.set.operations_extended.concat([Twig.expression.type.parameter.start]),compile:function(token,stack,output){
+token.value=token.match[1];output.push(token)},parse:function(token,stack,context){var input=stack.pop(),params=token.params&&Twig.expression.parse.apply(this,[token.params,context]);stack.push(Twig.filter.apply(this,[token.value,input,params]))}},{type:Twig.expression.type._function,regex:/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/,next:Twig.expression.type.parameter.start,transform:function(match,tokens){return"("},compile:function(token,stack,output){var fn=token.match[1];token.fn=fn;delete token.match;delete token.value;output.push(token)},parse:function(token,stack,context){var params=token.params&&Twig.expression.parse.apply(this,[token.params,context]),fn=token.fn,value;if(Twig.functions[fn]){value=Twig.functions[fn].apply(this,params)}else if(typeof context[fn]=="function"){value=context[fn].apply(context,params)}else{throw new Twig.Error(fn+" function does not exist and is not defined in the context")}stack.push(value)}},{type:Twig.expression.type.variable,regex:/^[a-zA-Z_][a-zA-Z0-9_]*/,next:Twig.expression.set.operations_extended.concat([Twig.expression.type.parameter.start]),compile:Twig.expression.fn.compile.push,validate:function(match,tokens){return Twig.indexOf(Twig.expression.reservedWords,match[0])<0},parse:function(token,stack,context){var value=Twig.expression.resolve(context[token.value],context);stack.push(value)}},{type:Twig.expression.type.key.period,regex:/^\.([a-zA-Z0-9_]+)/,next:Twig.expression.set.operations_extended.concat([Twig.expression.type.parameter.start]),compile:function(token,stack,output){token.key=token.match[1];delete token.match;delete token.value;output.push(token)},parse:function(token,stack,context){var params=token.params&&Twig.expression.parse.apply(this,[token.params,context]),key=token.key,object=stack.pop(),value;if(object===null||object===undefined){if(this.options.strict_variables){throw new Twig.Error("Can't access a key "+key+" on an null or undefined object.")}else{return null}}var capitalize=function(value){return value.substr(0,1).toUpperCase()+value.substr(1)};if(typeof object==="object"&&key in object){value=object[key]}else if(object["get"+capitalize(key)]!==undefined){value=object["get"+capitalize(key)]}else if(object["is"+capitalize(key)]!==undefined){value=object["is"+capitalize(key)]}else{value=undefined}stack.push(Twig.expression.resolve(value,object,params))}},{type:Twig.expression.type.key.brackets,regex:/^\[([^\]]*)\]/,next:Twig.expression.set.operations_extended.concat([Twig.expression.type.parameter.start]),compile:function(token,stack,output){var match=token.match[1];delete token.value;delete token.match;token.stack=Twig.expression.compile({value:match}).stack;output.push(token)},parse:function(token,stack,context){var params=token.params&&Twig.expression.parse.apply(this,[token.params,context]),key=Twig.expression.parse.apply(this,[token.stack,context]),object=stack.pop(),value;if(object===null||object===undefined){if(this.options.strict_variables){throw new Twig.Error("Can't access a key "+key+" on an null or undefined object.")}else{return null}}if(typeof object==="object"&&key in object){value=object[key]}else{value=null}stack.push(Twig.expression.resolve(value,object,params))}},{type:Twig.expression.type._null,regex:/^(null|NULL|none|NONE)/,next:Twig.expression.set.operations,compile:function(token,stack,output){delete token.match;token.value=null;output.push(token)},parse:Twig.expression.fn.parse.push_value},{type:Twig.expression.type.context,regex:/^_context/,next:Twig.expression.set.operations_extended.concat([Twig.expression.type.parameter.start]),compile:Twig.expression.fn.compile.push,parse:function(token,stack,context){stack.push(context)}},{type:Twig.expression.type.number,regex:/^\-?\d+(\.\d+)?/,next:Twig.expression.set.operations,compile:function(token,stack,output){token.value=Number(token.value);output.push(token)},parse:Twig.expression.fn.parse.push_value},{type:Twig.expression.type.bool,regex:/^(true|TRUE|false|FALSE)/,next:Twig.expression.set.operations,compile:function(token,stack,output){token.value=token.match[0].toLowerCase()==="true";delete token.match;output.push(token)},parse:Twig.expression.fn.parse.push_value}];Twig.expression.resolve=function(value,context,params){if(typeof value=="function"){return value.apply(context,params||[])}else{return value}};Twig.expression.handler={};Twig.expression.extendType=function(type){Twig.expression.type[type]="Twig.expression.type."+type};Twig.expression.extend=function(definition){if(!definition.type){throw new Twig.Error("Unable to extend logic definition. No type provided for "+definition)}Twig.expression.handler[definition.type]=definition};while(Twig.expression.definitions.length>0){Twig.expression.extend(Twig.expression.definitions.shift())}Twig.expression.tokenize=function(expression){var tokens=[],exp_offset=0,next=null,type,regex,regex_array,token_next,match_found,invalid_matches=[],match_function;match_function=function(){var match=Array.prototype.slice.apply(arguments),string=match.pop(),offset=match.pop();Twig.log.trace("Twig.expression.tokenize","Matched a ",type," regular expression of ",match);if(next&&Twig.indexOf(next,type)<0){invalid_matches.push(type+" cannot follow a "+tokens[tokens.length-1].type+" at template:"+exp_offset+" near '"+match[0].substring(0,20)+"...'");return match[0]}if(Twig.expression.handler[type].validate&&!Twig.expression.handler[type].validate(match,tokens)){return match[0]}invalid_matches=[];tokens.push({type:type,value:match[0],match:match});match_found=true;next=token_next;exp_offset+=match[0].length;if(Twig.expression.handler[type].transform){return Twig.expression.handler[type].transform(match,tokens)}return""};Twig.log.debug("Twig.expression.tokenize","Tokenizing expression ",expression);while(expression.length>0){expression=expression.trim();for(type in Twig.expression.handler){if(Twig.expression.handler.hasOwnProperty(type)){token_next=Twig.expression.handler[type].next;regex=Twig.expression.handler[type].regex;if(regex instanceof Array){regex_array=regex}else{regex_array=[regex]}match_found=false;while(regex_array.length>0){regex=regex_array.pop();expression=expression.replace(regex,match_function)}if(match_found){break}}}if(!match_found){if(invalid_matches.length>0){throw new Twig.Error(invalid_matches.join(" OR "))}else{throw new Twig.Error("Unable to parse '"+expression+"' at template position"+exp_offset)}}}Twig.log.trace("Twig.expression.tokenize","Tokenized to ",tokens);return tokens};Twig.expression.compile=function(raw_token){var expression=raw_token.value,tokens=Twig.expression.tokenize(expression),token=null,output=[],stack=[],token_template=null;Twig.log.trace("Twig.expression.compile: ","Compiling ",expression);while(tokens.length>0){token=tokens.shift();token_template=Twig.expression.handler[token.type];Twig.log.trace("Twig.expression.compile: ","Compiling ",token);token_template.compile&&token_template.compile(token,stack,output);Twig.log.trace("Twig.expression.compile: ","Stack is",stack);Twig.log.trace("Twig.expression.compile: ","Output is",output)}while(stack.length>0){output.push(stack.pop())}Twig.log.trace("Twig.expression.compile: ","Final output is",output);raw_token.stack=output;delete raw_token.value;return raw_token};Twig.expression.parse=function(tokens,context){var that=this;if(!(tokens instanceof Array)){tokens=[tokens]}var stack=[],token_template=null;Twig.forEach(tokens,function(token){token_template=Twig.expression.handler[token.type];token_template.parse&&token_template.parse.apply(that,[token,stack,context])});return stack.pop()};return Twig}(Twig||{});var Twig=function(Twig){"use strict";Twig.expression.operator={leftToRight:"leftToRight",rightToLeft:"rightToLeft"};var containment=function(a,b){if(b===undefined||b===null){return null}else if(b.indexOf!==undefined){return a===b||a!==""&&b.indexOf(a)>-1}else{var el;for(el in b){if(b.hasOwnProperty(el)&&b[el]===a){return true}}return false}};Twig.expression.operator.lookup=function(operator,token){switch(operator){case"..":case"not in":case"in":token.precidence=20;token.associativity=Twig.expression.operator.leftToRight;break;case",":token.precidence=18;token.associativity=Twig.expression.operator.leftToRight;break;case"?":case":":token.precidence=16;token.associativity=Twig.expression.operator.rightToLeft;break;case"or":token.precidence=14;token.associativity=Twig.expression.operator.leftToRight;break;case"and":token.precidence=13;token.associativity=Twig.expression.operator.leftToRight;break;case"==":case"!=":token.precidence=9;token.associativity=Twig.expression.operator.leftToRight;break;case"<":case"<=":case">":case">=":token.precidence=8;token.associativity=Twig.expression.operator.leftToRight;break;case"~":case"+":case"-":token.precidence=6;token.associativity=Twig.expression.operator.leftToRight;break;case"//":case"**":case"*":case"/":case"%":token.precidence=5;token.associativity=Twig.expression.operator.leftToRight;break;case"not":token.precidence=3;token.associativity=Twig.expression.operator.rightToLeft;break;default:throw new Twig.Error(operator+" is an unknown operator.")}token.operator=operator;return token};Twig.expression.operator.parse=function(operator,stack){Twig.log.trace("Twig.expression.operator.parse: ","Handling ",operator);var a,b,c;switch(operator){case":":break;case"?":c=stack.pop();b=stack.pop();a=stack.pop();if(a){stack.push(b)}else{stack.push(c)}break;case"+":b=parseFloat(stack.pop());a=parseFloat(stack.pop());stack.push(a+b);break;case"-":b=parseFloat(stack.pop());a=parseFloat(stack.pop());stack.push(a-b);break;case"*":b=parseFloat(stack.pop());a=parseFloat(stack.pop());stack.push(a*b);break;case"/":b=parseFloat(stack.pop());a=parseFloat(stack.pop());stack.push(a/b);break;case"//":b=parseFloat(stack.pop());a=parseFloat(stack.pop());stack.push(parseInt(a/b));break;case"%":b=parseFloat(stack.pop());a=parseFloat(stack.pop());stack.push(a%b);break;case"~":b=stack.pop();a=stack.pop();stack.push((a!=null?a.toString():"")+(b!=null?b.toString():""));break;case"not":case"!":stack.push(!stack.pop());break;case"<":b=stack.pop();a=stack.pop();stack.push(a<b);break;case"<=":b=stack.pop();a=stack.pop();stack.push(a<=b);break;case">":b=stack.pop();a=stack.pop();stack.push(a>b);break;case">=":b=stack.pop();a=stack.pop();stack.push(a>=b);break;case"===":b=stack.pop();a=stack.pop();stack.push(a===b);break;case"==":b=stack.pop();a=stack.pop();stack.push(a==b);break;case"!==":b=stack.pop();a=stack.pop();stack.push(a!==b);break;case"!=":b=stack.pop();a=stack.pop();stack.push(a!=b);break;case"or":b=stack.pop();a=stack.pop();stack.push(a||b);break;case"and":b=stack.pop();a=stack.pop();stack.push(a&&b);break;case"**":b=stack.pop();a=stack.pop();stack.push(Math.pow(a,b));break;case"not in":b=stack.pop();a=stack.pop();stack.push(!containment(a,b));break;case"in":b=stack.pop();a=stack.pop();stack.push(containment(a,b));break;case"..":b=stack.pop();a=stack.pop();stack.push(Twig.functions.range(a,b));break;default:throw new Twig.Error(operator+" is an unknown operator.")}};return Twig}(Twig||{});var Twig=function(Twig){function is(type,obj){var clas=Object.prototype.toString.call(obj).slice(8,-1);return obj!==undefined&&obj!==null&&clas===type}Twig.filters={upper:function(value){if(typeof value!=="string"){return value}return value.toUpperCase()},lower:function(value){if(typeof value!=="string"){return value}return value.toLowerCase()},capitalize:function(value){if(typeof value!=="string"){return value}return value.substr(0,1).toUpperCase()+value.toLowerCase().substr(1)},title:function(value){if(typeof value!=="string"){return value}return value.toLowerCase().replace(/(^|\s)([a-z])/g,function(m,p1,p2){return p1+p2.toUpperCase()})},length:function(value){if(Twig.lib.is("Array",value)||typeof value==="string"){return value.length}else if(Twig.lib.is("Object",value)){if(value._keys===undefined){return Object.keys(value).length}else{return value._keys.length}}else{return 0}},reverse:function(value){if(is("Array",value)){return value.reverse()}else if(is("String",value)){return value.split("").reverse().join("")}else if(is("Object",value)){var keys=value._keys||Object.keys(value).reverse();value._keys=keys;return value}},sort:function(value){if(is("Array",value)){return value.sort()}else if(is("Object",value)){delete value._keys;var keys=Object.keys(value),sorted_keys=keys.sort(function(a,b){var a1,a2;if(value[a]>value[b]==!(value[a]<=value[b])){return value[a]>value[b]?1:value[a]<value[b]?-1:0}else if(!isNaN(a1=parseFloat(value[a]))&&!isNaN(b1=parseFloat(value[b]))){return a1>b1?1:a1<b1?-1:0}else if(typeof value[a]=="string"){return value[a]>value[b].toString()?1:value[a]<value[b].toString()?-1:0}else if(typeof value[b]=="string"){return value[a].toString()>value[b]?1:value[a].toString()<value[b]?-1:0}else{return null}});value._keys=sorted_keys;return value}},keys:function(value){if(value===undefined||value===null){return}var keyset=value._keys||Object.keys(value),output=[];Twig.forEach(keyset,function(key){if(key==="_keys")return;if(value.hasOwnProperty(key)){output.push(key)}});return output},url_encode:function(value){if(value===undefined||value===null){return}var result=encodeURIComponent(value);result=result.replace("'","%27");return result},join:function(value,params){if(value===undefined||value===null){return}var join_str="",output=[],keyset=null;if(params&&params[0]){join_str=params[0]}if(is("Array",value)){output=value}else{keyset=value._keys||Object.keys(value);Twig.forEach(keyset,function(key){if(key==="_keys")return;if(value.hasOwnProperty(key)){output.push(value[key])}})}return output.join(join_str)},"default":function(value,params){if(params!==undefined&&params.length>1){throw new Twig.Error("default filter expects one argument")}if(value===undefined||value===null||value===""){if(params===undefined){return""}return params[0]}else{return value}},json_encode:function(value){if(value===undefined||value===null){return"null"}else if(typeof value=="object"&&is("Array",value)){output=[];Twig.forEach(value,function(v){output.push(Twig.filters.json_encode(v))});return"["+output.join(",")+"]"}else if(typeof value=="object"){var keyset=value._keys||Object.keys(value),output=[];Twig.forEach(keyset,function(key){output.push(JSON.stringify(key)+":"+Twig.filters.json_encode(value[key]))});return"{"+output.join(",")+"}"}else{return JSON.stringify(value)}},merge:function(value,params){var obj=[],arr_index=0,keyset=[];if(!is("Array",value)){obj={}}else{Twig.forEach(params,function(param){if(!is("Array",param)){obj={}}})}if(!is("Array",obj)){obj._keys=[]}if(is("Array",value)){Twig.forEach(value,function(val){if(obj._keys)obj._keys.push(arr_index);obj[arr_index]=val;arr_index++})}else{keyset=value._keys||Object.keys(value);Twig.forEach(keyset,function(key){obj[key]=value[key];obj._keys.push(key);var int_key=parseInt(key,10);if(!isNaN(int_key)&&int_key>=arr_index){arr_index=int_key+1}})}Twig.forEach(params,function(param){if(is("Array",param)){Twig.forEach(param,function(val){if(obj._keys)obj._keys.push(arr_index);obj[arr_index]=val;arr_index++})}else{keyset=param._keys||Object.keys(param);Twig.forEach(keyset,function(key){if(!obj[key])obj._keys.push(key);obj[key]=param[key];var int_key=parseInt(key,10);if(!isNaN(int_key)&&int_key>=arr_index){arr_index=int_key+1}})}});if(params.length===0){throw new Twig.Error("Filter merge expects at least one parameter")}return obj},date:function(value,params){var date=Twig.functions.date(value);var format=params&&params.length?params[0]:"F j, Y H:i";return Twig.lib.formatDate(date,format)},date_modify:function(value,params){if(value===undefined||value===null){return}if(params===undefined||params.length!==1){throw new Twig.Error("date_modify filter expects 1 argument")}var modifyText=params[0],time;if(Twig.lib.is("Date",value)){time=Twig.lib.strtotime(modifyText,value.getTime()/1e3)}if(Twig.lib.is("String",value)){time=Twig.lib.strtotime(modifyText,Twig.lib.strtotime(value))}if(Twig.lib.is("Number",value)){time=Twig.lib.strtotime(modifyText,value)}return new Date(time*1e3)},replace:function(value,params){if(value===undefined||value===null){return}var pairs=params[0],tag;for(tag in pairs){if(pairs.hasOwnProperty(tag)&&tag!=="_keys"){value=Twig.lib.replaceAll(value,tag,pairs[tag])}}return value},format:function(value,params){if(value===undefined||value===null){return}return Twig.lib.vsprintf(value,params)},striptags:function(value){if(value===undefined||value===null){return}return Twig.lib.strip_tags(value)},escape:function(value,params){if(value===undefined||value===null){return}var strategy="html";if(params&&params.length&&params[0]!==true)strategy=params[0];if(strategy=="html"){var raw_value=value.toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");return Twig.Markup(raw_value,"html")}else if(strategy=="js"){var raw_value=value.toString();var result="";for(var i=0;i<raw_value.length;i++){if(raw_value[i].match(/^[a-zA-Z0-9,\._]$/))result+=raw_value[i];else{var char_code=raw_value.charCodeAt(i);if(char_code<128)result+="\\x"+char_code.toString(16).toUpperCase();else result+=Twig.lib.sprintf("\\u%04s",char_code.toString(16).toUpperCase())}}return Twig.Markup(result,"js")}else if(strategy=="css"){var raw_value=value.toString();var result="";for(var i=0;i<raw_value.length;i++){if(raw_value[i].match(/^[a-zA-Z0-9]$/))result+=raw_value[i];else{var char_code=raw_value.charCodeAt(i);result+="\\"+char_code.toString(16).toUpperCase()+" "}}return Twig.Markup(result,"css")}else if(strategy=="url"){var result=Twig.filters.url_encode(value);return Twig.Markup(result,"url")}else if(strategy=="html_attr"){var raw_value=value.toString();var result="";for(var i=0;i<raw_value.length;i++){if(raw_value[i].match(/^[a-zA-Z0-9,\.\-_]$/))result+=raw_value[i];else if(raw_value[i].match(/^[&<>"]$/))result+=raw_value[i].replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");else{var char_code=raw_value.charCodeAt(i);if(char_code<=31&&char_code!=9&&char_code!=10&&char_code!=13)result+="&#xFFFD;";else if(char_code<128)result+=Twig.lib.sprintf("&#x%02s;",char_code.toString(16).toUpperCase());else result+=Twig.lib.sprintf("&#x%04s;",char_code.toString(16).toUpperCase())}}return Twig.Markup(result,"html_attr")}else{throw new Twig.Error("escape strategy unsupported")}},e:function(value,params){return Twig.filters.escape(value,params)},nl2br:function(value){if(value===undefined||value===null){return}var linebreak_tag="BACKSLASH_n_replace",br="<br />"+linebreak_tag;value=Twig.filters.escape(value).replace(/\r\n/g,br).replace(/\r/g,br).replace(/\n/g,br);value=Twig.lib.replaceAll(value,linebreak_tag,"\n");return Twig.Markup(value)},number_format:function(value,params){var number=value,decimals=params&&params[0]?params[0]:undefined,dec=params&&params[1]!==undefined?params[1]:".",sep=params&&params[2]!==undefined?params[2]:",";number=(number+"").replace(/[^0-9+\-Ee.]/g,"");var n=!isFinite(+number)?0:+number,prec=!isFinite(+decimals)?0:Math.abs(decimals),s="",toFixedFix=function(n,prec){var k=Math.pow(10,prec);return""+Math.round(n*k)/k};s=(prec?toFixedFix(n,prec):""+Math.round(n)).split(".");if(s[0].length>3){s[0]=s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g,sep)}if((s[1]||"").length<prec){s[1]=s[1]||"";s[1]+=new Array(prec-s[1].length+1).join("0")}return s.join(dec)},trim:function(value,params){if(value===undefined||value===null){return}var str=Twig.filters.escape(""+value),whitespace;if(params&&params[0]){whitespace=""+params[0]}else{whitespace=" \n\r	\f\x0B            ​\u2028\u2029　"}for(var i=0;i<str.length;i++){if(whitespace.indexOf(str.charAt(i))===-1){str=str.substring(i);break}}for(i=str.length-1;i>=0;i--){if(whitespace.indexOf(str.charAt(i))===-1){str=str.substring(0,i+1);break}}return whitespace.indexOf(str.charAt(0))===-1?str:""},truncate:function(value,params){var length=30,preserve=false,separator="...";value=value+"";if(params){if(params[0]){length=params[0]}if(params[1]){preserve=params[1]}if(params[2]){separator=params[2]}}if(value.length>length){if(preserve){length=value.indexOf(" ",length);if(length===-1){return value}}value=value.substr(0,length)+separator}return value},slice:function(value,params){if(value===undefined||value===null){return}if(params===undefined||params.length<1){throw new Twig.Error("slice filter expects at least 1 argument")}var start=params[0]||0;var length=params.length>1?params[1]:value.length;var startIndex=start>=0?start:Math.max(value.length+start,0);if(Twig.lib.is("Array",value)){var output=[];for(var i=startIndex;i<startIndex+length&&i<value.length;i++){output.push(value[i])}return output}else if(Twig.lib.is("String",value)){return value.substr(startIndex,length)}else{throw new Twig.Error("slice filter expects value to be an array or string")}},abs:function(value){if(value===undefined||value===null){return}return Math.abs(value)},first:function(value){if(is("Array",value)){return value[0]}else if(is("Object",value)){if("_keys"in value){return value[value._keys[0]]}}else if(typeof value==="string"){return value.substr(0,1)}return},split:function(value,params){if(value===undefined||value===null){return}if(params===undefined||params.length<1||params.length>2){throw new Twig.Error("split filter expects 1 or 2 argument")}if(Twig.lib.is("String",value)){var delimiter=params[0],limit=params[1],split=value.split(delimiter);if(limit===undefined){return split}else if(limit<0){return value.split(delimiter,split.length+limit)}else{var limitedSplit=[];if(delimiter==""){while(split.length>0){var temp="";for(var i=0;i<limit&&split.length>0;i++){temp+=split.shift()}limitedSplit.push(temp)}}else{for(var i=0;i<limit-1&&split.length>0;i++){limitedSplit.push(split.shift())}if(split.length>0){limitedSplit.push(split.join(delimiter))}}return limitedSplit}}else{throw new Twig.Error("split filter expects value to be a string")}},last:function(value){if(Twig.lib.is("Object",value)){var keys;if(value._keys===undefined){keys=Object.keys(value)}else{keys=value._keys}return value[keys[keys.length-1]]}return value[value.length-1]},raw:function(value){return Twig.Markup(value)},batch:function(items,params){var size=params.shift(),fill=params.shift(),result,last,missing;if(!Twig.lib.is("Array",items)){throw new Twig.Error("batch filter expects items to be an array")}if(!Twig.lib.is("Number",size)){throw new Twig.Error("batch filter expects size to be a number")}size=Math.ceil(size);result=Twig.lib.chunkArray(items,size);if(fill&&items.length%size!=0){last=result.pop();missing=size-last.length;while(missing--){last.push(fill)}result.push(last)}return result},round:function(value,params){params=params||[];var precision=params.length>0?params[0]:0,method=params.length>1?params[1]:"common";value=parseFloat(value);if(precision&&!Twig.lib.is("Number",precision)){throw new Twig.Error("round filter expects precision to be a number")}if(method==="common"){return Twig.lib.round(value,precision)}if(!Twig.lib.is("Function",Math[method])){throw new Twig.Error("round filter expects method to be 'floor', 'ceil', or 'common'")}return Math[method](value*Math.pow(10,precision))/Math.pow(10,precision)}};Twig.filter=function(filter,value,params){if(!Twig.filters[filter]){throw"Unable to find filter "+filter}return Twig.filters[filter].apply(this,[value,params])};Twig.filter.extend=function(filter,definition){Twig.filters[filter]=definition};return Twig}(Twig||{});var Twig=function(Twig){var TEMPLATE_NOT_FOUND_MESSAGE='Template "{name}" is not defined.';function is(type,obj){var clas=Object.prototype.toString.call(obj).slice(8,-1);return obj!==undefined&&obj!==null&&clas===type}Twig.functions={range:function(low,high,step){var matrix=[];var inival,endval,plus;var walker=step||1;var chars=false;if(!isNaN(low)&&!isNaN(high)){inival=parseInt(low,10);endval=parseInt(high,10)}else if(isNaN(low)&&isNaN(high)){chars=true;inival=low.charCodeAt(0);endval=high.charCodeAt(0)}else{inival=isNaN(low)?0:low;endval=isNaN(high)?0:high}plus=inival>endval?false:true;if(plus){while(inival<=endval){matrix.push(chars?String.fromCharCode(inival):inival);inival+=walker}}else{while(inival>=endval){matrix.push(chars?String.fromCharCode(inival):inival);inival-=walker}}return matrix},cycle:function(arr,i){var pos=i%arr.length;return arr[pos]},dump:function(){var EOL="\n",indentChar="  ",indentTimes=0,out="",args=Array.prototype.slice.call(arguments),indent=function(times){var ind="";while(times>0){times--;ind+=indentChar}return ind},displayVar=function(variable){out+=indent(indentTimes);if(typeof variable==="object"){dumpVar(variable)}else if(typeof variable==="function"){out+="function()"+EOL}else if(typeof variable==="string"){out+="string("+variable.length+') "'+variable+'"'+EOL}else if(typeof variable==="number"){out+="number("+variable+")"+EOL}else if(typeof variable==="boolean"){out+="bool("+variable+")"+EOL}},dumpVar=function(variable){var i;if(variable===null){out+="NULL"+EOL}else if(variable===undefined){out+="undefined"+EOL}else if(typeof variable==="object"){out+=indent(indentTimes)+typeof variable;indentTimes++;out+="("+function(obj){var size=0,key;for(key in obj){if(obj.hasOwnProperty(key)){size++}}return size}(variable)+") {"+EOL;for(i in variable){out+=indent(indentTimes)+"["+i+"]=> "+EOL;displayVar(variable[i])}indentTimes--;out+=indent(indentTimes)+"}"+EOL}else{displayVar(variable)}};if(args.length==0)args.push(this.context);Twig.forEach(args,function(variable){dumpVar(variable)});return out},date:function(date,time){var dateObj;if(date===undefined){dateObj=new Date}else if(Twig.lib.is("Date",date)){dateObj=date}else if(Twig.lib.is("String",date)){if(date.match(/^[0-9]+$/)){dateObj=new Date(date*1e3)}else{dateObj=new Date(Twig.lib.strtotime(date)*1e3)}}else if(Twig.lib.is("Number",date)){dateObj=new Date(date*1e3)}else{throw new Twig.Error("Unable to parse date "+date)}return dateObj},block:function(block){if(this.originalBlockTokens[block]){return Twig.logic.parse.apply(this,[this.originalBlockTokens[block],this.context]).output}else{return this.blocks[block]}},parent:function(){return Twig.placeholders.parent},attribute:function(object,method,params){if(Twig.lib.is("Object",object)){if(object.hasOwnProperty(method)){if(typeof object[method]==="function"){return object[method].apply(undefined,params)}else{return object[method]}}}return object[method]||undefined},max:function(values){if(Twig.lib.is("Object",values)){delete values["_keys"];return Twig.lib.max(values)}return Twig.lib.max.apply(null,arguments)},min:function(values){if(Twig.lib.is("Object",values)){delete values["_keys"];return Twig.lib.min(values)}return Twig.lib.min.apply(null,arguments)},template_from_string:function(template){if(template===undefined){template=""}return Twig.Templates.parsers.twig({options:this.options,data:template})},random:function(value){var LIMIT_INT31=2147483648;function getRandomNumber(n){var random=Math.floor(Math.random()*LIMIT_INT31);var limits=[0,n];var min=Math.min.apply(null,limits),max=Math.max.apply(null,limits);return min+Math.floor((max-min+1)*random/LIMIT_INT31)}if(Twig.lib.is("Number",value)){return getRandomNumber(value)}if(Twig.lib.is("String",value)){return value.charAt(getRandomNumber(value.length-1))}if(Twig.lib.is("Array",value)){return value[getRandomNumber(value.length-1)]}if(Twig.lib.is("Object",value)){var keys=Object.keys(value);return value[keys[getRandomNumber(keys.length-1)]]}return getRandomNumber(LIMIT_INT31-1)},source:function(name,ignore_missing){var templateSource;var templateFound=false;var isNodeEnvironment=typeof module!=="undefined"&&typeof module.exports!=="undefined"&&typeof window==="undefined";var loader;var path;if(isNodeEnvironment){loader="fs";path=__dirname+"/"+name}else{loader="ajax";path=name}var params={id:name,path:path,method:loader,parser:"source",async:false,fetchTemplateSource:true};if(typeof ignore_missing==="undefined"){ignore_missing=false}try{templateSource=Twig.Templates.loadRemote(name,params);if(typeof templateSource==="undefined"||templateSource===null){templateSource=""}else{templateFound=true}}catch(e){Twig.log.debug("Twig.functions.source: ","Problem loading template  ",e)}if(!templateFound&&!ignore_missing){return TEMPLATE_NOT_FOUND_MESSAGE.replace("{name}",name)}else{return templateSource}}};Twig._function=function(_function,value,params){if(!Twig.functions[_function]){throw"Unable to find function "+_function}return Twig.functions[_function](value,params)};Twig._function.extend=function(_function,definition){Twig.functions[_function]=definition};return Twig}(Twig||{});var Twig=function(Twig){"use strict";Twig.path={};Twig.path.parsePath=function(template,file){var namespaces=null,file=file||"";if(typeof template==="object"&&typeof template.options==="object"){namespaces=template.options.namespaces}if(typeof namespaces==="object"&&file.indexOf("::")>0||file.indexOf("@")>=0){for(var k in namespaces){if(namespaces.hasOwnProperty(k)){file=file.replace(k+"::",namespaces[k]);file=file.replace("@"+k,namespaces[k])}}return file}return Twig.path.relativePath(template,file)};Twig.path.relativePath=function(template,file){var base,base_path,sep_chr="/",new_path=[],file=file||"",val;if(template.url){if(typeof template.base!=="undefined"){base=template.base+(template.base.charAt(template.base.length-1)==="/"?"":"/")}else{base=template.url}}else if(template.path){var path=__webpack_require__(22),sep=path.sep||sep_chr,relative=new RegExp("^\\.{1,2}"+sep.replace("\\","\\\\"));file=file.replace(/\//g,sep);if(template.base!==undefined&&file.match(relative)==null){file=file.replace(template.base,"");base=template.base+sep}else{base=path.normalize(template.path)}base=base.replace(sep+sep,sep);sep_chr=sep}else if((template.name||template.id)&&template.method&&template.method!=="fs"&&template.method!=="ajax"){base=template.base||template.name||template.id}else{throw new Twig.Error("Cannot extend an inline template.")}base_path=base.split(sep_chr);base_path.pop();base_path=base_path.concat(file.split(sep_chr));while(base_path.length>0){val=base_path.shift();if(val=="."){}else if(val==".."&&new_path.length>0&&new_path[new_path.length-1]!=".."){new_path.pop()}else{new_path.push(val)}}return new_path.join(sep_chr)};return Twig}(Twig||{});var Twig=function(Twig){"use strict";Twig.tests={empty:function(value){if(value===null||value===undefined)return true;if(typeof value==="number")return false;if(value.length&&value.length>0)return false;for(var key in value){if(value.hasOwnProperty(key))return false}return true},odd:function(value){return value%2===1},even:function(value){return value%2===0},divisibleby:function(value,params){return value%params[0]===0},defined:function(value){return value!==undefined},none:function(value){return value===null},"null":function(value){return this.none(value)},sameas:function(value,params){return value===params[0]},iterable:function(value){return value&&(Twig.lib.is("Array",value)||Twig.lib.is("Object",value))}};Twig.test=function(test,value,params){if(!Twig.tests[test]){throw"Test "+test+" is not defined."}return Twig.tests[test](value,params)};Twig.test.extend=function(test,definition){Twig.tests[test]=definition};return Twig}(Twig||{});var Twig=function(Twig){"use strict";Twig.exports={VERSION:Twig.VERSION};Twig.exports.twig=function twig(params){"use strict";var id=params.id,options={strict_variables:params.strict_variables||false,autoescape:params.autoescape!=null&&params.autoescape||false,allowInlineIncludes:params.allowInlineIncludes||false,rethrow:params.rethrow||false,namespaces:params.namespaces};if(Twig.cache&&id){Twig.validateId(id)}if(params.debug!==undefined){Twig.debug=params.debug}if(params.trace!==undefined){Twig.trace=params.trace}if(params.data!==undefined){return Twig.Templates.parsers.twig({data:params.data,path:params.hasOwnProperty("path")?params.path:undefined,module:params.module,id:id,options:options})}else if(params.ref!==undefined){if(params.id!==undefined){throw new Twig.Error("Both ref and id cannot be set on a twig.js template.");
+}return Twig.Templates.load(params.ref)}else if(params.method!==undefined){if(!Twig.Templates.isRegisteredLoader(params.method)){throw new Twig.Error('Loader for "'+params.method+'" is not defined.')}return Twig.Templates.loadRemote(params.name||params.href||params.path||id||undefined,{id:id,method:params.method,parser:params.parser||"twig",base:params.base,module:params.module,precompiled:params.precompiled,async:params.async,options:options},params.load,params.error)}else if(params.href!==undefined){return Twig.Templates.loadRemote(params.href,{id:id,method:"ajax",parser:params.parser||"twig",base:params.base,module:params.module,precompiled:params.precompiled,async:params.async,options:options},params.load,params.error)}else if(params.path!==undefined){return Twig.Templates.loadRemote(params.path,{id:id,method:"fs",parser:params.parser||"twig",base:params.base,module:params.module,precompiled:params.precompiled,async:params.async,options:options},params.load,params.error)}};Twig.exports.extendFilter=function(filter,definition){Twig.filter.extend(filter,definition)};Twig.exports.extendFunction=function(fn,definition){Twig._function.extend(fn,definition)};Twig.exports.extendTest=function(test,definition){Twig.test.extend(test,definition)};Twig.exports.extendTag=function(definition){Twig.logic.extend(definition)};Twig.exports.extend=function(fn){fn(Twig)};Twig.exports.compile=function(markup,options){var id=options.filename,path=options.filename,template;template=new Twig.Template({data:markup,path:path,id:id,options:options.settings["twig options"]});return function(context){return template.render(context)}};Twig.exports.renderFile=function(path,options,fn){if(typeof options==="function"){fn=options;options={}}options=options||{};var settings=options.settings||{};var params={path:path,base:settings.views,load:function(template){fn(null,template.render(options))}};var view_options=settings["twig options"];if(view_options){for(var option in view_options){if(view_options.hasOwnProperty(option)){params[option]=view_options[option]}}}Twig.exports.twig(params)};Twig.exports.__express=Twig.exports.renderFile;Twig.exports.cache=function(cache){Twig.cache=cache};Twig.exports.path=Twig.path;return Twig}(Twig||{});var Twig=function(Twig){Twig.compiler={module:{}};Twig.compiler.compile=function(template,options){var tokens=JSON.stringify(template.tokens),id=template.id,output;if(options.module){if(Twig.compiler.module[options.module]===undefined){throw new Twig.Error("Unable to find module type "+options.module)}output=Twig.compiler.module[options.module](id,tokens,options.twig)}else{output=Twig.compiler.wrap(id,tokens)}return output};Twig.compiler.module={amd:function(id,tokens,pathToTwig){return'define(["'+pathToTwig+'"], function (Twig) {\n	var twig, templates;\ntwig = Twig.twig;\ntemplates = '+Twig.compiler.wrap(id,tokens)+"\n	return templates;\n});"},node:function(id,tokens){return'var twig = require("twig").twig;\n'+"exports.template = "+Twig.compiler.wrap(id,tokens)},cjs2:function(id,tokens,pathToTwig){return'module.declare([{ twig: "'+pathToTwig+'" }], function (require, exports, module) {\n'+'	var twig = require("twig").twig;\n'+"	exports.template = "+Twig.compiler.wrap(id,tokens)+"\n});"}};Twig.compiler.wrap=function(id,tokens){return'twig({id:"'+id.replace('"','\\"')+'", data:'+tokens+", precompiled: true});\n"};return Twig}(Twig||{});if(typeof module!=="undefined"&&module.declare){module.declare([],function(require,exports,module){for(key in Twig.exports){if(Twig.exports.hasOwnProperty(key)){exports[key]=Twig.exports[key]}}})}else if(true){!(__WEBPACK_AMD_DEFINE_RESULT__ = function(){return Twig.exports}.call(exports, __webpack_require__, exports, module),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__))}else if(typeof module!=="undefined"&&module.exports){module.exports=Twig.exports}else{window.twig=Twig.exports.twig;window.Twig=Twig.exports}
+//# sourceMappingURL=twig.min.js.map
+
+/* WEBPACK VAR INJECTION */}.call(exports, "/", __webpack_require__(12)(module)))
+
+/***/ }),
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -3744,10 +3772,10 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3860,7 +3888,7 @@ function configureAnalytics() {
 }
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3882,7 +3910,7 @@ var GIF_MODAL = exports.GIF_MODAL = 'GIF_MODAL';
 var YT_MODAL = exports.YT_MODAL = 'YT_MODAL';
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3890,17 +3918,17 @@ var YT_MODAL = exports.YT_MODAL = 'YT_MODAL';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _zepto = __webpack_require__(1);
+var _zepto = __webpack_require__(6);
 
 var _zepto2 = _interopRequireDefault(_zepto);
 
-var _is_js = __webpack_require__(25);
+var _is_js = __webpack_require__(26);
 
 var _is_js2 = _interopRequireDefault(_is_js);
 
-var _router = __webpack_require__(26);
+var _router = __webpack_require__(27);
 
-var _App = __webpack_require__(53);
+var _App = __webpack_require__(54);
 
 var _App2 = _interopRequireDefault(_App);
 
@@ -3958,7 +3986,7 @@ var entry = module.exports = new Entry();
 });
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -4869,10 +4897,10 @@ var entry = module.exports = new Entry();
     return is;
 }));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4884,7 +4912,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.initRouter = initRouter;
 exports.configureRoute = configureRoute;
 
-var _page = __webpack_require__(27);
+var _page = __webpack_require__(28);
 
 var _page2 = _interopRequireDefault(_page);
 
@@ -4892,13 +4920,13 @@ var _store = __webpack_require__(0);
 
 var _store2 = _interopRequireDefault(_store);
 
-var _routes = __webpack_require__(52);
+var _routes = __webpack_require__(53);
 
 var _routes2 = _interopRequireDefault(_routes);
 
-var _actions = __webpack_require__(18);
+var _actions = __webpack_require__(20);
 
-var _locations = __webpack_require__(4);
+var _locations = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -4960,12 +4988,6 @@ var routesFn = {
 	// 	// console.log('ctx.params', ctx.params);
 	// 	store.dispatch(navigate(PARADE_EXPERIENCE_HOTSPOT, ctx.params));
 	// },
-	// REDIRECT: (ctx) => {
-	// 	// set current city
-	// 	// store.dispatch(setCurrentCity(ctx.params.id));
-	// 	// console.log('ctx.params', ctx.params);
-	// 	page(ctx.params.redirect);
-	// },
 	NOT_FOUND: function NOT_FOUND(ctx) {
 		console.log('404!');
 		_store2.default.dispatch((0, _actions.navigate)(_locations.NOT_FOUND, ctx.params));
@@ -5026,7 +5048,7 @@ function configureRoute() {
 }
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5038,7 +5060,7 @@ function configureRoute() {
    * Module dependencies.
    */
 
-  var pathtoRegexp = __webpack_require__(28);
+  var pathtoRegexp = __webpack_require__(29);
 
   /**
    * Module exports.
@@ -5653,13 +5675,13 @@ function configureRoute() {
 
   page.sameOrigin = sameOrigin;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isarray = __webpack_require__(29)
+var isarray = __webpack_require__(30)
 
 /**
  * Expose `pathToRegexp`.
@@ -6052,7 +6074,7 @@ function pathToRegexp (path, keys, options) {
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports) {
 
 module.exports = Array.isArray || function (arr) {
@@ -6061,13 +6083,13 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRawTag_js__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__objectToString_js__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRawTag_js__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__objectToString_js__ = __webpack_require__(35);
 
 
 
@@ -6099,11 +6121,11 @@ function baseGetTag(value) {
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__ = __webpack_require__(33);
 
 
 /** Detect free variable `self`. */
@@ -6116,7 +6138,7 @@ var root = __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__["a" /* default */] || fr
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6125,14 +6147,14 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 /* harmony default export */ __webpack_exports__["a"] = (freeGlobal);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(11);
 
 
 /** Used for built-in method references. */
@@ -6182,7 +6204,7 @@ function getRawTag(value) {
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6211,11 +6233,11 @@ function objectToString(value) {
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__overArg_js__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__overArg_js__ = __webpack_require__(37);
 
 
 /** Built-in value references. */
@@ -6225,7 +6247,7 @@ var getPrototype = Object(__WEBPACK_IMPORTED_MODULE_0__overArg_js__["a" /* defau
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6247,7 +6269,7 @@ function overArg(func, transform) {
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6283,14 +6305,14 @@ function isObjectLike(value) {
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(39);
+module.exports = __webpack_require__(40);
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6300,7 +6322,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ponyfill = __webpack_require__(40);
+var _ponyfill = __webpack_require__(41);
 
 var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -6323,10 +6345,10 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(10)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(12)(module)))
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6355,14 +6377,14 @@ function symbolObservablePonyfill(root) {
 };
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = combineReducers;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_es_isPlainObject__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_warning__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_es_isPlainObject__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_warning__ = __webpack_require__(13);
 
 
 
@@ -6495,7 +6517,7 @@ function combineReducers(reducers) {
 }
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6549,12 +6571,12 @@ function bindActionCreators(actionCreators, dispatch) {
 }
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = applyMiddleware;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__compose__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__compose__ = __webpack_require__(14);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 
@@ -6605,7 +6627,7 @@ function applyMiddleware() {
 }
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6615,11 +6637,11 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _redux = __webpack_require__(6);
+var _redux = __webpack_require__(8);
 
-var _reduxResponsive = __webpack_require__(3);
+var _reduxResponsive = __webpack_require__(2);
 
-var _reducers = __webpack_require__(51);
+var _reducers = __webpack_require__(52);
 
 var _reducers2 = _interopRequireDefault(_reducers);
 
@@ -6677,7 +6699,7 @@ var rootReducer = (0, _redux.combineReducers)({
 exports.default = rootReducer;
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6686,9 +6708,9 @@ exports.default = rootReducer;
 /* unused harmony export getLessThan */
 /* unused harmony export getIs */
 /* unused harmony export getGreaterThan */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mediaquery__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mediaquery__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mediaquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_mediaquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__actions_types_CALCULATE_RESPONSIVE_STATE__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__actions_types_CALCULATE_RESPONSIVE_STATE__ = __webpack_require__(16);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 // third party imports
@@ -6934,7 +6956,7 @@ function getOrientation(matchMedia) {
 });
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var MQ = {
@@ -7025,11 +7047,11 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__handlers__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__handlers__ = __webpack_require__(49);
 // local imports
 
 
@@ -7064,14 +7086,14 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 });
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mediaquery__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mediaquery__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_mediaquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_mediaquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__actions_creators__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getBreakpoints__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__actions_creators__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getBreakpoints__ = __webpack_require__(51);
 // see: https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Testing_media_queries
 
 // external imports
@@ -7123,11 +7145,11 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 });
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__types__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__types__ = __webpack_require__(18);
 // action type
 
 
@@ -7160,7 +7182,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 });
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7264,7 +7286,7 @@ function getBreakpoints(store) {
 /* harmony default export */ __webpack_exports__["a"] = (getBreakpoints);
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7275,7 +7297,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.app = undefined;
 
-var _constants = __webpack_require__(17);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _constants = __webpack_require__(19);
 
 // import {
 // 	LANGS,
@@ -7284,7 +7308,10 @@ var _constants = __webpack_require__(17);
 var InitialState = {
 	routes: [],
 	params: null,
-	location: null
+	location: null,
+	isAnimating: false,
+	page: null,
+	oldPage: null
 };
 
 // const initialState = new InitialState();
@@ -7317,22 +7344,6 @@ var app = exports.app = function app() {
 
 		// 	return state.set('meta', stateMeta);
 		// }
-		// case SET_UI: {
-		// 	return state.set('ui', fromJS(action.data));
-		// }
-		// case SET_HASH: {
-		// 	return state.set('hash', action.hash);
-		// }
-		// case SET_QUERY: {
-		// 	return state.set('query', fromJS(action.query));
-		// }
-		// case APP_LOADED: {
-		// 	return state.set('appLoaded', action.appLoaded);
-		// }
-		// case CHANGE_LANG: {
-		// 	if (LANGS.indexOf(action.lang) > -1) return state.set('lang', action.lang);
-		// 	return state;
-		// }
 
 		case _constants.SET_ROUTES:
 			{
@@ -7347,7 +7358,24 @@ var app = exports.app = function app() {
 					location: action.location
 				});
 			}
-
+		case _constants.SET_ANIMATING:
+			{
+				return _extends({}, state, {
+					isAnimating: action.isAnimating
+				});
+			}
+		case _constants.SET_PAGE:
+			{
+				return _extends({}, state, {
+					page: action.page
+				});
+			}
+		case _constants.SET_OLDPAGE:
+			{
+				return _extends({}, state, {
+					oldPage: action.oldPage
+				});
+			}
 		default:
 			{
 				return state;
@@ -7358,13 +7386,13 @@ var app = exports.app = function app() {
 exports.default = app;
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports) {
 
-module.exports = {"404":{"id":"404","url":"/404","jsonUrl":"../public/assets/jsons/404.json"},"index":{"id":"index","url":"/","template":"index","json":"index.json"},"about":{"id":"about","url":"/about","template":"about","json":"about.json"}}
+module.exports = {"index":{"id":"index","url":"/","template":"index","json":"index.json"},"about":{"id":"about","url":"/about","template":"about","json":"about.json"},"error":{"id":"error","url":"/error","template":"error","jsonUrl":"error.json"}}
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7381,7 +7409,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 // import ParadeDetailContainer from 'containers/parade-detail/ParadeDetail';
 // import ExperiencePageContainer from 'containers/experience-page/ExperiencePage';
-// import NotFoundContainer from 'containers/not-found/NotFound';
+
 
 // Constants
 
@@ -7395,23 +7423,31 @@ var _createClass = function () { function defineProperties(target, props) { for 
 // import {showModal} from 'containers/modal/actions';
 
 
-var _Layout = __webpack_require__(54);
+var _Layout = __webpack_require__(55);
 
 var _Layout2 = _interopRequireDefault(_Layout);
 
-var _Homepage = __webpack_require__(76);
+var _Homepage = __webpack_require__(73);
 
 var _Homepage2 = _interopRequireDefault(_Homepage);
 
-var _locations = __webpack_require__(4);
+var _About = __webpack_require__(85);
 
-var _actions = __webpack_require__(18);
+var _About2 = _interopRequireDefault(_About);
+
+var _NotFound = __webpack_require__(81);
+
+var _NotFound2 = _interopRequireDefault(_NotFound);
+
+var _locations = __webpack_require__(3);
+
+var _actions = __webpack_require__(20);
 
 var _store = __webpack_require__(0);
 
 var _store2 = _interopRequireDefault(_store);
 
-var _reduxWatch = __webpack_require__(73);
+var _reduxWatch = __webpack_require__(79);
 
 var _reduxWatch2 = _interopRequireDefault(_reduxWatch);
 
@@ -7459,14 +7495,14 @@ var App = function () {
 			// 	// admin.name changed from JP to JOE
 			// }));
 		}
-	}, {
-		key: 'onIdChanged',
-		value: function onIdChanged(id, prevId) {
-			var location = this.getState().get('app').get('location');
-			if (id !== prevId && id && prevId && this.location === location) {
-				this.routing(location, true);
-			}
-		}
+
+		// onIdChanged(id, prevId) {
+		// 	const location = this.getState().get('app').get('location');
+		// 	if (id !== prevId && id && prevId && this.location === location) {
+		// 		this.routing(location, true);
+		// 	}
+		// }
+
 	}, {
 		key: 'onLocationChanged',
 		value: function onLocationChanged(location, prevLocation) {
@@ -7487,29 +7523,48 @@ var App = function () {
 
 			var fromSamePage = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-			var page = null;
+			var Page = null;
+			console.log('location', location);
 
 			switch (location) {
 				case _locations.HOMEPAGE:
-					page = new _Homepage2.default();break;
+					Page = _Homepage2.default;break;
 				case _locations.ABOUT:
-					page = new _Homepage2.default();break;
+					Page = _About2.default;break;
 				case _locations.NOT_FOUND:
-					page = new NotFoundContainer();break;
+					Page = _NotFound2.default;break;
 				default:
-					page = new AbstractPageComponent();
+					Page = AbstractPageComponent;
 			}
 
-			if (page === null) {
+			if (Page === null) {
 				console.error('Error: page is null');
 				return;
 			}
+			_store2.default.dispatch((0, _actions.setAnimating)(true));
 
-			this.oldPage = this.page;
-			this.page = page;
+			// First Render from the server
+			var el = null;
+			if (this.oldPage === null && this.page === null) {
+				el = document.getElementsByClassName('page-wrapper')[0];
+			}
+			console.log('el', el);
+
+			if (this.page) {
+
+				this.oldPage = this.page;
+				_store2.default.dispatch((0, _actions.setOldPage)(this.oldPage));
+			}
+
+			// Define first page and pass el if the page el is allready in the dom
+			this.page = new Page({
+				el: el ? el : null
+			});
+
+			_store2.default.dispatch((0, _actions.setPage)(this.page));
 
 			// Init the next page now
-			console.log('INIT PAGE', this.page);
+
 			this.page.init().then(function () {
 
 				console.log('ON PAGE INIT');
@@ -7524,6 +7579,7 @@ var App = function () {
 				if (_this2.oldPage) {
 					console.log('HIDE OLD PAGE', _this2.oldPage);
 					_this2.oldPage.hide().then(function () {
+						console.log('OLD PAGE HIDDEN');
 						_this2.oldPage.dispose();
 						_this2.oldPage = null;
 					});
@@ -7532,6 +7588,9 @@ var App = function () {
 				// Show next
 				_this2.page.show().then(function () {
 					// if (!this.getState().get('app').get('appLoaded')) this.dispatch(setAppLoaded(true));
+					console.log('CURRENT PAGE SHOW');
+
+					_store2.default.dispatch((0, _actions.setAnimating)(false));
 
 					// at this point, dispose
 					if (_this2.oldPage) {
@@ -7540,15 +7599,6 @@ var App = function () {
 						_this2.oldPage = null;
 					}
 				});
-
-				// If there was data already, we are not waiting for a loader screen to finish
-				// we show it now!
-
-				// if (hasData) {
-				//     this.page.show().then(() => {
-				//         if (!this.getState().get('app').get('appLoaded')) this.dispatch(setAppLoaded(true));
-				//     });
-				// }
 			});
 		}
 	}]);
@@ -7559,7 +7609,7 @@ var App = function () {
 exports.default = App;
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7571,17 +7621,17 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _container = __webpack_require__(19);
+var _container = __webpack_require__(4);
 
 var _container2 = _interopRequireDefault(_container);
 
-var _reduxResponsive = __webpack_require__(3);
+var _reduxResponsive = __webpack_require__(2);
 
 var _store = __webpack_require__(0);
 
 var _store2 = _interopRequireDefault(_store);
 
-var _Layout = __webpack_require__(55);
+var _Layout = __webpack_require__(56);
 
 var _Layout2 = _interopRequireDefault(_Layout);
 
@@ -7601,8 +7651,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // Actions
 
 
-var LayoutContainer = function (_AbstractContainers) {
-	_inherits(LayoutContainer, _AbstractContainers);
+var LayoutContainer = function (_AbstractContainer) {
+	_inherits(LayoutContainer, _AbstractContainer);
 
 	function LayoutContainer() {
 		_classCallCheck(this, LayoutContainer);
@@ -7659,7 +7709,7 @@ var LayoutContainer = function (_AbstractContainers) {
 exports.default = LayoutContainer;
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7673,19 +7723,17 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _DOMcomponent = __webpack_require__(20);
+var _DOMcomponent = __webpack_require__(5);
 
 var _DOMcomponent2 = _interopRequireDefault(_DOMcomponent);
 
-var _Header = __webpack_require__(57);
+var _Header = __webpack_require__(58);
 
 var _Header2 = _interopRequireDefault(_Header);
 
-var _zepto = __webpack_require__(1);
+var _zepto = __webpack_require__(6);
 
 var _zepto2 = _interopRequireDefault(_zepto);
-
-var _analytics = __webpack_require__(22);
 
 var _misc = __webpack_require__(69);
 
@@ -7717,6 +7765,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // import {NOT_FOUND, PARADE_DETAIL, PARADE_EXPERIENCE_HOTSPOT} from 'constants/locations';
 
 // Utils
+// import {trackPage} from 'utils/analytics';
 
 
 // import Detectizr from 'detectizr';
@@ -7783,7 +7832,9 @@ var Layout = function (_DOMComponent) {
 
 			var aInitPromises = [];
 
-			this.header = new _Header2.default();
+			this.header = new _Header2.default({
+				el: document.getElementById('main-nav')
+			});
 			aInitPromises.push(this.header.init());
 
 			// this.sidebar = new Sidebar();
@@ -7934,7 +7985,7 @@ var Layout = function (_DOMComponent) {
 exports.default = Layout;
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscore.js 1.8.3
@@ -9489,7 +9540,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscor
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9501,11 +9552,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _container = __webpack_require__(19);
+var _container = __webpack_require__(4);
 
 var _container2 = _interopRequireDefault(_container);
 
-var _Header = __webpack_require__(58);
+var _Header = __webpack_require__(59);
 
 var _Header2 = _interopRequireDefault(_Header);
 
@@ -9513,13 +9564,13 @@ var _store = __webpack_require__(0);
 
 var _store2 = _interopRequireDefault(_store);
 
-var _locations = __webpack_require__(4);
+var _locations = __webpack_require__(3);
 
 var _selectors = __webpack_require__(67);
 
 var _actions = __webpack_require__(68);
 
-var _constants = __webpack_require__(23);
+var _constants = __webpack_require__(24);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9532,10 +9583,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var HeaderContainer = function (_AbstractContainer) {
 	_inherits(HeaderContainer, _AbstractContainer);
 
-	function HeaderContainer() {
+	function HeaderContainer(options) {
 		_classCallCheck(this, HeaderContainer);
 
-		var _this = _possibleConstructorReturn(this, (HeaderContainer.__proto__ || Object.getPrototypeOf(HeaderContainer)).call(this));
+		var _this = _possibleConstructorReturn(this, (HeaderContainer.__proto__ || Object.getPrototypeOf(HeaderContainer)).call(this, options));
 
 		_this.Component = _Header2.default;
 		return _this;
@@ -9573,7 +9624,7 @@ var HeaderContainer = function (_AbstractContainer) {
 exports.default = HeaderContainer;
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9587,19 +9638,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _DOMcomponent = __webpack_require__(20);
+var _DOMcomponent = __webpack_require__(5);
 
 var _DOMcomponent2 = _interopRequireDefault(_DOMcomponent);
-
-var _header = __webpack_require__(59);
-
-var _header2 = _interopRequireDefault(_header);
 
 var _actions = __webpack_require__(62);
 
 var _cities = __webpack_require__(64);
 
-var _analytics = __webpack_require__(22);
+var _analytics = __webpack_require__(23);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9608,6 +9655,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+// import Tpl from './header.twig';
 
 // import {toggleSidebar} from 'containers/sidebar/actions';
 
@@ -9621,15 +9669,15 @@ var Header = function (_AbstractDOMComponent) {
 	function Header(props) {
 		_classCallCheck(this, Header);
 
-		var _this = _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this, props));
-
-		_this.template = _header2.default;
+		// this.template = Tpl;
 
 		// this.watchers = {
 		//     'header.isShown': ::this.render,
 		//     'header.isHamburgerActive': ::this.render,
 		//     'header.isLogoShown': ::this.render
 		// };
+
+		var _this = _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this, props));
 
 		_this.events = {
 			'click .btn-menu': function clickBtnMenu() {
@@ -9660,7 +9708,7 @@ var Header = function (_AbstractDOMComponent) {
 		value: function onDOMInit() {
 			console.log('HEADER ONDOMINIT');
 
-			document.getElementById('header-container').appendChild(this.el);
+			// document.getElementById('header-container').appendChild(this.el);
 			this.$menuEl = document.getElementById('btn-menu');
 			this.$navgiationHeader = this.$el.find('.navigation-header');
 			_get(Header.prototype.__proto__ || Object.getPrototypeOf(Header.prototype), 'onDOMInit', this).call(this);
@@ -9725,35 +9773,7 @@ var Header = function (_AbstractDOMComponent) {
 exports.default = Header;
 
 /***/ }),
-/* 59 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var twig = __webpack_require__(60).twig,
-    template = twig({id:"5ce199c92d044310d937b417a0bee89b05e699fe1c9129b6a02896efaa1f4c83dfffc5e01d6bf7ecd9dcb3f1e5daa1ddc0710608c9f57068472e5d9e842a2b8d", data:[{"type":"raw","value":"<header class=\"o-grid\">\n\t<div class=\"row\">\n\t\t<div class=\"btn-menu\" id=\"btn-menu\">\n\t\t\t<span></span>\n\t\t</div>\n\n\t\t<a href=\""},{"type":"output","stack":[{"type":"Twig.expression.type.variable","value":"home","match":["home"]},{"type":"Twig.expression.type.key.period","key":"url"}]},{"type":"raw","value":"\" title=\"Google\" class=\"logo main-logo\">"},{"type":"output","stack":[{"type":"Twig.expression.type.variable","value":"SVG","match":["SVG"]},{"type":"Twig.expression.type.key.period","key":"google_logo"},{"type":"Twig.expression.type.filter","value":"raw","match":["|raw","raw"]}]},{"type":"raw","value":"</a>\n\n\t\t<ul class=\"navigation-header\">\n\t\t\t<li class=\"navigation-item home\"><a href=\""},{"type":"output","stack":[{"type":"Twig.expression.type.variable","value":"home","match":["home"]},{"type":"Twig.expression.type.key.period","key":"url"}]},{"type":"raw","value":"\" class=\"home --f-regular14 --c-white\">"},{"type":"output","stack":[{"type":"Twig.expression.type.variable","value":"ui","match":["ui"]},{"type":"Twig.expression.type.key.period","key":"label_menu_home"}]},{"type":"raw","value":"</a></li>\n\t\t\t<li class=\"navigation-item\"><button class=\"about --f-regular14 --c-white\">"},{"type":"output","stack":[{"type":"Twig.expression.type.variable","value":"ui","match":["ui"]},{"type":"Twig.expression.type.key.period","key":"label_menu_about"}]},{"type":"raw","value":"</button></li>\n\t\t</ul>\n\t</div>\n</header>\n"}], allowInlineIncludes: true, rethrow: true});
-
-module.exports = function(context) { return template.render(context); }
-
-/***/ }),
-/* 60 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(__dirname, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
- * Twig.js 0.8.9
- *
- * @copyright 2011-2015 John Roepke and the Twig.js Contributors
- * @license   Available under the BSD 2-Clause License
- * @link      https://github.com/justjohn/twig.js
- */
-var Twig=function(Twig){Twig.VERSION="0.8.9";return Twig}(Twig||{});var Twig=function(Twig){"use strict";Twig.trace=false;Twig.debug=false;Twig.cache=true;Twig.placeholders={parent:"{{|PARENT|}}"};Twig.indexOf=function(arr,searchElement){if(Array.prototype.hasOwnProperty("indexOf")){return arr.indexOf(searchElement)}if(arr===void 0||arr===null){throw new TypeError}var t=Object(arr);var len=t.length>>>0;if(len===0){return-1}var n=0;if(arguments.length>0){n=Number(arguments[1]);if(n!==n){n=0}else if(n!==0&&n!==Infinity&&n!==-Infinity){n=(n>0||-1)*Math.floor(Math.abs(n))}}if(n>=len){return-1}var k=n>=0?n:Math.max(len-Math.abs(n),0);for(;k<len;k++){if(k in t&&t[k]===searchElement){return k}}if(arr==searchElement){return 0}return-1};Twig.forEach=function(arr,callback,thisArg){if(Array.prototype.forEach){return arr.forEach(callback,thisArg)}var T,k;if(arr==null){throw new TypeError(" this is null or not defined")}var O=Object(arr);var len=O.length>>>0;if({}.toString.call(callback)!="[object Function]"){throw new TypeError(callback+" is not a function")}if(thisArg){T=thisArg}k=0;while(k<len){var kValue;if(k in O){kValue=O[k];callback.call(T,kValue,k,O)}k++}};Twig.merge=function(target,source,onlyChanged){Twig.forEach(Object.keys(source),function(key){if(onlyChanged&&!(key in target)){return}target[key]=source[key]});return target};Twig.Error=function(message){this.message=message;this.name="TwigException";this.type="TwigException"};Twig.Error.prototype.toString=function(){var output=this.name+": "+this.message;return output};Twig.log={trace:function(){if(Twig.trace&&console){console.log(Array.prototype.slice.call(arguments))}},debug:function(){if(Twig.debug&&console){console.log(Array.prototype.slice.call(arguments))}}};if(typeof console!=="undefined"){if(typeof console.error!=="undefined"){Twig.log.error=function(){console.error.apply(console,arguments)}}else if(typeof console.log!=="undefined"){Twig.log.error=function(){console.log.apply(console,arguments)}}}else{Twig.log.error=function(){}}Twig.ChildContext=function(context){var ChildContext=function ChildContext(){};ChildContext.prototype=context;return new ChildContext};Twig.token={};Twig.token.type={output:"output",logic:"logic",comment:"comment",raw:"raw",output_whitespace_pre:"output_whitespace_pre",output_whitespace_post:"output_whitespace_post",output_whitespace_both:"output_whitespace_both",logic_whitespace_pre:"logic_whitespace_pre",logic_whitespace_post:"logic_whitespace_post",logic_whitespace_both:"logic_whitespace_both"};Twig.token.definitions=[{type:Twig.token.type.raw,open:"{% raw %}",close:"{% endraw %}"},{type:Twig.token.type.raw,open:"{% verbatim %}",close:"{% endverbatim %}"},{type:Twig.token.type.output_whitespace_pre,open:"{{-",close:"}}"},{type:Twig.token.type.output_whitespace_post,open:"{{",close:"-}}"},{type:Twig.token.type.output_whitespace_both,open:"{{-",close:"-}}"},{type:Twig.token.type.logic_whitespace_pre,open:"{%-",close:"%}"},{type:Twig.token.type.logic_whitespace_post,open:"{%",close:"-%}"},{type:Twig.token.type.logic_whitespace_both,open:"{%-",close:"-%}"},{type:Twig.token.type.output,open:"{{",close:"}}"},{type:Twig.token.type.logic,open:"{%",close:"%}"},{type:Twig.token.type.comment,open:"{#",close:"#}"}];Twig.token.strings=['"',"'"];Twig.token.findStart=function(template){var output={position:null,close_position:null,def:null},i,token_template,first_key_position,close_key_position;for(i=0;i<Twig.token.definitions.length;i++){token_template=Twig.token.definitions[i];first_key_position=template.indexOf(token_template.open);close_key_position=template.indexOf(token_template.close);Twig.log.trace("Twig.token.findStart: ","Searching for ",token_template.open," found at ",first_key_position);if(first_key_position>=0){if(token_template.open.length!==token_template.close.length){if(close_key_position<0){continue}}}if(first_key_position>=0&&(output.position===null||first_key_position<output.position)){output.position=first_key_position;output.def=token_template;output.close_position=close_key_position}else if(first_key_position>=0&&output.position!==null&&first_key_position===output.position){if(token_template.open.length>output.def.open.length){output.position=first_key_position;output.def=token_template;output.close_position=close_key_position}else if(token_template.open.length===output.def.open.length){if(token_template.close.length>output.def.close.length){if(close_key_position>=0&&close_key_position<output.close_position){output.position=first_key_position;output.def=token_template;output.close_position=close_key_position}}else if(close_key_position>=0&&close_key_position<output.close_position){output.position=first_key_position;output.def=token_template;output.close_position=close_key_position}}}}delete output["close_position"];return output};Twig.token.findEnd=function(template,token_def,start){var end=null,found=false,offset=0,str_pos=null,str_found=null,pos=null,end_offset=null,this_str_pos=null,end_str_pos=null,i,l;while(!found){str_pos=null;str_found=null;pos=template.indexOf(token_def.close,offset);if(pos>=0){end=pos;found=true}else{throw new Twig.Error("Unable to find closing bracket '"+token_def.close+"'"+" opened near template position "+start)}if(token_def.type===Twig.token.type.comment){break}if(token_def.type===Twig.token.type.raw){break}l=Twig.token.strings.length;for(i=0;i<l;i+=1){this_str_pos=template.indexOf(Twig.token.strings[i],offset);if(this_str_pos>0&&this_str_pos<pos&&(str_pos===null||this_str_pos<str_pos)){str_pos=this_str_pos;str_found=Twig.token.strings[i]}}if(str_pos!==null){end_offset=str_pos+1;end=null;found=false;while(true){end_str_pos=template.indexOf(str_found,end_offset);if(end_str_pos<0){throw"Unclosed string in template"}if(template.substr(end_str_pos-1,1)!=="\\"){offset=end_str_pos+1;break}else{end_offset=end_str_pos+1}}}}return end};Twig.tokenize=function(template){var tokens=[],error_offset=0,found_token=null,end=null;while(template.length>0){found_token=Twig.token.findStart(template);Twig.log.trace("Twig.tokenize: ","Found token: ",found_token);if(found_token.position!==null){if(found_token.position>0){tokens.push({type:Twig.token.type.raw,value:template.substring(0,found_token.position)})}template=template.substr(found_token.position+found_token.def.open.length);error_offset+=found_token.position+found_token.def.open.length;end=Twig.token.findEnd(template,found_token.def,error_offset);Twig.log.trace("Twig.tokenize: ","Token ends at ",end);tokens.push({type:found_token.def.type,value:template.substring(0,end).trim()});if(template.substr(end+found_token.def.close.length,1)==="\n"){switch(found_token.def.type){case"logic_whitespace_pre":case"logic_whitespace_post":case"logic_whitespace_both":case"logic":end+=1;break}}template=template.substr(end+found_token.def.close.length);error_offset+=end+found_token.def.close.length}else{tokens.push({type:Twig.token.type.raw,value:template});template=""}}return tokens};Twig.compile=function(tokens){try{var output=[],stack=[],intermediate_output=[],token=null,logic_token=null,unclosed_token=null,prev_token=null,prev_output=null,prev_intermediate_output=null,prev_template=null,next_token=null,tok_output=null,type=null,open=null,next=null;var compile_output=function(token){Twig.expression.compile.apply(this,[token]);if(stack.length>0){intermediate_output.push(token)}else{output.push(token)}};var compile_logic=function(token){logic_token=Twig.logic.compile.apply(this,[token]);type=logic_token.type;open=Twig.logic.handler[type].open;next=Twig.logic.handler[type].next;Twig.log.trace("Twig.compile: ","Compiled logic token to ",logic_token," next is: ",next," open is : ",open);if(open!==undefined&&!open){prev_token=stack.pop();prev_template=Twig.logic.handler[prev_token.type];if(Twig.indexOf(prev_template.next,type)<0){throw new Error(type+" not expected after a "+prev_token.type)}prev_token.output=prev_token.output||[];prev_token.output=prev_token.output.concat(intermediate_output);intermediate_output=[];tok_output={type:Twig.token.type.logic,token:prev_token};if(stack.length>0){intermediate_output.push(tok_output)}else{output.push(tok_output)}}if(next!==undefined&&next.length>0){Twig.log.trace("Twig.compile: ","Pushing ",logic_token," to logic stack.");if(stack.length>0){prev_token=stack.pop();prev_token.output=prev_token.output||[];prev_token.output=prev_token.output.concat(intermediate_output);stack.push(prev_token);intermediate_output=[]}stack.push(logic_token)}else if(open!==undefined&&open){tok_output={type:Twig.token.type.logic,token:logic_token};if(stack.length>0){intermediate_output.push(tok_output)}else{output.push(tok_output)}}};while(tokens.length>0){token=tokens.shift();prev_output=output[output.length-1];prev_intermediate_output=intermediate_output[intermediate_output.length-1];next_token=tokens[0];Twig.log.trace("Compiling token ",token);switch(token.type){case Twig.token.type.raw:if(stack.length>0){intermediate_output.push(token)}else{output.push(token)}break;case Twig.token.type.logic:compile_logic.call(this,token);break;case Twig.token.type.comment:break;case Twig.token.type.output:compile_output.call(this,token);break;case Twig.token.type.logic_whitespace_pre:case Twig.token.type.logic_whitespace_post:case Twig.token.type.logic_whitespace_both:case Twig.token.type.output_whitespace_pre:case Twig.token.type.output_whitespace_post:case Twig.token.type.output_whitespace_both:if(token.type!==Twig.token.type.output_whitespace_post&&token.type!==Twig.token.type.logic_whitespace_post){if(prev_output){if(prev_output.type===Twig.token.type.raw){output.pop();if(prev_output.value.match(/^\s*$/)===null){prev_output.value=prev_output.value.trim();output.push(prev_output)}}}if(prev_intermediate_output){if(prev_intermediate_output.type===Twig.token.type.raw){intermediate_output.pop();if(prev_intermediate_output.value.match(/^\s*$/)===null){prev_intermediate_output.value=prev_intermediate_output.value.trim();intermediate_output.push(prev_intermediate_output)}}}}switch(token.type){case Twig.token.type.output_whitespace_pre:case Twig.token.type.output_whitespace_post:case Twig.token.type.output_whitespace_both:compile_output.call(this,token);break;case Twig.token.type.logic_whitespace_pre:case Twig.token.type.logic_whitespace_post:case Twig.token.type.logic_whitespace_both:compile_logic.call(this,token);break}if(token.type!==Twig.token.type.output_whitespace_pre&&token.type!==Twig.token.type.logic_whitespace_pre){if(next_token){if(next_token.type===Twig.token.type.raw){tokens.shift();if(next_token.value.match(/^\s*$/)===null){next_token.value=next_token.value.trim();tokens.unshift(next_token)}}}}break}Twig.log.trace("Twig.compile: "," Output: ",output," Logic Stack: ",stack," Pending Output: ",intermediate_output)}if(stack.length>0){unclosed_token=stack.pop();throw new Error("Unable to find an end tag for "+unclosed_token.type+", expecting one of "+unclosed_token.next)}return output}catch(ex){Twig.log.error("Error compiling twig template "+this.id+": ");if(ex.stack){Twig.log.error(ex.stack)}else{Twig.log.error(ex.toString())}if(this.options.rethrow)throw ex}};Twig.parse=function(tokens,context){try{var output=[],chain=true,that=this;Twig.forEach(tokens,function parseToken(token){Twig.log.debug("Twig.parse: ","Parsing token: ",token);switch(token.type){case Twig.token.type.raw:output.push(Twig.filters.raw(token.value));break;case Twig.token.type.logic:var logic_token=token.token,logic=Twig.logic.parse.apply(that,[logic_token,context,chain]);if(logic.chain!==undefined){chain=logic.chain}if(logic.context!==undefined){context=logic.context}if(logic.output!==undefined){output.push(logic.output)}break;case Twig.token.type.comment:break;case Twig.token.type.output_whitespace_pre:case Twig.token.type.output_whitespace_post:case Twig.token.type.output_whitespace_both:case Twig.token.type.output:Twig.log.debug("Twig.parse: ","Output token: ",token.stack);output.push(Twig.expression.parse.apply(that,[token.stack,context]));break}});return Twig.output.apply(this,[output])}catch(ex){Twig.log.error("Error parsing twig template "+this.id+": ");if(ex.stack){Twig.log.error(ex.stack)}else{Twig.log.error(ex.toString())}if(this.options.rethrow)throw ex;if(Twig.debug){return ex.toString()}}};Twig.prepare=function(data){var tokens,raw_tokens;Twig.log.debug("Twig.prepare: ","Tokenizing ",data);raw_tokens=Twig.tokenize.apply(this,[data]);Twig.log.debug("Twig.prepare: ","Compiling ",raw_tokens);tokens=Twig.compile.apply(this,[raw_tokens]);Twig.log.debug("Twig.prepare: ","Compiled ",tokens);return tokens};Twig.output=function(output){if(!this.options.autoescape){return output.join("")}var strategy="html";if(typeof this.options.autoescape=="string")strategy=this.options.autoescape;var escaped_output=[];Twig.forEach(output,function(str){if(str&&(str.twig_markup!==true&&str.twig_markup!=strategy)){str=Twig.filters.escape(str,[strategy])}escaped_output.push(str)});return Twig.Markup(escaped_output.join(""))};Twig.Templates={loaders:{},parsers:{},registry:{}};Twig.validateId=function(id){if(id==="prototype"){throw new Twig.Error(id+" is not a valid twig identifier")}else if(Twig.cache&&Twig.Templates.registry.hasOwnProperty(id)){throw new Twig.Error("There is already a template with the ID "+id)}return true};Twig.Templates.registerLoader=function(method_name,func,scope){if(typeof func!=="function"){throw new Twig.Error("Unable to add loader for "+method_name+": Invalid function reference given.")}if(scope){func=func.bind(scope)}this.loaders[method_name]=func};Twig.Templates.unRegisterLoader=function(method_name){if(this.isRegisteredLoader(method_name)){delete this.loaders[method_name]}};Twig.Templates.isRegisteredLoader=function(method_name){return this.loaders.hasOwnProperty(method_name)};Twig.Templates.registerParser=function(method_name,func,scope){if(typeof func!=="function"){throw new Twig.Error("Unable to add parser for "+method_name+": Invalid function regerence given.")}if(scope){func=func.bind(scope)}this.parsers[method_name]=func};Twig.Templates.unRegisterParser=function(method_name){if(this.isRegisteredParser(method_name)){delete this.parsers[method_name]}};Twig.Templates.isRegisteredParser=function(method_name){return this.parsers.hasOwnProperty(method_name)};Twig.Templates.save=function(template){if(template.id===undefined){throw new Twig.Error("Unable to save template with no id")}Twig.Templates.registry[template.id]=template};Twig.Templates.load=function(id){if(!Twig.Templates.registry.hasOwnProperty(id)){return null}return Twig.Templates.registry[id]};Twig.Templates.loadRemote=function(location,params,callback,error_callback){var loader;if(params.async===undefined){params.async=true}if(params.id===undefined){params.id=location}if(Twig.cache&&Twig.Templates.registry.hasOwnProperty(params.id)){if(typeof callback==="function"){callback(Twig.Templates.registry[params.id])}return Twig.Templates.registry[params.id]}params.parser=params.parser||"twig";loader=this.loaders[params.method]||this.loaders.fs;return loader.apply(this,arguments)};function is(type,obj){var clas=Object.prototype.toString.call(obj).slice(8,-1);return obj!==undefined&&obj!==null&&clas===type}Twig.Template=function(params){var data=params.data,id=params.id,blocks=params.blocks,macros=params.macros||{},base=params.base,path=params.path,url=params.url,name=params.name,method=params.method,options=params.options;this.id=id;this.method=method;this.base=base;this.path=path;this.url=url;this.name=name;this.macros=macros;this.options=options;this.reset(blocks);if(is("String",data)){this.tokens=Twig.prepare.apply(this,[data])}else{this.tokens=data}if(id!==undefined){Twig.Templates.save(this)}};Twig.Template.prototype.reset=function(blocks){Twig.log.debug("Twig.Template.reset","Reseting template "+this.id);this.blocks={};this.importedBlocks=[];this.originalBlockTokens={};this.child={blocks:blocks||{}};this.extend=null};Twig.Template.prototype.render=function(context,params){params=params||{};var output,url;this.context=context||{};this.reset();if(params.blocks){this.blocks=params.blocks}if(params.macros){this.macros=params.macros}output=Twig.parse.apply(this,[this.tokens,this.context]);if(this.extend){var ext_template;if(this.options.allowInlineIncludes){ext_template=Twig.Templates.load(this.extend);if(ext_template){ext_template.options=this.options}}if(!ext_template){url=Twig.path.parsePath(this,this.extend);ext_template=Twig.Templates.loadRemote(url,{method:this.getLoaderMethod(),base:this.base,async:false,id:url,options:this.options})}this.parent=ext_template;return this.parent.render(this.context,{blocks:this.blocks})}if(params.output=="blocks"){return this.blocks}else if(params.output=="macros"){return this.macros}else{return output}};Twig.Template.prototype.importFile=function(file){var url,sub_template;if(!this.url&&this.options.allowInlineIncludes){file=this.path?this.path+"/"+file:file;sub_template=Twig.Templates.load(file);if(!sub_template){sub_template=Twig.Templates.loadRemote(url,{id:file,method:this.getLoaderMethod(),async:false,options:this.options});if(!sub_template){throw new Twig.Error("Unable to find the template "+file)}}sub_template.options=this.options;return sub_template}url=Twig.path.parsePath(this,file);sub_template=Twig.Templates.loadRemote(url,{method:this.getLoaderMethod(),base:this.base,async:false,options:this.options,id:url});return sub_template};Twig.Template.prototype.importBlocks=function(file,override){var sub_template=this.importFile(file),context=this.context,that=this,key;override=override||false;sub_template.render(context);Twig.forEach(Object.keys(sub_template.blocks),function(key){if(override||that.blocks[key]===undefined){that.blocks[key]=sub_template.blocks[key];that.importedBlocks.push(key)}})};Twig.Template.prototype.importMacros=function(file){var url=Twig.path.parsePath(this,file);var remoteTemplate=Twig.Templates.loadRemote(url,{method:this.getLoaderMethod(),async:false,id:url});return remoteTemplate};Twig.Template.prototype.getLoaderMethod=function(){if(this.path){return"fs"}if(this.url){return"ajax"}return this.method||"fs"};Twig.Template.prototype.compile=function(options){return Twig.compiler.compile(this,options)};Twig.Markup=function(content,strategy){if(typeof strategy=="undefined"){strategy=true}if(typeof content==="string"&&content.length>0){content=new String(content);content.twig_markup=strategy}return content};return Twig}(Twig||{});(function(Twig){"use strict";Twig.Templates.registerLoader("ajax",function(location,params,callback,error_callback){var template,xmlhttp,precompiled=params.precompiled,parser=this.parsers[params.parser]||this.parser.twig;if(typeof XMLHttpRequest==="undefined"){throw new Twig.Error("Unsupported platform: Unable to do ajax requests "+'because there is no "XMLHTTPRequest" implementation')}xmlhttp=new XMLHttpRequest;xmlhttp.onreadystatechange=function(){var data=null;if(xmlhttp.readyState===4){if(xmlhttp.status===200||window.cordova&&xmlhttp.status==0){Twig.log.debug("Got template ",xmlhttp.responseText);if(precompiled===true){data=JSON.parse(xmlhttp.responseText)}else{data=xmlhttp.responseText}params.url=location;params.data=data;template=parser.call(this,params);if(typeof callback==="function"){callback(template)}}else{if(typeof error_callback==="function"){error_callback(xmlhttp)}}}};xmlhttp.open("GET",location,!!params.async);xmlhttp.send();if(params.async){return true}else{return template}})})(Twig);(function(Twig){"use strict";var fs,path;try{fs=__webpack_require__(61);path=__webpack_require__(21)}catch(e){}Twig.Templates.registerLoader("fs",function(location,params,callback,error_callback){var template,data=null,precompiled=params.precompiled,parser=this.parsers[params.parser]||this.parser.twig;if(!fs||!path){throw new Twig.Error("Unsupported platform: Unable to load from file "+'because there is no "fs" or "path" implementation')}var loadTemplateFn=function(err,data){if(err){if(typeof error_callback==="function"){error_callback(err)}return}if(precompiled===true){data=JSON.parse(data)}params.data=data;params.path=params.path||location;template=parser.call(this,params);if(typeof callback==="function"){callback(template)}};params.path=params.path||location;if(params.async){fs.stat(params.path,function(err,stats){if(err||!stats.isFile()){throw new Twig.Error("Unable to find template file "+location)}fs.readFile(params.path,"utf8",loadTemplateFn)});return true}else{if(!fs.statSync(params.path).isFile()){throw new Twig.Error("Unable to find template file "+location)}data=fs.readFileSync(params.path,"utf8");loadTemplateFn(undefined,data);return template}})})(Twig);(function(Twig){"use strict";Twig.Templates.registerParser("source",function(params){return params.data||""})})(Twig);(function(Twig){"use strict";Twig.Templates.registerParser("twig",function(params){return new Twig.Template(params)})})(Twig);(function(){"use strict";if(!String.prototype.trim){String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g,"")}}if(!Object.keys)Object.keys=function(o){if(o!==Object(o)){throw new TypeError("Object.keys called on non-object")}var ret=[],p;for(p in o)if(Object.prototype.hasOwnProperty.call(o,p))ret.push(p);return ret}})();var Twig=function(Twig){Twig.lib={};var sprintfLib=function(){var re={not_string:/[^s]/,number:/[diefg]/,json:/[j]/,not_json:/[^j]/,text:/^[^\x25]+/,modulo:/^\x25{2}/,placeholder:/^\x25(?:([1-9]\d*)\$|\(([^\)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-gijosuxX])/,key:/^([a-z_][a-z_\d]*)/i,key_access:/^\.([a-z_][a-z_\d]*)/i,index_access:/^\[(\d+)\]/,sign:/^[\+\-]/};function sprintf(){var key=arguments[0],cache=sprintf.cache;if(!(cache[key]&&cache.hasOwnProperty(key))){cache[key]=sprintf.parse(key)}return sprintf.format.call(null,cache[key],arguments)}sprintf.format=function(parse_tree,argv){var cursor=1,tree_length=parse_tree.length,node_type="",arg,output=[],i,k,match,pad,pad_character,pad_length,is_positive=true,sign="";for(i=0;i<tree_length;i++){node_type=get_type(parse_tree[i]);if(node_type==="string"){output[output.length]=parse_tree[i]}else if(node_type==="array"){match=parse_tree[i];if(match[2]){arg=argv[cursor];for(k=0;k<match[2].length;k++){if(!arg.hasOwnProperty(match[2][k])){throw new Error(sprintf("[sprintf] property '%s' does not exist",match[2][k]))}arg=arg[match[2][k]]}}else if(match[1]){arg=argv[match[1]]}else{arg=argv[cursor++]}if(get_type(arg)=="function"){arg=arg()}if(re.not_string.test(match[8])&&re.not_json.test(match[8])&&(get_type(arg)!="number"&&isNaN(arg))){throw new TypeError(sprintf("[sprintf] expecting number but found %s",get_type(arg)))}if(re.number.test(match[8])){is_positive=arg>=0}switch(match[8]){case"b":arg=arg.toString(2);break;case"c":arg=String.fromCharCode(arg);break;case"d":case"i":arg=parseInt(arg,10);break;case"j":arg=JSON.stringify(arg,null,match[6]?parseInt(match[6]):0);break;case"e":arg=match[7]?arg.toExponential(match[7]):arg.toExponential();break;case"f":arg=match[7]?parseFloat(arg).toFixed(match[7]):parseFloat(arg);break;case"g":arg=match[7]?parseFloat(arg).toPrecision(match[7]):parseFloat(arg);break;case"o":arg=arg.toString(8);break;case"s":arg=(arg=String(arg))&&match[7]?arg.substring(0,match[7]):arg;break;case"u":arg=arg>>>0;break;case"x":arg=arg.toString(16);break;case"X":arg=arg.toString(16).toUpperCase();break}if(re.json.test(match[8])){output[output.length]=arg}else{if(re.number.test(match[8])&&(!is_positive||match[3])){sign=is_positive?"+":"-";arg=arg.toString().replace(re.sign,"")}else{sign=""}pad_character=match[4]?match[4]==="0"?"0":match[4].charAt(1):" ";pad_length=match[6]-(sign+arg).length;pad=match[6]?pad_length>0?str_repeat(pad_character,pad_length):"":"";output[output.length]=match[5]?sign+arg+pad:pad_character==="0"?sign+pad+arg:pad+sign+arg}}}return output.join("")};sprintf.cache={};sprintf.parse=function(fmt){var _fmt=fmt,match=[],parse_tree=[],arg_names=0;while(_fmt){if((match=re.text.exec(_fmt))!==null){parse_tree[parse_tree.length]=match[0]}else if((match=re.modulo.exec(_fmt))!==null){parse_tree[parse_tree.length]="%"}else if((match=re.placeholder.exec(_fmt))!==null){if(match[2]){arg_names|=1;var field_list=[],replacement_field=match[2],field_match=[];if((field_match=re.key.exec(replacement_field))!==null){field_list[field_list.length]=field_match[1];while((replacement_field=replacement_field.substring(field_match[0].length))!==""){if((field_match=re.key_access.exec(replacement_field))!==null){field_list[field_list.length]=field_match[1]}else if((field_match=re.index_access.exec(replacement_field))!==null){field_list[field_list.length]=field_match[1]}else{throw new SyntaxError("[sprintf] failed to parse named argument key")}}}else{throw new SyntaxError("[sprintf] failed to parse named argument key")}match[2]=field_list}else{arg_names|=2}if(arg_names===3){throw new Error("[sprintf] mixing positional and named placeholders is not (yet) supported")}parse_tree[parse_tree.length]=match}else{throw new SyntaxError("[sprintf] unexpected placeholder")}_fmt=_fmt.substring(match[0].length)}return parse_tree};var vsprintf=function(fmt,argv,_argv){_argv=(argv||[]).slice(0);_argv.splice(0,0,fmt);return sprintf.apply(null,_argv)};function get_type(variable){return Object.prototype.toString.call(variable).slice(8,-1).toLowerCase()}function str_repeat(input,multiplier){return Array(multiplier+1).join(input)}return{sprintf:sprintf,vsprintf:vsprintf}}();var sprintf=sprintfLib.sprintf;var vsprintf=sprintfLib.vsprintf;Twig.lib.sprintf=sprintf;Twig.lib.vsprintf=vsprintf;(function(){var shortDays="Sun,Mon,Tue,Wed,Thu,Fri,Sat".split(",");var fullDays="Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday".split(",");var shortMonths="Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec".split(",");var fullMonths="January,February,March,April,May,June,July,August,September,October,November,December".split(",");function getOrdinalFor(intNum){return(intNum=Math.abs(intNum)%100)%10==1&&intNum!=11?"st":intNum%10==2&&intNum!=12?"nd":intNum%10==3&&intNum!=13?"rd":"th"}function getISO8601Year(aDate){var d=new Date(aDate.getFullYear()+1,0,4);if((d-aDate)/864e5<7&&(aDate.getDay()+6)%7<(d.getDay()+6)%7)return d.getFullYear();if(aDate.getMonth()>0||aDate.getDate()>=4)return aDate.getFullYear();return aDate.getFullYear()-((aDate.getDay()+6)%7-aDate.getDate()>2?1:0)}function getISO8601Week(aDate){var d=new Date(getISO8601Year(aDate),0,4);d.setDate(d.getDate()-(d.getDay()+6)%7);return parseInt((aDate-d)/6048e5)+1}Twig.lib.formatDate=function(date,format){if(typeof format!=="string"||/^\s*$/.test(format))return date+"";var jan1st=new Date(date.getFullYear(),0,1);var me=date;return format.replace(/[dDjlNSwzWFmMntLoYyaABgGhHisuU]/g,function(option){switch(option){case"d":return("0"+me.getDate()).replace(/^.+(..)$/,"$1");case"D":return shortDays[me.getDay()];case"j":return me.getDate();case"l":return fullDays[me.getDay()];case"N":return(me.getDay()+6)%7+1;case"S":return getOrdinalFor(me.getDate());case"w":return me.getDay();case"z":return Math.ceil((jan1st-me)/864e5);case"W":return("0"+getISO8601Week(me)).replace(/^.(..)$/,"$1");case"F":return fullMonths[me.getMonth()];case"m":return("0"+(me.getMonth()+1)).replace(/^.+(..)$/,"$1");case"M":return shortMonths[me.getMonth()];case"n":return me.getMonth()+1;case"t":return new Date(me.getFullYear(),me.getMonth()+1,-1).getDate();case"L":return new Date(me.getFullYear(),1,29).getDate()==29?1:0;case"o":return getISO8601Year(me);case"Y":return me.getFullYear();case"y":return(me.getFullYear()+"").replace(/^.+(..)$/,"$1");case"a":return me.getHours()<12?"am":"pm";case"A":return me.getHours()<12?"AM":"PM";case"B":return Math.floor(((me.getUTCHours()+1)%24+me.getUTCMinutes()/60+me.getUTCSeconds()/3600)*1e3/24);case"g":return me.getHours()%12!=0?me.getHours()%12:12;case"G":return me.getHours();case"h":return("0"+(me.getHours()%12!=0?me.getHours()%12:12)).replace(/^.+(..)$/,"$1");case"H":return("0"+me.getHours()).replace(/^.+(..)$/,"$1");case"i":return("0"+me.getMinutes()).replace(/^.+(..)$/,"$1");case"s":return("0"+me.getSeconds()).replace(/^.+(..)$/,"$1");case"u":return me.getMilliseconds();case"U":return me.getTime()/1e3}})}})();Twig.lib.strip_tags=function(input,allowed){allowed=(((allowed||"")+"").toLowerCase().match(/<[a-z][a-z0-9]*>/g)||[]).join("");var tags=/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,commentsAndPhpTags=/<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;return input.replace(commentsAndPhpTags,"").replace(tags,function($0,$1){return allowed.indexOf("<"+$1.toLowerCase()+">")>-1?$0:""})};Twig.lib.parseISO8601Date=function(s){var re=/(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)(\.\d+)?(Z|([+-])(\d\d):(\d\d))/;var d=[];d=s.match(re);if(!d){throw"Couldn't parse ISO 8601 date string '"+s+"'"}var a=[1,2,3,4,5,6,10,11];for(var i in a){d[a[i]]=parseInt(d[a[i]],10)}d[7]=parseFloat(d[7]);var ms=Date.UTC(d[1],d[2]-1,d[3],d[4],d[5],d[6]);if(d[7]>0){ms+=Math.round(d[7]*1e3)}if(d[8]!="Z"&&d[10]){var offset=d[10]*60*60*1e3;if(d[11]){offset+=d[11]*60*1e3}if(d[9]=="-"){ms-=offset}else{ms+=offset}}return new Date(ms)};Twig.lib.strtotime=function(text,now){var parsed,match,today,year,date,days,ranges,len,times,regex,i,fail=false;if(!text){return fail}text=text.replace(/^\s+|\s+$/g,"").replace(/\s{2,}/g," ").replace(/[\t\r\n]/g,"").toLowerCase();match=text.match(/^(\d{1,4})([\-\.\/\:])(\d{1,2})([\-\.\/\:])(\d{1,4})(?:\s(\d{1,2}):(\d{2})?:?(\d{2})?)?(?:\s([A-Z]+)?)?$/);if(match&&match[2]===match[4]){if(match[1]>1901){switch(match[2]){case"-":{if(match[3]>12||match[5]>31){return fail}return new Date(match[1],parseInt(match[3],10)-1,match[5],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}case".":{return fail}case"/":{if(match[3]>12||match[5]>31){return fail}return new Date(match[1],parseInt(match[3],10)-1,match[5],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}}}else if(match[5]>1901){switch(match[2]){case"-":{if(match[3]>12||match[1]>31){return fail}return new Date(match[5],parseInt(match[3],10)-1,match[1],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}case".":{if(match[3]>12||match[1]>31){return fail}return new Date(match[5],parseInt(match[3],10)-1,match[1],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}case"/":{if(match[1]>12||match[3]>31){return fail}return new Date(match[5],parseInt(match[1],10)-1,match[3],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}}}else{switch(match[2]){case"-":{if(match[3]>12||match[5]>31||match[1]<70&&match[1]>38){return fail}year=match[1]>=0&&match[1]<=38?+match[1]+2e3:match[1];return new Date(year,parseInt(match[3],10)-1,match[5],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}case".":{if(match[5]>=70){if(match[3]>12||match[1]>31){return fail}return new Date(match[5],parseInt(match[3],10)-1,match[1],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}if(match[5]<60&&!match[6]){if(match[1]>23||match[3]>59){return fail}today=new Date;return new Date(today.getFullYear(),today.getMonth(),today.getDate(),match[1]||0,match[3]||0,match[5]||0,match[9]||0)/1e3}return fail}case"/":{if(match[1]>12||match[3]>31||match[5]<70&&match[5]>38){return fail}year=match[5]>=0&&match[5]<=38?+match[5]+2e3:match[5];return new Date(year,parseInt(match[1],10)-1,match[3],match[6]||0,match[7]||0,match[8]||0,match[9]||0)/1e3}case":":{if(match[1]>23||match[3]>59||match[5]>59){return fail}today=new Date;return new Date(today.getFullYear(),today.getMonth(),today.getDate(),match[1]||0,match[3]||0,match[5]||0)/1e3}}}}if(text==="now"){return now===null||isNaN(now)?(new Date).getTime()/1e3|0:now|0}if(!isNaN(parsed=Date.parse(text))){return parsed/1e3|0}if(match=text.match(/^([0-9]{4}-[0-9]{2}-[0-9]{2})[ t]([0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?)([\+-][0-9]{2}(:[0-9]{2})?|z)/)){if(match[4]=="z"){match[4]="Z"}else if(match[4].match(/^([\+-][0-9]{2})$/)){match[4]=match[4]+":00"}if(!isNaN(parsed=Date.parse(match[1]+"T"+match[2]+match[4]))){return parsed/1e3|0}}date=now?new Date(now*1e3):new Date;days={sun:0,mon:1,tue:2,wed:3,thu:4,fri:5,sat:6};ranges={yea:"FullYear",mon:"Month",day:"Date",hou:"Hours",min:"Minutes",sec:"Seconds"};function lastNext(type,range,modifier){
-var diff,day=days[range];if(typeof day!=="undefined"){diff=day-date.getDay();if(diff===0){diff=7*modifier}else if(diff>0&&type==="last"){diff-=7}else if(diff<0&&type==="next"){diff+=7}date.setDate(date.getDate()+diff)}}function process(val){var splt=val.split(" "),type=splt[0],range=splt[1].substring(0,3),typeIsNumber=/\d+/.test(type),ago=splt[2]==="ago",num=(type==="last"?-1:1)*(ago?-1:1);if(typeIsNumber){num*=parseInt(type,10)}if(ranges.hasOwnProperty(range)&&!splt[1].match(/^mon(day|\.)?$/i)){return date["set"+ranges[range]](date["get"+ranges[range]]()+num)}if(range==="wee"){return date.setDate(date.getDate()+num*7)}if(type==="next"||type==="last"){lastNext(type,range,num)}else if(!typeIsNumber){return false}return true}times="(years?|months?|weeks?|days?|hours?|minutes?|min|seconds?|sec"+"|sunday|sun\\.?|monday|mon\\.?|tuesday|tue\\.?|wednesday|wed\\.?"+"|thursday|thu\\.?|friday|fri\\.?|saturday|sat\\.?)";regex="([+-]?\\d+\\s"+times+"|"+"(last|next)\\s"+times+")(\\sago)?";match=text.match(new RegExp(regex,"gi"));if(!match){return fail}for(i=0,len=match.length;i<len;i++){if(!process(match[i])){return fail}}return date.getTime()/1e3};Twig.lib.is=function(type,obj){var clas=Object.prototype.toString.call(obj).slice(8,-1);return obj!==undefined&&obj!==null&&clas===type};Twig.lib.copy=function(src){var target={},key;for(key in src)target[key]=src[key];return target};Twig.lib.replaceAll=function(string,search,replace){return string.split(search).join(replace)};Twig.lib.chunkArray=function(arr,size){var returnVal=[],x=0,len=arr.length;if(size<1||!Twig.lib.is("Array",arr)){return[]}while(x<len){returnVal.push(arr.slice(x,x+=size))}return returnVal};Twig.lib.round=function round(value,precision,mode){var m,f,isHalf,sgn;precision|=0;m=Math.pow(10,precision);value*=m;sgn=value>0|-(value<0);isHalf=value%1===.5*sgn;f=Math.floor(value);if(isHalf){switch(mode){case"PHP_ROUND_HALF_DOWN":value=f+(sgn<0);break;case"PHP_ROUND_HALF_EVEN":value=f+f%2*sgn;break;case"PHP_ROUND_HALF_ODD":value=f+!(f%2);break;default:value=f+(sgn>0)}}return(isHalf?value:Math.round(value))/m};Twig.lib.max=function max(){var ar,retVal,i=0,n=0,argv=arguments,argc=argv.length,_obj2Array=function(obj){if(Object.prototype.toString.call(obj)==="[object Array]"){return obj}else{var ar=[];for(var i in obj){if(obj.hasOwnProperty(i)){ar.push(obj[i])}}return ar}},_compare=function(current,next){var i=0,n=0,tmp=0,nl=0,cl=0;if(current===next){return 0}else if(typeof current==="object"){if(typeof next==="object"){current=_obj2Array(current);next=_obj2Array(next);cl=current.length;nl=next.length;if(nl>cl){return 1}else if(nl<cl){return-1}for(i=0,n=cl;i<n;++i){tmp=_compare(current[i],next[i]);if(tmp==1){return 1}else if(tmp==-1){return-1}}return 0}return-1}else if(typeof next==="object"){return 1}else if(isNaN(next)&&!isNaN(current)){if(current==0){return 0}return current<0?1:-1}else if(isNaN(current)&&!isNaN(next)){if(next==0){return 0}return next>0?1:-1}if(next==current){return 0}return next>current?1:-1};if(argc===0){throw new Error("At least one value should be passed to max()")}else if(argc===1){if(typeof argv[0]==="object"){ar=_obj2Array(argv[0])}else{throw new Error("Wrong parameter count for max()")}if(ar.length===0){throw new Error("Array must contain at least one element for max()")}}else{ar=argv}retVal=ar[0];for(i=1,n=ar.length;i<n;++i){if(_compare(retVal,ar[i])==1){retVal=ar[i]}}return retVal};Twig.lib.min=function min(){var ar,retVal,i=0,n=0,argv=arguments,argc=argv.length,_obj2Array=function(obj){if(Object.prototype.toString.call(obj)==="[object Array]"){return obj}var ar=[];for(var i in obj){if(obj.hasOwnProperty(i)){ar.push(obj[i])}}return ar},_compare=function(current,next){var i=0,n=0,tmp=0,nl=0,cl=0;if(current===next){return 0}else if(typeof current==="object"){if(typeof next==="object"){current=_obj2Array(current);next=_obj2Array(next);cl=current.length;nl=next.length;if(nl>cl){return 1}else if(nl<cl){return-1}for(i=0,n=cl;i<n;++i){tmp=_compare(current[i],next[i]);if(tmp==1){return 1}else if(tmp==-1){return-1}}return 0}return-1}else if(typeof next==="object"){return 1}else if(isNaN(next)&&!isNaN(current)){if(current==0){return 0}return current<0?1:-1}else if(isNaN(current)&&!isNaN(next)){if(next==0){return 0}return next>0?1:-1}if(next==current){return 0}return next>current?1:-1};if(argc===0){throw new Error("At least one value should be passed to min()")}else if(argc===1){if(typeof argv[0]==="object"){ar=_obj2Array(argv[0])}else{throw new Error("Wrong parameter count for min()")}if(ar.length===0){throw new Error("Array must contain at least one element for min()")}}else{ar=argv}retVal=ar[0];for(i=1,n=ar.length;i<n;++i){if(_compare(retVal,ar[i])==-1){retVal=ar[i]}}return retVal};return Twig}(Twig||{});var Twig=function(Twig){"use strict";Twig.logic={};Twig.logic.type={if_:"Twig.logic.type.if",endif:"Twig.logic.type.endif",for_:"Twig.logic.type.for",endfor:"Twig.logic.type.endfor",else_:"Twig.logic.type.else",elseif:"Twig.logic.type.elseif",set:"Twig.logic.type.set",setcapture:"Twig.logic.type.setcapture",endset:"Twig.logic.type.endset",filter:"Twig.logic.type.filter",endfilter:"Twig.logic.type.endfilter",shortblock:"Twig.logic.type.shortblock",block:"Twig.logic.type.block",endblock:"Twig.logic.type.endblock",extends_:"Twig.logic.type.extends",use:"Twig.logic.type.use",include:"Twig.logic.type.include",spaceless:"Twig.logic.type.spaceless",endspaceless:"Twig.logic.type.endspaceless",macro:"Twig.logic.type.macro",endmacro:"Twig.logic.type.endmacro",import_:"Twig.logic.type.import",from:"Twig.logic.type.from",embed:"Twig.logic.type.embed",endembed:"Twig.logic.type.endembed"};Twig.logic.definitions=[{type:Twig.logic.type.if_,regex:/^if\s+([\s\S]+)$/,next:[Twig.logic.type.else_,Twig.logic.type.elseif,Twig.logic.type.endif],open:true,compile:function(token){var expression=token.match[1];token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;delete token.match;return token},parse:function(token,context,chain){var output="",result=Twig.expression.parse.apply(this,[token.stack,context]);chain=true;if(result){chain=false;output=Twig.parse.apply(this,[token.output,context])}return{chain:chain,output:output}}},{type:Twig.logic.type.elseif,regex:/^elseif\s+([^\s].*)$/,next:[Twig.logic.type.else_,Twig.logic.type.elseif,Twig.logic.type.endif],open:false,compile:function(token){var expression=token.match[1];token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;delete token.match;return token},parse:function(token,context,chain){var output="";if(chain&&Twig.expression.parse.apply(this,[token.stack,context])===true){chain=false;output=Twig.parse.apply(this,[token.output,context])}return{chain:chain,output:output}}},{type:Twig.logic.type.else_,regex:/^else$/,next:[Twig.logic.type.endif,Twig.logic.type.endfor],open:false,parse:function(token,context,chain){var output="";if(chain){output=Twig.parse.apply(this,[token.output,context])}return{chain:chain,output:output}}},{type:Twig.logic.type.endif,regex:/^endif$/,next:[],open:false},{type:Twig.logic.type.for_,regex:/^for\s+([a-zA-Z0-9_,\s]+)\s+in\s+([^\s].*?)(?:\s+if\s+([^\s].*))?$/,next:[Twig.logic.type.else_,Twig.logic.type.endfor],open:true,compile:function(token){var key_value=token.match[1],expression=token.match[2],conditional=token.match[3],kv_split=null;token.key_var=null;token.value_var=null;if(key_value.indexOf(",")>=0){kv_split=key_value.split(",");if(kv_split.length===2){token.key_var=kv_split[0].trim();token.value_var=kv_split[1].trim()}else{throw new Twig.Error("Invalid expression in for loop: "+key_value)}}else{token.value_var=key_value}token.expression=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;if(conditional){token.conditional=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:conditional}]).stack}delete token.match;return token},parse:function(token,context,continue_chain){var result=Twig.expression.parse.apply(this,[token.expression,context]),output=[],len,index=0,keyset,that=this,conditional=token.conditional,buildLoop=function(index,len){var isConditional=conditional!==undefined;return{index:index+1,index0:index,revindex:isConditional?undefined:len-index,revindex0:isConditional?undefined:len-index-1,first:index===0,last:isConditional?undefined:index===len-1,length:isConditional?undefined:len,parent:context}},loop=function(key,value){var inner_context=Twig.ChildContext(context);inner_context[token.value_var]=value;if(token.key_var){inner_context[token.key_var]=key}inner_context.loop=buildLoop(index,len);if(conditional===undefined||Twig.expression.parse.apply(that,[conditional,inner_context])){output.push(Twig.parse.apply(that,[token.output,inner_context]));index+=1}delete inner_context["loop"];delete inner_context[token.value_var];delete inner_context[token.key_var];Twig.merge(context,inner_context,true)};if(Twig.lib.is("Array",result)){len=result.length;Twig.forEach(result,function(value){var key=index;loop(key,value)})}else if(Twig.lib.is("Object",result)){if(result._keys!==undefined){keyset=result._keys}else{keyset=Object.keys(result)}len=keyset.length;Twig.forEach(keyset,function(key){if(key==="_keys")return;loop(key,result[key])})}continue_chain=output.length===0;return{chain:continue_chain,output:Twig.output.apply(this,[output])}}},{type:Twig.logic.type.endfor,regex:/^endfor$/,next:[],open:false},{type:Twig.logic.type.set,regex:/^set\s+([a-zA-Z0-9_,\s]+)\s*=\s*([\s\S]+)$/,next:[],open:true,compile:function(token){var key=token.match[1].trim(),expression=token.match[2],expression_stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;token.key=key;token.expression=expression_stack;delete token.match;return token},parse:function(token,context,continue_chain){var value=Twig.expression.parse.apply(this,[token.expression,context]),key=token.key;context[key]=value;return{chain:continue_chain,context:context}}},{type:Twig.logic.type.setcapture,regex:/^set\s+([a-zA-Z0-9_,\s]+)$/,next:[Twig.logic.type.endset],open:true,compile:function(token){var key=token.match[1].trim();token.key=key;delete token.match;return token},parse:function(token,context,continue_chain){var value=Twig.parse.apply(this,[token.output,context]),key=token.key;this.context[key]=value;context[key]=value;return{chain:continue_chain,context:context}}},{type:Twig.logic.type.endset,regex:/^endset$/,next:[],open:false},{type:Twig.logic.type.filter,regex:/^filter\s+(.+)$/,next:[Twig.logic.type.endfilter],open:true,compile:function(token){var expression="|"+token.match[1].trim();token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;delete token.match;return token},parse:function(token,context,chain){var unfiltered=Twig.parse.apply(this,[token.output,context]),stack=[{type:Twig.expression.type.string,value:unfiltered}].concat(token.stack);var output=Twig.expression.parse.apply(this,[stack,context]);return{chain:chain,output:output}}},{type:Twig.logic.type.endfilter,regex:/^endfilter$/,next:[],open:false},{type:Twig.logic.type.block,regex:/^block\s+([a-zA-Z0-9_]+)$/,next:[Twig.logic.type.endblock],open:true,compile:function(token){token.block=token.match[1].trim();delete token.match;return token},parse:function(token,context,chain){var block_output,output,isImported=Twig.indexOf(this.importedBlocks,token.block)>-1,hasParent=this.blocks[token.block]&&Twig.indexOf(this.blocks[token.block],Twig.placeholders.parent)>-1;if(this.blocks[token.block]===undefined||isImported||hasParent||context.loop||token.overwrite){if(token.expression){block_output=Twig.expression.parse.apply(this,[{type:Twig.expression.type.string,value:Twig.expression.parse.apply(this,[token.output,context])},context])}else{block_output=Twig.expression.parse.apply(this,[{type:Twig.expression.type.string,value:Twig.parse.apply(this,[token.output,context])},context])}if(isImported){this.importedBlocks.splice(this.importedBlocks.indexOf(token.block),1)}if(hasParent){this.blocks[token.block]=Twig.Markup(this.blocks[token.block].replace(Twig.placeholders.parent,block_output))}else{this.blocks[token.block]=block_output}this.originalBlockTokens[token.block]={type:token.type,block:token.block,output:token.output,overwrite:true}}if(this.child.blocks[token.block]){output=this.child.blocks[token.block]}else{output=this.blocks[token.block]}return{chain:chain,output:output}}},{type:Twig.logic.type.shortblock,regex:/^block\s+([a-zA-Z0-9_]+)\s+(.+)$/,next:[],open:true,compile:function(token){token.expression=token.match[2].trim();token.output=Twig.expression.compile({type:Twig.expression.type.expression,value:token.expression}).stack;token.block=token.match[1].trim();delete token.match;return token},parse:function(token,context,chain){return Twig.logic.handler[Twig.logic.type.block].parse.apply(this,arguments)}},{type:Twig.logic.type.endblock,regex:/^endblock(?:\s+([a-zA-Z0-9_]+))?$/,next:[],open:false},{type:Twig.logic.type.extends_,regex:/^extends\s+(.+)$/,next:[],open:true,compile:function(token){var expression=token.match[1].trim();delete token.match;token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;return token},parse:function(token,context,chain){var file=Twig.expression.parse.apply(this,[token.stack,context]);this.extend=file;return{chain:chain,output:""}}},{type:Twig.logic.type.use,regex:/^use\s+(.+)$/,next:[],open:true,compile:function(token){var expression=token.match[1].trim();delete token.match;token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;return token},parse:function(token,context,chain){var file=Twig.expression.parse.apply(this,[token.stack,context]);this.importBlocks(file);return{chain:chain,output:""}}},{type:Twig.logic.type.include,regex:/^include\s+(ignore missing\s+)?(.+?)\s*(?:with\s+([\S\s]+?))?\s*(only)?$/,next:[],open:true,compile:function(token){var match=token.match,includeMissing=match[1]!==undefined,expression=match[2].trim(),withContext=match[3],only=match[4]!==undefined&&match[4].length;delete token.match;token.only=only;token.includeMissing=includeMissing;token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;if(withContext!==undefined){token.withStack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:withContext.trim()}]).stack}return token},parse:function(token,context,chain){var innerContext={},withContext,i,template;if(!token.only){innerContext=Twig.ChildContext(context)}if(token.withStack!==undefined){withContext=Twig.expression.parse.apply(this,[token.withStack,context]);for(i in withContext){if(withContext.hasOwnProperty(i))innerContext[i]=withContext[i]}}var file=Twig.expression.parse.apply(this,[token.stack,innerContext]);if(file instanceof Twig.Template){template=file}else{template=this.importFile(file)}return{chain:chain,output:template.render(innerContext)}}},{type:Twig.logic.type.spaceless,regex:/^spaceless$/,next:[Twig.logic.type.endspaceless],open:true,parse:function(token,context,chain){var unfiltered=Twig.parse.apply(this,[token.output,context]),rBetweenTagSpaces=/>\s+</g,output=unfiltered.replace(rBetweenTagSpaces,"><").trim();return{chain:chain,output:output}}},{type:Twig.logic.type.endspaceless,regex:/^endspaceless$/,next:[],open:false},{type:Twig.logic.type.macro,regex:/^macro\s+([a-zA-Z0-9_]+)\s*\(\s*((?:[a-zA-Z0-9_]+(?:,\s*)?)*)\s*\)$/,next:[Twig.logic.type.endmacro],open:true,compile:function(token){var macroName=token.match[1],parameters=token.match[2].split(/[\s,]+/);for(var i=0;i<parameters.length;i++){for(var j=0;j<parameters.length;j++){if(parameters[i]===parameters[j]&&i!==j){throw new Twig.Error("Duplicate arguments for parameter: "+parameters[i])}}}token.macroName=macroName;token.parameters=parameters;delete token.match;return token},parse:function(token,context,chain){var template=this;this.macros[token.macroName]=function(){var macroContext={_self:template.macros};for(var i=0;i<token.parameters.length;i++){var prop=token.parameters[i];if(typeof arguments[i]!=="undefined"){macroContext[prop]=arguments[i]}else{macroContext[prop]=undefined}}return Twig.parse.apply(template,[token.output,macroContext])};return{chain:chain,output:""}}},{type:Twig.logic.type.endmacro,regex:/^endmacro$/,next:[],open:false},{type:Twig.logic.type.import_,regex:/^import\s+(.+)\s+as\s+([a-zA-Z0-9_]+)$/,next:[],open:true,compile:function(token){var expression=token.match[1].trim(),contextName=token.match[2].trim();delete token.match;token.expression=expression;token.contextName=contextName;token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;return token},parse:function(token,context,chain){if(token.expression!=="_self"){var file=Twig.expression.parse.apply(this,[token.stack,context]);var template=this.importFile(file||token.expression);context[token.contextName]=template.render({},{output:"macros"})}else{context[token.contextName]=this.macros}return{chain:chain,output:""}}},{type:Twig.logic.type.from,regex:/^from\s+(.+)\s+import\s+([a-zA-Z0-9_, ]+)$/,next:[],open:true,compile:function(token){var expression=token.match[1].trim(),macroExpressions=token.match[2].trim().split(/[ ,]+/),macroNames={};for(var i=0;i<macroExpressions.length;i++){var res=macroExpressions[i];var macroMatch=res.match(/^([a-zA-Z0-9_]+)\s+(.+)\s+as\s+([a-zA-Z0-9_]+)$/);if(macroMatch){macroNames[macroMatch[1].trim()]=macroMatch[2].trim()}else if(res.match(/^([a-zA-Z0-9_]+)$/)){macroNames[res]=res}else{}}delete token.match;token.expression=expression;token.macroNames=macroNames;token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;return token},parse:function(token,context,chain){var macros;if(token.expression!=="_self"){var file=Twig.expression.parse.apply(this,[token.stack,context]);var template=this.importFile(file||token.expression);macros=template.render({},{output:"macros"})}else{macros=this.macros}for(var macroName in token.macroNames){if(macros.hasOwnProperty(macroName)){context[token.macroNames[macroName]]=macros[macroName]}}return{chain:chain,output:""}}},{type:Twig.logic.type.embed,regex:/^embed\s+(ignore missing\s+)?(.+?)\s*(?:with\s+(.+?))?\s*(only)?$/,next:[Twig.logic.type.endembed],open:true,compile:function(token){var match=token.match,includeMissing=match[1]!==undefined,expression=match[2].trim(),withContext=match[3],only=match[4]!==undefined&&match[4].length;delete token.match;token.only=only;token.includeMissing=includeMissing;token.stack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:expression}]).stack;if(withContext!==undefined){token.withStack=Twig.expression.compile.apply(this,[{type:Twig.expression.type.expression,value:withContext.trim()}]).stack}return token},parse:function(token,context,chain){var innerContext={},withContext,i,template;if(!token.only){for(i in context){if(context.hasOwnProperty(i))innerContext[i]=context[i]}}if(token.withStack!==undefined){withContext=Twig.expression.parse.apply(this,[token.withStack,context]);for(i in withContext){if(withContext.hasOwnProperty(i))innerContext[i]=withContext[i]}}var file=Twig.expression.parse.apply(this,[token.stack,innerContext]);if(file instanceof Twig.Template){template=file}else{template=this.importFile(file)}this.blocks={};var output=Twig.parse.apply(this,[token.output,innerContext]);return{chain:chain,output:template.render(innerContext,{blocks:this.blocks})}}},{type:Twig.logic.type.endembed,regex:/^endembed$/,next:[],open:false}];Twig.logic.handler={};Twig.logic.extendType=function(type,value){value=value||"Twig.logic.type"+type;Twig.logic.type[type]=value};Twig.logic.extend=function(definition){if(!definition.type){throw new Twig.Error("Unable to extend logic definition. No type provided for "+definition)}else{Twig.logic.extendType(definition.type)}Twig.logic.handler[definition.type]=definition};while(Twig.logic.definitions.length>0){Twig.logic.extend(Twig.logic.definitions.shift())}Twig.logic.compile=function(raw_token){var expression=raw_token.value.trim(),token=Twig.logic.tokenize.apply(this,[expression]),token_template=Twig.logic.handler[token.type];if(token_template.compile){token=token_template.compile.apply(this,[token]);Twig.log.trace("Twig.logic.compile: ","Compiled logic token to ",token)}return token};Twig.logic.tokenize=function(expression){var token={},token_template_type=null,token_type=null,token_regex=null,regex_array=null,regex=null,match=null;expression=expression.trim();for(token_template_type in Twig.logic.handler){if(Twig.logic.handler.hasOwnProperty(token_template_type)){token_type=Twig.logic.handler[token_template_type].type;token_regex=Twig.logic.handler[token_template_type].regex;regex_array=[];if(token_regex instanceof Array){regex_array=token_regex}else{regex_array.push(token_regex)}while(regex_array.length>0){regex=regex_array.shift();match=regex.exec(expression.trim());if(match!==null){token.type=token_type;token.match=match;Twig.log.trace("Twig.logic.tokenize: ","Matched a ",token_type," regular expression of ",match);return token}}}}throw new Twig.Error("Unable to parse '"+expression.trim()+"'")};Twig.logic.parse=function(token,context,chain){var output="",token_template;context=context||{};Twig.log.debug("Twig.logic.parse: ","Parsing logic token ",token);token_template=Twig.logic.handler[token.type];if(token_template.parse){output=token_template.parse.apply(this,[token,context,chain])}return output};return Twig}(Twig||{});var Twig=function(Twig){"use strict";Twig.expression={};Twig.expression.reservedWords=["true","false","null","TRUE","FALSE","NULL","_context"];Twig.expression.type={comma:"Twig.expression.type.comma",operator:{unary:"Twig.expression.type.operator.unary",binary:"Twig.expression.type.operator.binary"},string:"Twig.expression.type.string",bool:"Twig.expression.type.bool",array:{start:"Twig.expression.type.array.start",end:"Twig.expression.type.array.end"},object:{start:"Twig.expression.type.object.start",end:"Twig.expression.type.object.end"},parameter:{start:"Twig.expression.type.parameter.start",end:"Twig.expression.type.parameter.end"},key:{period:"Twig.expression.type.key.period",brackets:"Twig.expression.type.key.brackets"},filter:"Twig.expression.type.filter",_function:"Twig.expression.type._function",variable:"Twig.expression.type.variable",number:"Twig.expression.type.number",_null:"Twig.expression.type.null",context:"Twig.expression.type.context",test:"Twig.expression.type.test"};Twig.expression.set={operations:[Twig.expression.type.filter,Twig.expression.type.operator.unary,Twig.expression.type.operator.binary,Twig.expression.type.array.end,Twig.expression.type.object.end,Twig.expression.type.parameter.end,Twig.expression.type.comma,Twig.expression.type.test],expressions:[Twig.expression.type._function,Twig.expression.type.bool,Twig.expression.type.string,Twig.expression.type.variable,Twig.expression.type.number,Twig.expression.type._null,Twig.expression.type.context,Twig.expression.type.parameter.start,Twig.expression.type.array.start,Twig.expression.type.object.start]};Twig.expression.set.operations_extended=Twig.expression.set.operations.concat([Twig.expression.type.key.period,Twig.expression.type.key.brackets]);Twig.expression.fn={compile:{push:function(token,stack,output){output.push(token)},push_both:function(token,stack,output){output.push(token);stack.push(token)}},parse:{push:function(token,stack,context){stack.push(token)},push_value:function(token,stack,context){stack.push(token.value)}}};Twig.expression.definitions=[{type:Twig.expression.type.test,regex:/^is\s+(not)?\s*([a-zA-Z_][a-zA-Z0-9_]*)/,next:Twig.expression.set.operations.concat([Twig.expression.type.parameter.start]),compile:function(token,stack,output){token.filter=token.match[2];token.modifier=token.match[1];delete token.match;delete token.value;output.push(token)},parse:function(token,stack,context){var value=stack.pop(),params=token.params&&Twig.expression.parse.apply(this,[token.params,context]),result=Twig.test(token.filter,value,params);if(token.modifier=="not"){stack.push(!result)}else{stack.push(result)}}},{type:Twig.expression.type.comma,regex:/^,/,next:Twig.expression.set.expressions.concat([Twig.expression.type.array.end,Twig.expression.type.object.end]),compile:function(token,stack,output){var i=stack.length-1,stack_token;delete token.match;delete token.value;for(;i>=0;i--){stack_token=stack.pop();if(stack_token.type===Twig.expression.type.object.start||stack_token.type===Twig.expression.type.parameter.start||stack_token.type===Twig.expression.type.array.start){stack.push(stack_token);break}output.push(stack_token)}output.push(token)}},{type:Twig.expression.type.operator.binary,regex:/(^[\+\-~%\?\:]|^[!=]==?|^[!<>]=?|^\*\*?|^\/\/?|^and\s+|^or\s+|^in\s+|^not in\s+|^\.\.)/,next:Twig.expression.set.expressions.concat([Twig.expression.type.operator.unary]),compile:function(token,stack,output){delete token.match;token.value=token.value.trim();var value=token.value,operator=Twig.expression.operator.lookup(value,token);Twig.log.trace("Twig.expression.compile: ","Operator: ",operator," from ",value);while(stack.length>0&&(stack[stack.length-1].type==Twig.expression.type.operator.unary||stack[stack.length-1].type==Twig.expression.type.operator.binary)&&(operator.associativity===Twig.expression.operator.leftToRight&&operator.precidence>=stack[stack.length-1].precidence||operator.associativity===Twig.expression.operator.rightToLeft&&operator.precidence>stack[stack.length-1].precidence)){var temp=stack.pop();output.push(temp)}if(value===":"){if(stack[stack.length-1]&&stack[stack.length-1].value==="?"){}else{var key_token=output.pop();if(key_token.type===Twig.expression.type.string||key_token.type===Twig.expression.type.variable){token.key=key_token.value}else if(key_token.type===Twig.expression.type.number){token.key=key_token.value.toString()}else if(key_token.type===Twig.expression.type.parameter.end&&key_token.expression){token.params=key_token.params}else{throw new Twig.Error("Unexpected value before ':' of "+key_token.type+" = "+key_token.value)}output.push(token);return}}else{stack.push(operator)}},parse:function(token,stack,context){if(token.key){stack.push(token)}else if(token.params){token.key=Twig.expression.parse.apply(this,[token.params,context]);stack.push(token);delete token.params}else{Twig.expression.operator.parse(token.value,stack)}}},{type:Twig.expression.type.operator.unary,regex:/(^not\s+)/,next:Twig.expression.set.expressions,compile:function(token,stack,output){delete token.match;token.value=token.value.trim();var value=token.value,operator=Twig.expression.operator.lookup(value,token);Twig.log.trace("Twig.expression.compile: ","Operator: ",operator," from ",value);while(stack.length>0&&(stack[stack.length-1].type==Twig.expression.type.operator.unary||stack[stack.length-1].type==Twig.expression.type.operator.binary)&&(operator.associativity===Twig.expression.operator.leftToRight&&operator.precidence>=stack[stack.length-1].precidence||operator.associativity===Twig.expression.operator.rightToLeft&&operator.precidence>stack[stack.length-1].precidence)){var temp=stack.pop();output.push(temp)}stack.push(operator)},parse:function(token,stack,context){Twig.expression.operator.parse(token.value,stack)}},{type:Twig.expression.type.string,regex:/^(["'])(?:(?=(\\?))\2[\s\S])*?\1/,next:Twig.expression.set.operations,compile:function(token,stack,output){var value=token.value;delete token.match;if(value.substring(0,1)==='"'){value=value.replace('\\"','"')}else{value=value.replace("\\'","'")}token.value=value.substring(1,value.length-1).replace(/\\n/g,"\n").replace(/\\r/g,"\r");Twig.log.trace("Twig.expression.compile: ","String value: ",token.value);output.push(token)},parse:Twig.expression.fn.parse.push_value},{type:Twig.expression.type.parameter.start,regex:/^\(/,next:Twig.expression.set.expressions.concat([Twig.expression.type.parameter.end]),compile:Twig.expression.fn.compile.push_both,parse:Twig.expression.fn.parse.push},{type:Twig.expression.type.parameter.end,regex:/^\)/,next:Twig.expression.set.operations_extended,compile:function(token,stack,output){var stack_token,end_token=token;stack_token=stack.pop();while(stack.length>0&&stack_token.type!=Twig.expression.type.parameter.start){output.push(stack_token);stack_token=stack.pop()}var param_stack=[];while(token.type!==Twig.expression.type.parameter.start){param_stack.unshift(token);token=output.pop()}param_stack.unshift(token);var is_expression=false;token=output[output.length-1];if(token===undefined||token.type!==Twig.expression.type._function&&token.type!==Twig.expression.type.filter&&token.type!==Twig.expression.type.test&&token.type!==Twig.expression.type.key.brackets&&token.type!==Twig.expression.type.key.period){end_token.expression=true;param_stack.pop();param_stack.shift();end_token.params=param_stack;output.push(end_token)}else{end_token.expression=false;token.params=param_stack}},parse:function(token,stack,context){var new_array=[],array_ended=false,value=null;if(token.expression){value=Twig.expression.parse.apply(this,[token.params,context]);stack.push(value)}else{while(stack.length>0){value=stack.pop();if(value&&value.type&&value.type==Twig.expression.type.parameter.start){array_ended=true;break}new_array.unshift(value)}if(!array_ended){throw new Twig.Error("Expected end of parameter set.")}stack.push(new_array)}}},{type:Twig.expression.type.array.start,regex:/^\[/,next:Twig.expression.set.expressions.concat([Twig.expression.type.array.end]),compile:Twig.expression.fn.compile.push_both,parse:Twig.expression.fn.parse.push},{type:Twig.expression.type.array.end,regex:/^\]/,next:Twig.expression.set.operations_extended,compile:function(token,stack,output){var i=stack.length-1,stack_token;for(;i>=0;i--){stack_token=stack.pop();if(stack_token.type===Twig.expression.type.array.start){break}output.push(stack_token)}output.push(token)},parse:function(token,stack,context){var new_array=[],array_ended=false,value=null;while(stack.length>0){value=stack.pop();if(value.type&&value.type==Twig.expression.type.array.start){array_ended=true;break}new_array.unshift(value)}if(!array_ended){throw new Twig.Error("Expected end of array.")}stack.push(new_array)}},{type:Twig.expression.type.object.start,regex:/^\{/,next:Twig.expression.set.expressions.concat([Twig.expression.type.object.end]),compile:Twig.expression.fn.compile.push_both,parse:Twig.expression.fn.parse.push},{type:Twig.expression.type.object.end,regex:/^\}/,next:Twig.expression.set.operations_extended,compile:function(token,stack,output){var i=stack.length-1,stack_token;for(;i>=0;i--){stack_token=stack.pop();if(stack_token&&stack_token.type===Twig.expression.type.object.start){break}output.push(stack_token)}output.push(token)},parse:function(end_token,stack,context){var new_object={},object_ended=false,token=null,token_key=null,has_value=false,value=null;while(stack.length>0){token=stack.pop();if(token&&token.type&&token.type===Twig.expression.type.object.start){object_ended=true;break}if(token&&token.type&&(token.type===Twig.expression.type.operator.binary||token.type===Twig.expression.type.operator.unary)&&token.key){if(!has_value){throw new Twig.Error("Missing value for key '"+token.key+"' in object definition.")}new_object[token.key]=value;if(new_object._keys===undefined)new_object._keys=[];new_object._keys.unshift(token.key);value=null;has_value=false}else{has_value=true;value=token}}if(!object_ended){throw new Twig.Error("Unexpected end of object.")}stack.push(new_object)}},{type:Twig.expression.type.filter,regex:/^\|\s?([a-zA-Z_][a-zA-Z0-9_\-]*)/,next:Twig.expression.set.operations_extended.concat([Twig.expression.type.parameter.start]),compile:function(token,stack,output){
-token.value=token.match[1];output.push(token)},parse:function(token,stack,context){var input=stack.pop(),params=token.params&&Twig.expression.parse.apply(this,[token.params,context]);stack.push(Twig.filter.apply(this,[token.value,input,params]))}},{type:Twig.expression.type._function,regex:/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/,next:Twig.expression.type.parameter.start,transform:function(match,tokens){return"("},compile:function(token,stack,output){var fn=token.match[1];token.fn=fn;delete token.match;delete token.value;output.push(token)},parse:function(token,stack,context){var params=token.params&&Twig.expression.parse.apply(this,[token.params,context]),fn=token.fn,value;if(Twig.functions[fn]){value=Twig.functions[fn].apply(this,params)}else if(typeof context[fn]=="function"){value=context[fn].apply(context,params)}else{throw new Twig.Error(fn+" function does not exist and is not defined in the context")}stack.push(value)}},{type:Twig.expression.type.variable,regex:/^[a-zA-Z_][a-zA-Z0-9_]*/,next:Twig.expression.set.operations_extended.concat([Twig.expression.type.parameter.start]),compile:Twig.expression.fn.compile.push,validate:function(match,tokens){return Twig.indexOf(Twig.expression.reservedWords,match[0])<0},parse:function(token,stack,context){var value=Twig.expression.resolve(context[token.value],context);stack.push(value)}},{type:Twig.expression.type.key.period,regex:/^\.([a-zA-Z0-9_]+)/,next:Twig.expression.set.operations_extended.concat([Twig.expression.type.parameter.start]),compile:function(token,stack,output){token.key=token.match[1];delete token.match;delete token.value;output.push(token)},parse:function(token,stack,context){var params=token.params&&Twig.expression.parse.apply(this,[token.params,context]),key=token.key,object=stack.pop(),value;if(object===null||object===undefined){if(this.options.strict_variables){throw new Twig.Error("Can't access a key "+key+" on an null or undefined object.")}else{return null}}var capitalize=function(value){return value.substr(0,1).toUpperCase()+value.substr(1)};if(typeof object==="object"&&key in object){value=object[key]}else if(object["get"+capitalize(key)]!==undefined){value=object["get"+capitalize(key)]}else if(object["is"+capitalize(key)]!==undefined){value=object["is"+capitalize(key)]}else{value=undefined}stack.push(Twig.expression.resolve(value,object,params))}},{type:Twig.expression.type.key.brackets,regex:/^\[([^\]]*)\]/,next:Twig.expression.set.operations_extended.concat([Twig.expression.type.parameter.start]),compile:function(token,stack,output){var match=token.match[1];delete token.value;delete token.match;token.stack=Twig.expression.compile({value:match}).stack;output.push(token)},parse:function(token,stack,context){var params=token.params&&Twig.expression.parse.apply(this,[token.params,context]),key=Twig.expression.parse.apply(this,[token.stack,context]),object=stack.pop(),value;if(object===null||object===undefined){if(this.options.strict_variables){throw new Twig.Error("Can't access a key "+key+" on an null or undefined object.")}else{return null}}if(typeof object==="object"&&key in object){value=object[key]}else{value=null}stack.push(Twig.expression.resolve(value,object,params))}},{type:Twig.expression.type._null,regex:/^(null|NULL|none|NONE)/,next:Twig.expression.set.operations,compile:function(token,stack,output){delete token.match;token.value=null;output.push(token)},parse:Twig.expression.fn.parse.push_value},{type:Twig.expression.type.context,regex:/^_context/,next:Twig.expression.set.operations_extended.concat([Twig.expression.type.parameter.start]),compile:Twig.expression.fn.compile.push,parse:function(token,stack,context){stack.push(context)}},{type:Twig.expression.type.number,regex:/^\-?\d+(\.\d+)?/,next:Twig.expression.set.operations,compile:function(token,stack,output){token.value=Number(token.value);output.push(token)},parse:Twig.expression.fn.parse.push_value},{type:Twig.expression.type.bool,regex:/^(true|TRUE|false|FALSE)/,next:Twig.expression.set.operations,compile:function(token,stack,output){token.value=token.match[0].toLowerCase()==="true";delete token.match;output.push(token)},parse:Twig.expression.fn.parse.push_value}];Twig.expression.resolve=function(value,context,params){if(typeof value=="function"){return value.apply(context,params||[])}else{return value}};Twig.expression.handler={};Twig.expression.extendType=function(type){Twig.expression.type[type]="Twig.expression.type."+type};Twig.expression.extend=function(definition){if(!definition.type){throw new Twig.Error("Unable to extend logic definition. No type provided for "+definition)}Twig.expression.handler[definition.type]=definition};while(Twig.expression.definitions.length>0){Twig.expression.extend(Twig.expression.definitions.shift())}Twig.expression.tokenize=function(expression){var tokens=[],exp_offset=0,next=null,type,regex,regex_array,token_next,match_found,invalid_matches=[],match_function;match_function=function(){var match=Array.prototype.slice.apply(arguments),string=match.pop(),offset=match.pop();Twig.log.trace("Twig.expression.tokenize","Matched a ",type," regular expression of ",match);if(next&&Twig.indexOf(next,type)<0){invalid_matches.push(type+" cannot follow a "+tokens[tokens.length-1].type+" at template:"+exp_offset+" near '"+match[0].substring(0,20)+"...'");return match[0]}if(Twig.expression.handler[type].validate&&!Twig.expression.handler[type].validate(match,tokens)){return match[0]}invalid_matches=[];tokens.push({type:type,value:match[0],match:match});match_found=true;next=token_next;exp_offset+=match[0].length;if(Twig.expression.handler[type].transform){return Twig.expression.handler[type].transform(match,tokens)}return""};Twig.log.debug("Twig.expression.tokenize","Tokenizing expression ",expression);while(expression.length>0){expression=expression.trim();for(type in Twig.expression.handler){if(Twig.expression.handler.hasOwnProperty(type)){token_next=Twig.expression.handler[type].next;regex=Twig.expression.handler[type].regex;if(regex instanceof Array){regex_array=regex}else{regex_array=[regex]}match_found=false;while(regex_array.length>0){regex=regex_array.pop();expression=expression.replace(regex,match_function)}if(match_found){break}}}if(!match_found){if(invalid_matches.length>0){throw new Twig.Error(invalid_matches.join(" OR "))}else{throw new Twig.Error("Unable to parse '"+expression+"' at template position"+exp_offset)}}}Twig.log.trace("Twig.expression.tokenize","Tokenized to ",tokens);return tokens};Twig.expression.compile=function(raw_token){var expression=raw_token.value,tokens=Twig.expression.tokenize(expression),token=null,output=[],stack=[],token_template=null;Twig.log.trace("Twig.expression.compile: ","Compiling ",expression);while(tokens.length>0){token=tokens.shift();token_template=Twig.expression.handler[token.type];Twig.log.trace("Twig.expression.compile: ","Compiling ",token);token_template.compile&&token_template.compile(token,stack,output);Twig.log.trace("Twig.expression.compile: ","Stack is",stack);Twig.log.trace("Twig.expression.compile: ","Output is",output)}while(stack.length>0){output.push(stack.pop())}Twig.log.trace("Twig.expression.compile: ","Final output is",output);raw_token.stack=output;delete raw_token.value;return raw_token};Twig.expression.parse=function(tokens,context){var that=this;if(!(tokens instanceof Array)){tokens=[tokens]}var stack=[],token_template=null;Twig.forEach(tokens,function(token){token_template=Twig.expression.handler[token.type];token_template.parse&&token_template.parse.apply(that,[token,stack,context])});return stack.pop()};return Twig}(Twig||{});var Twig=function(Twig){"use strict";Twig.expression.operator={leftToRight:"leftToRight",rightToLeft:"rightToLeft"};var containment=function(a,b){if(b===undefined||b===null){return null}else if(b.indexOf!==undefined){return a===b||a!==""&&b.indexOf(a)>-1}else{var el;for(el in b){if(b.hasOwnProperty(el)&&b[el]===a){return true}}return false}};Twig.expression.operator.lookup=function(operator,token){switch(operator){case"..":case"not in":case"in":token.precidence=20;token.associativity=Twig.expression.operator.leftToRight;break;case",":token.precidence=18;token.associativity=Twig.expression.operator.leftToRight;break;case"?":case":":token.precidence=16;token.associativity=Twig.expression.operator.rightToLeft;break;case"or":token.precidence=14;token.associativity=Twig.expression.operator.leftToRight;break;case"and":token.precidence=13;token.associativity=Twig.expression.operator.leftToRight;break;case"==":case"!=":token.precidence=9;token.associativity=Twig.expression.operator.leftToRight;break;case"<":case"<=":case">":case">=":token.precidence=8;token.associativity=Twig.expression.operator.leftToRight;break;case"~":case"+":case"-":token.precidence=6;token.associativity=Twig.expression.operator.leftToRight;break;case"//":case"**":case"*":case"/":case"%":token.precidence=5;token.associativity=Twig.expression.operator.leftToRight;break;case"not":token.precidence=3;token.associativity=Twig.expression.operator.rightToLeft;break;default:throw new Twig.Error(operator+" is an unknown operator.")}token.operator=operator;return token};Twig.expression.operator.parse=function(operator,stack){Twig.log.trace("Twig.expression.operator.parse: ","Handling ",operator);var a,b,c;switch(operator){case":":break;case"?":c=stack.pop();b=stack.pop();a=stack.pop();if(a){stack.push(b)}else{stack.push(c)}break;case"+":b=parseFloat(stack.pop());a=parseFloat(stack.pop());stack.push(a+b);break;case"-":b=parseFloat(stack.pop());a=parseFloat(stack.pop());stack.push(a-b);break;case"*":b=parseFloat(stack.pop());a=parseFloat(stack.pop());stack.push(a*b);break;case"/":b=parseFloat(stack.pop());a=parseFloat(stack.pop());stack.push(a/b);break;case"//":b=parseFloat(stack.pop());a=parseFloat(stack.pop());stack.push(parseInt(a/b));break;case"%":b=parseFloat(stack.pop());a=parseFloat(stack.pop());stack.push(a%b);break;case"~":b=stack.pop();a=stack.pop();stack.push((a!=null?a.toString():"")+(b!=null?b.toString():""));break;case"not":case"!":stack.push(!stack.pop());break;case"<":b=stack.pop();a=stack.pop();stack.push(a<b);break;case"<=":b=stack.pop();a=stack.pop();stack.push(a<=b);break;case">":b=stack.pop();a=stack.pop();stack.push(a>b);break;case">=":b=stack.pop();a=stack.pop();stack.push(a>=b);break;case"===":b=stack.pop();a=stack.pop();stack.push(a===b);break;case"==":b=stack.pop();a=stack.pop();stack.push(a==b);break;case"!==":b=stack.pop();a=stack.pop();stack.push(a!==b);break;case"!=":b=stack.pop();a=stack.pop();stack.push(a!=b);break;case"or":b=stack.pop();a=stack.pop();stack.push(a||b);break;case"and":b=stack.pop();a=stack.pop();stack.push(a&&b);break;case"**":b=stack.pop();a=stack.pop();stack.push(Math.pow(a,b));break;case"not in":b=stack.pop();a=stack.pop();stack.push(!containment(a,b));break;case"in":b=stack.pop();a=stack.pop();stack.push(containment(a,b));break;case"..":b=stack.pop();a=stack.pop();stack.push(Twig.functions.range(a,b));break;default:throw new Twig.Error(operator+" is an unknown operator.")}};return Twig}(Twig||{});var Twig=function(Twig){function is(type,obj){var clas=Object.prototype.toString.call(obj).slice(8,-1);return obj!==undefined&&obj!==null&&clas===type}Twig.filters={upper:function(value){if(typeof value!=="string"){return value}return value.toUpperCase()},lower:function(value){if(typeof value!=="string"){return value}return value.toLowerCase()},capitalize:function(value){if(typeof value!=="string"){return value}return value.substr(0,1).toUpperCase()+value.toLowerCase().substr(1)},title:function(value){if(typeof value!=="string"){return value}return value.toLowerCase().replace(/(^|\s)([a-z])/g,function(m,p1,p2){return p1+p2.toUpperCase()})},length:function(value){if(Twig.lib.is("Array",value)||typeof value==="string"){return value.length}else if(Twig.lib.is("Object",value)){if(value._keys===undefined){return Object.keys(value).length}else{return value._keys.length}}else{return 0}},reverse:function(value){if(is("Array",value)){return value.reverse()}else if(is("String",value)){return value.split("").reverse().join("")}else if(is("Object",value)){var keys=value._keys||Object.keys(value).reverse();value._keys=keys;return value}},sort:function(value){if(is("Array",value)){return value.sort()}else if(is("Object",value)){delete value._keys;var keys=Object.keys(value),sorted_keys=keys.sort(function(a,b){var a1,a2;if(value[a]>value[b]==!(value[a]<=value[b])){return value[a]>value[b]?1:value[a]<value[b]?-1:0}else if(!isNaN(a1=parseFloat(value[a]))&&!isNaN(b1=parseFloat(value[b]))){return a1>b1?1:a1<b1?-1:0}else if(typeof value[a]=="string"){return value[a]>value[b].toString()?1:value[a]<value[b].toString()?-1:0}else if(typeof value[b]=="string"){return value[a].toString()>value[b]?1:value[a].toString()<value[b]?-1:0}else{return null}});value._keys=sorted_keys;return value}},keys:function(value){if(value===undefined||value===null){return}var keyset=value._keys||Object.keys(value),output=[];Twig.forEach(keyset,function(key){if(key==="_keys")return;if(value.hasOwnProperty(key)){output.push(key)}});return output},url_encode:function(value){if(value===undefined||value===null){return}var result=encodeURIComponent(value);result=result.replace("'","%27");return result},join:function(value,params){if(value===undefined||value===null){return}var join_str="",output=[],keyset=null;if(params&&params[0]){join_str=params[0]}if(is("Array",value)){output=value}else{keyset=value._keys||Object.keys(value);Twig.forEach(keyset,function(key){if(key==="_keys")return;if(value.hasOwnProperty(key)){output.push(value[key])}})}return output.join(join_str)},"default":function(value,params){if(params!==undefined&&params.length>1){throw new Twig.Error("default filter expects one argument")}if(value===undefined||value===null||value===""){if(params===undefined){return""}return params[0]}else{return value}},json_encode:function(value){if(value===undefined||value===null){return"null"}else if(typeof value=="object"&&is("Array",value)){output=[];Twig.forEach(value,function(v){output.push(Twig.filters.json_encode(v))});return"["+output.join(",")+"]"}else if(typeof value=="object"){var keyset=value._keys||Object.keys(value),output=[];Twig.forEach(keyset,function(key){output.push(JSON.stringify(key)+":"+Twig.filters.json_encode(value[key]))});return"{"+output.join(",")+"}"}else{return JSON.stringify(value)}},merge:function(value,params){var obj=[],arr_index=0,keyset=[];if(!is("Array",value)){obj={}}else{Twig.forEach(params,function(param){if(!is("Array",param)){obj={}}})}if(!is("Array",obj)){obj._keys=[]}if(is("Array",value)){Twig.forEach(value,function(val){if(obj._keys)obj._keys.push(arr_index);obj[arr_index]=val;arr_index++})}else{keyset=value._keys||Object.keys(value);Twig.forEach(keyset,function(key){obj[key]=value[key];obj._keys.push(key);var int_key=parseInt(key,10);if(!isNaN(int_key)&&int_key>=arr_index){arr_index=int_key+1}})}Twig.forEach(params,function(param){if(is("Array",param)){Twig.forEach(param,function(val){if(obj._keys)obj._keys.push(arr_index);obj[arr_index]=val;arr_index++})}else{keyset=param._keys||Object.keys(param);Twig.forEach(keyset,function(key){if(!obj[key])obj._keys.push(key);obj[key]=param[key];var int_key=parseInt(key,10);if(!isNaN(int_key)&&int_key>=arr_index){arr_index=int_key+1}})}});if(params.length===0){throw new Twig.Error("Filter merge expects at least one parameter")}return obj},date:function(value,params){var date=Twig.functions.date(value);var format=params&&params.length?params[0]:"F j, Y H:i";return Twig.lib.formatDate(date,format)},date_modify:function(value,params){if(value===undefined||value===null){return}if(params===undefined||params.length!==1){throw new Twig.Error("date_modify filter expects 1 argument")}var modifyText=params[0],time;if(Twig.lib.is("Date",value)){time=Twig.lib.strtotime(modifyText,value.getTime()/1e3)}if(Twig.lib.is("String",value)){time=Twig.lib.strtotime(modifyText,Twig.lib.strtotime(value))}if(Twig.lib.is("Number",value)){time=Twig.lib.strtotime(modifyText,value)}return new Date(time*1e3)},replace:function(value,params){if(value===undefined||value===null){return}var pairs=params[0],tag;for(tag in pairs){if(pairs.hasOwnProperty(tag)&&tag!=="_keys"){value=Twig.lib.replaceAll(value,tag,pairs[tag])}}return value},format:function(value,params){if(value===undefined||value===null){return}return Twig.lib.vsprintf(value,params)},striptags:function(value){if(value===undefined||value===null){return}return Twig.lib.strip_tags(value)},escape:function(value,params){if(value===undefined||value===null){return}var strategy="html";if(params&&params.length&&params[0]!==true)strategy=params[0];if(strategy=="html"){var raw_value=value.toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");return Twig.Markup(raw_value,"html")}else if(strategy=="js"){var raw_value=value.toString();var result="";for(var i=0;i<raw_value.length;i++){if(raw_value[i].match(/^[a-zA-Z0-9,\._]$/))result+=raw_value[i];else{var char_code=raw_value.charCodeAt(i);if(char_code<128)result+="\\x"+char_code.toString(16).toUpperCase();else result+=Twig.lib.sprintf("\\u%04s",char_code.toString(16).toUpperCase())}}return Twig.Markup(result,"js")}else if(strategy=="css"){var raw_value=value.toString();var result="";for(var i=0;i<raw_value.length;i++){if(raw_value[i].match(/^[a-zA-Z0-9]$/))result+=raw_value[i];else{var char_code=raw_value.charCodeAt(i);result+="\\"+char_code.toString(16).toUpperCase()+" "}}return Twig.Markup(result,"css")}else if(strategy=="url"){var result=Twig.filters.url_encode(value);return Twig.Markup(result,"url")}else if(strategy=="html_attr"){var raw_value=value.toString();var result="";for(var i=0;i<raw_value.length;i++){if(raw_value[i].match(/^[a-zA-Z0-9,\.\-_]$/))result+=raw_value[i];else if(raw_value[i].match(/^[&<>"]$/))result+=raw_value[i].replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");else{var char_code=raw_value.charCodeAt(i);if(char_code<=31&&char_code!=9&&char_code!=10&&char_code!=13)result+="&#xFFFD;";else if(char_code<128)result+=Twig.lib.sprintf("&#x%02s;",char_code.toString(16).toUpperCase());else result+=Twig.lib.sprintf("&#x%04s;",char_code.toString(16).toUpperCase())}}return Twig.Markup(result,"html_attr")}else{throw new Twig.Error("escape strategy unsupported")}},e:function(value,params){return Twig.filters.escape(value,params)},nl2br:function(value){if(value===undefined||value===null){return}var linebreak_tag="BACKSLASH_n_replace",br="<br />"+linebreak_tag;value=Twig.filters.escape(value).replace(/\r\n/g,br).replace(/\r/g,br).replace(/\n/g,br);value=Twig.lib.replaceAll(value,linebreak_tag,"\n");return Twig.Markup(value)},number_format:function(value,params){var number=value,decimals=params&&params[0]?params[0]:undefined,dec=params&&params[1]!==undefined?params[1]:".",sep=params&&params[2]!==undefined?params[2]:",";number=(number+"").replace(/[^0-9+\-Ee.]/g,"");var n=!isFinite(+number)?0:+number,prec=!isFinite(+decimals)?0:Math.abs(decimals),s="",toFixedFix=function(n,prec){var k=Math.pow(10,prec);return""+Math.round(n*k)/k};s=(prec?toFixedFix(n,prec):""+Math.round(n)).split(".");if(s[0].length>3){s[0]=s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g,sep)}if((s[1]||"").length<prec){s[1]=s[1]||"";s[1]+=new Array(prec-s[1].length+1).join("0")}return s.join(dec)},trim:function(value,params){if(value===undefined||value===null){return}var str=Twig.filters.escape(""+value),whitespace;if(params&&params[0]){whitespace=""+params[0]}else{whitespace=" \n\r	\f\x0B            ​\u2028\u2029　"}for(var i=0;i<str.length;i++){if(whitespace.indexOf(str.charAt(i))===-1){str=str.substring(i);break}}for(i=str.length-1;i>=0;i--){if(whitespace.indexOf(str.charAt(i))===-1){str=str.substring(0,i+1);break}}return whitespace.indexOf(str.charAt(0))===-1?str:""},truncate:function(value,params){var length=30,preserve=false,separator="...";value=value+"";if(params){if(params[0]){length=params[0]}if(params[1]){preserve=params[1]}if(params[2]){separator=params[2]}}if(value.length>length){if(preserve){length=value.indexOf(" ",length);if(length===-1){return value}}value=value.substr(0,length)+separator}return value},slice:function(value,params){if(value===undefined||value===null){return}if(params===undefined||params.length<1){throw new Twig.Error("slice filter expects at least 1 argument")}var start=params[0]||0;var length=params.length>1?params[1]:value.length;var startIndex=start>=0?start:Math.max(value.length+start,0);if(Twig.lib.is("Array",value)){var output=[];for(var i=startIndex;i<startIndex+length&&i<value.length;i++){output.push(value[i])}return output}else if(Twig.lib.is("String",value)){return value.substr(startIndex,length)}else{throw new Twig.Error("slice filter expects value to be an array or string")}},abs:function(value){if(value===undefined||value===null){return}return Math.abs(value)},first:function(value){if(is("Array",value)){return value[0]}else if(is("Object",value)){if("_keys"in value){return value[value._keys[0]]}}else if(typeof value==="string"){return value.substr(0,1)}return},split:function(value,params){if(value===undefined||value===null){return}if(params===undefined||params.length<1||params.length>2){throw new Twig.Error("split filter expects 1 or 2 argument")}if(Twig.lib.is("String",value)){var delimiter=params[0],limit=params[1],split=value.split(delimiter);if(limit===undefined){return split}else if(limit<0){return value.split(delimiter,split.length+limit)}else{var limitedSplit=[];if(delimiter==""){while(split.length>0){var temp="";for(var i=0;i<limit&&split.length>0;i++){temp+=split.shift()}limitedSplit.push(temp)}}else{for(var i=0;i<limit-1&&split.length>0;i++){limitedSplit.push(split.shift())}if(split.length>0){limitedSplit.push(split.join(delimiter))}}return limitedSplit}}else{throw new Twig.Error("split filter expects value to be a string")}},last:function(value){if(Twig.lib.is("Object",value)){var keys;if(value._keys===undefined){keys=Object.keys(value)}else{keys=value._keys}return value[keys[keys.length-1]]}return value[value.length-1]},raw:function(value){return Twig.Markup(value)},batch:function(items,params){var size=params.shift(),fill=params.shift(),result,last,missing;if(!Twig.lib.is("Array",items)){throw new Twig.Error("batch filter expects items to be an array")}if(!Twig.lib.is("Number",size)){throw new Twig.Error("batch filter expects size to be a number")}size=Math.ceil(size);result=Twig.lib.chunkArray(items,size);if(fill&&items.length%size!=0){last=result.pop();missing=size-last.length;while(missing--){last.push(fill)}result.push(last)}return result},round:function(value,params){params=params||[];var precision=params.length>0?params[0]:0,method=params.length>1?params[1]:"common";value=parseFloat(value);if(precision&&!Twig.lib.is("Number",precision)){throw new Twig.Error("round filter expects precision to be a number")}if(method==="common"){return Twig.lib.round(value,precision)}if(!Twig.lib.is("Function",Math[method])){throw new Twig.Error("round filter expects method to be 'floor', 'ceil', or 'common'")}return Math[method](value*Math.pow(10,precision))/Math.pow(10,precision)}};Twig.filter=function(filter,value,params){if(!Twig.filters[filter]){throw"Unable to find filter "+filter}return Twig.filters[filter].apply(this,[value,params])};Twig.filter.extend=function(filter,definition){Twig.filters[filter]=definition};return Twig}(Twig||{});var Twig=function(Twig){var TEMPLATE_NOT_FOUND_MESSAGE='Template "{name}" is not defined.';function is(type,obj){var clas=Object.prototype.toString.call(obj).slice(8,-1);return obj!==undefined&&obj!==null&&clas===type}Twig.functions={range:function(low,high,step){var matrix=[];var inival,endval,plus;var walker=step||1;var chars=false;if(!isNaN(low)&&!isNaN(high)){inival=parseInt(low,10);endval=parseInt(high,10)}else if(isNaN(low)&&isNaN(high)){chars=true;inival=low.charCodeAt(0);endval=high.charCodeAt(0)}else{inival=isNaN(low)?0:low;endval=isNaN(high)?0:high}plus=inival>endval?false:true;if(plus){while(inival<=endval){matrix.push(chars?String.fromCharCode(inival):inival);inival+=walker}}else{while(inival>=endval){matrix.push(chars?String.fromCharCode(inival):inival);inival-=walker}}return matrix},cycle:function(arr,i){var pos=i%arr.length;return arr[pos]},dump:function(){var EOL="\n",indentChar="  ",indentTimes=0,out="",args=Array.prototype.slice.call(arguments),indent=function(times){var ind="";while(times>0){times--;ind+=indentChar}return ind},displayVar=function(variable){out+=indent(indentTimes);if(typeof variable==="object"){dumpVar(variable)}else if(typeof variable==="function"){out+="function()"+EOL}else if(typeof variable==="string"){out+="string("+variable.length+') "'+variable+'"'+EOL}else if(typeof variable==="number"){out+="number("+variable+")"+EOL}else if(typeof variable==="boolean"){out+="bool("+variable+")"+EOL}},dumpVar=function(variable){var i;if(variable===null){out+="NULL"+EOL}else if(variable===undefined){out+="undefined"+EOL}else if(typeof variable==="object"){out+=indent(indentTimes)+typeof variable;indentTimes++;out+="("+function(obj){var size=0,key;for(key in obj){if(obj.hasOwnProperty(key)){size++}}return size}(variable)+") {"+EOL;for(i in variable){out+=indent(indentTimes)+"["+i+"]=> "+EOL;displayVar(variable[i])}indentTimes--;out+=indent(indentTimes)+"}"+EOL}else{displayVar(variable)}};if(args.length==0)args.push(this.context);Twig.forEach(args,function(variable){dumpVar(variable)});return out},date:function(date,time){var dateObj;if(date===undefined){dateObj=new Date}else if(Twig.lib.is("Date",date)){dateObj=date}else if(Twig.lib.is("String",date)){if(date.match(/^[0-9]+$/)){dateObj=new Date(date*1e3)}else{dateObj=new Date(Twig.lib.strtotime(date)*1e3)}}else if(Twig.lib.is("Number",date)){dateObj=new Date(date*1e3)}else{throw new Twig.Error("Unable to parse date "+date)}return dateObj},block:function(block){if(this.originalBlockTokens[block]){return Twig.logic.parse.apply(this,[this.originalBlockTokens[block],this.context]).output}else{return this.blocks[block]}},parent:function(){return Twig.placeholders.parent},attribute:function(object,method,params){if(Twig.lib.is("Object",object)){if(object.hasOwnProperty(method)){if(typeof object[method]==="function"){return object[method].apply(undefined,params)}else{return object[method]}}}return object[method]||undefined},max:function(values){if(Twig.lib.is("Object",values)){delete values["_keys"];return Twig.lib.max(values)}return Twig.lib.max.apply(null,arguments)},min:function(values){if(Twig.lib.is("Object",values)){delete values["_keys"];return Twig.lib.min(values)}return Twig.lib.min.apply(null,arguments)},template_from_string:function(template){if(template===undefined){template=""}return Twig.Templates.parsers.twig({options:this.options,data:template})},random:function(value){var LIMIT_INT31=2147483648;function getRandomNumber(n){var random=Math.floor(Math.random()*LIMIT_INT31);var limits=[0,n];var min=Math.min.apply(null,limits),max=Math.max.apply(null,limits);return min+Math.floor((max-min+1)*random/LIMIT_INT31)}if(Twig.lib.is("Number",value)){return getRandomNumber(value)}if(Twig.lib.is("String",value)){return value.charAt(getRandomNumber(value.length-1))}if(Twig.lib.is("Array",value)){return value[getRandomNumber(value.length-1)]}if(Twig.lib.is("Object",value)){var keys=Object.keys(value);return value[keys[getRandomNumber(keys.length-1)]]}return getRandomNumber(LIMIT_INT31-1)},source:function(name,ignore_missing){var templateSource;var templateFound=false;var isNodeEnvironment=typeof module!=="undefined"&&typeof module.exports!=="undefined"&&typeof window==="undefined";var loader;var path;if(isNodeEnvironment){loader="fs";path=__dirname+"/"+name}else{loader="ajax";path=name}var params={id:name,path:path,method:loader,parser:"source",async:false,fetchTemplateSource:true};if(typeof ignore_missing==="undefined"){ignore_missing=false}try{templateSource=Twig.Templates.loadRemote(name,params);if(typeof templateSource==="undefined"||templateSource===null){templateSource=""}else{templateFound=true}}catch(e){Twig.log.debug("Twig.functions.source: ","Problem loading template  ",e)}if(!templateFound&&!ignore_missing){return TEMPLATE_NOT_FOUND_MESSAGE.replace("{name}",name)}else{return templateSource}}};Twig._function=function(_function,value,params){if(!Twig.functions[_function]){throw"Unable to find function "+_function}return Twig.functions[_function](value,params)};Twig._function.extend=function(_function,definition){Twig.functions[_function]=definition};return Twig}(Twig||{});var Twig=function(Twig){"use strict";Twig.path={};Twig.path.parsePath=function(template,file){var namespaces=null,file=file||"";if(typeof template==="object"&&typeof template.options==="object"){namespaces=template.options.namespaces}if(typeof namespaces==="object"&&file.indexOf("::")>0||file.indexOf("@")>=0){for(var k in namespaces){if(namespaces.hasOwnProperty(k)){file=file.replace(k+"::",namespaces[k]);file=file.replace("@"+k,namespaces[k])}}return file}return Twig.path.relativePath(template,file)};Twig.path.relativePath=function(template,file){var base,base_path,sep_chr="/",new_path=[],file=file||"",val;if(template.url){if(typeof template.base!=="undefined"){base=template.base+(template.base.charAt(template.base.length-1)==="/"?"":"/")}else{base=template.url}}else if(template.path){var path=__webpack_require__(21),sep=path.sep||sep_chr,relative=new RegExp("^\\.{1,2}"+sep.replace("\\","\\\\"));file=file.replace(/\//g,sep);if(template.base!==undefined&&file.match(relative)==null){file=file.replace(template.base,"");base=template.base+sep}else{base=path.normalize(template.path)}base=base.replace(sep+sep,sep);sep_chr=sep}else if((template.name||template.id)&&template.method&&template.method!=="fs"&&template.method!=="ajax"){base=template.base||template.name||template.id}else{throw new Twig.Error("Cannot extend an inline template.")}base_path=base.split(sep_chr);base_path.pop();base_path=base_path.concat(file.split(sep_chr));while(base_path.length>0){val=base_path.shift();if(val=="."){}else if(val==".."&&new_path.length>0&&new_path[new_path.length-1]!=".."){new_path.pop()}else{new_path.push(val)}}return new_path.join(sep_chr)};return Twig}(Twig||{});var Twig=function(Twig){"use strict";Twig.tests={empty:function(value){if(value===null||value===undefined)return true;if(typeof value==="number")return false;if(value.length&&value.length>0)return false;for(var key in value){if(value.hasOwnProperty(key))return false}return true},odd:function(value){return value%2===1},even:function(value){return value%2===0},divisibleby:function(value,params){return value%params[0]===0},defined:function(value){return value!==undefined},none:function(value){return value===null},"null":function(value){return this.none(value)},sameas:function(value,params){return value===params[0]},iterable:function(value){return value&&(Twig.lib.is("Array",value)||Twig.lib.is("Object",value))}};Twig.test=function(test,value,params){if(!Twig.tests[test]){throw"Test "+test+" is not defined."}return Twig.tests[test](value,params)};Twig.test.extend=function(test,definition){Twig.tests[test]=definition};return Twig}(Twig||{});var Twig=function(Twig){"use strict";Twig.exports={VERSION:Twig.VERSION};Twig.exports.twig=function twig(params){"use strict";var id=params.id,options={strict_variables:params.strict_variables||false,autoescape:params.autoescape!=null&&params.autoescape||false,allowInlineIncludes:params.allowInlineIncludes||false,rethrow:params.rethrow||false,namespaces:params.namespaces};if(Twig.cache&&id){Twig.validateId(id)}if(params.debug!==undefined){Twig.debug=params.debug}if(params.trace!==undefined){Twig.trace=params.trace}if(params.data!==undefined){return Twig.Templates.parsers.twig({data:params.data,path:params.hasOwnProperty("path")?params.path:undefined,module:params.module,id:id,options:options})}else if(params.ref!==undefined){if(params.id!==undefined){throw new Twig.Error("Both ref and id cannot be set on a twig.js template.");
-}return Twig.Templates.load(params.ref)}else if(params.method!==undefined){if(!Twig.Templates.isRegisteredLoader(params.method)){throw new Twig.Error('Loader for "'+params.method+'" is not defined.')}return Twig.Templates.loadRemote(params.name||params.href||params.path||id||undefined,{id:id,method:params.method,parser:params.parser||"twig",base:params.base,module:params.module,precompiled:params.precompiled,async:params.async,options:options},params.load,params.error)}else if(params.href!==undefined){return Twig.Templates.loadRemote(params.href,{id:id,method:"ajax",parser:params.parser||"twig",base:params.base,module:params.module,precompiled:params.precompiled,async:params.async,options:options},params.load,params.error)}else if(params.path!==undefined){return Twig.Templates.loadRemote(params.path,{id:id,method:"fs",parser:params.parser||"twig",base:params.base,module:params.module,precompiled:params.precompiled,async:params.async,options:options},params.load,params.error)}};Twig.exports.extendFilter=function(filter,definition){Twig.filter.extend(filter,definition)};Twig.exports.extendFunction=function(fn,definition){Twig._function.extend(fn,definition)};Twig.exports.extendTest=function(test,definition){Twig.test.extend(test,definition)};Twig.exports.extendTag=function(definition){Twig.logic.extend(definition)};Twig.exports.extend=function(fn){fn(Twig)};Twig.exports.compile=function(markup,options){var id=options.filename,path=options.filename,template;template=new Twig.Template({data:markup,path:path,id:id,options:options.settings["twig options"]});return function(context){return template.render(context)}};Twig.exports.renderFile=function(path,options,fn){if(typeof options==="function"){fn=options;options={}}options=options||{};var settings=options.settings||{};var params={path:path,base:settings.views,load:function(template){fn(null,template.render(options))}};var view_options=settings["twig options"];if(view_options){for(var option in view_options){if(view_options.hasOwnProperty(option)){params[option]=view_options[option]}}}Twig.exports.twig(params)};Twig.exports.__express=Twig.exports.renderFile;Twig.exports.cache=function(cache){Twig.cache=cache};Twig.exports.path=Twig.path;return Twig}(Twig||{});var Twig=function(Twig){Twig.compiler={module:{}};Twig.compiler.compile=function(template,options){var tokens=JSON.stringify(template.tokens),id=template.id,output;if(options.module){if(Twig.compiler.module[options.module]===undefined){throw new Twig.Error("Unable to find module type "+options.module)}output=Twig.compiler.module[options.module](id,tokens,options.twig)}else{output=Twig.compiler.wrap(id,tokens)}return output};Twig.compiler.module={amd:function(id,tokens,pathToTwig){return'define(["'+pathToTwig+'"], function (Twig) {\n	var twig, templates;\ntwig = Twig.twig;\ntemplates = '+Twig.compiler.wrap(id,tokens)+"\n	return templates;\n});"},node:function(id,tokens){return'var twig = require("twig").twig;\n'+"exports.template = "+Twig.compiler.wrap(id,tokens)},cjs2:function(id,tokens,pathToTwig){return'module.declare([{ twig: "'+pathToTwig+'" }], function (require, exports, module) {\n'+'	var twig = require("twig").twig;\n'+"	exports.template = "+Twig.compiler.wrap(id,tokens)+"\n});"}};Twig.compiler.wrap=function(id,tokens){return'twig({id:"'+id.replace('"','\\"')+'", data:'+tokens+", precompiled: true});\n"};return Twig}(Twig||{});if(typeof module!=="undefined"&&module.declare){module.declare([],function(require,exports,module){for(key in Twig.exports){if(Twig.exports.hasOwnProperty(key)){exports[key]=Twig.exports[key]}}})}else if(true){!(__WEBPACK_AMD_DEFINE_RESULT__ = function(){return Twig.exports}.call(exports, __webpack_require__, exports, module),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__))}else if(typeof module!=="undefined"&&module.exports){module.exports=Twig.exports}else{window.twig=Twig.exports.twig;window.Twig=Twig.exports}
-//# sourceMappingURL=twig.min.js.map
-
-/* WEBPACK VAR INJECTION */}.call(exports, "/", __webpack_require__(10)(module)))
-
-/***/ }),
+/* 60 */,
 /* 61 */
 /***/ (function(module, exports) {
 
@@ -9963,7 +9983,7 @@ exports.hideModal = hideModal;
 exports.setTypeModal = setTypeModal;
 exports.setModalsData = setModalsData;
 
-var _constants = __webpack_require__(23);
+var _constants = __webpack_require__(24);
 
 function showModal(typeModal) {
   return {
@@ -10474,324 +10494,6 @@ var MODAL_SCROLL = exports.MODAL_SCROLL = 'MODAL_SCROLL';
 
 "use strict";
 
-var getValue = __webpack_require__(74).get
-
-function defaultCompare (a, b) {
-  return a === b
-}
-
-function watch (getState, objectPath, compare) {
-  compare = compare || defaultCompare
-  var currentValue = getValue(getState(), objectPath)
-  return function w (fn) {
-    return function () {
-      var newValue = getValue(getState(), objectPath)
-      if (!compare(currentValue, newValue)) {
-        var oldValue = currentValue
-        currentValue = newValue
-        fn(newValue, oldValue, objectPath)
-      }
-    }
-  }
-}
-
-module.exports = watch
-
-
-/***/ }),
-/* 74 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory){
-  'use strict';
-
-  /*istanbul ignore next:cant test*/
-  if (typeof module === 'object' && typeof module.exports === 'object') {
-    module.exports = factory();
-  } else if (true) {
-    // AMD. Register as an anonymous module.
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-  } else {
-    // Browser globals
-    root.objectPath = factory();
-  }
-})(this, function(){
-  'use strict';
-
-  var
-    toStr = Object.prototype.toString,
-    _hasOwnProperty = Object.prototype.hasOwnProperty;
-
-  function isEmpty(value){
-    if (!value) {
-      return true;
-    }
-    if (isArray(value) && value.length === 0) {
-        return true;
-    } else if (!isString(value)) {
-        for (var i in value) {
-            if (_hasOwnProperty.call(value, i)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    return false;
-  }
-
-  function toString(type){
-    return toStr.call(type);
-  }
-
-  function isNumber(value){
-    return typeof value === 'number' || toString(value) === "[object Number]";
-  }
-
-  function isString(obj){
-    return typeof obj === 'string' || toString(obj) === "[object String]";
-  }
-
-  function isObject(obj){
-    return typeof obj === 'object' && toString(obj) === "[object Object]";
-  }
-
-  function isArray(obj){
-    return typeof obj === 'object' && typeof obj.length === 'number' && toString(obj) === '[object Array]';
-  }
-
-  function isBoolean(obj){
-    return typeof obj === 'boolean' || toString(obj) === '[object Boolean]';
-  }
-
-  function getKey(key){
-    var intKey = parseInt(key);
-    if (intKey.toString() === key) {
-      return intKey;
-    }
-    return key;
-  }
-
-  function set(obj, path, value, doNotReplace){
-    if (isNumber(path)) {
-      path = [path];
-    }
-    if (isEmpty(path)) {
-      return obj;
-    }
-    if (isString(path)) {
-      return set(obj, path.split('.').map(getKey), value, doNotReplace);
-    }
-    var currentPath = path[0];
-
-    if (path.length === 1) {
-      var oldVal = obj[currentPath];
-      if (oldVal === void 0 || !doNotReplace) {
-        obj[currentPath] = value;
-      }
-      return oldVal;
-    }
-
-    if (obj[currentPath] === void 0) {
-      //check if we assume an array
-      if(isNumber(path[1])) {
-        obj[currentPath] = [];
-      } else {
-        obj[currentPath] = {};
-      }
-    }
-
-    return set(obj[currentPath], path.slice(1), value, doNotReplace);
-  }
-
-  function del(obj, path) {
-    if (isNumber(path)) {
-      path = [path];
-    }
-
-    if (isEmpty(obj)) {
-      return void 0;
-    }
-
-    if (isEmpty(path)) {
-      return obj;
-    }
-    if(isString(path)) {
-      return del(obj, path.split('.'));
-    }
-
-    var currentPath = getKey(path[0]);
-    var oldVal = obj[currentPath];
-
-    if(path.length === 1) {
-      if (oldVal !== void 0) {
-        if (isArray(obj)) {
-          obj.splice(currentPath, 1);
-        } else {
-          delete obj[currentPath];
-        }
-      }
-    } else {
-      if (obj[currentPath] !== void 0) {
-        return del(obj[currentPath], path.slice(1));
-      }
-    }
-
-    return obj;
-  }
-
-  var objectPath = function(obj) {
-    return Object.keys(objectPath).reduce(function(proxy, prop) {
-      if (typeof objectPath[prop] === 'function') {
-        proxy[prop] = objectPath[prop].bind(objectPath, obj);
-      }
-
-      return proxy;
-    }, {});
-  };
-
-  objectPath.has = function (obj, path) {
-    if (isEmpty(obj)) {
-      return false;
-    }
-
-    if (isNumber(path)) {
-      path = [path];
-    } else if (isString(path)) {
-      path = path.split('.');
-    }
-
-    if (isEmpty(path) || path.length === 0) {
-      return false;
-    }
-
-    for (var i = 0; i < path.length; i++) {
-      var j = path[i];
-      if ((isObject(obj) || isArray(obj)) && _hasOwnProperty.call(obj, j)) {
-        obj = obj[j];
-      } else {
-        return false;
-      }
-    }
-
-    return true;
-  };
-
-  objectPath.ensureExists = function (obj, path, value){
-    return set(obj, path, value, true);
-  };
-
-  objectPath.set = function (obj, path, value, doNotReplace){
-    return set(obj, path, value, doNotReplace);
-  };
-
-  objectPath.insert = function (obj, path, value, at){
-    var arr = objectPath.get(obj, path);
-    at = ~~at;
-    if (!isArray(arr)) {
-      arr = [];
-      objectPath.set(obj, path, arr);
-    }
-    arr.splice(at, 0, value);
-  };
-
-  objectPath.empty = function(obj, path) {
-    if (isEmpty(path)) {
-      return obj;
-    }
-    if (isEmpty(obj)) {
-      return void 0;
-    }
-
-    var value, i;
-    if (!(value = objectPath.get(obj, path))) {
-      return obj;
-    }
-
-    if (isString(value)) {
-      return objectPath.set(obj, path, '');
-    } else if (isBoolean(value)) {
-      return objectPath.set(obj, path, false);
-    } else if (isNumber(value)) {
-      return objectPath.set(obj, path, 0);
-    } else if (isArray(value)) {
-      value.length = 0;
-    } else if (isObject(value)) {
-      for (i in value) {
-        if (_hasOwnProperty.call(value, i)) {
-          delete value[i];
-        }
-      }
-    } else {
-      return objectPath.set(obj, path, null);
-    }
-  };
-
-  objectPath.push = function (obj, path /*, values */){
-    var arr = objectPath.get(obj, path);
-    if (!isArray(arr)) {
-      arr = [];
-      objectPath.set(obj, path, arr);
-    }
-
-    arr.push.apply(arr, Array.prototype.slice.call(arguments, 2));
-  };
-
-  objectPath.coalesce = function (obj, paths, defaultValue) {
-    var value;
-
-    for (var i = 0, len = paths.length; i < len; i++) {
-      if ((value = objectPath.get(obj, paths[i])) !== void 0) {
-        return value;
-      }
-    }
-
-    return defaultValue;
-  };
-
-  objectPath.get = function (obj, path, defaultValue){
-    if (isNumber(path)) {
-      path = [path];
-    }
-    if (isEmpty(path)) {
-      return obj;
-    }
-    if (isEmpty(obj)) {
-      return defaultValue;
-    }
-    if (isString(path)) {
-      return objectPath.get(obj, path.split('.'), defaultValue);
-    }
-
-    var currentPath = getKey(path[0]);
-
-    if (path.length === 1) {
-      if (obj[currentPath] === void 0) {
-        return defaultValue;
-      }
-      return obj[currentPath];
-    }
-
-    return objectPath.get(obj[currentPath], path.slice(1), defaultValue);
-  };
-
-  objectPath.del = function(obj, path) {
-    return del(obj, path);
-  };
-
-  return objectPath;
-});
-
-
-/***/ }),
-/* 75 */,
-/* 76 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
@@ -10801,11 +10503,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _Pagecontainer = __webpack_require__(86);
+var _Pagecontainer = __webpack_require__(74);
 
 var _Pagecontainer2 = _interopRequireDefault(_Pagecontainer);
 
-var _Homepage = __webpack_require__(80);
+var _Homepage = __webpack_require__(75);
 
 var _Homepage2 = _interopRequireDefault(_Homepage);
 
@@ -10823,10 +10525,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var HomepageContainer = function (_AbstractPageContaine) {
 	_inherits(HomepageContainer, _AbstractPageContaine);
 
-	function HomepageContainer() {
+	function HomepageContainer(options) {
 		_classCallCheck(this, HomepageContainer);
 
-		var _this = _possibleConstructorReturn(this, (HomepageContainer.__proto__ || Object.getPrototypeOf(HomepageContainer)).call(this));
+		var _this = _possibleConstructorReturn(this, (HomepageContainer.__proto__ || Object.getPrototypeOf(HomepageContainer)).call(this, options));
 
 		_this.Component = _Homepage2.default;
 
@@ -10834,24 +10536,6 @@ var HomepageContainer = function (_AbstractPageContaine) {
 	}
 
 	_createClass(HomepageContainer, [{
-		key: 'initComponent',
-		value: function initComponent() {
-			var _this2 = this;
-
-			this.getData().then(function () {
-				_this2.initActions();
-				_this2.initData();
-
-				_this2.options.data = _this2.data;
-				_this2._component = new _this2.Component({
-					el: document.getElementsByClassName('page-wrapper')[0]
-				});
-				_this2._component.init().then(function () {
-					_this2.onInit();
-				});
-			});
-		}
-	}, {
 		key: 'initData',
 		value: function initData() {
 			console.log('HomepageContainer:initData');
@@ -10875,10 +10559,7 @@ var HomepageContainer = function (_AbstractPageContaine) {
 exports.default = HomepageContainer;
 
 /***/ }),
-/* 77 */,
-/* 78 */,
-/* 79 */,
-/* 80 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10892,13 +10573,127 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _Pagecomponent = __webpack_require__(81);
+var _container = __webpack_require__(4);
+
+var _container2 = _interopRequireDefault(_container);
+
+var _store = __webpack_require__(0);
+
+var _store2 = _interopRequireDefault(_store);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Constants
+// import {END_POINT} from 'constants/api';
+// import {BAR_LOADER} from 'containers/loader/constants';
+
+// Utils
+// import {loadJSON} from 'utils/load';
+
+// Actions
+// import {setMeta} from 'containers/app/actions';
+
+/**
+ * PageContainer: Defines a page container
+ * @extends AbstractContainer
+ * @constructor
+ */
+var PageContainer = function (_AbstractContainer) {
+	_inherits(PageContainer, _AbstractContainer);
+
+	function PageContainer(options) {
+		_classCallCheck(this, PageContainer);
+
+		return _possibleConstructorReturn(this, (PageContainer.__proto__ || Object.getPrototypeOf(PageContainer)).call(this, options));
+
+		// this.watchers = {
+		//     'loader.isShown': this._isLoaderShown
+		// };
+	}
+
+	// to override if needed
+
+
+	_createClass(PageContainer, [{
+		key: 'fetchData',
+		value: function fetchData() {
+			// console.log('PAge:fetchData');
+			var endPoint = _store2.default.getState().app.endPoint;
+
+			if (!endPoint) {
+				this.promises.data.resolve();
+				return;
+			}
+
+			// this.subscribe({
+			// 	path: 'loader.isShown',
+			// 	cb: () => this._isLoaderShown(),
+			// });
+
+			// // display a loader
+			// this.showLoader(this.TYPE_LOADER);
+
+			// // loadJSON(`${END_POINT}${endPoint}`).then((data) => {
+			// //     if (!data) {
+			// //         console.info('data are empty', this);
+			// //         this.promises.data.resolve();
+			// //         return;
+			// //     }
+
+			// //     this.data = data;
+			// //     this.loadAssets();
+			// // });
+		}
+	}, {
+		key: 'loadAssets',
+		value: function loadAssets() {
+			this.promises.data.resolve();
+		}
+	}, {
+		key: 'initData',
+		value: function initData() {
+			// this.dispatch(setMeta(this.data.meta));
+		}
+	}, {
+		key: 'onInit',
+		value: function onInit() {
+			_get(PageContainer.prototype.__proto__ || Object.getPrototypeOf(PageContainer.prototype), 'onInit', this).call(this);
+		}
+	}]);
+
+	return PageContainer;
+}(_container2.default);
+
+exports.default = PageContainer;
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _Pagecomponent = __webpack_require__(76);
 
 var _Pagecomponent2 = _interopRequireDefault(_Pagecomponent);
 
-var _homepage = __webpack_require__(83);
+var _index = __webpack_require__(84);
 
-var _homepage2 = _interopRequireDefault(_homepage);
+var _index2 = _interopRequireDefault(_index);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10939,11 +10734,9 @@ var Homepage = function (_AbstractPageComponen) {
 	function Homepage(options) {
 		_classCallCheck(this, Homepage);
 
-		// this.template = Tpl;
-
 		var _this = _possibleConstructorReturn(this, (Homepage.__proto__ || Object.getPrototypeOf(Homepage)).call(this, options));
 
-		_this.selector = '#homepage';
+		_this.template = _index2.default;
 
 		_this.states = {
 			isAnimating: false
@@ -10964,7 +10757,7 @@ var Homepage = function (_AbstractPageComponen) {
 exports.default = Homepage;
 
 /***/ }),
-/* 81 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10978,11 +10771,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _DOMcomponent = __webpack_require__(20);
+var _DOMcomponent = __webpack_require__(5);
 
 var _DOMcomponent2 = _interopRequireDefault(_DOMcomponent);
 
-var _gsap = __webpack_require__(82);
+var _gsap = __webpack_require__(77);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -11038,7 +10831,6 @@ var PageComponent = function (_AbstractDOMComponent) {
 		value: function onDOMInit() {
 			// append to main container
 			document.getElementById('content').appendChild(this.el);
-			// $('#content').append(this.$el);
 			_get(PageComponent.prototype.__proto__ || Object.getPrototypeOf(PageComponent.prototype), 'onDOMInit', this).call(this);
 		}
 	}, {
@@ -11068,7 +10860,7 @@ var PageComponent = function (_AbstractDOMComponent) {
 exports.default = PageComponent;
 
 /***/ }),
-/* 82 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -19034,21 +18826,328 @@ if (_gsScope._gsDefine) { _gsScope._gsQueue.pop()(); } //necessary in case Tween
 		_tickerActive = false; //ensures that the first official animation forces a ticker.tick() to update the time when it is instantiated
 
 })((typeof(module) !== "undefined" && module.exports && typeof(global) !== "undefined") ? global : this || window, "TweenMax");
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 83 */
+/* 78 */,
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var twig = __webpack_require__(60).twig,
-    template = twig({id:"8a9a2c1ff87e90e7f55b381278f18fd300cb786dde02edc24060ab3c2d5157012013e87228f0764165652239125cfab02a404a5d7f0095fd9f573fe5ac753153", data:[{"type":"raw","value":"<section id=\"app-index\" class=\"full-size\">\n\n</section>\n"}], allowInlineIncludes: true, rethrow: true});
+"use strict";
 
-module.exports = function(context) { return template.render(context); }
+var getValue = __webpack_require__(80).get
+
+function defaultCompare (a, b) {
+  return a === b
+}
+
+function watch (getState, objectPath, compare) {
+  compare = compare || defaultCompare
+  var currentValue = getValue(getState(), objectPath)
+  return function w (fn) {
+    return function () {
+      var newValue = getValue(getState(), objectPath)
+      if (!compare(currentValue, newValue)) {
+        var oldValue = currentValue
+        currentValue = newValue
+        fn(newValue, oldValue, objectPath)
+      }
+    }
+  }
+}
+
+module.exports = watch
+
 
 /***/ }),
-/* 84 */,
-/* 85 */,
-/* 86 */
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory){
+  'use strict';
+
+  /*istanbul ignore next:cant test*/
+  if (typeof module === 'object' && typeof module.exports === 'object') {
+    module.exports = factory();
+  } else if (true) {
+    // AMD. Register as an anonymous module.
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {
+    // Browser globals
+    root.objectPath = factory();
+  }
+})(this, function(){
+  'use strict';
+
+  var
+    toStr = Object.prototype.toString,
+    _hasOwnProperty = Object.prototype.hasOwnProperty;
+
+  function isEmpty(value){
+    if (!value) {
+      return true;
+    }
+    if (isArray(value) && value.length === 0) {
+        return true;
+    } else if (!isString(value)) {
+        for (var i in value) {
+            if (_hasOwnProperty.call(value, i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+  }
+
+  function toString(type){
+    return toStr.call(type);
+  }
+
+  function isNumber(value){
+    return typeof value === 'number' || toString(value) === "[object Number]";
+  }
+
+  function isString(obj){
+    return typeof obj === 'string' || toString(obj) === "[object String]";
+  }
+
+  function isObject(obj){
+    return typeof obj === 'object' && toString(obj) === "[object Object]";
+  }
+
+  function isArray(obj){
+    return typeof obj === 'object' && typeof obj.length === 'number' && toString(obj) === '[object Array]';
+  }
+
+  function isBoolean(obj){
+    return typeof obj === 'boolean' || toString(obj) === '[object Boolean]';
+  }
+
+  function getKey(key){
+    var intKey = parseInt(key);
+    if (intKey.toString() === key) {
+      return intKey;
+    }
+    return key;
+  }
+
+  function set(obj, path, value, doNotReplace){
+    if (isNumber(path)) {
+      path = [path];
+    }
+    if (isEmpty(path)) {
+      return obj;
+    }
+    if (isString(path)) {
+      return set(obj, path.split('.').map(getKey), value, doNotReplace);
+    }
+    var currentPath = path[0];
+
+    if (path.length === 1) {
+      var oldVal = obj[currentPath];
+      if (oldVal === void 0 || !doNotReplace) {
+        obj[currentPath] = value;
+      }
+      return oldVal;
+    }
+
+    if (obj[currentPath] === void 0) {
+      //check if we assume an array
+      if(isNumber(path[1])) {
+        obj[currentPath] = [];
+      } else {
+        obj[currentPath] = {};
+      }
+    }
+
+    return set(obj[currentPath], path.slice(1), value, doNotReplace);
+  }
+
+  function del(obj, path) {
+    if (isNumber(path)) {
+      path = [path];
+    }
+
+    if (isEmpty(obj)) {
+      return void 0;
+    }
+
+    if (isEmpty(path)) {
+      return obj;
+    }
+    if(isString(path)) {
+      return del(obj, path.split('.'));
+    }
+
+    var currentPath = getKey(path[0]);
+    var oldVal = obj[currentPath];
+
+    if(path.length === 1) {
+      if (oldVal !== void 0) {
+        if (isArray(obj)) {
+          obj.splice(currentPath, 1);
+        } else {
+          delete obj[currentPath];
+        }
+      }
+    } else {
+      if (obj[currentPath] !== void 0) {
+        return del(obj[currentPath], path.slice(1));
+      }
+    }
+
+    return obj;
+  }
+
+  var objectPath = function(obj) {
+    return Object.keys(objectPath).reduce(function(proxy, prop) {
+      if (typeof objectPath[prop] === 'function') {
+        proxy[prop] = objectPath[prop].bind(objectPath, obj);
+      }
+
+      return proxy;
+    }, {});
+  };
+
+  objectPath.has = function (obj, path) {
+    if (isEmpty(obj)) {
+      return false;
+    }
+
+    if (isNumber(path)) {
+      path = [path];
+    } else if (isString(path)) {
+      path = path.split('.');
+    }
+
+    if (isEmpty(path) || path.length === 0) {
+      return false;
+    }
+
+    for (var i = 0; i < path.length; i++) {
+      var j = path[i];
+      if ((isObject(obj) || isArray(obj)) && _hasOwnProperty.call(obj, j)) {
+        obj = obj[j];
+      } else {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  objectPath.ensureExists = function (obj, path, value){
+    return set(obj, path, value, true);
+  };
+
+  objectPath.set = function (obj, path, value, doNotReplace){
+    return set(obj, path, value, doNotReplace);
+  };
+
+  objectPath.insert = function (obj, path, value, at){
+    var arr = objectPath.get(obj, path);
+    at = ~~at;
+    if (!isArray(arr)) {
+      arr = [];
+      objectPath.set(obj, path, arr);
+    }
+    arr.splice(at, 0, value);
+  };
+
+  objectPath.empty = function(obj, path) {
+    if (isEmpty(path)) {
+      return obj;
+    }
+    if (isEmpty(obj)) {
+      return void 0;
+    }
+
+    var value, i;
+    if (!(value = objectPath.get(obj, path))) {
+      return obj;
+    }
+
+    if (isString(value)) {
+      return objectPath.set(obj, path, '');
+    } else if (isBoolean(value)) {
+      return objectPath.set(obj, path, false);
+    } else if (isNumber(value)) {
+      return objectPath.set(obj, path, 0);
+    } else if (isArray(value)) {
+      value.length = 0;
+    } else if (isObject(value)) {
+      for (i in value) {
+        if (_hasOwnProperty.call(value, i)) {
+          delete value[i];
+        }
+      }
+    } else {
+      return objectPath.set(obj, path, null);
+    }
+  };
+
+  objectPath.push = function (obj, path /*, values */){
+    var arr = objectPath.get(obj, path);
+    if (!isArray(arr)) {
+      arr = [];
+      objectPath.set(obj, path, arr);
+    }
+
+    arr.push.apply(arr, Array.prototype.slice.call(arguments, 2));
+  };
+
+  objectPath.coalesce = function (obj, paths, defaultValue) {
+    var value;
+
+    for (var i = 0, len = paths.length; i < len; i++) {
+      if ((value = objectPath.get(obj, paths[i])) !== void 0) {
+        return value;
+      }
+    }
+
+    return defaultValue;
+  };
+
+  objectPath.get = function (obj, path, defaultValue){
+    if (isNumber(path)) {
+      path = [path];
+    }
+    if (isEmpty(path)) {
+      return obj;
+    }
+    if (isEmpty(obj)) {
+      return defaultValue;
+    }
+    if (isString(path)) {
+      return objectPath.get(obj, path.split('.'), defaultValue);
+    }
+
+    var currentPath = getKey(path[0]);
+
+    if (path.length === 1) {
+      if (obj[currentPath] === void 0) {
+        return defaultValue;
+      }
+      return obj[currentPath];
+    }
+
+    return objectPath.get(obj[currentPath], path.slice(1), defaultValue);
+  };
+
+  objectPath.del = function(obj, path) {
+    return del(obj, path);
+  };
+
+  return objectPath;
+});
+
+
+/***/ }),
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19062,13 +19161,17 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _container = __webpack_require__(19);
+var _container = __webpack_require__(4);
 
 var _container2 = _interopRequireDefault(_container);
 
-var _store = __webpack_require__(0);
+var _NotFound = __webpack_require__(82);
 
-var _store2 = _interopRequireDefault(_store);
+var _NotFound2 = _interopRequireDefault(_NotFound);
+
+var _selectors = __webpack_require__(67);
+
+var _locations = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19078,88 +19181,238 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// Constants
-// import {END_POINT} from 'constants/api';
-// import {BAR_LOADER} from 'containers/loader/constants';
+var NotFoundContainer = function (_AbstractPageContaine) {
+	_inherits(NotFoundContainer, _AbstractPageContaine);
 
-// Utils
-// import {loadJSON} from 'utils/load';
+	function NotFoundContainer(options) {
+		_classCallCheck(this, NotFoundContainer);
 
-// Actions
-// import {setMeta} from 'containers/app/actions';
+		var _this = _possibleConstructorReturn(this, (NotFoundContainer.__proto__ || Object.getPrototypeOf(NotFoundContainer)).call(this, options));
 
-/**
- * PageContainer: Defines a page container
- * @extends AbstractContainer
- * @constructor
- */
-var PageContainer = function (_AbstractContainer) {
-	_inherits(PageContainer, _AbstractContainer);
-
-	function PageContainer(options) {
-		_classCallCheck(this, PageContainer);
-
-		return _possibleConstructorReturn(this, (PageContainer.__proto__ || Object.getPrototypeOf(PageContainer)).call(this, options));
-
-		// this.watchers = {
-		//     'loader.isShown': this._isLoaderShown
-		// };
+		_this.Component = _NotFound2.default;
+		return _this;
 	}
 
-	// to override if needed
-
-
-	_createClass(PageContainer, [{
-		key: 'fetchData',
-		value: function fetchData() {
-			// console.log('PAge:fetchData');
-			var endPoint = _store2.default.getState().app.endPoint;
-
-			if (!endPoint) {
-				this.promises.data.resolve();
-				return;
-			}
-
-			// this.subscribe({
-			// 	path: 'loader.isShown',
-			// 	cb: () => this._isLoaderShown(),
-			// });
-
-			// // display a loader
-			// this.showLoader(this.TYPE_LOADER);
-
-			// // loadJSON(`${END_POINT}${endPoint}`).then((data) => {
-			// //     if (!data) {
-			// //         console.info('data are empty', this);
-			// //         this.promises.data.resolve();
-			// //         return;
-			// //     }
-
-			// //     this.data = data;
-			// //     this.loadAssets();
-			// // });
-		}
-	}, {
-		key: 'loadAssets',
-		value: function loadAssets() {
-			this.promises.data.resolve();
+	_createClass(NotFoundContainer, [{
+		key: 'init',
+		value: function init() {
+			// this.dispatch(showLoader());
+			return _get(NotFoundContainer.prototype.__proto__ || Object.getPrototypeOf(NotFoundContainer.prototype), 'init', this).call(this);
 		}
 	}, {
 		key: 'initData',
 		value: function initData() {
-			// this.dispatch(setMeta(this.data.meta));
-		}
-	}, {
-		key: 'onInit',
-		value: function onInit() {
-			_get(PageContainer.prototype.__proto__ || Object.getPrototypeOf(PageContainer.prototype), 'onInit', this).call(this);
+			this.data = {
+				home: (0, _selectors.getRoute)(_locations.HOMEPAGE)
+			};
 		}
 	}]);
 
-	return PageContainer;
+	return NotFoundContainer;
 }(_container2.default);
 
-exports.default = PageContainer;
+exports.default = NotFoundContainer;
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _Pagecomponent = __webpack_require__(76);
+
+var _Pagecomponent2 = _interopRequireDefault(_Pagecomponent);
+
+var _error = __webpack_require__(86);
+
+var _error2 = _interopRequireDefault(_error);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var NotFound = function (_AbstractPageComponen) {
+	_inherits(NotFound, _AbstractPageComponen);
+
+	function NotFound(options) {
+		_classCallCheck(this, NotFound);
+
+		var _this = _possibleConstructorReturn(this, (NotFound.__proto__ || Object.getPrototypeOf(NotFound)).call(this, options));
+
+		_this.template = _error2.default;
+		return _this;
+	}
+
+	return NotFound;
+}(_Pagecomponent2.default);
+
+exports.default = NotFound;
+
+/***/ }),
+/* 83 */,
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var twig = __webpack_require__(21).twig,
+    template = twig({id:"cb2ae216402a8ff1889998d5fa8b50f8fb8a550fbf8ee2d81d6597e4ecba4fdeab0ef1ff60cfaf7c4d0e5cefbf770928e7cc6c4141c728dca922000f7659e8df", data:[{"type":"raw","value":"<section class=\"page-wrapper\" id=\"homepage\">\n\n\t<div class=\"introduction\">\n\t\t\t<h1>Dynamic content: "},{"type":"output","stack":[{"type":"Twig.expression.type.variable","value":"data","match":["data"]},{"type":"Twig.expression.type.key.period","key":"content"},{"type":"Twig.expression.type.key.period","key":"title"}]},{"type":"raw","value":"</h1>\n\t\t\t<h2>INDEX PAGE Static content</h2>\n\t</div>\n\n</section>"}], allowInlineIncludes: true, rethrow: true});
+
+module.exports = function(context) { return template.render(context); }
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _Pagecontainer = __webpack_require__(74);
+
+var _Pagecontainer2 = _interopRequireDefault(_Pagecontainer);
+
+var _About = __webpack_require__(87);
+
+var _About2 = _interopRequireDefault(_About);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// actions
+// import {setIntroListHomepage} from './actions';
+
+var AboutContainer = function (_AbstractPageContaine) {
+	_inherits(AboutContainer, _AbstractPageContaine);
+
+	function AboutContainer(options) {
+		_classCallCheck(this, AboutContainer);
+
+		var _this = _possibleConstructorReturn(this, (AboutContainer.__proto__ || Object.getPrototypeOf(AboutContainer)).call(this, options));
+
+		_this.Component = _About2.default;
+
+		return _this;
+	}
+
+	_createClass(AboutContainer, [{
+		key: 'initData',
+		value: function initData() {
+			console.log('AboutContainer:initData');
+			// const list = {
+			// 	default_landing: false,
+			// };
+
+			// this.data.cities.forEach((key, value) => {
+			// 	list[key.id] = false;
+			// });
+
+			// this.dispatch(setIntroListHomepage(list));
+
+			_get(AboutContainer.prototype.__proto__ || Object.getPrototypeOf(AboutContainer.prototype), 'initData', this).call(this);
+		}
+	}]);
+
+	return AboutContainer;
+}(_Pagecontainer2.default);
+
+exports.default = AboutContainer;
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var twig = __webpack_require__(21).twig,
+    template = twig({id:"09c6b13b9726a404a293232421e5c1665b4aed9c0d72c0dfd4c2a4154894e05cdc8a7adcbe548c0c3b26dcbf3604d4126099ce1884e0524ff0a35a4857c5f0f5", data:[{"type":"raw","value":"<section class=\"page-wrapper\" id=\"error\">\n\n\t<div class=\"introduction\">\n\n\t\t\t<h1>Not the page you are lookig for</h1>\n\n\t</div>\n\n</section>"}], allowInlineIncludes: true, rethrow: true});
+
+module.exports = function(context) { return template.render(context); }
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _Pagecomponent = __webpack_require__(76);
+
+var _Pagecomponent2 = _interopRequireDefault(_Pagecomponent);
+
+var _about = __webpack_require__(88);
+
+var _about2 = _interopRequireDefault(_about);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Homepage = function (_AbstractPageComponen) {
+	_inherits(Homepage, _AbstractPageComponen);
+
+	function Homepage(options) {
+		_classCallCheck(this, Homepage);
+
+		var _this = _possibleConstructorReturn(this, (Homepage.__proto__ || Object.getPrototypeOf(Homepage)).call(this, options));
+
+		_this.template = _about2.default;
+
+		_this.states = {
+			isAnimating: false
+		};
+		return _this;
+	}
+
+	_createClass(Homepage, [{
+		key: 'dispose',
+		value: function dispose() {
+			_get(Homepage.prototype.__proto__ || Object.getPrototypeOf(Homepage.prototype), 'dispose', this).call(this);
+		}
+	}]);
+
+	return Homepage;
+}(_Pagecomponent2.default);
+
+exports.default = Homepage;
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var twig = __webpack_require__(21).twig,
+    template = twig({id:"cee5f1b3d3e4ee46bb1db7c224c1d6fedd9b47830aaae95703410cd995e2cf8f1d5dd11f940e03fefe7b8ce10ceb1aca8d74583817dc2e895cf4498a18bd603a", data:[{"type":"raw","value":"<section class=\"page-wrapper\" id=\"homepage\">\n\n\t\t<div class=\"introduction\">\n\t\t\t\t<h1>Dynamic content: "},{"type":"output","stack":[{"type":"Twig.expression.type.variable","value":"data","match":["data"]},{"type":"Twig.expression.type.key.period","key":"content"},{"type":"Twig.expression.type.key.period","key":"title"}]},{"type":"raw","value":"</h1>\n\t\t\t\t<h2>ABOUT PAGE Static content</h2>\n\t\t</div>\n\n\t</section>"}], allowInlineIncludes: true, rethrow: true});
+
+module.exports = function(context) { return template.render(context); }
 
 /***/ })
 /******/ ]);

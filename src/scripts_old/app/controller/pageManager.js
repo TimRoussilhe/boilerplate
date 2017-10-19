@@ -38,7 +38,6 @@ class PageManager {
 	 */
 	navigateTo(page, params, hash) {
 
-
 		// Safety here
 		// We make sure we kill the currentPage is there is a change in the url but animation are still playing (page show / hide)
 		// Usually means that user is clikcing fast on arrows
