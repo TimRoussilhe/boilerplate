@@ -1,6 +1,6 @@
 import Component from 'abstract/component';
 import $ from 'zepto';
-import _ from 'underscore';
+// import _ from 'underscore';
 // import {router} from 'router';
 import page from 'page';
 

@@ -1,10 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
-const ManifestPlugin = require('webpack-manifest-plugin');
+// const ManifestPlugin = require('webpack-manifest-plugin');
 const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
 
 const appEntryPoint = path.join(__dirname, '../src/scripts/app/index.js');
 const outputPath = path.join(__dirname, '../build/assets/js/');
+const reportPath = path.join(__dirname, '../reports/plain-report.txt');
 const filename = 'bundle.min.js';
 
 const devTool = false;
@@ -21,17 +22,8 @@ console.log(' outputPath path ' + outputPath + '\n');
 const entryPoints = appEntryPoint;
 
 module.exports = {
-
-		/*
-		http://webpack.github.io/docs/configuration.html
-
-	ENTRY
-	If you pass a string: The string is resolved to a module which is loaded upon startup.
-	If you pass an array: All modules are loaded upon startup. The last one is exported.
-	If you pass an object: Multiple entry bundles are created. The key is the chunk name. The value can be a string or an array.
-	*/
 	node: {
-		fs: 'empty'
+		fs: 'empty',
 	},
 
 	entry: entryPoints,
@@ -40,33 +32,33 @@ module.exports = {
 	output: {
 		path:       outputPath,
 		filename:   filename,
-		publicPath: 'assets/js/'
+		publicPath: 'assets/js/',
 	},
 
 	plugins: [
 		new webpack.optimize.ModuleConcatenationPlugin(),
 		new webpack.NoEmitOnErrorsPlugin(),
 		new webpack.DefinePlugin({
-				 'process.env.NODE_ENV': JSON.stringify('production')
+				 'process.env.NODE_ENV': JSON.stringify('production'),
 		}),
 		new webpack.optimize.UglifyJsPlugin({
 			compress: {
 				screw_ie8: true,
 				drop_console: true,
-				warnings: false
+				warnings: false,
 			},
 			mangle: {
-				screw_ie8: true
+				screw_ie8: true,
 			},
 			output: {
 				comments: false,
-				screw_ie8: true
-			}
+				screw_ie8: true,
+			},
 		}),
-		new ManifestPlugin({
-			fileName: 'assets.json'
-		}),
-		new WebpackBundleSizeAnalyzerPlugin('../reports/plain-report.txt')
+		// new ManifestPlugin({
+		// 	fileName: 'assets.json',
+		// }),
+		new WebpackBundleSizeAnalyzerPlugin(reportPath),
 	],
 
 	// make 'zepto' resolve to your local copy of the library
@@ -79,11 +71,11 @@ module.exports = {
 			'src/scripts/vendors/',
 			'shared/',
 			'public/assets/',
-			'node_modules'
+			'node_modules',
 		],
 		alias: {
 			// Modernizr: path.join(__dirname, '/../src/js/vendors/modernizr.custom'),
-		}
+		},
 	},
 
 	module: {
@@ -91,19 +83,19 @@ module.exports = {
 			{
 				test: /\.js?$/,
 				exclude: /(node_modules|bower_components)/,
-				loader: 'babel-loader'
+				loader: 'babel-loader',
 			},
 			{test: /\.json$/, loader: 'json-loader'},
-			{test: /\.twig$/, loader: 'twig-loader'}
-		]
+			{test: /\.twig$/, loader: 'twig-loader'},
+		],
 	},
 
 	stats: {
 		// Nice colored output
-		colors: true
+		colors: true,
 	},
 
 	// Create Sourcemaps for the bundle
-	devtool: devTool
+	devtool: devTool,
 
 };

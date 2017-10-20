@@ -1,6 +1,6 @@
 import $ from 'zepto';
-import is from 'is_js';
-
+// import is from 'is_js';
+import {isMobile, isTablet} from 'utils/is';
 import {configureRoute, initRouter} from 'router';
 import App from 'containers/app/App';
 // import {configureAnalytics} from 'utils/analytics';
@@ -23,8 +23,11 @@ class Entry {
 		// custom Detectizr setup
 		const root = $('html');
 
-		is.mobile() && root.addClass('isMobile');
-		is.tablet() && root.addClass('isTablet');
+		console.log('isMobile', isMobile());
+		console.log('isMobile', isTablet());
+
+		isMobile() && root.addClass('isMobile');
+		isTablet() && root.addClass('isTablet');
 
 		console.log('initRouter Done');
 

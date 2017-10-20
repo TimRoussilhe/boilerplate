@@ -16,11 +16,6 @@ class LayoutContainer extends AbstractContainer {
 
 	}
 
-	// init(){
-	// 	console.log('laoyut init');
-
-	// }
-
 	initActions() {
 		this.options.actions.resize = () => this.resizeAction();
 		this.options.actions.scroll = () => this.scrollAction();

@@ -5,23 +5,19 @@
 import Layout from 'containers/layout/Layout';
 import HomepageContainer from 'containers/homepage/Homepage';
 import AboutContainer from 'containers/about/About';
-// import ParadeDetailContainer from 'containers/parade-detail/ParadeDetail';
-// import ExperiencePageContainer from 'containers/experience-page/ExperiencePage';
 import NotFoundContainer from 'containers/not-found/NotFound';
 
 // Constants
 import {HOMEPAGE, ABOUT, NOT_FOUND} from 'constants/locations';
-// import {SEARCH_MODAL, ABOUT_MODAL} from 'containers/modal/constants';
 
-// Watchers
-// import Loader from 'containers/loader/Loader';
+// Selector
+import {getRoute} from './selectors';
 
 // Actions
 import {setAnimating, setPage, setOldPage} from './actions';
 // import {showModal} from 'containers/modal/actions';
 import store from 'store';
 import watch from 'redux-watch';
-
 
 class App {
 
@@ -51,7 +47,6 @@ class App {
 	bindStoreEvents() {
 
 		let w = watch(store.getState, 'app.location');
-
 		store.subscribe(w((newVal, oldVal, objectPath) => this.onLocationChanged(newVal, oldVal)));
 		// 	console.log('%s changed from %s to %s', objectPath, oldVal, newVal);
 		// 	// admin.name changed from JP to JOE
@@ -100,7 +95,9 @@ class App {
 		if (this.oldPage === null && this.page === null) {
 			el = document.getElementsByClassName('page-wrapper')[0];
 		}
-		console.log('el', el);
+
+		const currentRoute = getRoute(location);
+		console.log('currentRoute', currentRoute);
 
 		if (this.page) {
 
@@ -112,6 +109,7 @@ class App {
 		// Define first page and pass el if the page el is allready in the dom
 		this.page = new Page({
 			el: el ? el : null,
+			endPoint: currentRoute && currentRoute.json ? currentRoute.json : null,
 		});
 
 		store.dispatch(setPage(this.page));
@@ -127,7 +125,7 @@ class App {
 			this.layout.triggerResize();
 
 			// Meta
-			this.layout.setMeta();
+			// this.layout.setMeta();
 
 			if (this.oldPage) {
 				console.log('HIDE OLD PAGE', this.oldPage);

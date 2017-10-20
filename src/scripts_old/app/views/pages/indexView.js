@@ -11,7 +11,7 @@ class IndexView extends PageView {
 
 		_.defaults(options, {
 			template: template,
-			model: new PageModel({url: options.idView + '.json'})
+			model: new PageModel({url: options.idView + '.json'}),
 		});
 
 		super(options, data);

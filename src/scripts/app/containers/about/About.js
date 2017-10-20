@@ -1,6 +1,5 @@
 import AbstractPageContainer from 'abstract/Pagecontainer';
 import Homepage from 'components/about/About';
-
 // actions
 // import {setIntroListHomepage} from './actions';
 
@@ -27,6 +26,7 @@ class AboutContainer extends AbstractPageContainer {
 
 		super.initData();
 	}
+
 }
 
 export default AboutContainer;

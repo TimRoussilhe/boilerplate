@@ -1,5 +1,6 @@
 import DOMComponent from 'abstract/DOMcomponent';
-
+import store from 'store';
+import watch from 'redux-watch';
 // Containers
 import Header from 'containers/header/Header';
 // import Footer from 'containers/footer/Footer';
@@ -25,34 +26,22 @@ import $ from 'zepto';
 // import {trackPage} from 'utils/analytics';
 import {debounce} from 'utils/misc';
 
-// import Detectizr from 'detectizr';
-// import FastClick from 'fastclick';
-
 class Layout extends DOMComponent {
 
 	constructor(props) {
 		super(props);
 
-		// this.watchers = {
-		//     'layout.modalScroll': ::this.updateModal,
-		//     'layout.scrollEnabled': ::this.updateScroll,
-		//     'layout.scrollDisabled': ::this.disableScroll,
-		//     'app.location': ::this.setContentClass,
-		//     'gmaps.hasScript': ::this.gmapsHasScript,
-		//     'header.isHamburgerActive': ::this.toggleScrollPast
-		// };
 		this.scrollTicket = false;
 
 		this.header = null;
-		// this.sidebar = null;
-		// this.rotateScreen = null;
-		// this.footer = null;
-		// this.modal = null;
-		// this.experience = null;
-		// this.paradeDetailGMaps = null;
 
-		this.el = document.body;
-		console.log('this.$el', this.$el);
+		this.el = document.documentElement;
+
+		let w = watch(store.getState, 'app.meta');
+		store.subscribe(w((newVal, oldVal, objectPath) => this.setMeta(newVal, oldVal)));
+
+		let watchLocation = watch(store.getState, 'app.location');
+		store.subscribe(watchLocation((newVal, oldVal, objectPath) => this.setLocationClass(newVal)));
 
 	}
 
@@ -64,6 +53,7 @@ class Layout extends DOMComponent {
 
 		this.$content = this.$el.find('#content');
 		this.$title = this.$el.find('head > title');
+
 		this.$metaDescription = this.$el.find('head > meta[name=description]');
 
 		// if you need to remove fastclick event of an element
@@ -85,24 +75,6 @@ class Layout extends DOMComponent {
 		});
 		aInitPromises.push(this.header.init());
 
-		// this.sidebar = new Sidebar();
-		// aInitPromises.push(this.sidebar.init());
-
-		// this.modal = new Modal();
-		// aInitPromises.push(this.modal.init());
-
-		// this.experience = new Experience();
-		// aInitPromises.push(this.experience.init());
-
-		// this.footer = new Footer();
-		// aInitPromises.push(this.footer.init());
-
-		// this.rotateScreen = new RotateScreen();
-		// aInitPromises.push(this.rotateScreen.init());
-
-		// this.paradeDetailGMaps = new ParadeDetailGMaps();
-		// aInitPromises.push(this.paradeDetailGMaps.init());
-
 		// scroll top
 		window.scrollTo(0, 0);
 
@@ -114,19 +86,18 @@ class Layout extends DOMComponent {
 		});
 	}
 
-	toggleScrollPast(isHamburgerActive) {
-		isHamburgerActive ? this.el.classList.add('u-scroll-past') : this.el.classList.remove('u-scroll-past');
-	}
-
 	bindEvents() {
+
 		window.addEventListener('orientationchange', debounce(() => {
 			// this._calcVH();
 			this.actions.resize(window);
 		}, 300), false);
+
 		window.addEventListener('resize', debounce(() => {
 			// this._calcVH();
 			this.actions.resize(window);
 		}, 300), false);
+
 		window.addEventListener('scroll', () => {
 			this.scrollTicket = true;
 		}, false);
@@ -162,50 +133,17 @@ class Layout extends DOMComponent {
 		$(window).trigger('resize');
 	}
 
-	setMeta() {
+	setMeta(meta, oldMeta) {
 
-		// here display currentpage meta
-
-
-		// const meta = this.getState().get('app').get('meta');
-
-		// document.title = meta.get('title');
-		// this.$els.title.text(meta.get('title'));
-		// this.$els.metaDescription.val(meta.get('description'));
+		this.$title.text(meta.title);
+		this.$metaDescription.val(meta.description);
 
 		// // Analytics
 		// trackPage();
 	}
 
-	setContentClass(location) {
+	setLocationClass(location) {
 		this.el.setAttribute('location', location);
-	}
-
-	updateScroll() {
-		const isScrollEnabled = this.getState().get('layout').get('scrollEnabled');
-		if (isScrollEnabled) {
-			this.$el.addClass('scroll-enabled');
-		} else {
-			this.$el.removeClass('scroll-enabled');
-		}
-	}
-
-	disableScroll() {
-		const isScrollDisabled = this.getState().get('layout').get('scrollDisabled');
-		if (isScrollDisabled) {
-			this.$el.addClass('scroll-disabled');
-		} else {
-			this.$el.removeClass('scroll-disabled');
-		}
-	}
-
-	updateModal() {
-		const isModalScroll = this.getState().get('layout').get('modalScroll');
-		if (isModalScroll) {
-			this.$el.addClass('modal-scroll');
-		} else {
-			this.$el.removeClass('modal-scroll');
-		}
 	}
 
 	resize() {

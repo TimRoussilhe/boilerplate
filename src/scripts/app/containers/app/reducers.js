@@ -4,11 +4,8 @@ import {
 	SET_OLDPAGE,
 	NAVIGATION,
 	SET_ANIMATING,
+	SET_META,
 } from './constants';
-
-// import {
-// 	LANGS,
-// } from 'constants/langs';
 
 const InitialState = {
 	routes: [],
@@ -17,6 +14,7 @@ const InitialState = {
 	isAnimating: false,
 	page: null,
 	oldPage: null,
+	meta: {},
 };
 
 // const initialState = new InitialState();
@@ -24,28 +22,30 @@ const InitialState = {
 // Updates an entity cache in response to any action with response.entities.
 export const app = (state = InitialState, action) => {
 	switch (action.type) {
-	// case SET_META: {
-	// 	// Set default meta
-	// 	if (action.isDefault) {
-	// 		const meta = {};
-	// 		meta.default_title = action.meta.title;
-	// 		meta.default_description = action.meta.description;
+	case SET_META: {
+		// // Set default meta
+		// if (action.isDefault) {
+		// 	const meta = {};
+		// 	meta.default_title = action.meta.title;
+		// 	meta.default_description = action.meta.description;
 
-	// 		state = state.set('meta', fromJS(meta));
-	// 	}
+		// 	// state = state.set('meta', fromJS(meta));
+		// }
 
-	// 	let stateMeta = state.get('meta');
+		// let stateMeta = state.get('meta');
 
-	// 	const defaultTitle = stateMeta.default_title;
-	// 	const defaultDescription = stateMeta.default_description;
-	// 	const title = action.meta && action.meta.title ? action.meta.title : defaultTitle;
-	// 	const description = action.meta && action.meta.description ? action.meta.description : defaultDescription;
+		// const defaultTitle = stateMeta.default_title;
+		// const defaultDescription = stateMeta.default_description;
+		// const title = action.meta && action.meta.title ? action.meta.title : defaultTitle;
+		// const description = action.meta && action.meta.description ? action.meta.description : defaultDescription;
 
-	// 	stateMeta = stateMeta.set('title', title);
-	// 	stateMeta = stateMeta.set('description', description);
-
-	// 	return state.set('meta', stateMeta);
-	// }
+		// stateMeta = stateMeta.set('title', title);
+		// stateMeta = stateMeta.set('description', description);
+		return {
+			...state,
+			meta: action.meta,
+		};
+	}
 
 	case SET_ROUTES: {
 		return Object.assign({}, state, {

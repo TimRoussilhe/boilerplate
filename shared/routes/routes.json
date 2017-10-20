@@ -1,18 +1,18 @@
 {
 	"index": {
-		"id": "index",
+		"id": "HOMEPAGE",
 		"url": "/",
 		"template": "index",
 		"json": "index.json"
 	},
 	"about": {
-		"id": "about",
+		"id": "ABOUT",
 		"url": "/about",
 		"template": "about",
 		"json": "about.json"
 	},
 	"error": {
-		"id": "error",
+		"id": "NOT_FOUND",
 		"url": "/error",
 		"template": "error",
 		"jsonUrl": "error.json"

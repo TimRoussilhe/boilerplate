@@ -9,7 +9,10 @@ import store from 'store';
 // import {loadJSON} from 'utils/load';
 
 // Actions
-// import {setMeta} from 'containers/app/actions';
+import {setMeta} from 'containers/app/actions';
+
+// Config
+import {JSON_ENDPOINTS} from 'constants/config';
 
 /**
  * PageContainer: Defines a page container
@@ -29,31 +32,28 @@ class PageContainer extends AbstractContainer {
 	// to override if needed
 	fetchData() {
 		// console.log('PAge:fetchData');
-		const endPoint = store.getState().app.endPoint;
+		const endPoint = this.options.endPoint;
 
 		if (!endPoint) {
 			this.promises.data.resolve();
 			return;
 		}
 
-		// this.subscribe({
-		// 	path: 'loader.isShown',
-		// 	cb: () => this._isLoaderShown(),
-		// });
+		// this.promises.data.resolve();
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: JSON_ENDPOINTS + this.options.endPoint,
+			success: (data) => {
+				this.data = data;
+				this.promises.data.resolve();
+			},
+			error: (xhr, type) => {
+				this.promises.data.reject();
+			},
+		});
 
-		// // display a loader
-		// this.showLoader(this.TYPE_LOADER);
 
-		// // loadJSON(`${END_POINT}${endPoint}`).then((data) => {
-		// //     if (!data) {
-		// //         console.info('data are empty', this);
-		// //         this.promises.data.resolve();
-		// //         return;
-		// //     }
-
-		// //     this.data = data;
-		// //     this.loadAssets();
-		// // });
 	}
 
 	loadAssets() {
@@ -61,7 +61,7 @@ class PageContainer extends AbstractContainer {
 	}
 
 	initData() {
-		// this.dispatch(setMeta(this.data.meta));
+		store.dispatch(setMeta(this.data.meta));
 	}
 
 	onInit() {

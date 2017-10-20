@@ -49,11 +49,11 @@ const routesFn = {
 		// page('/');
 		// store.dispatch(navigate(HOMEPAGE, ctx.params));
 	},
-	index: (ctx) => {
+	HOMEPAGE: (ctx) => {
 		console.log('index navigate');
 		store.dispatch(navigate(HOMEPAGE, ctx.params));
 	},
-	about: (ctx) => {
+	ABOUT: (ctx) => {
 		console.log('about navigate');
 		store.dispatch(navigate(ABOUT, ctx.params));
 	},

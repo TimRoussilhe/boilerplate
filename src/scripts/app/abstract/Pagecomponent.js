@@ -1,7 +1,10 @@
 
 import AbstractDOMComponent from 'abstract/DOMcomponent';
 // import $ from 'zepto';
-import {TweenLite, TimelineLite, Cubic} from 'gsap';
+// import {TweenLite} from 'gsap';
+import TweenLite from 'TweenLite';
+import TimelineLite from 'TimelineLite';
+import CSSPlugin from 'CSSPlugin';
 
 /**
  * PageComponent: Defines a page

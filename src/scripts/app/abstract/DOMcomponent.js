@@ -1,5 +1,6 @@
-import _ from 'underscore';
 import store from 'store';
+import _ from 'lodash';
+import SVGS from 'jsons/svgs.json';
 
 const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 
@@ -306,7 +307,10 @@ class Component {
 	 * Render your template
 	 */
 	renderTemplate() {
-		this.$el = $(this.template());
+		this.$el = $(this.template({
+			data:this.data,
+			svgs: SVGS,
+		}));
 		this.el = this.$el[0];
 	}
 

@@ -27,6 +27,7 @@ class HomepageContainer extends AbstractPageContainer {
 
 		super.initData();
 	}
+
 }
 
 export default HomepageContainer;

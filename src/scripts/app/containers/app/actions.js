@@ -2,6 +2,7 @@ import {
 	SET_ROUTES,
 	NAVIGATION,
 	SET_ANIMATING,
+	SET_META,
 	SET_PAGE,
 	SET_OLDPAGE,
 } from './constants';

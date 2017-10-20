@@ -41,7 +41,7 @@ class PageView extends BaseView {
 		// We check if we are on the server ( and data are here ) or if we need to fecth model before render
 		if (this.model.get('asyncronous') === true) {
 			this.model.fetch({
-				success: this.render.bind(this)
+				success: this.render.bind(this),
 			});
 		} else {
 			this.render();
