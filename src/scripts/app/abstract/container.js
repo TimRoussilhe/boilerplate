@@ -2,20 +2,15 @@
  * Container: Handles actions and data for a component
  * @constructor
  */
-class AbstractContainer{
 
-	set promises(newPromises) {
-		if (!this._promises) this._promises = {};
-		for (const promise in newPromises) {
-			this._promises[promise] = newPromises[promise];
-		}
-	}
-	get promises() {
-		return this._promises;
-	}
+import Base from './Base';
+
+class AbstractContainer extends Base {
 
 	constructor(options = {}) {
+
 		console.log('options', options);
+		super(options);
 
 		/**
     * Component asociated to the container
@@ -51,10 +46,7 @@ class AbstractContainer{
 		// */
 		// this.options.el = options.el ? options.el : null;
 
-		console.log('this.options', this.options);
-
-
-		this._promises = {
+		this.promises = {
 			init: {
 				resolve: null,
 				reject: null,
@@ -74,30 +66,6 @@ class AbstractContainer{
 
 	}
 
-	/**
-	 * Init
-	 * @return Promise a Promise the component is init
-	 */
-	init() {
-
-		console.log('this', this);
-		console.log('this.Component', this.Component);
-
-		return new Promise((resolve, reject) => {
-			this.promises.init.resolve = resolve;
-			this.promises.init.reject = reject;
-
-			const {isInit} = this.states;
-
-			if (isInit) {
-				this.promises.init.reject();
-				return;
-			}
-
-			this.initComponent();
-		});
-	}
-
 	getComponent() {
 		return this._component;
 	}
@@ -113,33 +81,6 @@ class AbstractContainer{
 				this.onInit();
 			});
 		});
-	}
-
-	/**
-	 * Once the component is init
-	 */
-	onInit() {
-		console.log('ONInit');
-		this.setState({isInit: true, canUpdate: true});
-		this.promises.init.resolve();
-	}
-
-	setState(partialState = {}, callback, needRender = false) {
-		if (typeof partialState !== 'object' &&
-            typeof partialState !== 'function' &&
-            partialState !== null
-		) {
-			console.error('setState(...): takes an object of state variables to update or a ' +
-            'function which returns an object of state variables.');
-			return;
-		}
-
-		for (const key in partialState) { // eslint-disable-line guard-for-in
-			this.states[key] = partialState[key];
-		}
-
-		if (callback) callback();
-		if (needRender) this.render();
 	}
 
 	getData() {

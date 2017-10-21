@@ -1,6 +1,7 @@
 import store from 'store';
 import _ from 'lodash';
 import SVGS from 'jsons/svgs.json';
+import Base from './Base';
 
 const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 
@@ -8,7 +9,8 @@ const delegateEventSplitter = /^(\S+)\s*(.*)$/;
  * Component: Defines a component with basic methods
  * @constructor
  */
-class Component {
+
+class Component extends Base {
 
 	set events(events) {
 		for (const event in events) { // eslint-disable-line guard-for-in
@@ -21,9 +23,10 @@ class Component {
 		return this._events;
 	}
 
-	set promises(promises) {
-		for (const promise in promises) {
-			this.promises[promise] = promises[promise];
+	set promises(newPromises) {
+		if (!this._promises) this._promises = {};
+		for (const promise in newPromises) {
+			this._promises[promise] = newPromises[promise];
 		}
 	}
 	get promises() {
@@ -41,6 +44,8 @@ class Component {
 	}
 
 	constructor(props) {
+
+		super(props);
 
 		/**
 			 * Object as associative array of all the <handlers> objects
@@ -123,146 +128,11 @@ class Component {
 	}
 
 	/**
-	 * Init
-	 * @return {Promise} A Promise the component is init
-	 */
-	init() {
-		return new Promise((resolve, reject) => {
-			this.promises.init.resolve = resolve;
-			this.promises.init.reject = reject;
-
-			const {isInit} = this.states;
-
-			if (isInit) {
-				this.promises.init.reject();
-				return;
-			}
-
-			this.initComponent();
-		});
-	}
-
-	/**
 	 * Init the component.
 	 * Override and trigger onInit when we have to wait for computer procesing, like canvas initialization for instance.
 	 */
 	initComponent() {
 		this.render();
-	}
-
-	/**
-     * Init all your DOM elements here
-     */
-	initDOM() {}
-
-	/**
-     * Setup your DOM elements here ( for example defaut style before animation )
-     */
-	setupDOM() {}
-
-	/**
-	 * Init the Timeline here
-	 */
-	initTL() {}
-
-	onDOMInit() {
-		this.bindEvents();
-		this.bindGlobalStoreEvents();
-		this.onInit();
-	}
-
-	/**
-	 * Once the component is init
-	 */
-	onInit() {
-		console.log('ONInit');
-		this.setState({isInit: true, canUpdate: true});
-		this.promises.init.resolve();
-	}
-
-	/**
-	 * Bind your events here
-	 */
-	bindEvents() {}
-
-	/**
-	 * Bind your store events here
-	 */
-	bindGlobalStoreEvents() {}
-
-	/**
-	 * Unbind yout events here
-	 */
-	unbindEvents() {}
-
-	/**
-	 * Set callbacks, where `this.events` is a hash of
-	 *
-	 * *{"event selector": "callback"}*
-	 *
-	 *  {
-	 *      'mousedown .title':  'edit',
-	 *      'click .button':     'save',
-	 *      'click .open':       function(e) { ... }
-	 *   }
-	 * @param {Object} Events Objcets
-	 */
-	delegateEvents(events) {
-
-		events || (events = _.result(this, 'events'));
-		if (!events) return this;
-		this.undelegateEvents();
-		for (let key in events) {
-			let method = events[key];
-			if (!_.isFunction(method)) method = this[method];
-			if (!method) continue;
-			let match = key.match(delegateEventSplitter);
-			this.delegate(match[1], match[2], _.bind(method, this));
-		}
-		return this;
-	}
-
-	/**
-     * Add a single event listener to the view's element (or a child element
-     * using `selector`). This only works for delegate-able events: not `focus`,
-     * `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
-     */
-	delegate(eventName, selector, listener) {
-		if (this.$el) this.$el.on(eventName + '.delegateEvents' + this.cid, selector, listener);
-		return this;
-	}
-
-	// Clears all callbacks previously bound to the view by `delegateEvents`.
-	// You usually don't need to use this, but may wish to if you have multiple
-	// Backbone views attached to the same DOM element.
-	undelegateEvents() {
-		if (this.$el) this.$el.off('.delegateEvents' + this.cid);
-		return this;
-	}
-
-	// A finer-grained `undelegateEvents` for removing a single delegated event.
-	// `selector` and `listener` are both optional.
-	undelegate(eventName, selector, listener) {
-		this.$el.off(eventName + '.delegateEvents' + this.cid, selector, listener);
-		return this;
-	}
-
-	setState(partialState = {}, callback, needRender = false) {
-		if (typeof partialState !== 'object' &&
-            typeof partialState !== 'function' &&
-            partialState !== null
-		) {
-			console.error('setState(...): takes an object of state variables to update or a ' +
-            'function which returns an object of state variables.');
-			return;
-		}
-
-		for (const key in partialState) { // eslint-disable-line guard-for-in
-			this.states[key] = partialState[key];
-		}
-
-		if (callback) callback();
-		if (needRender) this.render();
 	}
 
 	/**
@@ -324,6 +194,87 @@ class Component {
 		setTimeout(() => this.onDOMInit(), 0);
 	}
 
+	/**
+     * Init all your DOM elements here
+     */
+	initDOM() {}
+
+	/**
+     * Setup your DOM elements here ( for example defaut style before animation )
+     */
+	setupDOM() {}
+
+	/**
+	 * Init the Timeline here
+	 */
+	initTL() {}
+
+	onDOMInit() {
+		this.bindEvents();
+		this.onInit();
+	}
+
+	/**
+	 * Bind your events here
+	 */
+	bindEvents() {}
+
+	/**
+	 * Unbind yout events here
+	 */
+	unbindEvents() {}
+
+	/**
+	 * Set callbacks, where `this.events` is a hash of
+	 *
+	 * *{"event selector": "callback"}*
+	 *
+	 *  {
+	 *      'mousedown .title':  'edit',
+	 *      'click .button':     'save',
+	 *      'click .open':       function(e) { ... }
+	 *   }
+	 * @param {Object} Events Objcets
+	 */
+	delegateEvents(events) {
+
+		events || (events = _.result(this, 'events'));
+		if (!events) return this;
+		this.undelegateEvents();
+		for (let key in events) {
+			let method = events[key];
+			if (!_.isFunction(method)) method = this[method];
+			if (!method) continue;
+			let match = key.match(delegateEventSplitter);
+			this.delegate(match[1], match[2], _.bind(method, this));
+		}
+		return this;
+	}
+
+	/**
+     * Add a single event listener to the view's element (or a child element
+     * using `selector`). This only works for delegate-able events: not `focus`,
+     * `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
+     */
+	delegate(eventName, selector, listener) {
+		if (this.$el) this.$el.on(eventName + '.delegateEvents' + this.cid, selector, listener);
+		return this;
+	}
+
+	// Clears all callbacks previously bound to the view by `delegateEvents`.
+	// You usually don't need to use this, but may wish to if you have multiple
+	// Backbone views attached to the same DOM element.
+	undelegateEvents() {
+		if (this.$el) this.$el.off('.delegateEvents' + this.cid);
+		return this;
+	}
+
+	// A finer-grained `undelegateEvents` for removing a single delegated event.
+	// `selector` and `listener` are both optional.
+	undelegate(eventName, selector, listener) {
+		this.$el.off(eventName + '.delegateEvents' + this.cid, selector, listener);
+		return this;
+	}
 
 	/**
 	 * Update
@@ -419,7 +370,6 @@ class Component {
 		page(url);
 	}
 
-	// TODO : add connection to isAnimating
 	hyperlink(e) {
 		// const href = e.currentTarget.href;
 		// const route = !e.currentTarget.classList.contains('no-route');
@@ -485,8 +435,6 @@ class Component {
 		this.$el = null;
 		this.$els = {};
 		this._events = {};
-
-		// TODO : unsubscribe redux-watch
 	}
 }
 
