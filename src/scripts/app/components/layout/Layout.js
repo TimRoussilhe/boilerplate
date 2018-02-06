@@ -1,29 +1,12 @@
 import DOMComponent from 'abstract/DOMcomponent';
 import store from 'store';
 import watch from 'redux-watch';
+
 // Containers
 import Header from 'containers/header/Header';
-// import Footer from 'containers/footer/Footer';
-// import Sidebar from 'containers/sidebar/Sidebar';
-// import Modal from 'containers/modal/Modal';
-// import Experience from 'containers/experience/Experience';
-// import RotateScreen from 'components/rotate-screen/RotateScreen';
-// import ParadeDetailGMaps from 'containers/parade-detail-gmaps/ParadeDetailGMaps';
 
 import $ from 'zepto';
 
-// Actions
-// import {showSidebar} from 'containers/sidebar/actions';
-// import {showHeader} from 'containers/header/actions';
-// import {showFooter} from 'containers/footer/actions';
-
-// import {getScriptGmaps} from 'containers/parade-detail-gmaps/actions';
-
-// Constants
-// import {NOT_FOUND, PARADE_DETAIL, PARADE_EXPERIENCE_HOTSPOT} from 'constants/locations';
-
-// Utils
-// import {trackPage} from 'utils/analytics';
 import {debounce} from 'utils/misc';
 
 class Layout extends DOMComponent {

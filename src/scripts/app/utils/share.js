@@ -8,7 +8,7 @@ class ShareUtil {
 			facebook: [500, 600],
 			twitter: [500, 310],
 			google: [500, 425],
-			pinterest: [750, 320]
+			pinterest: [750, 320],
 		};
 
 		this.urls = {
@@ -16,7 +16,7 @@ class ShareUtil {
 			// twitter: 'https://twitter.com/intent/tweet?url={{url}}&text={{desc}}&hashtags={{hashtags}}&via={{via}}',
 			twitter: 'https://twitter.com/intent/tweet?url={{url}}&text={{desc}}&hashtags={{hashtags}}',
 			google: 'https://plus.google.com/share?url={{url}}',
-			pinterest: 'http://www.pinterest.com/pin/create/button/?url={{url}}&media={{img}}&description={{title}},%20{{desc}}'
+			pinterest: 'http://www.pinterest.com/pin/create/button/?url={{url}}&media={{img}}&description={{title}},%20{{desc}}',
 		};
 
 		this.popup = null;
@@ -29,13 +29,13 @@ class ShareUtil {
 		let w;
 		let h;
 
-        if (debug) console.log('data', data);
+		if (debug) console.log('data', data);
 
 		if (this.popup) {
 			// if (this.detectIE() !== false && this.popup) {
-            //     this.popup.close();
-            // }
-            this.popup.close();
+			//     this.popup.close();
+			// }
+			this.popup.close();
 			this.popup = null;
 		}
 
@@ -55,7 +55,7 @@ class ShareUtil {
 				method,
 				name: data.title,
 				link: data.url,
-				description: data.desc
+				description: data.desc,
 			};
 
 			FB.ui(params, function(response) {
@@ -75,7 +75,7 @@ class ShareUtil {
 		href = href.replace('{{hashtags}}', encodeURIComponent(data.hashtags));
 		href = href.replace('{{via}}', encodeURIComponent(data.via));
 
-        if (debug) console.log('href', href);
+		if (debug) console.log('href', href);
 
 		this.popup = window.open(href, data.id, `width=${w},height=${h},left=${this.getX(w)},top=${this.getY(h)},scrollbars=1,location=0,menubar=0,resizable=0,status=0,toolbar=0`);
 		this.popup.focus();
@@ -98,19 +98,19 @@ class ShareUtil {
 	 */
 	getShareDatas(el) {
 		const obj = {
-            desc: '',
-            hashtags: '',
-            via: ''
-        };
+			desc: '',
+			hashtags: '',
+			via: '',
+		};
 		obj.id = el.getAttribute('share-id');
 
 		if (el.getAttribute('share-method')) obj.method = el.getAttribute('share-method');
 
 		// # url
-        // here we setup share url to the currant page if you don't assign one
-        // you can specify another one or setup an empty string ( twitter for example )
+		// here we setup share url to the currant page if you don't assign one
+		// you can specify another one or setup an empty string ( twitter for example )
 		if (el.getAttribute('share-url')) obj.url = el.getAttribute('share-url');
-        else obj.url = window.location.href;
+		else obj.url = window.location.href;
 
 		// # title
 		if (el.getAttribute('share-title')) obj.title = el.getAttribute('share-title');
@@ -128,12 +128,12 @@ class ShareUtil {
 		for (let j = 0; j < el.attributes.length; j++) {
 			const attr = el.attributes[j];
 			if (obj.desc && !attr.name.match(/^data/)) {
-                obj.desc = obj.desc.replace(`{{${attr.name}}}`, attr.value);
-            }
+				obj.desc = obj.desc.replace(`{{${attr.name}}}`, attr.value);
+			}
 		}
 
-        if (el.getAttribute('share-hashtags')) obj.hashtags = el.getAttribute('share-hashtags');
-        if (el.getAttribute('share-via')) obj.via = el.getAttribute('share-via');
+		if (el.getAttribute('share-hashtags')) obj.hashtags = el.getAttribute('share-hashtags');
+		if (el.getAttribute('share-via')) obj.via = el.getAttribute('share-via');
 
 		// # img
 		// obj.img = CV.share.img;
@@ -154,35 +154,35 @@ class ShareUtil {
 		return windowTop + (window.outerHeight - h) * 0.5;
 	}
 
-    /**
+	/**
      * detect IE
      * returns version of IE or false, if browser is not Internet Explorer
      */
-    detectIE() {
-        const ua = window.navigator.userAgent;
+	detectIE() {
+		const ua = window.navigator.userAgent;
 
-        const msie = ua.indexOf('MSIE ');
-        if (msie > 0) {
-            // IE 10 or older => return version number
-            return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
-        }
+		const msie = ua.indexOf('MSIE ');
+		if (msie > 0) {
+			// IE 10 or older => return version number
+			return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+		}
 
-        const trident = ua.indexOf('Trident/');
-        if (trident > 0) {
-            // IE 11 => return version number
-            const rv = ua.indexOf('rv:');
-            return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
-        }
+		const trident = ua.indexOf('Trident/');
+		if (trident > 0) {
+			// IE 11 => return version number
+			const rv = ua.indexOf('rv:');
+			return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+		}
 
-        const edge = ua.indexOf('Edge/');
-        if (edge > 0) {
-        // Edge (IE 12+) => return version number
-        return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
-        }
+		const edge = ua.indexOf('Edge/');
+		if (edge > 0) {
+			// Edge (IE 12+) => return version number
+			return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+		}
 
-        // other browser
-        return false;
-    }
+		// other browser
+		return false;
+	}
 
 }
 
