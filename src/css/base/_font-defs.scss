@@ -3,16 +3,16 @@
 
 @mixin f-title {
   @include ffRegular;
-  @include fontSize(53, 1500, $bp-desktop-s, $bp-desktop-l);
+  @include responsiveFontSize(53, 1500, $bp-desktop-s, $bp-desktop-l);
 
   line-height: 1.13em;
 
   @media #{$mq-desktop-s} {
-    @include fontSize(48, 1200, $bp-mobile, $bp-desktop-s);
+    @include responsiveFontSize(48, 1200, $bp-mobile, $bp-desktop-s);
   }
 
   @media #{$mq-mobile-landscape} {
-    @include fontSize(50, 800, $bp-mobile, $bp-mobile-landscape);
+    @include responsiveFontSize(50, 800, $bp-mobile, $bp-mobile-landscape);
   }
 
 }

@@ -1,5 +1,8 @@
 // import mixins
 @import 'mixins/mixins';
+@import 'mixins/aspect_ratio';
+@import 'mixins/font_style';
+@import 'mixins/responsive_font';
 
 // import variables
 @import 'vars/fonts';
