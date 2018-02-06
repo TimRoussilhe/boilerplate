@@ -1,5 +1,5 @@
 // Abstract
-// import AbstractPageComponent from 'abstract/component/DOM/page';
+import Base from 'abstract/Base';
 
 // Containers
 import Layout from 'containers/layout/Layout';
@@ -19,9 +19,11 @@ import {setAnimating, setPage, setOldPage} from './actions';
 import store from 'store';
 import watch from 'redux-watch';
 
-class App {
+class App extends Base {
 
-	constructor() {
+	constructor(options) {
+
+		super(options);
 
 		this.prevLocation = null;
 		this.location = null;
@@ -29,6 +31,10 @@ class App {
 		this.loader = null;
 		this.page = null;
 		this.oldPage = null;
+
+		this.storeEvents = {
+			'app.location': (location, prevLocation) => this.onLocationChanged(location, prevLocation),
+		};
 
 		this.bindStoreEvents();
 
@@ -46,8 +52,8 @@ class App {
 	// add proper bind undinb store listener
 	bindStoreEvents() {
 
-		let w = watch(store.getState, 'app.location');
-		store.subscribe(w((newVal, oldVal, objectPath) => this.onLocationChanged(newVal, oldVal)));
+		// let w = watch(store.getState, 'app.location');
+		// store.subscribe(w((newVal, oldVal, objectPath) => this.onLocationChanged(newVal, oldVal)));
 		// 	console.log('%s changed from %s to %s', objectPath, oldVal, newVal);
 		// 	// admin.name changed from JP to JOE
 		// }));
@@ -62,9 +68,6 @@ class App {
 	// }
 
 	onLocationChanged(location, prevLocation) {
-
-		console.log('location', location);
-		console.log('prevLocation', prevLocation);
 
 		this.prevLocation = prevLocation;
 		if (location !== prevLocation) {
@@ -134,24 +137,29 @@ class App {
 						console.log('OLD PAGE HIDDEN');
 						this.oldPage.dispose();
 						this.oldPage = null;
+						this.showPage();
 					});
+			} else {
+				// TODO : check why it's so long for first page setupdom to start
+				this.showPage();
 			}
+		});
+	}
 
-			// Show next
-			this.page.show().then(() => {
-				// if (!this.getState().get('app').get('appLoaded')) this.dispatch(setAppLoaded(true));
-				console.log('CURRENT PAGE SHOW');
+	showPage(){
+		// Show next
+		this.page.show().then(() => {
+			// if (!this.getState().get('app').get('appLoaded')) this.dispatch(setAppLoaded(true));
+			console.log('CURRENT PAGE SHOW');
 
-				store.dispatch(setAnimating(false));
+			store.dispatch(setAnimating(false));
 
-				// at this point, dispose
-				if (this.oldPage) {
-					console.log('dispose again?');
-					this.oldPage.dispose();
-					this.oldPage = null;
-				}
-			});
-
+			// at this point, dispose
+			if (this.oldPage) {
+				console.log('dispose again?');
+				this.oldPage.dispose();
+				this.oldPage = null;
+			}
 		});
 	}
 

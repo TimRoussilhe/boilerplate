@@ -10,17 +10,17 @@ class GlobalStore {
 		this._callbackFunctions = [];
 		this._dataObj = {
 			createdAt: new Date(),
-			rafCallStack: [],	
+			rafCallStack: [],
 			scroll: {
 				targetY: 0,
-				currentY: 0
+				currentY: 0,
 			},
 
 			viewport: {
 				width: window.innerWidth,
-				height: window.innerHeight
+				height: window.innerHeight,
 			},
-			//keydown : evt.keyCode || evt.which
+			// keydown : evt.keyCode || evt.which
 			onKeyDown: null,
 			// is there any animation happening
 			isAnimating : false,
@@ -28,7 +28,7 @@ class GlobalStore {
 			// Pages
 			oldPage : null,
 			currentPage: null,
-			firstTime: true
+			firstTime: true,
 
 		};
 
@@ -38,7 +38,7 @@ class GlobalStore {
 	}
 
 	on(eventType, callback) {
-		if ( this._eventTypes.findIndex(x => x === eventType) === -1 ) {
+		if ( this._eventTypes.findIndex((x) => x === eventType) === -1 ) {
 			this._eventTypes.push(eventType);
 		}
 
@@ -59,8 +59,8 @@ class GlobalStore {
 				this._dataObj[attr] = val;
 				this._eventTypes.forEach( ( eventType, index ) => {
 					this._callbackFunctions[eventType].forEach( ( callback, index ) => {
-						if ( eventType.indexOf("change:") > -1 ) {
-							if ( eventType === ( "change:" + attr ) ) {
+						if ( eventType.indexOf('change:') > -1 ) {
+							if ( eventType === ( 'change:' + attr ) ) {
 								callback.call(this, val, previous);
 							}
 						} else {
