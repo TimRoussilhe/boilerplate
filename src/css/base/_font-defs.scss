@@ -1,34 +1,47 @@
-// Fonts size
+// Fonts definition here, we defin each style of font.
+// We can them create some font Style with different viewport in the _font_styles.scss file
 
+@mixin f-title {
+  @include ffRegular;
+  @include fontSize(53, 1500, $bp-desktop-s, $bp-desktop-l);
 
-/* Footer */
-// footer-links
-// footer-mobile-480
-@mixin f-footer-regular14() {
-	color: $c-white;
-	@include ffRegular();
-	@include fontStyle(14,22,$ls-body);
-}
-.--f-footer-regular14 {
-	@include f-footer-regular14();
-}
+  line-height: 1.13em;
 
-// FOOTER
-// footer-mobile-320
-@mixin f-footer-regular10() {
-	color: $c-white;
-	@include ffRegular();
-	@include fontStyle(10,16,$ls-body);
-}
-.--f-footer-regular10 {
-	@include f-footer-regular10();
+  @media #{$mq-desktop-s} {
+    @include fontSize(48, 1200, $bp-mobile, $bp-desktop-s);
+  }
+
+  @media #{$mq-mobile-landscape} {
+    @include fontSize(50, 800, $bp-mobile, $bp-mobile-landscape);
+  }
+
 }
 
-@mixin f-footer-regular12() {
-	@include ffRegular();
-	@include fontStyle(12,13,$ls-body);
+@mixin f-regular28 {
+  @include ffRegular;
+  @include fontStyle(28, 36, 0);
 }
-.--f-footer-regular12 {
-	@include f-footer-regular12();
+
+.f-regular28 {
+  @include f-regular28;
 }
+
+@mixin f-regular26 {
+  @include ffRegular;
+  @include fontStyle(26, 30, 0);
+}
+
+.f-regular26 {
+  @include f-regular26;
+}
+
+@mixin f-regular24 {
+  @include ffRegular;
+  @include fontStyle(24, 32, 0);
+}
+
+.f-regular24 {
+  @include f-regular24;
+}
+
 
