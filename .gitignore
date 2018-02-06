@@ -9,6 +9,7 @@
 node_modules
 vendor
 
+
 npm-debug.log.*
 *.map
 *.log
@@ -18,4 +19,5 @@ node_modules
 npm-debug.log.*
 
 build
-
+public/assets/js
+public/assets/css
