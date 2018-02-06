@@ -10,8 +10,8 @@ module.exports = function(gulp, $) {
 		default: () => {
 
 			connect.server({
-				base: './public/.'
-			}, function (){
+				base: './public/.',
+			}, function(){
 				browserSync({
 					proxy: '127.0.0.1:8000',
 					files: ['public/**/*.*'],
@@ -23,6 +23,6 @@ module.exports = function(gulp, $) {
 			watch('./public/assets/svgs/**/*.svg', () => {
 				runSequence('svgs-to-json');
 			});
-		}
+		},
 	};
 };

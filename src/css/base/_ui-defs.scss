@@ -1,141 +1,44 @@
 html {
+
 	box-sizing: border-box;
 	font-size: 62.5%;
+
+	/* Adjust font size */
+	font-size: 62.5%;
 	-webkit-text-size-adjust: 100%;
+
+	/* Font varient */
+	font-variant-ligatures: none;
+	-webkit-font-variant-ligatures: none;
+
+	/* Smoothing */
+	text-rendering: optimizeLegibility;
+	-moz-osx-font-smoothing: grayscale;
+	font-smoothing: antialiased;
 	-webkit-font-smoothing: antialiased;
-	user-select: none;
+
 }
 
 body {
 
-  	overflow:hidden;
+	overflow:hidden;
 	background-color: $c-white;
-	// background-color: $c-white;
-
-	// default
-	// @extend .--f-regular14;
-	// @extend .--c-dark-grey;
-
-	&.scroll-enabled{
-		height: auto;
-		overflow: auto;
-	}
 
 	.block-events {
 		pointer-events: none !important;
 	}
 
-	// when a modal need to trigger defaut browser scroll
-	// ex : about modal
-	&.modal-scroll{
-
-		height: auto;
-		overflow: auto;
-
-		#content{
-			height: 0px;
-			overflow: hidden;
-		}
-		#content{
-			height: 0px;
-			overflow: hidden;
-		}
-		#parade-detail-google-maps-container{
-			height: 0px;
-			overflow: hidden;
-		}
-		#modal-container{
-			position: relative;
-
-			.modal-content-container{
-				position: relative;
-
-				.modal{
-					position: relative;
-				}
-			}
-		}
-	}
-}
-
-//https://stackoverflow.com/questions/11258877/fixed-element-disappears-in-chrome
-@media #{$mq-tablet} {
-	html, body {height:100%;overflow:auto}
 }
 
 #content {
 	position: absolute;
-	// position: fixed;
 	z-index: 5;
 	top: 0;
 	right: 0;
 	left: 0;
 	bottom: 0;
-	// overflow: scroll;
-	// height: 100vh;
-
-	// because of header
-	@media #{$mq-tablet} {
-	    top: $header-tablet-height;
-	    // height: calc(100vh - #{$header-tablet-height});
-	}
-
-	// because of header
-	@media #{$mq-mobile} {
-	    top: $header-mobile-height;
-	    // height: calc(100vh - #{$header-mobile-height});
-	}
-
-	// > section {
-	// 	position: relative;
-	// 	z-index: 5;
-	// }
 }
 
-.reset-mg-inline {
-	font-size: 0;
+.page-wrapper{
+	opacity: 0;
 }
-
-// .--btn-std {
-// 	@extend .--f-button-medium16;
-// 	// @extend .--f-button-medium14;
-// 	background-color: $c-dodger-blue;
-// 	padding: 14px 24px 14px 24px;
-// 	transition: all $cubic-out-transition;
-// 	color: $c-white;
-// 	text-transform: uppercase;
-// 	border-radius: 2px;
-
-// 	&:hover {
-// 		background-color: $c-dodger-blue-hover;
-// 	}
-
-// 	// 1024
-// 	@media #{$mq-tablet-h} {
-// 	    padding: 14px 24px 14px 24px;
-// 	}
-
-// 	// 768
-// 	@media #{$mq-tablet} {
-// 	    // padding: 16px 40px 14px 37px;
-// 	   	padding: 14px 24px 14px 24px;
-// 	}
-
-// 	// 320
-// 	@media #{$mq-min} {
-// 		// @extend .--f-button-medium14;
-// 		padding: 15px 24px 15px 24px;
-// 		@include f-button-medium14();
-// 	}
-
-// }
-
-// .link{
-// 	@extend .--ff-link;
-// 	//color: $c-charcoal-grey;
-// 	transition: opacity $default-inout-transition;
-
-// 	&:hover{
-// 		opacity: 0.54;
-// 	}
-// }

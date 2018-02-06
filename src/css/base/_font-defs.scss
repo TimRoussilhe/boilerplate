@@ -1,13 +1,5 @@
 // Fonts size
 
-/*
- I had to define @mixin to be able to re-use them in _reponsive-utils.
- it's not optimized as it generates 2 different classes, but it does the job
-*/
-
-.--skew-up {
-  transform: skewY(-15deg);
-}
 
 /* Footer */
 // footer-links
@@ -40,14 +32,3 @@
 	@include f-footer-regular12();
 }
 
-// Font color
-.--c-white {
-	color: $c-white;
-}
-.--c-black {
-	color: $c-black;
-}
-
-.--c-tangerine {
-	color: $c-tangerine;
-}

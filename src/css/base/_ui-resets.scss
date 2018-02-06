@@ -14,8 +14,8 @@ dl, dt, dd, ol, ul, li, fieldset, form, label, legend, button {
 	@include ffRegular();
 	color: $c-dark-grey;
 	font-size: $fs-base;
-	line-height: 1.86;
-	letter-spacing: 0.3px;
+	line-height: $lh-base;
+	letter-spacing: $ls-body;
 	font-weight: normal;
 	font-style: normal;
 	vertical-align: baseline;

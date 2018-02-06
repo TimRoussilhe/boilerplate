@@ -55,6 +55,7 @@
     "json-loader": "^0.5.7",
     "lodash": "^4.17.4",
     "node-notifier": "^5.1.2",
+    "normalize.css": "^7.0.0",
     "page": "^1.7.1",
     "redux": "^3.7.2",
     "redux-responsive": "^4.3.4",

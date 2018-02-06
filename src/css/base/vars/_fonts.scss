@@ -1,31 +1,17 @@
 @import '../font-faces';
 
 // font families
-// $ff-base: 'ProductSans-Light', 'Helvetica', 'Arial', sans-serif;
-$ff-title: 'ProductSans-Bold', 'Helvetica', 'Arial', sans-serif;
-$ff-bold: 'Roboto-Bold', 'Helvetica', 'Arial', sans-serif;
-$ff-regular: 'Roboto-Regular', 'Helvetica', 'Arial', sans-serif;
-$ff-medium: 'Roboto-Medium', 'Helvetica', 'Arial', sans-serif;
+$ff-title: 'Untitled Sans', 'Helvetica', 'Arial', sans-serif;
+$ff-bold: 'Untitled Sans', 'Helvetica', 'Arial', sans-serif;
+$ff-regular: 'Untitled Sans', 'Helvetica', 'Arial', sans-serif;
+$ff-medium: 'Untitled Sans', 'Helvetica', 'Arial', sans-serif;
 
 $fw-regular: normal;
-
 // font sizes
 $fs-base: 1.4rem;
+$lh-base: 1.8;
 
 // Font Definitions
-
-// @mixin ffLight() {
-// 	font-family: $ff-base;
-// 	font-weight: 300;
-// 	font-style: normal;
-// }
-
-$ls-title: -0.5px;
-$ls-body: 0px;
-$ls-allcaps: 0.5px;
-$ls-search: -1px;
-$ls-sidebar: 0.2px;
-
 @mixin ffRegular() {
 	font-family: $ff-regular;
 	font-weight: normal;
@@ -49,4 +35,8 @@ $ls-sidebar: 0.2px;
 	font-weight: bold;
 	font-style: normal;
 }
+
+// Line Height Variables
+$ls-title: 0.5em;
+$ls-body: 0.01em;
 

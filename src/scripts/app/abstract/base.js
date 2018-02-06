@@ -1,9 +1,6 @@
 import store from 'store';
 import watch from 'redux-watch';
 
-// import _ from 'lodash';
-// import SVGS from 'jsons/svgs.json';
-
 /**
  * Component: Defines a component with basic methods
  * @constructor
@@ -58,10 +55,10 @@ class Base {
 		 */
 		this._states = {};
 
-		/**
-     * Object as associative array of all <watcher> objects
-     * @type {Object}
-     */
+		// /**
+		//  * Object as associative array of all <watcher> objects
+		//  * @type {Object}
+		//  */
 		this._storeEvents = {};
 
 
@@ -140,10 +137,6 @@ class Base {
 
 			this._storeEvents[o.path] = method;
 
-			// const watcher = watch(() => {
-			// 	return store.getState().toJS();
-			// }, o.path, compare);
-			// this.subscriptions[o.path] = store.subscribe(watcher(method));
 			const watcher = watch(store.getState, o.path);
 			this.subscriptions[o.path] = store.subscribe(watcher(method));
 
@@ -179,6 +172,7 @@ class Base {
 
 		for (const path in this.subscriptions) {
 			if (!this.subscriptions[path]) continue;
+
 			// To unsubscribe the change listener, invoke the function returned by subscribe.
 			// Ex : let unsubscribe = store.subscribe(handleChange)
 			// unsubscribe()

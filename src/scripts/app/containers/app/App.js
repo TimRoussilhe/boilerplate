@@ -36,8 +36,6 @@ class App extends Base {
 			'app.location': (location, prevLocation) => this.onLocationChanged(location, prevLocation),
 		};
 
-		this.bindStoreEvents();
-
 	}
 
 	init() {
@@ -47,27 +45,8 @@ class App extends Base {
 		return this.layout.init();
 	}
 
-
-	// TODO refactor this into the base component
-	// add proper bind undinb store listener
-	bindStoreEvents() {
-
-		// let w = watch(store.getState, 'app.location');
-		// store.subscribe(w((newVal, oldVal, objectPath) => this.onLocationChanged(newVal, oldVal)));
-		// 	console.log('%s changed from %s to %s', objectPath, oldVal, newVal);
-		// 	// admin.name changed from JP to JOE
-		// }));
-
-	}
-
-	// onIdChanged(id, prevId) {
-	// 	const location = this.getState().get('app').get('location');
-	// 	if (id !== prevId && id && prevId && this.location === location) {
-	// 		this.routing(location, true);
-	// 	}
-	// }
-
 	onLocationChanged(location, prevLocation) {
+		console.log('onLocationChanged', location);
 
 		this.prevLocation = prevLocation;
 		if (location !== prevLocation) {

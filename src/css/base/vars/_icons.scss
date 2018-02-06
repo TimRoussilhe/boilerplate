@@ -1,20 +1,8 @@
 .icon{
-    max-width: 20px;
-
-    &.facebook{
-        .st0{
-            fill:blue;
-        }
-        .st1{
-            fill: white;
-        }
-    }
-    &.twitter{
-        .cls-1{
-            fill:transparent;
-        }
-        .cls-2{
-            fill: blue;
-        }
+    max-width: 40px;
+    display: block;
+    &.instagram{
+        fill: blue;
+        margin: 50px;
     }
 }

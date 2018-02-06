@@ -5,29 +5,8 @@
 
 	header {
 
-		// pointer-events: auto;
 		padding-top: $nav-padding - 1px;
 		padding-left: $nav-padding;
-
-		@media #{$mq-tablet} {
-			padding-top: 0px;
-			padding-bottom: $header-tablet-height;
-			background-color: $c-white;
-		}
-
-		@media #{$mq-mobile} {
-			padding-top: 0px;
-			padding-bottom: $header-mobile-height;
-		}
-
-		ul{
-
-			button, a {
-				margin-right: $nav-item-margin;
-				transition: opacity $default-inout-transition;
-			}
-
-		}
 
 	}
 

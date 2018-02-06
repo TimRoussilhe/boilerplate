@@ -1,42 +1,11 @@
 // break points
-$bp-min: 360;
-$bp-lowpoint: 375;
-$bp-low-mobile: 400;
 $bp-mobile: 480;
-$bp-min-height: 650;
-$bp-midpoint: 600;
-$bp-midpoint-h: 700;
-$bp-tablet: 768;
-$bp-tablet-big: 850;
-$bp-laptop: 992;
-$bp-tablet-h: 1024;
-$bp-desktop: 1260;
-$bp-desktop-m: 1440;
-$bp-desktop-l: 1680;
-$bp-desktop-xl: 1920;
+$bp-mobile-landscape: 800;
+$bp-tablet: 960;
+$bp-tablet-landscape: 1024;
 
 // media queries
-$mq-min: '(max-width: #{$bp-min}px)';
-$mq-mobile: '(max-width: #{$bp-mobile}px)';
-$mq-tablet-down: '(max-width: #{$bp-tablet-h}px)';
-$mq-tablet-range: '(min-width: #{$bp-mobile + 1}px) and (max-width: #{$bp-tablet}px)';
-$mq-tablet: '(max-width: #{$bp-tablet}px)';
-$mq-tablet-h: '(max-width: #{$bp-tablet-h}px)';
-$mq-tablet-l: '(min-width: #{$bp-tablet}px)';
-$mq-laptop: '(max-width: #{$bp-laptop}px)';
-$mq-desktop: '(max-width: #{$bp-desktop}px)';
-$mq-desktop-m: '(max-width: #{$bp-desktop-m}px)';
-$mq-desktop-m-sup: '(min-width: #{$bp-desktop-m}px)';
-$mq-desktop-l: '(min-width: #{$bp-desktop-l}px)';
-
-$mq-mobile-landscape: '(max-width: #{$bp-tablet}px) and (max-height: #{$bp-mobile}px)';
-
-$mq-desktop-h: '(max-height: #{$bp-tablet-big}px) and (min-width: #{$bp-mobile}px)';
-$mq-laptop-h: '(max-height: #{$bp-tablet}px) and (min-width: #{$bp-laptop}px)';
-$mq-laptop-h-desktop: '(max-height: #{$bp-min-height}px) and (min-width: #{$bp-desktop-m}px)';
-$mq-mobile-h: '(max-height: #{$bp-midpoint-h}px) and (max-width: #{$bp-mobile}px)';
-$mq-tablet-height: '(max-height: #{$bp-mobile}px) and (min-width: #{$bp-midpoint}px)';
-$low-h: '(max-height: #{$bp-low-mobile}px) and (max-width: #{$bp-midpoint}px)';
-$mq-short-desktop: '(max-height: #{$bp-tablet}px) and (min-width: #{$bp-tablet}px)';
-$mq-small-height: '(max-height: #{$bp-min-height}px) and (min-width: #{$bp-tablet}px)';
-$mq-small-height-mobile: '(max-height: #{$bp-midpoint}px) and (max-width: #{$bp-mobile}px)';
+$mq-mobile: "(max-width: #{$bp-mobile}px)";
+$mq-mobile-landscape: "(max-width: #{$bp-mobile-landscape}px) and (orientation : landscape)";
+$mq-tablet: "(max-width: #{$bp-tablet}px)";
+$mq-tablet-landscape: "(max-width: #{$bp-tablet-landscape}px) and (orientation : landscape)";

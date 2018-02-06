@@ -1,6 +1,5 @@
 import AbstractContainer from 'abstract/container.js';
 import Header from 'components/header/Header';
-import store from 'store';
 
 import {
 	HOMEPAGE,
@@ -21,17 +20,6 @@ class HeaderContainer extends AbstractContainer {
 		this.data = {
 			home: getRoute(HOMEPAGE),
 		};
-		// // test
-		// const about = getRoute(ABOUT);
-		// const paradeNYC = getRoute(PARADE_DETAIL, {id: 'new-york-city'});
-	}
-
-	initActions() {
-		this.options.actions.about = () => this._about();
-	}
-
-	_about() {
-		store.dispatch(showModal(ABOUT_MODAL));
 	}
 
 }

@@ -17,8 +17,6 @@ const InitialState = {
 	meta: {},
 };
 
-// const initialState = new InitialState();
-
 // Updates an entity cache in response to any action with response.entities.
 export const app = (state = InitialState, action) => {
 	switch (action.type) {
