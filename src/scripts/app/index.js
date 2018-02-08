@@ -1,9 +1,9 @@
-import $ from 'zepto';
-// import is from 'is_js';
+
 import {isMobile, isTablet} from 'utils/is';
-import {configureRoute, initRouter} from 'router';
 import App from 'containers/app/App';
-// import {configureAnalytics} from 'utils/analytics';
+import Router from 'router';
+import {setDeviceType} from 'containers/app/actions';
+import store from 'store';
 
 class Entry {
 
@@ -11,37 +11,42 @@ class Entry {
 		console.log('--- APP ---');
 		console.log('\n\n\n');
 		this.app = null;
-		// configureAnalytics();
 	}
 
 	init() {
 
 		console.log('init');
 
-		const router = configureRoute();
+		const router = Router.configureRoute();
 		this.app = new App();
 		// custom Detectizr setup
-		const root = $('html');
+		const root = document.documentElement;
 
 		console.log('isMobile', isMobile());
 		console.log('isMobile', isTablet());
 
-		isMobile() && root.addClass('isMobile');
-		isTablet() && root.addClass('isTablet');
+		isMobile() && root.classList.add('isMobile');
+		isTablet() && root.classList.add('isTablet');
 
-		console.log('initRouter Done');
+		let deviceType = 'desktop';
+		if (isMobile()) deviceType = 'mobile';
+		if (isTablet()) deviceType = 'tablet';
 
-		initRouter().then(() => {
+		store.dispatch(setDeviceType(deviceType));
+
+		Router.initRouter().then(() => {
 			this.app.init()
 				.then(() => {
 					console.log('init then');
 					router.start();
 				});
 		});
+
 	}
 
 }
 
 // initialize the APP do not make a global reference to it.
 const entry = module.exports = new Entry();
-$(document).ready(() => entry.init());
+document.addEventListener('DOMContentLoaded', () => entry.init());
+

@@ -8,9 +8,6 @@ class Homepage extends AbstractPageComponent {
 
 		this.template = Tpl;
 
-		this.states = {
-			isAnimating: false,
-		};
 	}
 
 	dispose() {

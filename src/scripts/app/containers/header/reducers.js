@@ -13,14 +13,12 @@ const initialState = new InitialState();
 export const header = (state = initialState, action) => {
 	switch (action.type) {
 	case SHOW_HEADER: {
-		console.log('--SHOW_HEADER');
 		return {
 			...state,
 			isShown: true,
 		};
 	}
 	case HIDE_HEADER: {
-		console.log('--HIDE_HEADER');
 		return {
 			...state,
 			isShown: false,

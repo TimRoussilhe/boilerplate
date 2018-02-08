@@ -57,7 +57,6 @@ class App extends Base {
 
 	routing(location, fromSamePage = false) {
 		let Page = null;
-		console.log('location', location);
 
 		switch (location) {
 		case HOMEPAGE: Page = HomepageContainer; break;
@@ -97,17 +96,12 @@ class App extends Base {
 		store.dispatch(setPage(this.page));
 
 		// Init the next page now
-
 		this.page.init().then(() => {
 
 			console.log('ON PAGE INIT');
 
 			// Resize the current page for position
-			// this.page.resize();
 			this.layout.triggerResize();
-
-			// Meta
-			// this.layout.setMeta();
 
 			if (this.oldPage) {
 				console.log('HIDE OLD PAGE', this.oldPage);
@@ -119,7 +113,6 @@ class App extends Base {
 						this.showPage();
 					});
 			} else {
-				// TODO : check why it's so long for first page setupdom to start
 				this.showPage();
 			}
 		});

@@ -1,5 +1,6 @@
 import AbstractContainer from './container';
 import store from 'store';
+import axios from 'axios';
 
 // Constants
 // import {END_POINT} from 'constants/api';
@@ -24,14 +25,11 @@ class PageContainer extends AbstractContainer {
 	constructor(options) {
 		super(options);
 
-		// this.watchers = {
-		//     'loader.isShown': this._isLoaderShown
-		// };
 	}
 
 	// to override if needed
 	fetchData() {
-		// console.log('PAge:fetchData');
+
 		const endPoint = this.options.endPoint;
 
 		if (!endPoint) {
@@ -39,20 +37,16 @@ class PageContainer extends AbstractContainer {
 			return;
 		}
 
-		// this.promises.data.resolve();
-		$.ajax({
-			type: 'GET',
-			dataType: 'json',
-			url: JSON_ENDPOINTS + this.options.endPoint,
-			success: (data) => {
-				this.data = data;
+		const url = JSON_ENDPOINTS + this.options.endPoint;
+		axios.get(url)
+			.then((response) => {
+				console.log('response', response);
+				this.data = response.data;
 				this.promises.data.resolve();
-			},
-			error: (xhr, type) => {
-				this.promises.data.reject();
-			},
-		});
-
+			})
+			.catch((error) => {
+				his.promises.data.reject();
+			});
 
 	}
 

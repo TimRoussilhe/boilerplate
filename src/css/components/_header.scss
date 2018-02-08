@@ -3,11 +3,15 @@
 	position: absolute;
 	z-index: 99;
 
-	header {
+	padding-top: $nav-padding - 1px;
+	padding-left: $nav-padding;
 
-		padding-top: $nav-padding - 1px;
-		padding-left: $nav-padding;
-
+	.menu{
+		li{
+			&.active{
+				border-bottom: 1px solid black;
+			}
+		}
 	}
 
 }

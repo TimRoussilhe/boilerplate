@@ -11,7 +11,7 @@
 		<title>{{data.metas.title}}</title>
 
 		<!-- Meta -->
-		<meta property="description" content="{{data.metas.description}}" />
+		<meta name="description" content="{{data.metas.description}}" />
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<meta name="robots" content="index, follow">
@@ -55,15 +55,16 @@
 	</head>
 
 		<body>
-			<nav id="main-nav">
-				<ul>
-
-					<li><a data-page="index" href="/" title="">Home</a></li>
-					<li><a data-page="about" href="/about" title="">About</a></li>
-					<li><a href="https:www.google.com" target="_blank" title="">External Link</a></li>
-					<li><a href="/dsads" title="">Broken Link</a></li>
-
-				</ul>
-			</nav>
+			<header id="main-nav">
+				<nav>
+					<h1 class="logo">LOGO</h1>
+					<ul class="menu">
+						<li><a data-page="HOMEPAGE" href="/" title="">Home</a></li>
+						<li><a data-page="ABOUT" href="/about" title="">About</a></li>
+						<li><a href="https:www.google.com" target="_blank" title="">External Link</a></li>
+						<li><a href="/dsads" title="">Broken Link</a></li>
+					</ul>
+				</nav>
+			</header>
 
 			<div id="header-container"></div>

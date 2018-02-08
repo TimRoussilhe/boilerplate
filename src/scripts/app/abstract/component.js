@@ -13,13 +13,19 @@ const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 class Component extends Base {
 
 	set events(events) {
-		for (const event in events) { // eslint-disable-line guard-for-in
+		for (const event in events) {
+			const uid = _.uniqueId('e');
+			events[event].uid = uid;
 			this._events[event] = events[event];
 		}
-		this.delegateEvents();
+
+		// for now we disable it here to avoid too many call
+		// and let the render naturally call the evetns delegation
+		// this.delegateEvents();
 	}
 
 	get events() {
+		console.log('get events');
 		return this._events;
 	}
 
@@ -34,7 +40,7 @@ class Component extends Base {
 	}
 
 	set states(states) {
-		for (const state in states) { // eslint-disable-line guard-for-in
+		for (const state in states) {
 			this._states[state] = states[state];
 		}
 	}
@@ -44,6 +50,7 @@ class Component extends Base {
 	}
 
 	constructor(props) {
+		console.log('props', props);
 
 		super(props);
 
@@ -58,6 +65,7 @@ class Component extends Base {
 			 * @type {Object}
 			 */
 		this._events = {};
+		this.delegatedEvents = [];
 
 			 /**
      * Object as associative array of all the <promises> objects
@@ -104,18 +112,14 @@ class Component extends Base {
 			isShown: false,
 		};
 
-
 		/**
 		* El
 		* If el is passed from parent, this means the DOM is allready render
 		and we just need to scope it
 		* @type {DOM}
 		*/
-		this.el = props.el ? props.el : null;
-		this.$el = props.$el ? props.$el : null;
-		console.log('this.el', this.el);
-		console.log('props.el', props.el);
 
+		this.el = props.el ? props.el : null;
 		this.template = props.template ? props.template : null;
 
 		this.data = props.data ? props.data : this.data;
@@ -153,17 +157,11 @@ class Component extends Base {
 		console.log('this.el', this.el);
 
 		if (this.el === null && this.template === null) {
-			console.error('You must provide a template or an el to scope a component. Creating an empty div instead', this);
+			console.error('You must provide a template or an el to scope a component. Creating an empty div instead');
 			this.el = document.createElement('div');
 		}
 
 		if (this.el !== null) {
-			this.$el = $(this.el);
-			return;
-		}
-
-		if (this.$el !== null) {
-			this.el = this.$el[0];
 			return;
 		}
 
@@ -177,11 +175,18 @@ class Component extends Base {
 	 * Render your template
 	 */
 	renderTemplate() {
-		this.$el = $(this.template({
+		console.log('renderTemplate');
+
+		const html = this.template({
 			data:this.data,
 			svgs: SVGS,
-		}));
-		this.el = this.$el[0];
+		});
+
+		// String to DOM Element
+		let wrapper= document.createElement('div');
+		wrapper.innerHTML= html;
+		this.el = wrapper.firstChild;
+
 	}
 
 	onRender() {
@@ -246,7 +251,9 @@ class Component extends Base {
 			if (!_.isFunction(method)) method = this[method];
 			if (!method) continue;
 			let match = key.match(delegateEventSplitter);
-			this.delegate(match[1], match[2], _.bind(method, this));
+			console.log('method.uid', method.uid);
+
+			this.delegate(match[1], match[2], _.bind(method, this), method.uid);
 		}
 		return this;
 	}
@@ -256,23 +263,58 @@ class Component extends Base {
      * using `selector`). This only works for delegate-able events: not `focus`,
      * `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
      */
-	delegate(eventName, selector, listener) {
-		if (this.$el) this.$el.on(eventName + '.delegateEvents' + this.cid, selector, listener);
+	delegate(eventName, selector, listener, uid) {
+
+		if (this.el){
+
+			if (selector){
+				const items = [...this.el.querySelectorAll(selector)];
+				if (items.length > 0 ) items.forEach((item) => item.addEventListener(eventName, listener) );
+			} else {
+				this.el.addEventListener(eventName, listener);
+			}
+
+			this.delegatedEvents.push({
+				uid: uid,
+				eventName: eventName,
+				selector: selector,
+				listener: listener,
+			});
+		}
 		return this;
 	}
 
 	// Clears all callbacks previously bound to the view by `delegateEvents`.
 	// You usually don't need to use this, but may wish to if you have multiple
-	// Backbone views attached to the same DOM element.
+	// views attached to the same DOM element.
 	undelegateEvents() {
-		if (this.$el) this.$el.off('.delegateEvents' + this.cid);
+
+		if (this.el){
+			this.delegatedEvents.forEach((element) => {
+				this.undelegate(element.eventName, element.selector, element.listener, element.uid);
+			});
+		}
+
 		return this;
 	}
 
 	// A finer-grained `undelegateEvents` for removing a single delegated event.
 	// `selector` and `listener` are both optional.
-	undelegate(eventName, selector, listener) {
-		this.$el.off(eventName + '.delegateEvents' + this.cid, selector, listener);
+	undelegate(eventName, selector, listener, uid) {
+
+		if (this.el){
+			if (selector){
+				const items = [...this.el.querySelectorAll(selector)];
+				if (items.length > 0 ) items.forEach((item) => item.removeEventListener(eventName, listener) );
+			} else {
+				this.el.removeEventListener(eventName, listener);
+			}
+		}
+		// remove event from array based on uid
+		_.remove(this.delegatedEvents, (event) => {
+			return event.uid === uid;
+		});
+
 		return this;
 	}
 
@@ -348,44 +390,9 @@ class Component extends Base {
 		this.promises.hidden.resolve();
 	}
 
-	/**
-	 * Navigate using the router
-	 */
-	navigate(url, options = {}) {
-		// if absolute, make sure to add the root
-		if (url.indexOf(window.location.origin) >= 0) {
-			url = url.replace(window.location.origin, '');
-		}
-
-		const re = new RegExp(/^.*\//);
-		const rootUrl = re.exec(window.location.href);
-
-		// If internal
-		if (url.indexOf(rootUrl) >= 0) {
-			// make it relative
-			url = url.replace(window.location.origin, '');
-			url = url.replace(rootUrl, '');
-		}
-
-		page(url);
-	}
-
 	hyperlink(e) {
-		// const href = e.currentTarget.href;
-		// const route = !e.currentTarget.classList.contains('no-route');
+		console.log('hyperlink');
 
-		// // internal link
-		// if ((href.substr(0, 4) !== 'http' || href.indexOf(window.location.origin) >= 0) && route) {
-		// 	e.preventDefault();
-
-		// 	// // if is loading or loader still shown, we block the navigation
-		// 	// const isLoading = this.getState().get('loader').get('isLoading');
-		// 	// const isLoaderShown = this.getState().get('loader').get('isShown');
-
-		// 	if (!isLoading && !isLoaderShown) {
-		// 		this.navigate(href);
-		// 	}
-		// }
 		const isAnimating = store.getState().app.isAnimating;
 		if (isAnimating){
 			e.preventDefault();
@@ -431,10 +438,12 @@ class Component extends Base {
 
 		this.undelegateEvents();
 		this.destroyTL();
-		this.$el.remove();
-		this.$el = null;
-		this.$els = {};
+
+		this.el.parentNode.removeChild(this.el);
+		this.el = null;
 		this._events = {};
+		// this.events = {};
+		// TODO Check this to make sure event are properly removed
 	}
 }
 

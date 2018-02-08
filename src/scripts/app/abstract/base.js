@@ -185,6 +185,10 @@ class Base {
 		store.dispatch(action);
 	}
 
+	dispose(){
+		this.unsubscribe();
+	}
+
 	resize() {}
 
 }

@@ -4,18 +4,10 @@ import routes from 'routes/routes.json';
 
 // Actions
 import {navigate, setRoutes} from 'containers/app/actions';
-// import {setLoaderData} from 'containers/loader/actions';
-// import {setSidebarData} from 'containers/sidebar/actions';
-// import {setFooterData} from 'containers/footer/actions';
-// import {setModalsData} from 'containers/modal/actions';
-// import {setListCities, setCurrentCity} from 'actions/cities';
 
 // Selectors
-// import {getRoute} from 'containers/app/selectors';
 
 // Constants
-// import {JSON_DIR, SET_END_POINT, SET_SEARCH_END_POINT} from 'constants/api';
-// import {LIST_CITIES} from 'constants/cities';
 
 import {
 	HOMEPAGE,
@@ -24,100 +16,116 @@ import {
 } from 'constants/locations';
 
 // Utils
-// import {loadJSON} from 'utils/load';
+// import {MAIN_ENDPOINT} from 'constants/config';
+import {isString} from 'utils/is';
+
 // import qs from 'utils/query-string';
 
 // import {setHotspotsList} from 'containers/experience/actions';
 
-const preRouting = (ctx, next) => {
-	// // If there's a query string
-	// ctx.query = qs.parse(window.location.search.slice(1));
-
-	// store.dispatch(setQuery(ctx.query));
-
-	// // store current hash. Only set if not null to not remove it dureing a redirection
-	// if (ctx.hash) store.dispatch(setHash(ctx.hash));
-
-	next();
-};
-
-
 const routesFn = {
 	ROOT: (ctx) => {
-		// Roots redirect to the current lang
-		// const lang = store.getState().get('app').get('lang');
-		// page('/');
-		// store.dispatch(navigate(HOMEPAGE, ctx.params));
+		// Roots redirect to the current lang for example
 	},
 	HOMEPAGE: (ctx) => {
 		console.log('index navigate');
+		console.log('ctx.params', ctx.params);
+
 		store.dispatch(navigate(HOMEPAGE, ctx.params));
 	},
 	ABOUT: (ctx) => {
 		console.log('about navigate');
 		store.dispatch(navigate(ABOUT, ctx.params));
 	},
-	// PARADE_DETAIL: (ctx) => {
-	// 	// set current city
-	// 	// store.dispatch(setCurrentCity(ctx.params.id));
-	// 	// console.log('ctx.params', ctx.params);
-	// 	store.dispatch(navigate(PARADE_DETAIL, ctx.params));
-	// },
-	// PARADE_EXPERIENCE_HOTSPOT: (ctx) => {
-	// 	// set current city
-	// 	// store.dispatch(setCurrentCity(ctx.params.id));
-	// 	// console.log('ctx.params', ctx.params);
-	// 	store.dispatch(navigate(PARADE_EXPERIENCE_HOTSPOT, ctx.params));
-	// },
 	NOT_FOUND: (ctx) => {
 		console.log('404!');
 		store.dispatch(navigate(NOT_FOUND, ctx.params));
 	},
 };
 
-export function initRouter() {
+class Router {
 
-	return new Promise((resolve, reject) => {
+	constructor() {
 
-		// // store.dispatch(setRoutes(data.routes));
-		store.dispatch(setRoutes(routes));
+		this.routesFn = routesFn;
 
-		//  // Set Cities
-		// store.dispatch(setListCities(LIST_CITIES));
-		// store.dispatch(setCurrentCity(data.global.current_city));
+	}
 
-		// // Set Globals
-		// store.dispatch(setLoaderData(data.global.loader));
-		// store.dispatch(setSidebarData(data.global.sidebar));
-		// store.dispatch(setFooterData(data.global.footer));
-		// store.dispatch(setModalsData(data.global.modals));
-		// store.dispatch(setUIData(data.global.ui));
-		// store.dispatch(setMeta(data.global.default.meta, true));
+	preRouting(ctx, next){
 
-		// Setup routes dynamically
-		for (let key in routes) {
+		// here the path will contains query parameter so we can remove them suing this :
+		// const path = this.getPathFromUrl(ctx.path);
+		// if (path === '/'){}
 
-			if (!routes.hasOwnProperty(key)) continue;
-			let route = routes[key];
+		// Example if there's a query string
+		// ctx.query = qs.parse(window.location.search.slice(1));
 
-			page(route.url, preRouting, (ctx) => {
-				routesFn[route.id](ctx);
-			});
+		// store.dispatch(setQuery(ctx.query));
+		next();
+	};
 
+
+	initRouter() {
+
+		return new Promise((resolve, reject) => {
+
+			store.dispatch(setRoutes(routes));
+
+			// Setup routing from Routes JSON
+			for (let key in routes) {
+
+				if (!routes.hasOwnProperty(key)) continue;
+				let route = routes[key];
+
+				page(route.url, (ctx, next) => this.preRouting(ctx, next), (ctx) => {
+					this.routesFn[route.id](ctx);
+				});
+
+			}
+
+			// 404
+			page('*', (ctx, next) => this.preRouting(ctx, next), this.routesFn.NOT_FOUND);
+			resolve();
+
+		});
+
+	}
+
+	configureRoute(options = {}) {
+		if (options.base) page.base(options.base);
+		return page;
+	}
+
+	getPathFromUrl(url) {
+		return url.split('?')[0];
+	}
+
+	/**
+	 * Navigate using the router
+	 */
+	navigate(url, options = {}) {
+		console.log('navigate url', url );
+
+		if (!isString(url)) return false;
+
+		// if absolute, make sure to add the root
+		if (url.indexOf(window.location.origin) >= 0) {
+			url = url.replace(window.location.origin, '');
 		}
 
-		// // Roots redirect to the current lang
-		page('/', preRouting, routesFn.ROOT);
+		const re = new RegExp(/^.*\//);
+		const rootUrl = re.exec(window.location.href);
 
-		// 404
-		page('*', preRouting, routesFn.NOT_FOUND);
-		resolve();
+		// If internal
+		if (url.indexOf(rootUrl) >= 0) {
+			// make it relative
+			url = url.replace(window.location.origin, '');
+			url = url.replace(rootUrl, '');
+		}
 
-	});
+		page('/' + url);
+	}
 
 }
 
-export function configureRoute(options = {}) {
-	if (options.base) page.base(options.base);
-	return page;
-}
+module.exports = new Router();

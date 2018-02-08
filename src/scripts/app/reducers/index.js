@@ -1,12 +1,12 @@
 import {combineReducers} from 'redux';
 import {createResponsiveStateReducer} from 'redux-responsive';
 
-// import layout from 'containers/layout/reducers';
-// import loader from 'containers/loader/reducers';
 import app from 'containers/app/reducers';
+import layout from 'containers/layout/reducers';
 
 const rootReducer = combineReducers({
 	app,
+	layout,
 	browser: createResponsiveStateReducer({
 		mobile: 640,
 		tablet: 768,

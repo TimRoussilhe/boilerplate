@@ -61,7 +61,6 @@ module.exports = {
 		}),
 	],
 
-	// make 'zepto' resolve to your local copy of the library
 	// i. e. through the resolve.alias option
 	// will be included in the bundle, no need to add and load vendor
 	resolve: {
@@ -87,10 +86,10 @@ module.exports = {
 			},
 			{test: /\.json$/, loader: 'json-loader'},
 			{test: /\.twig$/, loader: 'twig-loader'},
-			{
-				test: path.join(__dirname, '/../node_modules/zepto/dist/zepto.js'),
-				use: 'imports-loader?this=>window',
-			},
+			// {
+			// 	test: path.join(__dirname, '/../node_modules/zepto/dist/zepto.js'),
+			// 	use: 'imports-loader?this=>window',
+			// },
 		],
 	},
 

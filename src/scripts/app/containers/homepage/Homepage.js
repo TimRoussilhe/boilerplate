@@ -9,7 +9,7 @@ class HomepageContainer extends AbstractPageContainer {
 	constructor(options) {
 		super(options);
 
-		this.Component = Homepage;
+		this.ComponentClass = Homepage;
 
 	}
 

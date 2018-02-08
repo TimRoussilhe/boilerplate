@@ -1,11 +1,8 @@
-import DOMComponent from 'abstract/DOMcomponent';
+import DOMComponent from 'abstract/component';
 import store from 'store';
-import watch from 'redux-watch';
 
 // Containers
 import Header from 'containers/header/Header';
-
-import $ from 'zepto';
 
 import {debounce} from 'utils/misc';
 
@@ -20,24 +17,18 @@ class Layout extends DOMComponent {
 
 		this.el = document.documentElement;
 
-		let w = watch(store.getState, 'app.meta');
-		store.subscribe(w((newVal, oldVal, objectPath) => this.setMeta(newVal, oldVal)));
-
-		let watchLocation = watch(store.getState, 'app.location');
-		store.subscribe(watchLocation((newVal, oldVal, objectPath) => this.setLocationClass(newVal)));
+		this.storeEvents = {
+			'app.location': (location, prevLocation) => this.setLocationClass(location, prevLocation),
+			'app.meta': (newVal, oldVal) => this.setMeta(newVal, oldVal),
+		};
 
 	}
 
 	initDOM() {
-		const scrollObj = {
-			x: window.scrollX || window.pageXOffset,
-			y: window.scrollY || window.pageYOffset,
-		};
 
-		this.$content = this.$el.find('#content');
-		this.$title = this.$el.find('head > title');
-
-		this.$metaDescription = this.$el.find('head > meta[name=description]');
+		this.$content = this.el.querySelector('#content');
+		this.$title = this.el.querySelector('head > title');
+		this.$metaDescription = this.el.querySelector('head > meta[name=description]');
 
 		// if you need to remove fastclick event of an element
 		// just add needsclick as a class
@@ -47,43 +38,42 @@ class Layout extends DOMComponent {
 		// };
 		// FastClick.attach(this.el);
 
-		this.actions.scroll(scrollObj);
 	}
 
 	onDOMInit() {
 		const aInitPromises = [];
 
+		console.log('document.getElementById()', document.getElementById('main-nav'));
+
 		this.header = new Header({
 			el: document.getElementById('main-nav'),
 		});
+
 		aInitPromises.push(this.header.init());
 
 		// scroll top
 		window.scrollTo(0, 0);
 
 		Promise.all(aInitPromises).then(() => {
-			// Load Gmaps script now!
-			// this.dispatch(getScriptGmaps());
 			super.onDOMInit();
-
 		});
 	}
 
 	bindEvents() {
 
 		window.addEventListener('orientationchange', debounce(() => {
-			// this._calcVH();
 			this.actions.resize(window);
 		}, 300), false);
 
 		window.addEventListener('resize', debounce(() => {
-			// this._calcVH();
+			this.actions.setOrientation(window);
 			this.actions.resize(window);
 		}, 300), false);
 
-		window.addEventListener('scroll', () => {
-			this.scrollTicket = true;
-		}, false);
+		// enable a flag to grab scroll position during update
+		// window.addEventListener('scroll', () => {
+		// 	this.scrollTicket = true;
+		// }, false);
 
 		// Actually, unsubscribe to any this.events to avoid any double trigger because of body
 		this.undelegateEvents();
@@ -96,36 +86,40 @@ class Layout extends DOMComponent {
 				x: window.scrollX || window.pageXOffset,
 				y: window.scrollY || window.pageYOffset,
 			};
-			this.actions.scroll(scrollObj);
 		}
 	}
 
 	showComponent() {
-		// if (this.states.isShown) return;
-		const location = this.getState().get('app').get('location');
+		console.log('this.states.isShown', this.states.isShown);
+
+		if (this.states.isShown) return;
 
 		setTimeout(() => {
-			if (location !== NOT_FOUND) this.dispatch(showSidebar());
-			if (location !== PARADE_DETAIL) this.dispatch(showHeader());
-			if (location !== PARADE_DETAIL && location !== PARADE_EXPERIENCE_HOTSPOT) this.dispatch(showFooter());
 			super.showComponent();
 		}, 0);
 	}
 
 	triggerResize() {
-		$(window).trigger('resize');
+
+		window.dispatchEvent(new Event('resize'));
 	}
 
 	setMeta(meta, oldMeta) {
 
-		this.$title.text(meta.title);
-		this.$metaDescription.val(meta.description);
+		this.$title.textContent = meta.title;
+		this.$metaDescription.textContent = meta.description;
 
-		// // Analytics
-		// trackPage();
+		// Analytics
+		if (window.ga){
+			const location = store.getState().app.location;
+			ga('set', 'page', location);
+			ga('send', 'pageview');
+		}
+
 	}
 
 	setLocationClass(location) {
+
 		this.el.setAttribute('location', location);
 	}
 

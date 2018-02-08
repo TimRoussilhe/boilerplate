@@ -1,7 +1,5 @@
 
-import AbstractDOMComponent from 'abstract/DOMcomponent';
-// import $ from 'zepto';
-// import {TweenLite} from 'gsap';
+import AbstractDOMComponent from 'abstract/component';
 import TweenLite from 'TweenLite';
 import TimelineLite from 'TimelineLite';
 import CSSPlugin from 'CSSPlugin';
@@ -14,20 +12,17 @@ import CSSPlugin from 'CSSPlugin';
 class PageComponent extends AbstractDOMComponent {
 
 	setupDOM() {
-		TweenLite.set(this.$el, {autoAlpha: 0});
+		TweenLite.set(this.el, {autoAlpha: 0});
 	}
 
 	initTL() {
 		console.log('==================== initTL');
 
 		this.TL.show = new TimelineLite({paused: true, onComplete: () => this.onShown()});
-		// this.TL.show.set(this.$el, {autoAlpha: 0, ease: Cubic.easeOut});
-		this.TL.show.to(this.$el, 0.3, {autoAlpha: 1, ease: Cubic.easeOut});
-
-		console.log('this.$el', this.$el);
+		this.TL.show.to(this.el, 0.3, {autoAlpha: 1, ease: Cubic.easeOut});
 
 		this.TL.hide = new TimelineLite({paused: true, onComplete: () => this.onHidden()});
-		this.TL.hide.to(this.$el, 0.3, {autoAlpha: 0, ease: Cubic.easeOut});
+		this.TL.hide.to(this.el, 0.3, {autoAlpha: 0, ease: Cubic.easeOut});
 	}
 
 	onDOMInit() {

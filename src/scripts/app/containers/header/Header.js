@@ -1,25 +1,14 @@
-import AbstractContainer from 'abstract/container.js';
+import AbstractContainer from 'abstract/container';
 import Header from 'components/header/Header';
 
-import {
-	HOMEPAGE,
-	// ABOUT,
-	// PARADE_DETAIL
-} from 'constants/locations';
-
-import {getRoute} from 'containers/app/selectors';
+// import {getRoute} from 'containers/app/selectors';
 
 class HeaderContainer extends AbstractContainer {
 
 	constructor(options) {
 		super(options);
-		this.Component = Header;
-	}
+		this.ComponentClass = Header;
 
-	initData() {
-		this.data = {
-			home: getRoute(HOMEPAGE),
-		};
 	}
 
 }

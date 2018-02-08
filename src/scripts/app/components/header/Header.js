@@ -1,8 +1,4 @@
-import AbstractDOMComponent from 'abstract/DOMcomponent';
-
-// import {toggleSidebar} from 'containers/sidebar/actions';
-
-import {trackEvent} from 'utils/analytics';
+import AbstractDOMComponent from 'abstract/component';
 
 class Header extends AbstractDOMComponent {
 
@@ -10,26 +6,40 @@ class Header extends AbstractDOMComponent {
 		super(props);
 
 		this.events = {
-			'click .btn-menu': () => this._clickToggle(),
-			'click .main-logo': () => this._clickMainLogo(),
-			'click .home': () => this._clickHome(),
-			'click .about': () => this._clickAbout(),
+			// 'click .home': () => this._clickHome(),
 		};
+
+		this.storeEvents = {
+			'app.location': (location, prevLocation) => this.setActiveLink(location, prevLocation),
+		};
+
 	}
 
 	initDOM() {
-		console.log('this.el', this.el);
-		this.$logo = this.el.querySelector('.main-logo');
+		this.$logo = this.el.querySelector('.logo');
+		this.$navItems = this.el.querySelectorAll('.menu li a');
 	}
 
-	onDOMInit() {
-		console.log('HEADER ONDOMINIT');
+	setActiveLink(location) {
+		this.resetCurrentNavItem();
 
-		// document.getElementById('header-container').appendChild(this.el);
-		this.$menuEl = document.getElementById('btn-menu');
-		this.$navgiationHeader = this.$el.find('.navigation-header');
-		super.onDOMInit();
+		let $currentNavItem = null;
+		[...this.$navItems].forEach((navItem) => {
+			if (navItem.dataset.page === location) $currentNavItem = navItem.parentNode;
+		});
+
+		// if no nav item SKIP. this would happen when rendering legacy and 404.
+		if ($currentNavItem === null) return;
+
+		$currentNavItem.classList.add('active');
 	}
+
+	resetCurrentNavItem() {
+		[...this.$navItems].forEach((navItem) => {
+			navItem.parentNode.classList.remove('active');
+		});
+	}
+
 }
 
 export default Header;

@@ -16,13 +16,16 @@ class AbstractContainer extends Base {
     * Component asociated to the container
     * @type {Object}
     */
-		this._component = null;
+		this.component = null;
 
 		/**
 		* Component Class
 		* @type {Object}
 		*/
-		this.Component = null;
+		console.log('this.ComponentClass', this.ComponentClass);
+		console.log('this', this);
+
+		this.ComponentClass = null;
 
 		/**
 		* Data Object
@@ -67,7 +70,7 @@ class AbstractContainer extends Base {
 	}
 
 	getComponent() {
-		return this._component;
+		return this.component;
 	}
 
 	initComponent() {
@@ -76,8 +79,10 @@ class AbstractContainer extends Base {
 			this.initData();
 
 			this.options.data = this.data;
-			this._component = new this.Component(this.options);
-			this._component.init().then(() => {
+			console.log('initComponent', this.ComponentClass);
+
+			this.component = new this.ComponentClass(this.options);
+			this.component.init().then(() => {
 				this.onInit();
 			});
 		});
@@ -103,20 +108,21 @@ class AbstractContainer extends Base {
 	initActions() {}
 
 	resize() {
-		return this._component.resize();
+		return this.component.resize();
 	}
 
 	show() {
-		return this._component.show();
+		return this.component.show();
 	}
 
 	hide() {
-		return this._component.hide();
+		return this.component.hide();
 	}
 
 	dispose() {
-		this._component.dispose();
-		this._component = null;
+		this.component.dispose();
+		this.component = null;
+		super.dispose();
 		return this;
 	}
 

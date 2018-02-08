@@ -1,5 +1,4 @@
 // Global store in addition of the STATE, Animation / mouse state when State is in charge of Application State.
-/* global  window  */
 
 class GlobalStore {
 	constructor() {

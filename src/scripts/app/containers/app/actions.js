@@ -5,6 +5,7 @@ import {
 	SET_META,
 	SET_PAGE,
 	SET_OLDPAGE,
+	SET_DEVICE_TYPE,
 } from './constants';
 
 export function navigate(location, params = {}) {
@@ -48,5 +49,12 @@ export function setOldPage(page) {
 	return {
 		type: SET_OLDPAGE,
 		page: page,
+	};
+}
+
+export function setDeviceType(deviceType) {
+	return {
+		type: SET_DEVICE_TYPE,
+		deviceType: deviceType,
 	};
 }

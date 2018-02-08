@@ -1,28 +1,16 @@
 import AbstractPageContainer from 'abstract/Pagecontainer';
-import Homepage from 'components/about/About';
-// actions
-// import {setIntroListHomepage} from './actions';
+import About from 'components/about/About';
 
 class AboutContainer extends AbstractPageContainer {
 
 	constructor(options) {
 		super(options);
 
-		this.Component = Homepage;
+		this.ComponentClass = About;
 
 	}
 
 	initData() {
-		console.log('AboutContainer:initData');
-		// const list = {
-		// 	default_landing: false,
-		// };
-
-		// this.data.cities.forEach((key, value) => {
-		// 	list[key.id] = false;
-		// });
-
-		// this.dispatch(setIntroListHomepage(list));
 
 		super.initData();
 	}
