@@ -14,7 +14,7 @@
   },
   "scripts": {
     "dist:sass": "node-sass --include-path node_modules ./src/css/app.scss ./build/assets/css/app.min.css",
-    "dist:autoprefixer": "postcss --use autoprefixer -c autoprefixer-options.json ./build/assets/css/app.min.css --replace",
+    "dist:autoprefixer": "postcss -c postcss.config.js ./build/assets/css/app.min.css --replace --no-map",
     "dist:js": "webpack --config ./config/webpack.prod.config.js ",
     "lint:css": "stylelint ./build/assets/css/*.css",
     "lint:js": "eslint ./src/scripts/project",
